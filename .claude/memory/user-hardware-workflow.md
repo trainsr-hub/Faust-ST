@@ -1,5 +1,9 @@
 ---
 name: user-hardware-workflow
+key: core:hardware_workflow
+keys:
+  - core:hardware_workflow
+  - core:codex
 description: User workflow across primary high-power desktop and mobile secondary laptop
 metadata:
   type: user

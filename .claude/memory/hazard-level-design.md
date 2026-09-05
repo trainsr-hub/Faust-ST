@@ -1,7 +1,15 @@
 ---
 name: hazard-level-design
+key: div:backend:hazard_math
+keys:
+  - div:backend:hazard_math
+  - div:backend:*
+  - div:game:golden_hour
+  - div:ui:gate_of_babylon
+  - core:codex
 description: "Hazard Level is a personal odometer (just <a.b>), no rank tiers. Rank tiers are only for collection items. Formula: y = 1.5 * ln(x+1), floor 0."
 metadata:
+  node_type: memory
   type: project
   originSessionId: 5313ccb3-6f35-4ef6-9d87-013d6a233473
   modified: 2026-09-03T15:14:26.392Z

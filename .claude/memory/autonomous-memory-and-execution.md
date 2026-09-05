@@ -1,5 +1,9 @@
 ---
 name: autonomous-memory-and-execution
+key: core:execution_protocol
+keys:
+  - core:execution_protocol
+  - core:codex
 description: "User prefers assistant to work autonomously, auto-record important facts, and execute without prompting"
 metadata: 
   node_type: memory

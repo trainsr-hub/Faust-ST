@@ -1,5 +1,10 @@
 ---
 name: git-setup-pending
+key: ref:history_git_setup
+keys:
+  - ref:history_git_setup
+  - ref:*
+  - core:hardware_workflow
 description: "User just installed Git and linked to GitHub — needs terminal restart, then initial commit and push"
 metadata: 
   node_type: memory

@@ -1,5 +1,9 @@
 ---
 name: faust-manager-codex
+key: core:codex
+keys:
+  - core:codex
+  - core:identity
 description: The foundational Codex establishing the dynamic between the Manager and Faust
 metadata:
   type: user

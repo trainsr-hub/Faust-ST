@@ -1,5 +1,10 @@
 ---
 name: session-status-sept3
+key: ref:history_sept3
+keys:
+  - ref:history_sept3
+  - ref:*
+  - core:monorepo_architecture
 description: "Status as of Sept 3 2026 — all apps restored, build clean, git just installed"
 metadata: 
   node_type: memory

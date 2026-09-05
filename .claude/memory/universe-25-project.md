@@ -1,5 +1,10 @@
 ---
 name: universe-25-project
+key: div:ui:universe25
+keys:
+  - div:ui:universe25
+  - div:ui:*
+  - core:codex
 description: "Universe 25 - Web-OS with plugin-based architecture, Time currency, soft-coded theming, authoritative Blue Rose backend storage"
 metadata: 
   node_type: memory

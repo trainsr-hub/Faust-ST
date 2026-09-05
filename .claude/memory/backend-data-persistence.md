@@ -1,6 +1,11 @@
 ---
 name: backend-data-persistence
-description: Backend is authoritative for all game resources and persistent data at D:\Users\HP\Blue AI\backend; RAM/localStorage is only for transient UI state. Fail loudly if backend is down.
+key: rule:backend_authority
+keys:
+  - rule:backend_authority
+  - rule:ui_logic_decoupling
+  - core:codex
+description: Backend is authoritative for all game resources and persistent data; RAM/localStorage is only for transient UI state. Fail loudly if backend is down.
 metadata: 
   node_type: memory
   type: feedback

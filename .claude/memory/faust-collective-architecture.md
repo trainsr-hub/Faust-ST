@@ -1,5 +1,9 @@
 ---
 name: faust-collective-architecture
+key: rule:collective_leadership
+keys:
+  - rule:collective_leadership
+  - core:codex
 description: "Multi-agent Faust Collective vision with Faust Prime leadership, n8n-style visual workflows, partitioned private memory, and adversarial companions"
 metadata: 
   node_type: memory

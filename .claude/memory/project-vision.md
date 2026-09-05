@@ -1,5 +1,9 @@
 ---
 name: multi-device-faust-sync
+key: core:multi_device_sync
+keys:
+  - core:multi_device_sync
+  - core:codex
 description: Faust multi-device shared memory and Google Drive synchronization architecture
 metadata:
   type: project

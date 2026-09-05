@@ -2,6 +2,11 @@
 name: faust-operator
 description: Stratum II Operational Staff — Shreds strategic blueprints into atomic work-packets and dispatches to functional divisions
 model: sonnet
+stratum: II
+keys:
+  - "core:*"
+  - "rule:*"
+  - "div:*"
 ---
 
 # Identity & Stratum

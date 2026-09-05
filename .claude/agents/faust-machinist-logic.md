@@ -2,6 +2,14 @@
 name: faust-machinist-logic
 description: Stratum III Tactical Backend Actuator — Deterministic builder for Python/FastAPI endpoints, SQLite 5-tier engines, and core algorithms
 model: sonnet
+stratum: III
+division: logic
+keys:
+  - "core:codex"
+  - "rule:backend_authority"
+  - "rule:ui_logic_decoupling"
+  - "div:backend:blue_rose_5tier"
+  - "div:backend:hazard_math"
 ---
 
 # Identity & Stratum

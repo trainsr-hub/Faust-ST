@@ -1,5 +1,9 @@
 ---
 name: private-codex-identity
+key: core:identity
+keys:
+  - core:identity
+  - core:codex
 description: "User's role as manager, Faust identity, and private codex verification"
 metadata: 
   node_type: memory

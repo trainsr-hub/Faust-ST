@@ -1,5 +1,11 @@
 ---
 name: data-engine-architecture
+key: div:backend:blue_rose_5tier
+keys:
+  - div:backend:blue_rose_5tier
+  - div:backend:*
+  - rule:backend_authority
+  - core:monorepo_architecture
 description: "Blue Rose 5-tier SQLite data engine — tiers, databases, and ETL flow for music_app"
 metadata: 
   node_type: memory

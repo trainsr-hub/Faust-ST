@@ -1,5 +1,9 @@
 ---
 name: faust-three-tier-warfare-architecture
+key: core:warfare_c2_doctrine
+keys:
+  - core:warfare_c2_doctrine
+  - core:codex
 description: Three Levels of Warfare multi-agent architecture (Strategic High Command, Operational General Staff, Tactical Legion)
 metadata:
   type: project

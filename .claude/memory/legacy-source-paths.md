@@ -1,5 +1,10 @@
 ---
 name: legacy-source-paths
+key: ref:legacy_paths
+keys:
+  - ref:legacy_paths
+  - ref:*
+  - core:monorepo_architecture
 description: Paths to legacy Gate of Babylon and Blue Rose source files used as reference
 metadata: 
   node_type: memory

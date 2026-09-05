@@ -1,5 +1,12 @@
 ---
 name: gamification-master-game-vision
+key: div:game:golden_hour
+keys:
+  - div:game:golden_hour
+  - div:game:*
+  - div:ui:universe25
+  - div:backend:hazard_math
+  - core:codex
 description: "Core gamification vision: Sub-games as effort engines producing tickets for a Gilgamesh-style Master Game (Modern Day Nexus)"
 metadata: 
   node_type: memory

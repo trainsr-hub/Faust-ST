@@ -1,5 +1,11 @@
 ---
 name: gate-of-babylon-migration
+key: div:ui:vinyl_angel
+keys:
+  - div:ui:vinyl_angel
+  - div:ui:gate_of_babylon
+  - div:ui:*
+  - core:codex
 description: Migrated Gate of Babylon treasure modules into Universe 25 architecture
 metadata: 
   node_type: memory

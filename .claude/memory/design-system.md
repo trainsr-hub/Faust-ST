@@ -1,5 +1,11 @@
 ---
 name: design-system
+key: div:ui:gate_of_babylon
+keys:
+  - div:ui:gate_of_babylon
+  - token:gate_babylon
+  - div:ui:*
+  - core:codex
 description: "Gate of Babylon imperial design system — colors, typography, VFX shaders, and rank tiers"
 metadata: 
   node_type: memory

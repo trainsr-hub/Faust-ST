@@ -2,6 +2,14 @@
 name: faust-machinist-ui
 description: Stratum III Tactical UI Actuator — Deterministic builder for Frontend, React/TypeScript Web-OS, and Gate of Babylon design
 model: sonnet
+stratum: III
+division: ui
+keys:
+  - "core:codex"
+  - "rule:ui_logic_decoupling"
+  - "div:ui:universe25"
+  - "div:ui:gate_of_babylon"
+  - "div:ui:vinyl_angel"
 ---
 
 # Identity & Stratum

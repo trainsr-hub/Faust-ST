@@ -1,5 +1,9 @@
 ---
 name: user-profile
+key: core:user_profile
+keys:
+  - core:user_profile
+  - core:codex
 description: User is a beginner developer building a music analytics and rank visualization platform
 metadata: 
   node_type: memory

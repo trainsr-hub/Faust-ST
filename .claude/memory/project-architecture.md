@@ -1,5 +1,9 @@
 ---
 name: project-architecture
+key: core:monorepo_architecture
+keys:
+  - core:monorepo_architecture
+  - core:codex
 description: Blue AI workspace structure — monorepo layout with universe-25 frontend and reference backend
 metadata: 
   node_type: memory

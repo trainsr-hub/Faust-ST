@@ -1,5 +1,9 @@
 ---
 name: ecs-key-based-memory-architecture
+key: core:ecs_memory_architecture
+keys:
+  - core:ecs_memory_architecture
+  - core:codex
 description: Data-Driven Memory Architecture (DDMA / ECS) using unique Keys/IDs to decouple memory components from agent entities
 metadata:
   type: project

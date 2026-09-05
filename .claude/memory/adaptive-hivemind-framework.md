@@ -1,5 +1,9 @@
 ---
 name: adaptive-hivemind-framework
+key: core:adaptive_lifecycle
+keys:
+  - core:adaptive_lifecycle
+  - core:codex
 description: Manager's core directive on evolutionary, dynamic agent lifecycle over rigid static structures
 metadata:
   type: feedback
