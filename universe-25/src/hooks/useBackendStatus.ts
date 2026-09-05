@@ -1,27 +1,28 @@
-// Hook to check backend connection status
-import { useState, useEffect, useCallback } from 'react'
+// path: src/hooks/useBackendStatus.ts
 
-const API_BASE = 'http://localhost:8080'
+import { useState, useEffect, useCallback } from 'react'
+import { subscribeBackendStatus, checkBackendHealth, getBackendStatus } from '../core/api'
 
 export function useBackendStatus() {
-  const [isOnline, setIsOnline] = useState<boolean | null>(null)
-  const [isChecking, setIsChecking] = useState(false)
+  const initialStatus = getBackendStatus()
+  const [isOnline, setIsOnline] = useState<boolean>(initialStatus.isOnline)
+  const [lastError, setLastError] = useState<string | null>(initialStatus.lastError)
+  const [isChecking, setIsChecking] = useState<boolean>(false)
+
+  useEffect(() => {
+    const unsubscribe = subscribeBackendStatus((status) => {
+      setIsOnline(status.isOnline)
+      setLastError(status.lastError)
+    })
+    return () => {
+      unsubscribe()
+    }
+  }, [])
 
   const checkStatus = useCallback(async () => {
     setIsChecking(true)
     try {
-      const controller = new AbortController()
-      const timeoutId = setTimeout(() => controller.abort(), 3000)
-
-      const response = await fetch(`${API_BASE}/openapi.json`, {
-        method: 'GET',
-        signal: controller.signal,
-      })
-
-      clearTimeout(timeoutId)
-      setIsOnline(response.ok)
-    } catch (error) {
-      setIsOnline(false)
+      await checkBackendHealth()
     } finally {
       setIsChecking(false)
     }
@@ -29,9 +30,9 @@ export function useBackendStatus() {
 
   useEffect(() => {
     checkStatus()
-    const interval = setInterval(checkStatus, 30000) // Check every 30 seconds
+    const interval = setInterval(checkStatus, 15000) // Poll health every 15s
     return () => clearInterval(interval)
   }, [checkStatus])
 
-  return { isOnline, isChecking, checkStatus }
+  return { isOnline, lastError, isChecking, checkStatus }
 }

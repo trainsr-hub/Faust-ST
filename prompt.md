@@ -25,3 +25,11 @@ if (-not $isAdmin) {
 [Environment]::SetEnvironmentVariable("ANTHROPIC_MODEL", "Faust-ST", "Machine")
 
 Write-Host "Thực thi thành công. Bạn PHẢI TẮT VÀ MỞ LẠI toàn bộ các cửa sổ terminal (hoặc VS Code) để máy tính nạp lại biến môi trường mới."
+
+
+omniroute
+
+claude --dangerously-skip-permissions
+
+powershell -ExecutionPolicy Bypass -File .\setup_sync_memory.ps1
+(If the laptop also needs your OmniRoute environment variables, run your setup_omniroute_machine_env.ps1 as Administrator first).

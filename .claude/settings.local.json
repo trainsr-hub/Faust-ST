@@ -1,8 +1,26 @@
 {
   "permissions": {
     "allow": [
-      "Skill(update-config)",
-      "PowerShell(Test-NetConnection *)"
+      "Bash(*)",
+      "Edit(*)",
+      "Write(*)",
+      "Read(*)",
+      "Glob(*)",
+      "Grep(*)",
+      "Skill(*)",
+      "Agent(*)",
+      "NotebookEdit(*)",
+      "mcp_ide_getDiagnostics(*)",
+      "mcp_ide_executeCode(*)",
+      "WebFetch(*)",
+      "WebSearch(*)",
+      "PowerShell(npm run *)",
+      "PowerShell(python -c \"import fastapi, uvicorn; print\\('FastAPI is ready'\\)\")",
+      "PowerShell(Invoke-RestMethod -Uri \"http://localhost:8080/health\" -Method Get)",
+      "PowerShell(Invoke-RestMethod -Uri \"http://localhost:8080/health\")",
+      "PowerShell(Invoke-RestMethod -Uri \"http://localhost:8080/api/v1/execute\" -Method Post -ContentType \"application/json\" -Body '{\"project_id\":\"universe_25\",\"tier\":\"state\",\"order\":{\"action\":\"read_all\"}}')",
+      "PowerShell(Invoke-RestMethod -Uri \"http://localhost:8080/api/v1/execute\" -Method Post -ContentType \"application/json\" -Body '{\"project_id\":\"universe_25\",\"tier\":\"vault\",\"order\":{\"action\":\"read_all\"}}')",
+      "PowerShell(python --version)"
     ]
   }
 }

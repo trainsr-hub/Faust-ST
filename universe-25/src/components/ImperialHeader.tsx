@@ -1,19 +1,50 @@
-// Imperial Header Component - Gate of Babylon Style
-import { Crown, Sparkles, RefreshCw, Radio } from 'lucide-react'
+// Imperial Header Component - Gate of Babylon Style with Fail-Loudly Status Banner
+import { Crown, Sparkles, RefreshCw, Radio, AlertTriangle } from 'lucide-react'
 import { useBackendStatus } from '../hooks/useBackendStatus'
 import { useGlobalStore, APP_REGISTRY } from '../store/useGlobalStore'
 
 export function ImperialHeader() {
-  const { isOnline, isChecking, checkStatus } = useBackendStatus()
+  const { isOnline, lastError, isChecking, checkStatus } = useBackendStatus()
   const activeApp = useGlobalStore((s) => s.activeApp)
   const setActiveApp = useGlobalStore((s) => s.setActiveApp)
+  const loadFromBackend = useGlobalStore((s) => s.loadFromBackend)
+  const isLoaded = useGlobalStore((s) => s.isLoaded)
 
   const currentApp = APP_REGISTRY.find((app) => app.id === activeApp)
 
-  return (
-    <header className="relative border-b border-[#2d2438] bg-[#0a080e]/80 backdrop-blur-md sticky top-0 z-40">
-      <div className="max-w-7xl mx-auto px-6 py-4 flex flex-col md:flex-row items-center justify-between gap-4">
+  const handleRetry = async () => {
+    await checkStatus()
+    await loadFromBackend()
+  }
 
+  return (
+    <header className="relative border-b border-[#2d2438] bg-[#0a080e]/90 backdrop-blur-md sticky top-0 z-40">
+      {/* Critical Offline Banner - Fail-Loudly Anti-Silent Mode */}
+      {!isOnline && (
+        <div className="bg-gradient-to-r from-red-950/90 via-red-900/90 to-red-950/90 border-b border-red-600/60 px-6 py-2.5 text-red-200 text-xs flex items-center justify-between shadow-lg">
+          <div className="flex items-center gap-3">
+            <AlertTriangle className="w-4 h-4 text-red-400 animate-bounce" />
+            <div>
+              <span className="font-cinzel font-bold text-white tracking-wider uppercase mr-2">
+                [Backend Storage Engine Offline]
+              </span>
+              <span className="text-red-300 font-mono">
+                {lastError || 'Cannot connect to storage engine at http://localhost:8080. Durable game data will not synchronize.'}
+              </span>
+            </div>
+          </div>
+          <button
+            onClick={handleRetry}
+            disabled={isChecking}
+            className="flex items-center gap-1.5 px-3 py-1 rounded bg-red-800 hover:bg-red-700 text-white font-cinzel font-bold text-xs border border-red-500 transition active:scale-95 disabled:opacity-50 cursor-pointer"
+          >
+            <RefreshCw className={`w-3 h-3 ${isChecking ? 'animate-spin' : ''}`} />
+            <span>Reconnect</span>
+          </button>
+        </div>
+      )}
+
+      <div className="max-w-7xl mx-auto px-6 py-4 flex flex-col md:flex-row items-center justify-between gap-4">
         {/* Logo & Title */}
         <div className="flex items-center gap-4">
           <div className="relative flex items-center justify-center w-12 h-12 rounded-xl bg-gradient-to-br from-[#d4af37]/30 to-[#841822]/30 border border-[#d4af37] shadow-gold-sm">
@@ -30,7 +61,7 @@ export function ImperialHeader() {
               </span>
             </div>
             <p className="text-xs text-[#9c93a8] font-cinzel tracking-wider">
-              Autonomous Web Operating System
+              Autonomous Web Operating System • Blue Rose Engine
             </p>
           </div>
         </div>
@@ -38,43 +69,51 @@ export function ImperialHeader() {
         {/* Status & Controls */}
         <div className="flex items-center gap-3">
           {/* Backend Status Indicator */}
-          <div className="px-3.5 py-1.5 rounded-lg bg-[#14101c] border border-[#33283f] flex items-center gap-2.5 text-xs">
+          <div className={`px-3.5 py-1.5 rounded-lg border flex items-center gap-2.5 text-xs ${
+            isOnline
+              ? 'bg-[#14101c] border-[#33283f]'
+              : 'bg-red-950/40 border-red-600/50'
+          }`}>
             <Radio
               className={`w-4 h-4 ${
-                isOnline === null
-                  ? 'text-[#9c93a8]'
-                  : isOnline
-                    ? 'text-emerald-400 animate-pulse'
-                    : 'text-[#ef4444]'
+                isOnline
+                  ? 'text-emerald-400 animate-pulse'
+                  : 'text-red-500 animate-ping'
               }`}
             />
-            <span className="text-[#9c93a8]">Backend:</span>
+            <span className="text-[#9c93a8]">Storage:</span>
             <span className={`font-mono font-bold ${
-              isOnline === null
-                ? 'text-[#9c93a8]'
-                : isOnline
-                  ? 'text-emerald-400'
-                  : 'text-[#ef4444]'
+              isOnline
+                ? 'text-emerald-400'
+                : 'text-red-400'
             }`}>
-              {isOnline === null ? 'CHECKING...' : isOnline ? 'ONLINE' : 'OFFLINE'}
+              {isOnline ? 'ONLINE' : 'DISCONNECTED'}
+            </span>
+          </div>
+
+          {/* Sync Status */}
+          <div className="px-3.5 py-1.5 rounded-lg bg-[#14101c] border border-[#33283f] flex items-center gap-2.5 text-xs">
+            <span className="text-[#9c93a8]">Sync:</span>
+            <span className={`font-mono font-bold ${isLoaded ? 'text-[#ffd86b]' : 'text-amber-400'}`}>
+              {isLoaded ? 'HYDRATED' : 'PENDING'}
             </span>
           </div>
 
           {/* Apps Mounted */}
           <div className="px-3.5 py-1.5 rounded-lg bg-[#14101c] border border-[#33283f] flex items-center gap-2.5 text-xs">
             <Sparkles className="w-4 h-4 text-[#d4af37]" />
-            <span className="text-[#9c93a8]">Apps Mounted:</span>
+            <span className="text-[#9c93a8]">Apps:</span>
             <span className="font-mono font-bold text-[#ffd86b]">{APP_REGISTRY.length}</span>
           </div>
 
-          {/* Refresh Button */}
+          {/* Refresh / Reconnect Button */}
           <button
-            onClick={checkStatus}
+            onClick={handleRetry}
             disabled={isChecking}
-            className="flex items-center gap-2 px-3.5 py-1.5 rounded-lg bg-[#1a1424] hover:bg-[#261d36] border border-[#524124] text-[#ffd86b] text-xs font-semibold shadow-gold-sm transition active:scale-95 disabled:opacity-50"
+            className="flex items-center gap-2 px-3.5 py-1.5 rounded-lg bg-[#1a1424] hover:bg-[#261d36] border border-[#524124] text-[#ffd86b] text-xs font-semibold shadow-gold-sm transition active:scale-95 disabled:opacity-50 cursor-pointer"
           >
             <RefreshCw className={`w-3.5 h-3.5 ${isChecking ? 'animate-spin' : ''}`} />
-            <span className="font-cinzel">Reload</span>
+            <span className="font-cinzel">Sync</span>
           </button>
         </div>
       </div>

@@ -1,0 +1,29 @@
+{
+  "vault": [],
+  "arenaSlots": [
+    {
+      "slotIndex": 0,
+      "equippedItem": null
+    },
+    {
+      "slotIndex": 1,
+      "equippedItem": null
+    },
+    {
+      "slotIndex": 2,
+      "equippedItem": null
+    },
+    {
+      "slotIndex": 3,
+      "equippedItem": null
+    }
+  ],
+  "energyReserves": {
+    "solar": 100,
+    "void": 100,
+    "verdant": 100,
+    "celestial": 100,
+    "aether": 100
+  },
+  "totalPulls": 0
+}

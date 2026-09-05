@@ -1,0 +1,43 @@
+# Dependencies
+node_modules/
+**/node_modules/
+
+# Python cache & artifacts
+__pycache__/
+**/__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+ENV/
+
+# Build artifacts
+dist/
+**/dist/
+dist-ssr/
+build/
+
+# Temporary SQLite WAL & SHM files
+*.db-wal
+*.db-shm
+*.sqlite-wal
+*.sqlite-shm
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+
+# Editor & OS files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Claude Local Settings (keep .claude/memory and .claude/rules tracked)
+.claude/settings.local.json
+.claude/paste-cache/
+.claude/file-history/
+.claude/tasks/

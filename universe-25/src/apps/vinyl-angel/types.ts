@@ -1,3 +1,5 @@
+// path: src/apps/vinyl-angel/types.ts
+
 // =============================================================================
 // [VINYL ANGEL SPECIFIC TYPES]
 // =============================================================================
@@ -31,8 +33,55 @@ export interface VinylDisplayCard {
   channel: string;
   duration?: number | string | null;
   hazard_level: number;
-  played: number; // Tổng số lượng phần tử từ tất cả các trường score (score_3 -> score_7)
+  played: number;
   timeblock: string | null;
   unlock_date: string | null;
   rankCategory: string;
+}
+
+export interface PlaylistItem {
+  id: string;
+  title: string;
+  channel: string;
+  duration?: number | string | null;
+}
+
+export type ScoreTier = '3+' | '4+' | '5+' | '6+' | '7+';
+
+export type VinylAction = ScoreTier | 'pass' | 'spin' | 'block' | 'cancel';
+
+export type VinylLocalTheme =
+  | 'celestial-gold'
+  | 'crimson-void'
+  | 'emerald-sanctuary'
+  | 'cyber-neon'
+  | 'obsidian-abyss';
+
+export interface ShopItem {
+  id: string;
+  name: string;
+  description: string;
+  category: 'ticket' | 'cosmetic' | 'booster' | 'utility' | 'theme';
+  priceDiscs?: number;
+  priceTime?: number;
+  rewardTicket?: string;
+  isLocked?: boolean;
+  lockReason?: string;
+  iconName: string;
+  color: string;
+  perkEffect?: string;
+  consumable?: boolean;
+}
+
+export interface VinylPlayerSettings {
+  autoplay: boolean;
+  defaultPassScore: ScoreTier;
+  soundEffects: boolean;
+  autoSync: boolean;
+}
+
+export interface VinylSessionStats {
+  sessionRatingsCount: number;
+  totalDiscsEarned: number;
+  lastSyncTimestamp: string | null;
 }

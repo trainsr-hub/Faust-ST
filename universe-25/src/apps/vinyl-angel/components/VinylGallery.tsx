@@ -1,16 +1,22 @@
+// path: src/apps/vinyl-angel/components/VinylGallery.tsx
+
 // =============================================================================
-// [VINYL ANGEL GALLERY COMPONENT WITH INSTANT 16-CARD PAGINATION]
+// [VINYL ANGEL GALLERY & LEADERBOARD COMPONENT WITH INTEGRATED ETL PIPELINE]
 // =============================================================================
 import { useState, useEffect, useMemo, type MouseEvent, type FC } from 'react';
+import { executeOrder } from '../../../services/api';
 import {
   fetchEligibleTier4List,
-  resolvePageMetadataOnDemand
+  resolvePageMetadataOnDemand,
+  syncTier2ToTier3,
+  syncTier3ToTier4,
 } from '../services/engine';
+import { useVinylStore } from '../store/useVinylStore';
 import { formatDuration } from '../../../utils/time';
 import { GLOBAL_RANKS } from '../../../utils/rank';
 import { HazardBadge } from '../../../components/HazardBadge';
 import { Pagination } from '../../../components/Pagination';
-import type { VinylDisplayCard } from '../types';
+import type { VinylDisplayCard, Tier2EventEntry } from '../types';
 import {
   Search,
   SlidersHorizontal,
@@ -24,17 +30,28 @@ import {
   X,
   Clock,
   RefreshCw,
-  Sparkles
+  Sparkles,
+  Database,
+  CheckCircle2,
+  AlertCircle,
+  Zap,
 } from 'lucide-react';
 
 const PAGE_SIZE = 16;
 
 export const VinylGallery: FC<{ projectId?: string }> = ({ projectId = 'music_app' }) => {
   const targetProjectId = !projectId || projectId === 'vinyl_angel' ? 'music_app' : projectId;
+  const recordSyncCompleted = useVinylStore((s) => s.recordSyncCompleted);
+  const lastSyncTimestamp = useVinylStore((s) => s.stats.lastSyncTimestamp);
 
   const [allEligibleItems, setAllEligibleItems] = useState<VinylDisplayCard[]>([]);
   const [currentPageItems, setCurrentPageItems] = useState<VinylDisplayCard[]>([]);
   const [loading, setLoading] = useState(true);
+
+  // ETL Sync state
+  const [pendingEventsCount, setPendingEventsCount] = useState<number>(0);
+  const [isSyncing, setIsSyncing] = useState<boolean>(false);
+  const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' | 'info' } | null>(null);
 
   // Filters & Sorting
   const [searchQuery, setSearchQuery] = useState('');
@@ -48,11 +65,31 @@ export const VinylGallery: FC<{ projectId?: string }> = ({ projectId = 'music_ap
   const [inspectItem, setInspectItem] = useState<VinylDisplayCard | null>(null);
   const [copiedId, setCopiedId] = useState<string | null>(null);
 
+  const showToast = (message: string, type: 'success' | 'error' | 'info' = 'info') => {
+    setToast({ message, type });
+    setTimeout(() => setToast(null), 4000);
+  };
+
+  const checkPendingLogs = async () => {
+    try {
+      const res = await executeOrder<Tier2EventEntry[]>({
+        project_id: targetProjectId,
+        tier: '2',
+        order: { action: 'read_all' },
+      });
+      const list = Array.isArray(res.data) ? res.data : [];
+      setPendingEventsCount(list.length);
+    } catch {
+      setPendingEventsCount(0);
+    }
+  };
+
   const loadIndexList = async (forceRefresh = false) => {
     setLoading(true);
     try {
       const data = await fetchEligibleTier4List(targetProjectId, forceRefresh);
       setAllEligibleItems(data);
+      await checkPendingLogs();
     } catch (e) {
       console.error(e);
     } finally {
@@ -63,6 +100,33 @@ export const VinylGallery: FC<{ projectId?: string }> = ({ projectId = 'music_ap
   useEffect(() => {
     loadIndexList(false);
   }, [targetProjectId]);
+
+  const handleFullSync = async () => {
+    setIsSyncing(true);
+    const startTime = performance.now();
+    try {
+      // Step 1: Ingest Tier 2 events into Tier 3 matrices & Clear Tier 2 buffer
+      const t2Res = await syncTier2ToTier3(targetProjectId);
+
+      // Step 2: Project Tier 3 state into Tier 4 Hazard scores & Purge bad KPI
+      const t3Res = await syncTier3ToTier4(targetProjectId);
+
+      const durationMs = Math.round(performance.now() - startTime);
+
+      let msg = `✨ Sync Complete (${durationMs}ms): ${t2Res.eventsProcessed} logs ingested & buffer emptied ➔ ${t3Res.syncedCount} tracks projected to Tier 4!`;
+      if (t2Res.blockedCount > 0) {
+        msg += ` (🚫 ${t2Res.blockedCount} blacklisted)`;
+      }
+
+      showToast(msg, 'success');
+      recordSyncCompleted();
+      await loadIndexList(true);
+    } catch (err: any) {
+      showToast(`❌ ETL Sync Error: ${err.message}`, 'error');
+    } finally {
+      setIsSyncing(false);
+    }
+  };
 
   const filteredItems = useMemo(() => {
     const res = allEligibleItems.filter((item) => {
@@ -136,6 +200,64 @@ export const VinylGallery: FC<{ projectId?: string }> = ({ projectId = 'music_ap
 
   return (
     <div className="space-y-6">
+      {/* Toast Notification */}
+      {toast && (
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 px-5 py-3 rounded-xl bg-[#171320] border border-[#d4af37] text-xs font-semibold shadow-2xl flex items-center gap-2 animate-in fade-in slide-in-from-bottom-2 text-[#ffd86b] max-w-lg">
+          {toast.type === 'success' && <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0" />}
+          {toast.type === 'error' && <AlertCircle className="w-4 h-4 text-rose-400 flex-shrink-0" />}
+          {toast.type === 'info' && <Sparkles className="w-4 h-4 text-[#ffd86b] flex-shrink-0" />}
+          <span>{toast.message}</span>
+        </div>
+      )}
+
+      {/* Integrated ETL Sync Header Bar */}
+      <div className="p-4 md:p-5 rounded-2xl bg-[#120f18] border border-[#2b2238] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-lg">
+        <div className="flex items-center gap-3">
+          <div className="p-2.5 rounded-xl bg-[#1a1424] border border-[#3d304f] text-[#ffd86b]">
+            <Database className="w-5 h-5" />
+          </div>
+          <div>
+            <div className="flex items-center gap-2">
+              <h3 className="font-cinzel text-sm font-bold text-[#ffd86b]">Leaderboard Vault</h3>
+              <span className="text-[11px] font-mono px-2 py-0.5 rounded bg-[#171320] text-[#8c7a9e] border border-[#261d33]">
+                {allEligibleItems.length} Ranked Tracks
+              </span>
+            </div>
+            <p className="text-xs text-[#8c7a9e] mt-0.5">
+              {pendingEventsCount > 0 ? (
+                <span className="text-amber-400 font-semibold">
+                  ⚡ {pendingEventsCount} pending rating logs in Tier 2 buffer ready to sync.
+                </span>
+              ) : (
+                <span>All logs are processed and synchronized with Tier 4 state matrix.</span>
+              )}
+              {lastSyncTimestamp && ` (Last sync: ${lastSyncTimestamp})`}
+            </p>
+          </div>
+        </div>
+
+        <button
+          type="button"
+          onClick={handleFullSync}
+          disabled={isSyncing}
+          className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-cinzel font-bold transition shadow-md self-stretch sm:self-auto justify-center active:scale-95 disabled:opacity-50 ${
+            pendingEventsCount > 0
+              ? 'bg-gradient-to-r from-[#d4af37] to-[#aa8214] text-black shadow-gold-sm hover:brightness-110 border border-[#ffd86b]'
+              : 'bg-[#1a1424] hover:bg-[#251d33] border border-[#3d304f] text-[#cbd5e1]'
+          }`}
+        >
+          {isSyncing ? (
+            <>
+              <RefreshCw className="w-3.5 h-3.5 animate-spin" /> Processing ETL Pipeline...
+            </>
+          ) : (
+            <>
+              <Zap className="w-3.5 h-3.5" /> Sync Logs ➔ Update & Empty Buffer ({pendingEventsCount})
+            </>
+          )}
+        </button>
+      </div>
+
       {/* Search, Filter & Sort Bar */}
       <div className="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-4 p-4 rounded-xl bg-[#100d16] border border-[#261d33] shadow-lg">
         <div className="relative flex-1 flex items-center gap-2">
@@ -143,7 +265,7 @@ export const VinylGallery: FC<{ projectId?: string }> = ({ projectId = 'music_ap
             <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8c7a9e]" />
             <input
               type="text"
-              placeholder="Search by Track ID, Arc..."
+              placeholder="Search by Track ID, Title, Arc..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full bg-[#171320] border border-[#332842] focus:border-[#d4af37] rounded-lg pl-10 pr-4 py-2.5 text-xs md:text-sm text-white focus:outline-none transition placeholder-[#685c78]"

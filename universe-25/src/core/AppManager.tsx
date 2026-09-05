@@ -3,6 +3,7 @@
 import { useGlobalStore } from '../store/useGlobalStore'
 import { ImperialHeader } from '../components/ImperialHeader'
 import { Hub } from '../apps/hub/Hub'
+import { GoldenHour } from '../apps/golden-hour/GoldenHour'
 import { FarmA } from '../apps/farm-a/FarmA'
 import { FarmB } from '../apps/farm-b/FarmB'
 import { VinylAngel } from '../apps/vinyl-angel/VinylAngel'
@@ -27,6 +28,10 @@ export function AppManager() {
       <div className="w-full">
         <div className={activeApp === 'hub' ? 'app-visible' : 'app-hidden'}>
           <Hub />
+        </div>
+
+        <div className={activeApp === 'golden-hour' ? 'app-visible' : 'app-hidden'}>
+          <GoldenHour />
         </div>
 
         <div className={activeApp === 'farm-a' ? 'app-visible' : 'app-hidden'}>

@@ -49,7 +49,7 @@ export function FarmA() {
 
   return (
     <div className="min-h-screen portal-backdrop" style={{ background: 'var(--bg-primary)', padding: '2rem' }}>
-      <div className="max-w-5xl mx-auto">
+      <div className="max-w-7xl mx-auto w-full">
         {/* Header with Navigation */}
         <header className="mb-10 fade-in">
           <button
