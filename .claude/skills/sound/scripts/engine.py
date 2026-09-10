@@ -408,6 +408,9 @@ class SoundEngine:
         if not sentences:
             return np.array([], dtype=np.int16), sample_rate
 
+        # Append to daily spoken transcript on every generation
+        self._append_spoken_transcript(text, blend_profile, norm_type)
+
         logger.info(
             f"[Faust Acoustic Core] Synthesizing: \"{text[:60]}{'...' if len(text) > 60 else ''}\" | "
             f"Voice: [{blend_profile}] | Norm: {norm_type.upper()} | Chunks: {len(sentences)}"
@@ -490,6 +493,12 @@ class SoundEngine:
 
         raw_sentences = re.split(r"(?<=[.!?])\s+", text.strip())
         sentences = [s.strip() for s in raw_sentences if s.strip()]
+
+        if not sentences:
+            return
+
+        # Append to daily spoken transcript on every streaming generation
+        self._append_spoken_transcript(text, blend_profile, norm_type)
 
         logger.info(
             f"[Faust Streaming Synthesis] Pipeline started: [{blend_profile}] | "
@@ -586,16 +595,7 @@ class SoundEngine:
         if broadcast_subtitle:
             self._subtitle_worker.broadcast(text)
 
-        # Resolve final voice style and blend profile for logging
-        voice_style, blend_profile = self._generate_voice_style(
-            base_voice=voice,
-            secondary_voice=secondary_voice,
-            blend_enabled=blend_voice
-        )
         final_norm = normalization_type or self.config.normalization_type
-
-        # Log the spoken utterance to the daily transcript
-        self._append_spoken_transcript(text, blend_profile, final_norm)
 
         if pipelined and sd is not None and not save_path:
             # Pipelined low-latency playback: Chunk 1 plays while Chunk 2 synthesizes concurrently

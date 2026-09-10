@@ -12,7 +12,7 @@ logger = logging.getLogger("faust.sound.config")
 
 # Base paths for self-contained plugin execution
 PLUGIN_DIR = Path(__file__).resolve().parent
-PROJECT_ROOT = PLUGIN_DIR.parent.parent
+PROJECT_ROOT = Path(__file__).resolve().parents[4]
 MODELS_DIR = PLUGIN_DIR.parent / "assets" / "models"
 PRIMARY_MODEL_PATH = MODELS_DIR / "kokoro-v1.0.onnx"
 PRIMARY_VOICES_PATH = MODELS_DIR / "voices-v1.0.bin"
