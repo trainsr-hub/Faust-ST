@@ -44,3 +44,8 @@ Engineering workflows follow deterministic infrastructural routing across 4 spec
   - `daemons/`: Persistent background processes (OmniRoute, Telegram Listener).
   - `scripts/`: Turn hooks, multi-device memory sync, deterministic dispatcher.
 - **External Project Isolation**: Sandbox and client applications (e.g., Universe 25, external frontends) reside outside Faust's sovereign C2 repository and communicate via standard API contracts.
+
+## 5. Storage & Installation Invariant (Strict Local Disk D: Policy)
+- **Target Drive**: **`D:\` ALWAYS**.
+- All software, CLI tools (e.g. GitHub CLI), packages, AI models, caches, virtual environments, and downloaded files must **ALWAYS be installed, downloaded, and stored on Local Disk `D:\`** (e.g., `D:\Program Files\`, `D:\Temp\`, or `D:\My Drive\Blue AI\`).
+- Never write, download, or place developer tools, models, or temporary payloads onto `C:\` or default OS user folders unless strictly required by the Windows kernel.

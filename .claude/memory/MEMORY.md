@@ -29,6 +29,7 @@ This registry indexes all atomic memory components by their unique **Key IDs**. 
 - `[rule:backend_authority]` → [Backend Data Persistence](backend-data-persistence.md) — Backend is authoritative for all resources; RAM is transient; fail loudly.
 - `[rule:collective_leadership]` → [Faust Collective Architecture](faust-collective-architecture.md) — Faust Prime leadership, partitioned memory, adversarial review.
 - `[rule:project_boundary_isolation]` → [Project Boundary Isolation](project-boundary-isolation.md) — Faust communication/session harness is strictly isolated from independent application projects (Blue Rose & Universe 25).
+- `[rule:d_drive_storage_invariant]` → [Strict D: Drive Storage Invariant](d-drive-storage-invariant.md) — All software, CLI tools, models, packages, and temp files must ALWAYS be installed and stored on Local Disk D:.
 
 ---
 
