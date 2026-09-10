@@ -1,0 +1,158 @@
+#!/usr/bin/env python3
+"""
+Faust Speech Interface - high-level API for chunked voice output.
+"""
+import sys
+from pathlib import Path
+sys.path.append(str(Path(__file__).parent))
+
+from stream_synth import FaustVoiceStream
+import re
+import time
+
+# Global voice stream instance
+_voice_stream = None
+
+class SilentVoiceStream(FaustVoiceStream):
+    """Voice stream that does not auto-start playback thread on feed_text."""
+    def feed_text(self, text_chunk):
+        """Synthesize and queue audio without starting playback thread."""
+        audio_chunk = self._synthesize_chunk(text_chunk)
+        if len(audio_chunk) > 0:
+            self.audio_queue.put(audio_chunk)
+
+def _get_voice_stream():
+    global _voice_stream
+    if _voice_stream is None:
+        _voice_stream = FaustVoiceStream(
+            voice="af_bella",
+            speed=0.84,
+            language="en-us",
+            pitch_shift=-0.3
+        )
+        _voice_stream.start()
+    return _voice_stream
+
+def speak(text, block=True):
+    """
+    Speak the given text using chunked streaming.
+
+    Args:
+        text (str): The text to speak.
+        block (bool): If True, wait for speech to finish before returning.
+    """
+    if not text or not text.strip():
+        return
+
+    # Split text into prosodic chunks: sentences and phrases
+    # Simple splitting by punctuation and then grouping
+    # We'll split by commas, semicolons, colons, and periods, but keep the delimiters with the preceding phrase
+    # Actually, we want to keep natural phrasing. Let's split by sentence first, then if a sentence is long, split by commas.
+
+    # First, split into sentences (naive)
+    sentences = re.split(r'(?<=[.!?])\s+', text.strip())
+
+    chunks = []
+    for sent in sentences:
+        sent = sent.strip()
+        if not sent:
+            continue
+        # If sentence is short (<= 5 words), keep as one chunk
+        if len(sent.split()) <= 5:
+            chunks.append(sent)
+        else:
+            # Split by commas, semicolons, colons
+            parts = re.split(r'(?<=[,;:])\s+', sent)
+            for part in parts:
+                part = part.strip()
+                if part:
+                    # If part is still long, split into word groups of ~3-4 words
+                    words = part.split()
+                    if len(words) > 4:
+                        for i in range(0, len(words), 3):
+                            chunk = ' '.join(words[i:i+3])
+                            chunks.append(chunk)
+                    else:
+                        chunks.append(part)
+
+    # Ensure each chunk ends with a space for natural break
+    chunks = [chunk + ' ' for chunk in chunks]
+
+    vs = _get_voice_stream()
+    for chunk in chunks:
+        vs.feed_text(chunk)
+
+    if block:
+        vs.flush()
+
+def speak_deferred(text, block=True, max_wait=1.0):
+    """
+    Synthesize text in parallel with reasoning, but defer playback until
+    a sentence boundary is detected or max_wait elapses.
+
+    Args:
+        text (str): The full text to speak (assumed already available).
+        block (bool): If True, wait for playback to finish before returning.
+        max_wait (float): Maximum seconds to wait for a sentence boundary
+            before forcing playback.
+    """
+    if not text or not text.strip():
+        return
+
+    # Use same chunking logic as speak
+    sentences = re.split(r'(?<=[.!?])\s+', text.strip())
+    chunks = []
+    for sent in sentences:
+        sent = sent.strip()
+        if not sent:
+            continue
+        if len(sent.split()) <= 5:
+            chunks.append(sent)
+        else:
+            parts = re.split(r'(?<=[,;:])\s+', sent)
+            for part in parts:
+                part = part.strip()
+                if part:
+                    words = part.split()
+                    if len(words) > 4:
+                        for i in range(0, len(words), 3):
+                            chunk = ' '.join(words[i:i+3])
+                            chunks.append(chunk)
+                    else:
+                        chunks.append(part)
+    chunks = [chunk + ' ' for chunk in chunks]
+
+    vs = SilentVoiceStream(
+        voice="af_bella",
+        speed=0.84,
+        language="en-us",
+        pitch_shift=-0.3
+    )
+    # Feed all chunks (synthesis happens, audio queued)
+    for chunk in chunks:
+        vs.feed_text(chunk)
+
+    # Start playback thread and play queued audio
+    vs.start()
+    if block:
+        vs.flush()
+    vs.stop()
+
+def speak_async(text):
+    """Speak text without blocking."""
+    speak(text, block=False)
+
+def stop():
+    """Stop the voice stream."""
+    global _voice_stream
+    if _voice_stream is not None:
+        _voice_stream.stop()
+        _voice_stream = None
+
+# For testing
+if __name__ == "__main__":
+    speak("Faust online. Awaiting your directive, Manager.")
+    # Wait a bit to let it finish
+    import time
+    time.sleep(2)
+    stop()

@@ -1,0 +1,26 @@
+TELEGRAM NOTIFICATION UTILITY IS READY
+
+File: telegram_notify.py
+Purpose: Send Telegram messages from Faust scripts.
+Dependencies: None (standard library only).
+
+To activate:
+1. Create a Telegram bot via @BotFather and note the token.
+2. Get your chat ID (e.g., @userinfobot or by messaging the bot).
+3. Either:
+   a) Set environment variables:
+        set TELEGRAM_BOT_TOKEN=your_token_here
+        set TELEGRAM_CHAT_ID=your_chat_id_here
+   b) Or create a JSON file named telegram_config.json in the same directory:
+        {
+          "bot_token": "your_token_here",
+          "chat_id": "your_chat_id_here"
+        }
+
+Usage in any Python script:
+    from telegram_notify import send_telegram_message
+    send_telegram_message("Faust: Task completed.")
+
+The utility is designed for low friction and autonomous use.
+
+When you have your token and chat ID, let me know and I can help test or record the configuration in memory.

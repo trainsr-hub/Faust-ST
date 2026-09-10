@@ -6,8 +6,8 @@ from pathlib import Path
 from datetime import datetime
 from typing import Optional, Any, Dict, List
 from contextlib import asynccontextmanager
-from fastapi import FastAPI, HTTPException, Request
-from fastapi.responses import JSONResponse
+from fastapi import FastAPI, HTTPException, Request, WebSocket, WebSocketDisconnect
+from fastapi.responses import JSONResponse, StreamingResponse
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
@@ -42,7 +42,14 @@ async def lifespan(app: FastAPI):
                 for log_file in log_dir.glob("*.log"):
                     try: log_file.unlink()
                     except Exception: pass
-    print("🚀 Blue Rose High-Performance Storage Engine Standby!")
+    # Preload Faust Sound Plugin to eliminate cold start latency
+    try:
+        from faust_plugins.sound import preload
+        preload()
+        print("[VOICE] Faust Sound Plugin preloaded successfully.")
+    except Exception as e:
+        print(f"[WARNING] Failed to preload Faust Sound Plugin: {e}")
+    print("[ROCKET] Blue Rose High-Performance Storage Engine Standby!")
     yield
 
 app = FastAPI(title="Blue Rose Storage Engine", lifespan=lifespan)
@@ -83,7 +90,7 @@ class OrderRequest(BaseModel):
 
 def load_global_spec() -> Dict[str, Any]:
     if not SPEC_PATH.exists():
-        raise HTTPException(status_code=500, detail=f"Thiếu file cấu hình api_spec.json tại: {SPEC_PATH}")
+        raise HTTPException(status_code=500, detail=f"Missing configuration file api_spec.json at: {SPEC_PATH}")
     with open(SPEC_PATH, "r", encoding="utf-8") as f:
         return json.load(f)
 
@@ -91,7 +98,7 @@ def load_project_index(project_id: str) -> Dict[str, Any]:
     resolved_id = resolve_project_id(project_id)
     index_path = BASE_DIR / resolved_id / "index.json"
     if not index_path.exists():
-        raise HTTPException(status_code=404, detail=f"Project '{project_id}' không tồn tại tại: {index_path}")
+        raise HTTPException(status_code=404, detail=f"Project '{project_id}' not found at: {index_path}")
     with open(index_path, "r", encoding="utf-8") as f:
         return json.load(f)
 
@@ -117,6 +124,14 @@ def infer_sqlite_column_type(val: Any) -> str:
 async def health_check():
     return {"status": "ok", "message": "Blue Rose Storage Engine is running"}
 
+# Import and include voice synthesis router
+try:
+    from faust_plugins.sound.api import include_voice_router
+    include_voice_router(app)
+    print("[VOICE] Voice synthesis API endpoint registered at /api/v1/voice/synthesize")
+except Exception as e:
+    print(f"[WARNING] Failed to load voice synthesis API: {e}")
+
 @app.post("/api/v1/execute")
 async def execute_order(req: OrderRequest):
     project_id = resolve_project_id(req.project_id)
@@ -131,7 +146,7 @@ async def execute_order(req: OrderRequest):
     tiers_map = proj_config.get("tiers", {})
 
     if tier not in tiers_map:
-        err = f"Tier '{tier}' chưa được cấu hình trong index.json của project '{project_id}'"
+        err = f"Tier '{tier}' not configured in index.json for project '{project_id}'"
         if log_enabled: write_error_log(project_id, err)
         raise HTTPException(status_code=400, detail=err)
 
@@ -143,7 +158,7 @@ async def execute_order(req: OrderRequest):
     
     extended_actions = ["delete", "batch_delete", "batch_upsert", "batch_read", "read_keys", "overwrite_all", "overwrite", "seed_if_missing"]
     if act not in allowed_actions and act not in extended_actions:
-        err = f"Format '{fmt}' của Tier {tier} không hỗ trợ action '{act}'."
+        err = f"Format '{fmt}' of Tier {tier} does not support action '{act}'."
         if log_enabled: write_error_log(project_id, err)
         raise HTTPException(status_code=400, detail=err)
 
@@ -153,7 +168,7 @@ async def execute_order(req: OrderRequest):
     file_path.parent.mkdir(parents=True, exist_ok=True)
 
     if act == "backup":
-        if not file_path.exists(): return {"status": "skipped", "message": "File chưa tồn tại"}
+        if not file_path.exists(): return {"status": "skipped", "message": "File not found"}
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         backup_dir = BASE_DIR / project_id / "backups" / timestamp
         backup_dir.mkdir(parents=True, exist_ok=True)
@@ -173,7 +188,7 @@ async def execute_order(req: OrderRequest):
             with open(file_path, "r", encoding="utf-8") as f: return {"data": json.load(f)}
         elif act == "read_key":
             if not file_path.exists(): return {"data": None}
-            if not key: raise ValueError("Action 'read_key' yêu cầu 'key'")
+            if not key: raise ValueError("Action 'read_key' requires 'key'")
             with open(file_path, "r", encoding="utf-8") as f:
                 return {"data": json.load(f).get(key)}
         elif act in ["overwrite", "overwrite_all"]:
@@ -192,7 +207,7 @@ async def execute_order(req: OrderRequest):
                 return {"data": [json.loads(line) for line in f if line.strip()]}
         elif act == "clear":
             open(file_path, "w").close()
-            return {"status": "success", "message": "Đã dọn dẹp JSONL buffer"}
+            return {"status": "success", "message": "JSONL buffer cleared"}
 
     elif fmt == "sqlite":
         with sqlite3.connect(file_path) as conn:
@@ -229,7 +244,7 @@ async def execute_order(req: OrderRequest):
             elif act == "read_key":
                 if not tables:
                     return {"data": None}
-                if not key: raise ValueError("Action 'read_key' yêu cầu 'key'")
+                if not key: raise ValueError("Action 'read_key' requires 'key'")
                 cursor.execute(f"SELECT * FROM {target_table} WHERE id = ?", (key,))
                 row = cursor.fetchone()
                 if not row: return {"data": None}
@@ -239,7 +254,7 @@ async def execute_order(req: OrderRequest):
 
             # =================================================================
             # [START MODIFICATION - ULTRA FAST BATCH READ FOR PAGINATION]
-            # Đọc cùng lúc danh sách nhiều ID chỉ với 1 câu lệnh SQL duy nhất
+            # Read multiple IDs at once with a single SQL statement
             # =================================================================
             elif act in ["batch_read", "read_keys"]:
                 keys_to_read = payload if isinstance(payload, list) else ([key] if key else [])
@@ -329,10 +344,10 @@ async def execute_order(req: OrderRequest):
 
             elif act in ["overwrite_all", "overwrite"]:
                 if not isinstance(payload, dict):
-                    raise ValueError("Action 'overwrite_all' yêu cầu payload dạng Dictionary")
+                    raise ValueError("Action 'overwrite_all' requires payload as Dictionary")
 
                 if not payload:
-                    return {"status": "skipped", "message": "Payload rỗng, hủy thao tác xóa bảng an toàn."}
+                    return {"status": "skipped", "message": "Payload empty, cancelling table deletion safely."}
 
                 if tables:
                     cursor.execute(f"DELETE FROM {target_table}")
@@ -374,9 +389,9 @@ async def execute_order(req: OrderRequest):
                 return {"status": "success", "rows_written": len(payload)}
 
             elif act == "upsert":
-                if not key: raise ValueError("Action 'upsert' yêu cầu 'key'")
+                if not key: raise ValueError("Action 'upsert' requires 'key'")
                 if payload is None: payload = {}
-                if not isinstance(payload, dict): raise ValueError("Payload phải là Object")
+                if not isinstance(payload, dict): raise ValueError("Payload must be an Object")
 
                 if not tables:
                     columns_def = ["id TEXT PRIMARY KEY"]
@@ -417,6 +432,73 @@ async def execute_order(req: OrderRequest):
                 conn.commit()
                 return {"status": "success"}
 
+
+# WebSocket connection manager for Faust subtitle streaming
+class ConnectionManager:
+    def __init__(self):
+        self.active_connections: list[WebSocket] = []
+
+    async def connect(self, websocket: WebSocket):
+        await websocket.accept()
+        self.active_connections.append(websocket)
+        print(f"WebSocket connected. Total connections: {len(self.active_connections)}")
+
+    def disconnect(self, websocket: WebSocket):
+        self.active_connections.remove(websocket)
+        print(f"WebSocket disconnected. Total connections: {len(self.active_connections)}")
+
+    async def send_personal_message(self, message: str, websocket: WebSocket):
+        try:
+            await websocket.send_text(message)
+        except Exception as e:
+            print(f"Failed to send message: {e}")
+            self.disconnect(websocket)
+
+    async def broadcast(self, message: str):
+        for connection in self.active_connections:
+            try:
+                await connection.send_text(message)
+            except Exception as e:
+                print(f"Failed to broadcast to connection: {e}")
+                self.disconnect(connection)
+
+
+manager = ConnectionManager()
+
+
+@app.websocket("/ws/subtitle")
+async def subtitle_websocket_endpoint(websocket: WebSocket):
+    """WebSocket endpoint for streaming Faust subtitle updates."""
+    await manager.connect(websocket)
+    try:
+        while True:
+            # Keep connection alive by waiting for messages from client (we don't process them)
+            # This allows us to detect when the client disconnects
+            data = await websocket.receive_text()
+            # We don't process incoming messages from clients in this implementation
+    except WebSocketDisconnect:
+        manager.disconnect(websocket)
+    except Exception as e:
+        print(f"WebSocket error: {e}")
+        manager.disconnect(websocket)
+
+
+# Helper function to broadcast subtitle updates (to be called from voice synthesis)
+async def broadcast_subtitle_update(text: str):
+    """Broadcast subtitle text to all connected WebSocket clients."""
+    print(f"[WebSocket] Broadcasting subtitle: {text}")
+    print(f"[WebSocket] Active connections: {len(manager.active_connections)}")
+    if manager.active_connections:
+        # Format as Faust subtitle with prefix
+        subtitle_message = f"Faust: {text}"
+        print(f"[WebSocket] Sending message: {subtitle_message}")
+        await manager.broadcast(subtitle_message)
+    else:
+        print("[WebSocket] No active connections to broadcast to")
+
 if __name__ == "__main__":
     import uvicorn
+    # Mount static files for serving the voice tester HTML
+    from fastapi.staticfiles import StaticFiles
+    app.mount("/", StaticFiles(directory=".", html=True), name="static")
     uvicorn.run("server:app", host="0.0.0.0", port=8080, reload=True)

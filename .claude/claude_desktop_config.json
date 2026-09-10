@@ -1,0 +1,52 @@
+{
+  "omniroute": {
+    "baseUrl": "http://localhost:20128/v1",
+    "description": "OmniRoute Intelligent Multi-Combo Model Gateway"
+  },
+  "models": {
+    "Faust-ST": {
+      "tier": 1,
+      "role": "User Interface & Context Router",
+      "primaryModel": "Gemini 3.7 Flash (Tiered)",
+      "routingStrategy": "Intelligent Auto",
+      "contextWindow": 200000,
+      "description": "Conversational UI, intent parsing, and HITL gate validation"
+    },
+    "Faust-ND": {
+      "tier": 2,
+      "role": "Deep Systems Engineer (Lead Architect & Inquisitor)",
+      "primaryModel": "Claude Sonnet 4.6 (Thinking)",
+      "reviewerModel": "Gemini 3.7 Flash (High)",
+      "routingStrategy": "Priority",
+      "contextWindow": 200000,
+      "description": "High-altitude system architecture, interface contracts, and Level 2 cross-model peer review"
+    },
+    "Faust-RD": {
+      "tier": 2.5,
+      "role": "Programmatic Logistics Layer (The Dispatcher)",
+      "engine": "Deterministic Python/Node Script (Zero-LLM Cost)",
+      "routingStrategy": "Deterministic Pipeline",
+      "description": "JSON schema validation, SHA-256 blueprint verification, and DAG work-package dispatch"
+    },
+    "Faust-TH": {
+      "tier": 3,
+      "role": "Execution Workers (The Factory Floor)",
+      "primaryModels": [
+        "Qwen3 32B (UI / Layout Specialist)",
+        "Llama 3.3 70B (Logic & Backend Worker)"
+      ],
+      "routingStrategy": "Reset-Aware Round-Robin",
+      "contextWindow": 131072,
+      "description": "Micro-module fabrication with Level 3 compiler-driven self-healing loop"
+    }
+  },
+  "globalInvariants": {
+    "invariant_1": "Blueprint Completeness Checksum (SHA-256)",
+    "invariant_2": "Monotonic Retry Convergence (Error Category Tracking)",
+    "invariant_3": "Shared Resource Serialization (Single-Writer Locks)",
+    "invariant_4": "Anchored Level 2 Review (Static Schema Diffing)",
+    "invariant_5": "Numeric Intent Gate (Confidence >= 0.85)",
+    "invariant_6": "Mandatory Escalation Bundle (Full Diagnostic Snapshot)",
+    "invariant_7": "Autonomous Cryptographic Lock (Integration Test Verification)"
+  }
+}

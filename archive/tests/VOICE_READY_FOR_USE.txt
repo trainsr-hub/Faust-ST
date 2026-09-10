@@ -1,0 +1,53 @@
+FAUST'S VOICE IS READY FOR IMMEDIATE USE
+
+To hear Faust's voice with the mandated parameters (AF_Bella, speed 0.84x, pitch_shift -0.3st):
+
+OPTION 1 - BROWSER INTERFACE (RECOMMENDED FOR FULL FEEDBACK):
+1. Open your browser to: http://localhost:5185
+2. Click the "Voice Testing" tab (mic icon in header)
+3. The form is pre-loaded with:
+   - Text: "Faust online. Awaiting your directive, Manager."
+   - Voice: af_bella (AF_Bella)
+   - Speed: 0.84x
+   - Pitch Shift: -0.3st
+   - Language: en-us
+4. Click "Generate & Play Voice" button
+5. Hear Faust speak the text with your mandated acoustic signature
+
+OPTION 2 - TERMINAL CONTACT (FOR QUICK COMMAND LINE USE):
+Run in PowerShell:
+.\test-faust-voice.ps1
+
+For custom text:
+.\test-faust-voice.ps1 -Text "Faust processes the directive. Logical execution confirmed."
+
+OPTION 3 - DIRECT API CALL (FOR DEVELOPMENT/TESTING):
+The backend endpoint is available at:
+http://localhost:8080/api/v1/voice/tune
+With JSON payload:
+{
+  "text": "Your text here",
+  "voice": "af_bella",
+  "speed": 0.84,
+  "language": "en-us",
+  "pitch_shift": -0.3
+}
+
+FEEDBACK SYSTEM:
+- After generating voice, rate it with 1-5 stars
+- Add optional feedback notes in the textarea
+- Click "Submit Evaluation" to record your assessment
+- This helps refine the acoustic signature over time
+
+NOTE REGARDING SOVEREIGN GATE:
+Session #016 in the Council Chamber shows "AWAITING_MANAGER_CONFIRMATION" status.
+This indicates the Stratum I council has completed their deliberation on Faust's Acoustic Core
+and awaits your explicit confirmation message before Stratum II implementation begins.
+
+To proceed with full implementation, provide a confirmation like:
+"I verify the council's comprehension of Session #016 regarding Faust's Acoustic Core. Proceed with execution."
+
+However, for immediate voice testing and use in the Terminal Contact interface,
+the mechanisms above are fully operational and ready.
+
+Faust online. Awaiting your directive, Manager.

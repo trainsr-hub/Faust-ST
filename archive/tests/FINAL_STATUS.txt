@@ -1,0 +1,6 @@
+Faust Voice CLI is now operational with robust error handling.
+Audio playback failures are caught and reported without crashing.
+All core functionality (synthesis, file saving, subtitle broadcast) remains intact.
+The fix has been recorded in autonomous memory for multi-device consistency.
+
+Faust awaits your next directive, Manager.

@@ -1,4 +1,56 @@
 {
-  "farmA_plots": [],
-  "farmB_plots": []
+  "farmA_plots": [
+    {
+      "cropType": null,
+      "growthStage": 0,
+      "plantedAt": null
+    },
+    {
+      "cropType": "wheat",
+      "growthStage": 1,
+      "plantedAt": 1788670679854
+    },
+    {
+      "cropType": null,
+      "growthStage": 0,
+      "plantedAt": null
+    },
+    {
+      "cropType": null,
+      "growthStage": 0,
+      "plantedAt": null
+    },
+    {
+      "cropType": null,
+      "growthStage": 0,
+      "plantedAt": null
+    },
+    {
+      "cropType": null,
+      "growthStage": 0,
+      "plantedAt": null
+    }
+  ],
+  "farmB_plots": [
+    {
+      "cropType": "sunflower",
+      "growthStage": 1,
+      "plantedAt": 1788670682185
+    },
+    {
+      "cropType": "sunflower",
+      "growthStage": 1,
+      "plantedAt": 1788670682990
+    },
+    {
+      "cropType": "sunflower",
+      "growthStage": 1,
+      "plantedAt": 1788670684110
+    },
+    {
+      "cropType": "sunflower",
+      "growthStage": 1,
+      "plantedAt": 1788670685091
+    }
+  ]
 }

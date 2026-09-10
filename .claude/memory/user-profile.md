@@ -17,5 +17,6 @@ The user is building a personal music analytics platform with a custom hazard sc
 Key preferences observed:
 - Prefers the AI to take initiative and act rather than asking for confirmation on routine steps
 - Values visual quality highly — the UI design matters ("the ui fire")
+- Prefers emoji-enriched formatting (e.g. ⚡, 🛡️, 📊, ✅) for Telegram communication to elevate visual clarity and hierarchy
 - Wants architectural clarity — requested a single source-of-truth structure document to avoid duplication confusion
 - Comfortable with the AI copying files and making structural changes directly

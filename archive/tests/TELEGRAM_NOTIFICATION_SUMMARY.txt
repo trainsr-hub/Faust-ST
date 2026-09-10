@@ -1,0 +1,22 @@
+TELEGRAM NOTIFICATION SYSTEM STATUS
+
+- Bot: @FaustoftheBlueRose_bot (token configured)
+- Chat ID: -1004405650953 (Group: Council of the Blue Rose)
+- Utility: telegram_notify.py (ready to send messages)
+- Test messages: sent and received successfully.
+
+LISTENER STATUS:
+The listener script (telegram_listener.py) encounters HTTP 409 Conflict when trying to poll for updates, indicating another getUpdates request may be active. This could be due to a lingering process or a webhook setting. Despite this, the bot can still receive messages if privacy mode is disabled (which you have done) and a listener is running.
+
+RECOMMENDATION:
+For the primary goal of receiving notifications when Faust completes tasks, the utility is fully functional. Simply call:
+    from telegram_notify import send_telegram_message
+    send_telegram_message("Task description.")
+
+Faust will integrate this into task completion scripts.
+
+If two-way communication is desired, we can:
+1. Investigate and resolve the 409 Conflict (e.g., check for other listener instances, use webhooks, or ensure only one listener runs).
+2. Alternatively, set up a simple command-based response using the same utility but triggered by external events (e.g., Faust sends a message and waits for a reply via a separate script).
+
+Please let me know how you wish to proceed.
