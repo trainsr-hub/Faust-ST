@@ -12,15 +12,21 @@ logger = logging.getLogger("faust.sound.config")
 
 # Base paths for self-contained plugin execution
 PLUGIN_DIR = Path(__file__).resolve().parent
-PROJECT_ROOT = Path(__file__).resolve().parents[4]
-MODELS_DIR = PLUGIN_DIR.parent / "assets" / "models"
+SOUND_SKILL_DIR = PLUGIN_DIR.parent
+SKILLS_DIR = SOUND_SKILL_DIR.parent
+CLAUDE_DIR = SKILLS_DIR.parent
+PROJECT_ROOT = CLAUDE_DIR.parent
+
+MODELS_DIR = SOUND_SKILL_DIR / "assets" / "models"
 PRIMARY_MODEL_PATH = MODELS_DIR / "kokoro-v1.0.onnx"
 PRIMARY_VOICES_PATH = MODELS_DIR / "voices-v1.0.bin"
 
 # Candidate ROM configuration file paths (ordered by search priority)
 CONFIG_CANDIDATE_PATHS = [
+    CLAUDE_DIR / "faust_config.json",
+    PROJECT_ROOT / ".claude" / "faust_config.json",
     PROJECT_ROOT / "faust_config.json",
-    PROJECT_ROOT / "config" / "faust_config.json",
+    SOUND_SKILL_DIR / "faust_config.json",
     PLUGIN_DIR / "faust_config.json",
 ]
 
@@ -63,7 +69,7 @@ def resolve_speech_log_dir(custom_dir: Optional[str] = None) -> Path:
         return p.resolve()
     cfg = load_rom_config()
     acoustic_cfg = cfg.get("acoustic_presence", {})
-    configured_dir = acoustic_cfg.get("speech_log_dir", "logs/speech")
+    configured_dir = acoustic_cfg.get("speech_log_dir", ".claude/skills/sound/logs/speech")
     p = Path(configured_dir)
     if not p.is_absolute():
         return (PROJECT_ROOT / p).resolve()
@@ -112,7 +118,7 @@ class VoiceConfig:
 
     # Spoken transcript logging (<year>_<month>_<day>.md)
     speech_log_enabled: bool = True
-    speech_log_dir: str = "logs/speech"
+    speech_log_dir: str = ".claude/skills/sound/logs/speech"
 
     # Normalization type: "peak" or "rms"
     normalization_type: str = "peak"

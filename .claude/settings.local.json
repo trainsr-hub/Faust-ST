@@ -24,7 +24,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python scripts/faust_turn_hook.py",
+            "command": "python .claude/scripts/faust_turn_hook.py",
             "timeout": 30
           }
         ]
@@ -36,7 +36,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python scripts/faust_turn_hook.py",
+            "command": "python .claude/scripts/faust_turn_hook.py",
             "timeout": 30
           }
         ]

@@ -15,7 +15,7 @@ if str(PROJECT_ROOT) not in sys.path:
 if str(SKILLS_DIR) not in sys.path:
     sys.path.insert(0, str(SKILLS_DIR))
 
-from faust_plugins.sound import (
+from sound import (
     speak,
     preload,
     list_voices,

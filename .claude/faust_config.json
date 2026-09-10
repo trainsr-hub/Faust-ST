@@ -1,0 +1,58 @@
+{
+  "acoustic_presence": {
+    "enabled": true,
+    "voice": "af_bella",
+    "secondary_voice": "random_female",
+    "voice_blend_enabled": true,
+    "voice_blend_female_pool": [
+      "bf_alice",
+      "bf_emma",
+      "bf_isabella",
+      "bf_lily",
+      "af_heart",
+      "af_kore",
+      "af_nicole",
+      "af_nova",
+      "af_sarah",
+      "af_alloy",
+      "af_aoede",
+      "af_jessica"
+    ],
+    "discarded_voices": [
+      "af_sky",
+      "af_river"
+    ],
+    "normalization_type": "peak",
+    "speed": 0.84,
+    "pitch_shift": -0.3,
+    "pause_duration": 0.3,
+    "prosody_jitter_enabled": true,
+    "pipelined_playback": true,
+    "speech_log_enabled": true,
+    "speech_log_dir": ".claude/skills/sound/logs/speech",
+    "websocket_subtitles": true,
+    "websocket_subtitle_url": "ws://localhost:8082/ws/subtitle",
+    "port": 20129,
+    "host": "127.0.0.1"
+  },
+  "operational": {
+    "persona": "Faust",
+    "briefing_mode": "full",
+    "auto_preload": true,
+    "log_level": "INFO"
+  },
+  "hivemind": {
+    "stratum": "I",
+    "telemetry_enabled": true
+  },
+  "telegram": {
+    "enabled": true,
+    "bot_token": "8886654932:AAFq6vaPlJig3oekr8BEW2PuRvMejIUB7VU",
+    "chat_id": -1004405650953,
+    "manager_user_id": 8016442589,
+    "port": 20130,
+    "host": "127.0.0.1",
+    "poll_timeout": 30,
+    "max_dedup_history": 1000
+  }
+}

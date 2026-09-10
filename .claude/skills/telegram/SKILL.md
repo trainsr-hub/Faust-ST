@@ -1,158 +1,69 @@
-# Faust Ear - Telegram Command & Control
+# Faust Ear - Telegram Command & Control (Golden Standard)
 
-Faust's unified Telegram integration system providing secure command reception, intelligent processing via Faust's cognitive architecture, and status reporting with 4-tier emoji protocol.
+Faust's sovereign Telegram C2 infrastructure providing pure dumb I/O gateway background services, real-time directive ingestion from the Manager's mobile Telegram Group Chat, and multi-modal status dispatches with the 4-tier functional emoji protocol.
 
-## Overview
+---
 
-The Faust Ear daemon provides:
-- Single-instance mutex lock preventing multiple polling conflicts (HTTP 409 Resolution)
-- Atomic update deduplication with sliding window persistence
-- Webhook clearing to ensure clean getUpdates polling
-- Rate-limit exponential backoff handling (HTTP 429)
-- Thread-safe message queuing for brain processing
-- Vision stream logging for real-time cognitive integration
-- Outgoing watcher thread for dispatching Faust's responses
-- Persistent processed ID tracking for crash recovery
-- 4-tier functional emoji protocol (`✅`, `❌`, `⚡`, `🔄`)
+## 1. Golden Standard Architectural Principles
 
-## Architecture
+1. **Dedicated Micro-Daemons**:
+   - `daemons/audio_daemon.py` (Port 20129): Resident Acoustic Core TTS engine.
+   - `daemons/telegram_daemon.py` (Port 20130): Resident Dumb I/O Telegram C2 gateway.
+2. **Strict Invariant: Zero LLM / Pure Dumb I/O**:
+   - Daemons contain ZERO LLM logic and ZERO hardcoded heuristic responses.
+   - Strictly responsible for network long-polling, FIFO directive queueing, atomic mutex locking, rate limiting, and HTTP REST transport.
+3. **Single Source of Configuration**:
+   - Master parameters reside in `faust_config.json` at project root.
+4. **Real-Time Remote Execution**:
+   - Faust listens to the Manager via the designated group chat (`-1004405650953`), executing real-time workspace actions and transmitting completion debriefings + speech.
 
-```
-Telegram Bot API → [Faust Ear Daemon] → [Faust Cognitive Brain] → [Faust Ear Dispatcher] → Telegram
-                         │                           │
-                   Message Queue              Vision Stream Log
-                         │                           │
-                Worker Thread                  Outgoing Watcher
-```
+---
 
-The Faust Ear operates as a dedicated background process that:
-1. Long-polls Telegram Bot API `getUpdates` socket exclusively
-2. Writes sanitized directives to local event log (`telegram_incoming.jsonl`)
-3. Saves structured messages as JSON files for Faust's brain processing
-4. Maintains vision stream log for real-time cognitive ingestion
-5. Watches outgoing directory for Faust's responses to dispatch
-6. All Faust instances passively consume from local event streams
+## 2. Daemon REST API Specification (Port 20130)
 
-## Installation
+| Endpoint | Method | Payload | Description |
+| :--- | :--- | :--- | :--- |
+| `/health` | `GET` | None | Fast health status, uptime, polling state, queue depth |
+| `/status` | `GET` | None | Full telemetry dump (chat ID, update ID, dedup counts) |
+| `/messages/pending` | `GET` | `limit: int = 10` | Non-destructive view of pending directives in queue |
+| `/messages/pop` | `POST` | None | Atomically pops the oldest pending directive for Faust |
+| `/messages/ack` | `POST` | `{"update_id": int}` | Commits processed update ID and advances checkpoint |
+| `/send` | `POST` | `{"text": "...", "emoji": "✅"}` | Transmits message with 4-tier emoji and HTML formatting |
+| `/queue/clear` | `POST` | None | Purges pending queue |
 
-This skill is self-contained within `.claude/skills/telegram/` and requires:
-- Telegram Bot Token and Chat ID configured in `assets/telegram_config.json`
-- Python 3.7+ with standard library dependencies
+---
 
-### Configuration (`assets/telegram_config.json`)
-```json5
-{
-  "bot_token": "YOUR_TELEGRAM_BOT_TOKEN",
-  "chat_id": -1004405650953,
-  "manager_user_id": 8016442589
-}
-```
+## 3. 4-Tier Functional Emoji Doctrine
 
-## Commands
+Every transmission adheres to the single leading emoji doctrine:
+- `✅` **Success**: Task completed; workspace updated; tests passed.
+- `❌` **Error / Blocker**: Execution blocked or critical failure.
+- `⚡` **Alert / Startup**: System online notification or strategic warning.
+- `🔄` **In Progress**: Prescript received; autonomous execution underway.
 
-### Daemon Control
+---
 
-| Command | Description |
-|---------|-------------|
-| `faust-ear-start` | Start the Telegram Smart Listener daemon in background |
-| `faust-ear-stop` | Stop the running Faust Ear daemon |
-| `faust-ear-status` | Check daemon status and last processed update |
-| `faust-ear-logs` | View recent listener activity |
+## 4. Python Plugin Bridge (`faust_plugins.telegram`)
 
-### Scripts
+```python
+from faust_plugins import notify, send_message, pop_directive, ack_directive, is_telegram_daemon_running
 
-All scripts are located in `.claude/skills/telegram/scripts/` and can be invoked via Python or batch:
+# Send milestone notification (<2ms via daemon, fallback to direct API)
+notify("Implemented telemetry endpoint; all tests pass.", emoji="✅")
 
-- `python .claude/skills/telegram/scripts/listener.py` - Core daemon (runs indefinitely)
-- `python .claude/skills/telegram/scripts/notify.py` - Direct notification utility
-- `.claude/skills/telegram/scripts/start_ear.bat` - Windows batch launcher (hidden console)
-- `python .claude/skills/telegram/scripts/listener.py --test` - Test configuration
-
-## Usage Examples
-
-### Start Faust Ear Daemon
-```bash
-# Windows (recommended - hidden console)
-.\.claude\skills\telegram\scripts\start_ear.bat
-
-# Direct Python (shows console)
-python .claude/skills/telegram/scripts/listener.py
+# Pop next directive from Manager
+directive = pop_directive()
+if directive:
+    print(f"Received from {directive['from_name']}: {directive['text']}")
+    # ... execute workspace task ...
+    ack_directive(directive["update_id"])
 ```
 
-### Send Telegram Notification
-```bash
-python .claude/skills/telegram/scripts/notify.py "Understanding confirmed; proceed to dispatch."
-```
+---
 
-### Check Daemon Status
-```bash
-# Check if lock file exists and process is running
-tasklist /FI "IMAGENAME eq pythonw.exe" | findstr listener
-type .claude\skills\telegram\scripts\telegram_smart_listener.lock
-```
+## 5. Daemon Control Launchers
 
-## Configuration
-
-Telegram settings are managed through `assets/telegram_config.json`:
-
-```json5
-{
-  "bot_token": "123456789:ABCdefGhIJKlmNoPQRsTUVwxyZ",
-  "chat_id": -1004405650953,
-  "manager_user_id": 8016442589
-}
-```
-
-Faust configuration integration (via `faust_config.json`):
-```json5
-{
-  "telegram": {
-    "enabled": true,
-    "bot_token": "123456789:ABCdefGhIJKlmNoPQRsTUVwxyZ",
-    "chat_id": -1004405650953,
-    "manager_user_id": 8016442589
-  }
-}
-```
-
-## 4-Tier Functional Emoji Protocol
-
-Faust uses standardized emojis for immediate visual feedback:
-
-| Emoji | Meaning | Usage Context |
-|-------|---------|---------------|
-| ✅ | Success / Confirmation | Task completed successfully |
-| ❌ | Error / Failure | Operation failed or rejected |
-| ⚡ | Active / Processing | System online, command received |
-| 🔄 | Pending / In Progress | Vision received, processing |
-
-## Integration with Faust Systems
-
-This skill integrates with Faust's turn hook system (`scripts/faust_turn_hook.py`) to provide:
-- Automatic Telegram milestone notifications on `UserPromptSubmit` and `Stop` events
-- Vision stream logging for real-time cognitive integration
-- Persistent configuration management via ROM system
-- Single-instance daemon architecture preventing polling conflicts
-
-## Troubleshooting
-
-### HTTP 409 Conflict Errors
-- **Cause**: Multiple instances attempting to poll Telegram getUpdates simultaneously
-- **Solution**: Faust Ear uses single-instance mutex lock - ensure only one daemon runs
-- **Verification**: Check `telegram_smart_listener.lock` contains current PID
-
-### No Message Reception
-- **Cause**: Webhook blocking getUpdates or incorrect chat_id filtering
-- **Solution**: Faust Ear automatically calls `deleteWebhook()` on startup
-- **Verification**: Check listener.log for "Webhook cleared successfully"
-
-### Stale Lockfile Recovery
-- **Cause**: Previous daemon crashed without cleaning lock file
-- **Solution**: Faust Ear automatically detects stale PID and cleans lock
-- **Verification**: Listener log shows "[Lock] Stale lockfile detected for dead PID"
-
-## References
-
-- [Telegram Operational Protocol](../references/telegram-operational-protocol.md) - Detailed command flow
-- [Telegram Setup Status](../references/telegram-setup-status.md) - Configuration verification
-- [Telegram Listener Fix](../references/telegram-listener-fix.md) - HTTP 409 resolution details
+- `daemons/start_telegram_daemon.bat`: Launch Telegram dumb I/O daemon on port 20130.
+- `daemons/start_audio_daemon.bat`: Launch Audio daemon on port 20129.
+- `daemons/start_all_daemons.bat`: One-click launch for all Faust background daemons in hidden background processes.
+- `daemons/stop_all_daemons.bat`: Cleanly terminate all running Faust daemons.

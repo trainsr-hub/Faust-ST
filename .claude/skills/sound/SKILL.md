@@ -48,7 +48,7 @@ Voice settings are managed through `faust_config.json` in the project root under
     "sample_rate": 24000,
     "peak_norm": 0.90,
     "speech_log_enabled": true,
-    "speech_log_dir": "logs/speech",
+    "speech_log_dir": ".claude/skills/sound/logs/speech",
     "websocket_subtitle_url": "ws://localhost:8082/ws/subtitle",
     "normalization_type": "peak",
     "voice_blend_enabled": true,

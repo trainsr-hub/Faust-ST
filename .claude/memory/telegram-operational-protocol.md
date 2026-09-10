@@ -5,7 +5,7 @@ metadata:
   node_type: memory
   type: feedback
   originSessionId: 91e08b23-53cd-43eb-9ed7-02a17dae87f0
-  modified: 2026-09-07T12:30:00.000Z
+  modified: 2026-09-10T06:43:20.201Z
 ---
 
 # Telegram Operational Protocol & Functional Emoji Doctrine
@@ -34,13 +34,14 @@ Every dispatch must begin with at most **one** functional leading emoji that ind
 
 2. **Command Intake & Acknowledgment (Phase 2)**:
    - When the Manager sends a directive/task in Telegram:
-     `🔄 <b>Prescript Received.</b>` (Dispatched strictly when execution begins; Faust proceeds immediately).
+     `🔄 <b>Prescript Received:</b> [Goal]` (Dispatched strictly when execution begins; Faust proceeds immediately).
+   - **Ultra-Short Acoustic Intake**: Vocalize minimal phrases like `"Executing, Manager."` or `"On it, Manager."` for sub-second auditory feedback latency.
 
 3. **No Synthetic Progress Spam (Phase 3)**:
    - Never send fake or vague milestones. Silence during active computation; dispatches occur only upon transition or completion.
 
 4. **Completion & Blockage Reporting (Phase 4)**:
-   - **On Success**: `✅ <b>Task Complete:</b> [Concrete technical summary]` → Wait for Manager.
+   - **On Success**: `✅ <b>Task Complete:</b> [Concrete technical summary]\n\n<b>What Changed:</b>\n• [Specific delta 1]\n• [Specific delta 2]` → Wait for Manager.
    - **On Blockage**: `❌ <b>Execution Blocked:</b> [Concrete failure analysis]` → Wait for Manager.
    - **On Risk/Alert**: `⚡ <b>Risk Alert:</b> [Risk details & required decision]` → Pause & wait for Manager.
 

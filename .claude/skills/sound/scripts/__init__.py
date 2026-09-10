@@ -39,7 +39,7 @@ def speak(
     """
     if not save_path:
         try:
-            from faust_plugins.sound import _try_daemon_speak
+            from sound import _try_daemon_speak
             if _try_daemon_speak(
                 text=text,
                 voice=voice,

@@ -5,26 +5,28 @@ Test script to validate Faust Sound Plugin improvements
 import sys
 from pathlib import Path
 
-# Add project root to sys.path
-PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
+# Add skills directory to sys.path
+SKILLS_DIR = Path(__file__).resolve().parents[2]
+PROJECT_ROOT = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(PROJECT_ROOT))
+sys.path.insert(0, str(SKILLS_DIR))
 
 import time
 import numpy as np
-from faust_plugins.sound import (
+from sound import (
     speak,
     preload,
     shutdown,
     DEFAULT_CONFIG,
-    RMS_TEST_CONFIG
 )
+from sound.scripts.config import RMS_TEST_CONFIG
 
 def test_preload_performance():
     """Test that preload eliminates cold start latency"""
     print("\n=== Testing Preload Performance ===")
 
     # Fresh engine instance
-    from faust_plugins.sound.engine import SoundEngine
+    from sound.scripts.engine import SoundEngine
     engine = SoundEngine()
 
     # Cold start test
