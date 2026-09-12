@@ -7,8 +7,9 @@ Faust's sovereign Telegram C2 infrastructure providing pure dumb I/O gateway bac
 ## 1. Golden Standard Architectural Principles
 
 1. **Dedicated Micro-Daemons**:
-   - `daemons/audio_daemon.py` (Port 20129): Resident Acoustic Core TTS engine.
-   - `daemons/telegram_daemon.py` (Port 20130): Resident Dumb I/O Telegram C2 gateway.
+   - `.claude/skills/sound/daemon/audio_daemon.py` (Port 20129): Resident Acoustic Core TTS engine.
+   - `.claude/skills/telegram/daemon/telegram_daemon.py` (Port 20130): Resident Dumb I/O Telegram C2 gateway.
+   - `.claude/daemons/watchdog.py`: Autonomous process supervisor & auto-recovery.
 2. **Strict Invariant: Zero LLM / Pure Dumb I/O**:
    - Daemons contain ZERO LLM logic and ZERO hardcoded heuristic responses.
    - Strictly responsible for network long-polling, FIFO directive queueing, atomic mutex locking, rate limiting, and HTTP REST transport.

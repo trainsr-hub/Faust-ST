@@ -47,9 +47,10 @@ if (-not (Test-Path $claudeProjectsDir)) {
     exit 1
 }
 
-# Look for directories matching this Google Drive project name
+# Look for directories matching this Google Drive project name or current workspace folder
+$normalizedRootName = ($projectRoot -replace '[:\\/]', '-').Trim('-')
 $matchingProjectDirs = Get-ChildItem -Path $claudeProjectsDir -Directory | Where-Object {
-    $_.Name -match "Blue.AI"
+    $_.Name -match "Blue.AI" -or $_.Name -like "*$normalizedRootName*" -or $_.Name -like "*Main-03*" -or $_.Name -like "*Main_03*"
 }
 
 if ($matchingProjectDirs.Count -eq 0) {
@@ -86,6 +87,13 @@ foreach ($projDir in $matchingProjectDirs) {
         Write-Host "[^] Successfully linked local project memory to Google Drive cortex!" -ForegroundColor Green
     } else {
         Write-Host "[X] Failed to create NTFS junction. Check permissions (or Developer Mode)." -ForegroundColor Red
+    }
+
+    # Sync MEMORY.md to the project root directory
+    if (Test-Path $sharedMemoryIndex) {
+        $projRootMemoryMd = Join-Path $projDir.FullName "MEMORY.md"
+        Copy-Item -Path $sharedMemoryIndex -Destination $projRootMemoryMd -Force
+        Write-Host "[+] Synced MEMORY.md to $projRootMemoryMd" -ForegroundColor Green
     }
 }
 

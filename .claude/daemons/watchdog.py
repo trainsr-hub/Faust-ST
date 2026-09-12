@@ -48,6 +48,12 @@ DAEMONS = {
         "port": 20130,
         "max_retries": 5,
     },
+    "cortex": {
+        "script": BASE_DIR / "cortex_daemon.py",
+        "url": "http://127.0.0.1:20135/health",
+        "port": 20135,
+        "max_retries": 5,
+    },
 }
 
 LOGS_DIR.mkdir(parents=True, exist_ok=True)
@@ -101,7 +107,13 @@ def spawn_daemon(name: str, script_path: Path) -> subprocess.Popen:
 
 def get_log_tail(daemon_name: str, lines: int = 50) -> str:
     """Retrieve the last N lines from the daemon's log file."""
-    log_path = BASE_DIR / f"{daemon_name}_daemon.log"
+    if daemon_name == "audio":
+        log_path = SOUND_SKILL_DIR / "logs" / "audio_daemon.log"
+    elif daemon_name == "telegram":
+        log_path = TELEGRAM_SKILL_DIR / "logs" / "telegram_daemon.log"
+    else:
+        log_path = LOGS_DIR / f"{daemon_name}_daemon.log"
+
     if not log_path.exists():
         return "Log file not found."
     try:

@@ -64,6 +64,7 @@ try:
         resolve_speech_log_dir,
         is_acoustic_presence_enabled,
     )
+    from .vietnamese_g2p import vi_text_to_ipa, contains_vietnamese
 except ImportError:
     from config import (
         DEFAULT_CONFIG,
@@ -73,6 +74,7 @@ except ImportError:
         resolve_speech_log_dir,
         is_acoustic_presence_enabled,
     )
+    from vietnamese_g2p import vi_text_to_ipa, contains_vietnamese
 
 
 class SubtitleWorker:
@@ -433,8 +435,13 @@ class SoundEngine:
             ratio = 2.0 ** (chunk_pitch / 12.0)
             synth_speed = chunk_speed * ratio
 
-            # Synthesize single sentence chunk
-            raw_float_samples, _ = kokoro.create(sentence, voice=voice_style, speed=synth_speed, lang=language)
+            # Detect Vietnamese segments and translate to Kokoro IPA phonemes
+            if contains_vietnamese(sentence):
+                phoneme_text = vi_text_to_ipa(sentence)
+                raw_float_samples, _ = kokoro.create(phoneme_text, voice=voice_style, speed=synth_speed, is_phonemes=True)
+            else:
+                # Standard English synthesis
+                raw_float_samples, _ = kokoro.create(sentence, voice=voice_style, speed=synth_speed, lang=language)
 
             # Ultra-fast Fourier pitch shift (~3ms)
             if chunk_pitch != 0.0:
@@ -518,7 +525,13 @@ class SoundEngine:
             ratio = 2.0 ** (chunk_pitch / 12.0)
             synth_speed = chunk_speed * ratio
 
-            raw_float_samples, _ = kokoro.create(sentence, voice=voice_style, speed=synth_speed, lang=language)
+            # Detect Vietnamese segments and translate to Kokoro IPA phonemes
+            if contains_vietnamese(sentence):
+                phoneme_text = vi_text_to_ipa(sentence)
+                raw_float_samples, _ = kokoro.create(phoneme_text, voice=voice_style, speed=synth_speed, is_phonemes=True)
+            else:
+                # Standard English synthesis
+                raw_float_samples, _ = kokoro.create(sentence, voice=voice_style, speed=synth_speed, lang=language)
 
             if chunk_pitch != 0.0:
                 raw_float_samples = self._apply_fast_pitch_shift(raw_float_samples, chunk_pitch)

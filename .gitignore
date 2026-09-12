@@ -63,3 +63,5 @@ Thumbs.db
 .claude/paste-cache/
 .claude/file-history/
 .claude/tasks/
+.claude/graphify/cache/
+graphify-out/

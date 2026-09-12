@@ -12,8 +12,12 @@ import urllib.error
 import urllib.request
 from pathlib import Path
 
-PROJECT_ROOT = Path(__file__).resolve().parent.parent
+SOUND_DIR = Path(__file__).resolve().parent.parent
+SKILLS_DIR = SOUND_DIR.parent
+CLAUDE_DIR = SKILLS_DIR.parent
+PROJECT_ROOT = CLAUDE_DIR.parent
 sys.path.insert(0, str(PROJECT_ROOT))
+sys.path.insert(0, str(SKILLS_DIR))
 
 DAEMON_URL = "http://127.0.0.1:20129"
 TEST_PHRASE = "Faust acoustic core online. Resident memory latency test completed, Manager."

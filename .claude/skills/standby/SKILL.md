@@ -8,7 +8,7 @@ All outbound Telegram notifications MUST adhere to the Single-Emoji Doctrine:
 - Zero decorative emojis in body text, lists, or headers.
 
 ## Architectural Lifecycle & Autonomous Watchdog
-1. **Daemon-Level Self-Healing**: Background daemons (Audio on 20129, Telegram on 20130) are supervised by `daemons/watchdog.py`. They auto-restart without cognitive intervention. If a daemon exceeds max retries, the watchdog generates an escalation diagnostic payload for Faust-ND (Stratum I Strategic Architect) and alerts the group chat.
+1. **Daemon-Level Self-Healing**: Background daemons (Audio on 20129, Telegram on 20130) are supervised by `.claude/daemons/watchdog.py`. They auto-restart without cognitive intervention. If a daemon exceeds max retries, the watchdog generates an escalation diagnostic payload for Faust-ND (Stratum I Strategic Architect) and alerts the group chat.
 2. **Daemon Status Emission**: Daemons broadcast their operational readiness independently upon launch.
 3. **Faust Readiness Transmission**: Only once Faust completes full cognitive initialization and verifies system health does Faust dispatch her readiness dispatch (`⚡`).
 
