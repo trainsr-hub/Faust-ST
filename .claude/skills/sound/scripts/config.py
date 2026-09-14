@@ -123,19 +123,22 @@ class VoiceConfig:
     # Normalization type: "peak" or "rms"
     normalization_type: str = "peak"
 
-    # Voice blending: random mix around base voice
+    # Voice blending: random 3-way mix around base voice (af_bella: 0.5-0.8, 2 random female: 0.2-0.5)
     voice_blend_enabled: bool = True
     voice_blend_secondary: str = "random_female"
+    voice_blend_num_secondary: int = 2
     voice_blend_female_pool: list = field(default_factory=lambda: [
         "bf_alice", "bf_emma", "bf_isabella", "bf_lily",
         "af_heart", "af_kore", "af_nicole", "af_nova",
-        "af_river", "af_sarah", "af_sky", "af_alloy",
-        "af_aoede", "af_jessica"
+        "af_sarah", "af_alloy", "af_aoede", "af_jessica"
     ])
-    voice_blend_base_weight_mean: float = 0.85
+    discarded_voices: list = field(default_factory=lambda: [
+        "af_sky", "af_river"
+    ])
+    voice_blend_base_weight_mean: float = 0.65
     voice_blend_base_weight_var: float = 0.08
-    voice_blend_min_base_weight: float = 0.70
-    voice_blend_max_base_weight: float = 0.95
+    voice_blend_min_base_weight: float = 0.50
+    voice_blend_max_base_weight: float = 0.80
 
     # Prosody jitter: per-chunk randomization for naturalness
     prosody_jitter_enabled: bool = True
@@ -167,7 +170,9 @@ class VoiceConfig:
             "normalization_type",
             "voice_blend_enabled",
             "voice_blend_secondary",
+            "voice_blend_num_secondary",
             "voice_blend_female_pool",
+            "discarded_voices",
             "voice_blend_base_weight_mean",
             "voice_blend_base_weight_var",
             "voice_blend_min_base_weight",

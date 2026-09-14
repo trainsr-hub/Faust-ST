@@ -262,50 +262,93 @@ class SoundEngine:
     def _generate_voice_style(
         self,
         base_voice: Optional[str] = None,
-        secondary_voice: Optional[str] = None,
+        secondary_voice: Optional[Union[str, List[str]]] = None,
         blend_enabled: Optional[bool] = None,
     ) -> Tuple[Union[str, np.ndarray], str]:
         """
         Calculates a blended neural voice style vector in O(1) time.
-        When secondary_voice is 'random_female', 'random', or unspecified,
-        a random female voice is stochastically selected from the pool per generation.
+        Blends base voice (af_bella: 0.5 - 0.8) with secondary voices (2 random female voices: 0.2 - 0.5 total).
         Logs the exact mathematical combination for phenomenal voice discovery.
         """
         kokoro = self._get_kokoro()
         base = base_voice or self.config.voice
-        configured_sec = secondary_voice or self.config.voice_blend_secondary
-
-        # Determine secondary voice
-        if configured_sec in (None, "", "random", "random_female"):
-            # Select from configured female pool or full female voices list
-            pool = getattr(self.config, "voice_blend_female_pool", None) or self.list_female_voices()
-            candidates = [v for v in pool if v != base]
-            secondary = random.choice(candidates) if candidates else base
-        else:
-            secondary = configured_sec
+        configured_sec = secondary_voice if secondary_voice is not None else self.config.voice_blend_secondary
 
         should_blend = self.config.voice_blend_enabled if blend_enabled is None else blend_enabled
 
-        if not should_blend or base == secondary:
+        if not should_blend:
             return base, f"{base} (Pure)"
 
-        # Randomize blend ratio around base weight
-        base_weight = random.gauss(
-            self.config.voice_blend_base_weight_mean,
-            self.config.voice_blend_base_weight_var
-        )
-        base_weight = max(
-            self.config.voice_blend_min_base_weight,
-            min(base_weight, self.config.voice_blend_max_base_weight)
-        )
-        sec_weight = 1.0 - base_weight
+        # Determine discarded voices to exclude from candidate pool
+        discarded = set(getattr(self.config, "discarded_voices", []) or [])
+
+        # Determine secondary voices
+        if configured_sec in (None, "", "random", "random_female"):
+            pool = getattr(self.config, "voice_blend_female_pool", None) or self.list_female_voices()
+            candidates = [v for v in pool if v != base and v not in discarded]
+            num_sec = getattr(self.config, "voice_blend_num_secondary", 2)
+            if len(candidates) >= num_sec:
+                secondaries = random.sample(candidates, num_sec)
+            elif candidates:
+                secondaries = list(candidates)
+            else:
+                secondaries = [base]
+        elif isinstance(configured_sec, (list, tuple)):
+            secondaries = [s for s in configured_sec if s != base and s not in discarded]
+            if not secondaries:
+                secondaries = [base]
+        elif isinstance(configured_sec, str) and "," in configured_sec:
+            secondaries = [s.strip() for s in configured_sec.split(",") if s.strip() and s.strip() != base and s.strip() not in discarded]
+            if not secondaries:
+                secondaries = [base]
+        else:
+            secondaries = [configured_sec] if configured_sec != base else [base]
+
+        if secondaries == [base]:
+            return base, f"{base} (Pure)"
+
+        # Calculate base voice weight (0.50 - 0.80)
+        min_base = getattr(self.config, "voice_blend_min_base_weight", 0.50)
+        max_base = getattr(self.config, "voice_blend_max_base_weight", 0.80)
+        mean_base = getattr(self.config, "voice_blend_base_weight_mean", 0.65)
+        var_base = getattr(self.config, "voice_blend_base_weight_var", 0.08)
+
+        base_weight = random.gauss(mean_base, var_base)
+        base_weight = max(min_base, min(base_weight, max_base))
+        base_weight = round(base_weight, 3)
+
+        # Total secondary weight (0.20 - 0.50)
+        sec_total_weight = round(1.0 - base_weight, 3)
+
+        # Distribute sec_total_weight among secondary voices
+        k = len(secondaries)
+        if k == 1:
+            sec_weights = [sec_total_weight]
+        elif k == 2:
+            # Balanced stochastic split between 30% and 70%
+            split_ratio = random.uniform(0.30, 0.70)
+            w1 = round(sec_total_weight * split_ratio, 3)
+            w2 = round(sec_total_weight - w1, 3)
+            sec_weights = [w1, w2]
+        else:
+            # Generalized distribution for k > 2
+            raw_weights = [random.uniform(0.3, 1.0) for _ in range(k)]
+            sum_raw = sum(raw_weights)
+            sec_weights = [round((w / sum_raw) * sec_total_weight, 3) for w in raw_weights[:-1]]
+            sec_weights.append(round(sec_total_weight - sum(sec_weights), 3))
 
         try:
-            # O(1) in-memory vector retrieval and linear interpolation
+            # O(1) in-memory vector retrieval and linear combination
             v_base = kokoro.get_voice_style(base)
-            v_sec = kokoro.get_voice_style(secondary)
-            blended_vector = (base_weight * v_base) + (sec_weight * v_sec)
-            profile_tag = f"{base}*{base_weight:.3f} + {secondary}*{sec_weight:.3f}"
+            blended_vector = base_weight * v_base
+            parts_tags = [f"{base}*{base_weight:.3f}"]
+
+            for s_voice, s_weight in zip(secondaries, sec_weights):
+                v_sec = kokoro.get_voice_style(s_voice)
+                blended_vector = blended_vector + (s_weight * v_sec)
+                parts_tags.append(f"{s_voice}*{s_weight:.3f}")
+
+            profile_tag = " + ".join(parts_tags)
             return blended_vector, profile_tag
         except Exception as e:
             logger.warning(f"Voice blending fallback to pure base voice: {e}")
@@ -368,7 +411,7 @@ class SoundEngine:
         self,
         text: str,
         voice: Optional[str] = None,
-        secondary_voice: Optional[str] = None,
+        secondary_voice: Optional[Union[str, List[str]]] = None,
         blend_voice: Optional[bool] = None,
         speed: Optional[float] = None,
         pitch_shift: Optional[float] = None,
@@ -467,7 +510,7 @@ class SoundEngine:
         self,
         text: str,
         voice: Optional[str] = None,
-        secondary_voice: Optional[str] = None,
+        secondary_voice: Optional[Union[str, List[str]]] = None,
         blend_voice: Optional[bool] = None,
         speed: Optional[float] = None,
         pitch_shift: Optional[float] = None,
@@ -559,7 +602,7 @@ class SoundEngine:
         self,
         text: str,
         voice: Optional[str] = None,
-        secondary_voice: Optional[str] = None,
+        secondary_voice: Optional[Union[str, List[str]]] = None,
         blend_voice: Optional[bool] = None,
         speed: Optional[float] = None,
         pitch_shift: Optional[float] = None,

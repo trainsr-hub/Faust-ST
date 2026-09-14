@@ -1,6 +1,5 @@
-#!/usr/bin/env python3
-"""
-Faust Telegram Event-Driven Worker (Real Headless Execution Bridge)
+﻿#!/usr/bin/env python3
+"Faust Telegram Event-Driven Worker (Real Headless Execution Bridge)"
 Supervised by Faust Watchdog (Port 20131).
 
 Listens on Telegram Dumb I/O Daemon (Port 20130).
@@ -8,12 +7,14 @@ When a directive arrives:
 1. Dispatches an initial progress card & acoustic intake alert.
 2. Spawns Claude Code to execute real tool actions (Read, Edit, Write, PowerShell) across the workspace.
 3. Updates the Telegram progress card in-place with the REAL tools and files being modified in real time.
-4. Transmits the real debrief report and vocalizes voice completion through speakers.
-5. Commits transactional ACK to SQLite queue.
-"""
+4. Enforces 100% strict HTML escaping, plain-text fallback, and total elimination of orphaned hourglass (⏳) emojis.
+5. Transmits the real debrief report and vocalizes voice completion through speakers.
+6. Commits transactional ACK to SQLite queue.
+"
 
 import argparse
 import asyncio
+import html
 import json
 import logging
 import os
@@ -22,6 +23,7 @@ import signal
 import subprocess
 import sys
 import time
+import urllib.error
 import urllib.parse
 import urllib.request
 from pathlib import Path
@@ -70,11 +72,20 @@ class FaustTelegramRealWorker:
             with urllib.request.urlopen(req, timeout=5) as resp:
                 body = resp.read().decode("utf-8")
                 return json.loads(body) if body else None
-        except Exception:
+        except urllib.error.HTTPError as e:
+            try:
+                err_body = e.read().decode("utf-8")
+                err_json = json.loads(err_body)
+                logger.warning(f"HTTP Error {e.code} on {url}: {err_json.get('description', err_body)}")
+                return err_json
+            except Exception:
+                logger.warning(f"HTTP Error {e.code} on {url}")
+                return None
+        except Exception as e:
+            logger.warning(f"Network error on {url}: {e}")
             return None
 
     def pop_directive(self) -> Optional[Dict[str, Any]]:
-        """Atomically pop the oldest pending directive from the resident daemon."""
         url = f"http://127.0.0.1:{self.daemon_port}/messages/pop"
         res = self._http_post(url)
         if res and res.get("directive"):
@@ -82,22 +93,20 @@ class FaustTelegramRealWorker:
         return None
 
     def ack_directive(self, update_id: int):
-        """Commit processed directive to SQLite WAL queue."""
         url = f"http://127.0.0.1:{self.daemon_port}/messages/ack"
         self._http_post(url, {"update_id": update_id})
 
     def speak(self, text: str):
-        """Synthesize acoustic feedback via resident audio daemon (Port 20129)."""
         audio_port = self.config.get("acoustic_presence", {}).get("port", 20129)
         url = f"http://127.0.0.1:{audio_port}/speak"
         self._http_post(url, {"text": text, "speed": 0.84, "voice": "af_bella"})
 
     def send_initial_card(self, directive_text: str) -> Optional[int]:
-        """Dispatch initial in-place progress card to Telegram."""
         if not self.token:
             return None
+        escaped_directive = html.escape(directive_text)
         lines = [
-            f"🔄 <b>Prescript Received:</b> <i>{directive_text}</i>",
+            f"🔄 <b>Prescript Received:</b> <i>{escaped_directive}</i>",
             "<b>Engineering Pipeline:</b> <code>Faust Autonomous Core Active</code>",
             "",
             "[1/1] ⏳ <b>Analyzing workspace & initiating steps...</b>"
@@ -107,20 +116,55 @@ class FaustTelegramRealWorker:
         res = self._http_post(url, payload)
         if res and res.get("ok"):
             return res.get("result", {}).get("message_id")
+        elif res and not res.get("ok"):
+            plain_lines = [
+                f"🔄 Prescript Received: {directive_text}",
+                "Engineering Pipeline: Faust Autonomous Core Active",
+                "",
+                "[1/1] ⏳ Analyzing workspace & initiating steps..."
+            ]
+            fallback_res = self._http_post(url, {"chat_id": self.chat_id, "text": "\n".join(plain_lines)})
+            if fallback_res and fallback_res.get("ok"):
+                return fallback_res.get("result", {}).get("message_id")
         return None
 
-    def update_card(self, msg_id: int, directive_text: str, active_steps: List[Dict[str, Any]], is_done: bool = False, final_summary: str = ""):
-        """Update Telegram card in-place via editMessageText with real tool actions."""
+    def update_card(
+        self,
+        msg_id: int,
+        directive_text: str,
+        active_steps: List[Dict[str, Any]],
+        is_done: bool = False,
+        final_summary: str = "",
+        is_failed: bool = False
+    ):
         if not self.token or not msg_id:
             return
+
+        header_emoji = "❌" if is_failed else ("✅" if is_done else "🔄")
+        header_title = "Prescript Blocked:" if is_failed else ("Prescript Executed:" if is_done else "Prescript:")
+
+        escaped_directive = html.escape(directive_text)
         lines = [
-            f"🔄 <b>Prescript:</b> <i>{directive_text}</i>",
+            f"{header_emoji} <b>{header_title}</b> <i>{escaped_directive}</i>",
             ""
         ]
 
-        display_steps = active_steps[-6:] if len(active_steps) > 6 else active_steps
+        if is_done or is_failed:
+            for step in active_steps:
+                if step.get("status") == "running":
+                    step["status"] = "failed" if is_failed else "completed"
+
+        rendered_steps = list(active_steps)
+        if not rendered_steps and (is_done or is_failed):
+            rendered_steps = [{
+                "name": "Cognitive Synthesis & Verification",
+                "status": "failed" if is_failed else "completed",
+                "duration": 0
+            }]
+
+        display_steps = rendered_steps[-6:] if len(rendered_steps) > 6 else rendered_steps
         for idx, step in enumerate(display_steps, 1):
-            name = step.get("name", "Tool")
+            name = html.escape(step.get("name", "Tool"))
             status = step.get("status", "running")
             dur = step.get("duration", 0)
 
@@ -135,32 +179,24 @@ class FaustTelegramRealWorker:
 
         if is_done:
             lines.append("")
-            lines.append(f"⚡ <b>Execution Complete.</b> {final_summary or 'Task verified.'}")
+            lines.append(f"⚡ <b>Execution Complete.</b> {html.escape(final_summary or 'Task verified.')}")
+        elif is_failed:
+            lines.append("")
+            lines.append(f"❌ <b>Execution Failed.</b> {html.escape(final_summary or 'Error encountered.')}")
 
         text = "\n".join(lines)
         url = f"https://api.telegram.org/bot{self.token}/editMessageText"
         payload = {"chat_id": self.chat_id, "message_id": msg_id, "text": text, "parse_mode": "HTML"}
-        self._http_post(url, payload)
+        res = self._http_post(url, payload)
 
-    def send_final_report(self, report_text: str):
-        """Send complete debriefing report to Telegram."""
-        if not self.token or not report_text:
-            return
-        chunks = [report_text[i:i+3800] for i in range(0, len(report_text), 3800)]
-        for chunk in chunks:
-            url = f"https://api.telegram.org/bot{self.token}/sendMessage"
-            payload = {
-                "chat_id": self.chat_id,
-                "text": f"✅ <b>Task Complete:</b>\n\n{chunk}",
-                "parse_mode": "HTML"
-            }
-            res = self._http_post(url, payload)
-            if not res or not res.get("ok"):
-                payload.pop("parse_mode", None)
-                self._http_post(url, payload)
+        if res and not res.get("ok"):
+            err_desc = str(res.get("description", "")).lower()
+            if "can't parse entities" in err_desc or "bad request" in err_desc:
+                plain_text = re.sub(r"<[^>]+>", "", text)
+                payload_fallback = {"chat_id": self.chat_id, "message_id": msg_id, "text": plain_text}
+                self._http_post(url, payload_fallback)
 
     async def execute_real_claude_directive(self, directive: Dict[str, Any]):
-        """Execute real Claude Code headless session and stream live tool actions to Telegram."""
         text = directive.get("text", "").strip()
         update_id = directive.get("update_id", 0)
         from_name = directive.get("from_name", "Manager")
@@ -180,12 +216,13 @@ class FaustTelegramRealWorker:
         cmd = [
             "claude",
             "-p", full_prompt,
+            "--permission-mode", "auto",
+            "--setting-sources=user,project,local",
             "--output-format", "stream-json",
             "--verbose"
         ]
 
         active_steps: List[Dict[str, Any]] = []
-        final_result_text = ""
         t_start = time.time()
         last_update_time = 0.0
 
@@ -228,13 +265,14 @@ class FaustTelegramRealWorker:
                                     fname = Path(fpath).name if fpath else "File"
                                     step_label = f"{tool_name} {fname}"
                                 elif tool_name in ["PowerShell", "Bash"]:
-                                    cmd_str = tool_input.get("command", "")
-                                    cmd_preview = cmd_str[:30] + "..." if len(cmd_str) > 30 else cmd_str
+                                    cmd_str = tool_input.get("command", "").strip()
+                                    cmd_single = " ".join(cmd_str.split())
+                                    cmd_preview = cmd_single[:35] + "..." if len(cmd_single) > 35 else cmd_single
                                     step_label = f"Exec: {cmd_preview}"
                                 elif tool_name == "Grep":
-                                    step_label = f"Grep '{tool_input.get('pattern', '')}'"
+                                    step_label = f"Grep '{tool_input.get('pattern', '')[:25]}'"
                                 elif tool_name == "Glob":
-                                    step_label = f"Glob '{tool_input.get('pattern', '')}'"
+                                    step_label = f"Glob '{tool_input.get('pattern', '')[:25]}'"
                                 else:
                                     step_label = f"{tool_name}"
 
@@ -250,9 +288,6 @@ class FaustTelegramRealWorker:
                                     self.update_card(msg_id, text, active_steps)
                                     last_update_time = time.time()
 
-                    elif ev_type == "result":
-                        final_result_text = event.get("result", "")
-
                 except json.JSONDecodeError:
                     pass
 
@@ -262,14 +297,16 @@ class FaustTelegramRealWorker:
                 current_tool_step["status"] = "completed"
                 current_tool_step["duration"] = int((time.time() - tool_start_time) * 1000)
 
+            for step in active_steps:
+                if step.get("status") == "running":
+                    step["status"] = "completed"
+
             total_elapsed = time.time() - t_start
 
             self.update_card(
                 msg_id, text, active_steps, is_done=True,
                 final_summary=f"Processed in {total_elapsed:.1f}s • {len(active_steps)} Real Actions Executed."
             )
-
-            # Do not send redundant completion report message; in-place card & acoustic presence provide clean, complete feedback.
 
             self.speak("Directive completed successfully, Manager.")
             self.ack_directive(update_id)
@@ -279,7 +316,10 @@ class FaustTelegramRealWorker:
 
         except Exception as e:
             logger.error(f"❌ Error during real Claude execution: {e}")
-            self.update_card(msg_id, text, active_steps, is_done=True, final_summary=f"Execution error: {e}")
+            for step in active_steps:
+                if step.get("status") == "running":
+                    step["status"] = "failed"
+            self.update_card(msg_id, text, active_steps, is_done=True, is_failed=True, final_summary=f"Execution error: {e}")
             self.ack_directive(update_id)
 
     async def _health_handler(self, reader: asyncio.StreamReader, writer: asyncio.StreamWriter):

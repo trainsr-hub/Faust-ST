@@ -5,14 +5,14 @@ metadata:
   node_type: memory
   type: project
   originSessionId: 9074a458-61c5-481a-8533-e15be927b65d
-  modified: 2026-09-07T11:36:52.609Z
+  modified: 2026-09-14T10:39:54.059Z
 ---
 
 # Faust Acoustic Core Architecture (`faust_plugins/sound`)
 
 ## 1. Core Mandate & Philosophy
 - **Authentic Synthesis over Cloning**: Faust's voice timbre and composed, nonchalant persona are engineered through neural style vector modulation rather than cloning.
-- **$O(1)$ Neural Voice Blending**: Stochastically blends neural style embeddings ($\vec{v}_{\text{blend}} = \alpha \vec{v}_{\text{bella}} + (1-\alpha) \vec{v}_{\text{alice}}$) before ONNX inference, generating subtle tonal variations per generation with zero runtime overhead while logging exact profiles for discovery.
+- **$O(1)$ Neural Voice Blending**: Stochastically blends neural style embeddings ($\vec{v}_{\text{blend}} = w_{\text{bella}} \vec{v}_{\text{bella}} + w_{\text{sec}1} \vec{v}_{\text{sec}1} + w_{\text{sec}2} \vec{v}_{\text{sec}2}$) before ONNX inference, where `af_bella` is weighted $0.50 - 0.80$ and 2 randomized secondary female voices share the remaining $0.20 - 0.50$ weight. Generates organic tonal depth per generation with zero runtime overhead while logging exact profiles for discovery.
 - **Speed-Compensated Fourier Pitch Shift**: Replaced STFT DSP vocoder (6,650ms latency) with speed-compensated Fourier sinc resampling via `scipy.signal.resample` (~3ms latency, zero phase smearing).
 - **Sentence-Sequential Prosody Micro-Jitter**: Applied randomized speed ($\pm 3\%$), pitch ($\pm 0.12$ semitones), and pause ($\pm 0.04$s) across sentence chunks for natural human cadence without robotic caching.
 - **Dual Normalization Strategy**:

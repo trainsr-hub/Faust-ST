@@ -63,16 +63,19 @@ Voice settings are managed through `faust_config.json` in the project root under
     "normalization_type": "peak",
     "voice_blend_enabled": true,
     "voice_blend_secondary": "random_female",
+    "voice_blend_num_secondary": 2,
     "voice_blend_female_pool": [
       "bf_alice", "bf_emma", "bf_isabella", "bf_lily",
       "af_heart", "af_kore", "af_nicole", "af_nova",
-      "af_river", "af_sarah", "af_sky", "af_alloy",
-      "af_aoede", "af_jessica"
+      "af_sarah", "af_alloy", "af_aoede", "af_jessica"
     ],
-    "voice_blend_base_weight_mean": 0.85,
+    "discarded_voices": [
+      "af_sky", "af_river"
+    ],
+    "voice_blend_base_weight_mean": 0.65,
     "voice_blend_base_weight_var": 0.08,
-    "voice_blend_min_base_weight": 0.70,
-    "voice_blend_max_base_weight": 0.95,
+    "voice_blend_min_base_weight": 0.50,
+    "voice_blend_max_base_weight": 0.80,
     "prosody_jitter_enabled": true,
     "prosody_speed_jitter": 0.03,
     "prosody_pitch_jitter": 0.12,

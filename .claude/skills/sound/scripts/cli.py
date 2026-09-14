@@ -38,7 +38,7 @@ def main():
         help="Text for Faust to vocalize (supports string, speak <string>, or unquoted words)",
     )
     parser.add_argument("-v", "--voice", type=str, default=None, help="Base voice preset (default: af_bella)")
-    parser.add_argument("--secondary", type=str, default=None, help="Secondary blend voice preset (default: bf_alice)")
+    parser.add_argument("--secondary", type=str, default=None, help="Secondary blend voice(s) (e.g. 'random_female', 'bf_alice', or comma-separated)")
     parser.add_argument("--no-blend", action="store_true", help="Disable random voice blending (pure voice)")
     parser.add_argument("-s", "--speed", type=float, default=None, help="Base speed rate (default: 0.84)")
     parser.add_argument("-p", "--pitch", type=float, default=None, help="Base pitch shift semitones (default: -0.3)")

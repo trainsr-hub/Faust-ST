@@ -13,7 +13,7 @@ import threading
 import time
 from contextlib import asynccontextmanager
 from pathlib import Path
-from typing import Any, Dict, Optional
+from typing import Any, Dict, List, Optional, Union
 
 import uvicorn
 from fastapi import FastAPI, HTTPException
@@ -51,7 +51,7 @@ logger = logging.getLogger("faust.audio_daemon")
 class SpeakRequest(BaseModel):
     text: str = Field(..., description="Text for Faust to vocalize")
     voice: Optional[str] = Field(default=None, description="Primary voice preset (default: af_bella)")
-    secondary_voice: Optional[str] = Field(default=None, description="Secondary blend voice")
+    secondary_voice: Optional[Union[str, List[str]]] = Field(default=None, description="Secondary blend voice(s)")
     blend_voice: Optional[bool] = Field(default=None, description="Enable random voice blending")
     speed: Optional[float] = Field(default=None, description="Speed multiplier")
     pitch_shift: Optional[float] = Field(default=None, description="Pitch shift in semitones")

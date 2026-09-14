@@ -4,7 +4,7 @@ Provides REST API endpoints for Faust speech synthesis.
 """
 import io
 import wave
-from typing import Optional
+from typing import Any, Dict, List, Optional, Union
 import numpy as np
 from fastapi import APIRouter, HTTPException
 from fastapi.responses import StreamingResponse
@@ -26,7 +26,7 @@ router = APIRouter(prefix="/api/v1/voice", tags=["voice"])
 class VoiceSynthesisRequest(BaseModel):
     text: str = Field(..., description="Text for Faust to synthesize")
     voice: str = Field(default=DEFAULT_CONFIG.voice, description="Primary voice preset")
-    secondary_voice: str = Field(default=DEFAULT_CONFIG.voice_blend_secondary, description="Secondary blend voice")
+    secondary_voice: Optional[Union[str, List[str]]] = Field(default=DEFAULT_CONFIG.voice_blend_secondary, description="Secondary blend voice(s)")
     blend_voice: bool = Field(default=DEFAULT_CONFIG.voice_blend_enabled, description="Enable random voice blending")
     speed: float = Field(default=DEFAULT_CONFIG.speed, description="Speed multiplier")
     language: str = Field(default=DEFAULT_CONFIG.language, description="Language code")
@@ -65,32 +65,27 @@ async def preload_acoustic_core():
     return {"status": "ok", "message": "Faust acoustic core preloaded and warmed up."}
 
 
-from .engine import get_engine
-from .config import (
-    DEFAULT_CONFIG,
-    load_rom_config,
-    save_rom_config,
-    is_acoustic_presence_enabled,
-    set_acoustic_presence_enabled,
-    toggle_acoustic_presence,
-)
-
-from pydantic import BaseModel
-from typing import Optional, Dict, Any
-
-
 class VoiceConfigUpdate(BaseModel):
     """Update parameters for the acoustic_presence section of ROM config."""
     enabled: Optional[bool] = None
     voice: Optional[str] = None
-    secondary_voice: Optional[str] = None
+    secondary_voice: Optional[Union[str, List[str]]] = None
     voice_blend_enabled: Optional[bool] = None
+    voice_blend_num_secondary: Optional[int] = None
+    voice_blend_female_pool: Optional[List[str]] = None
+    discarded_voices: Optional[List[str]] = None
+    voice_blend_base_weight_mean: Optional[float] = None
+    voice_blend_base_weight_var: Optional[float] = None
+    voice_blend_min_base_weight: Optional[float] = None
+    voice_blend_max_base_weight: Optional[float] = None
     normalization_type: Optional[str] = None
     speed: Optional[float] = None
     pitch_shift: Optional[float] = None
     pause_duration: Optional[float] = None
     prosody_jitter_enabled: Optional[bool] = None
     pipelined_playback: Optional[bool] = None
+    speech_log_enabled: Optional[bool] = None
+    speech_log_dir: Optional[str] = None
     websocket_subtitles: Optional[bool] = None
     websocket_subtitle_url: Optional[str] = None
 
