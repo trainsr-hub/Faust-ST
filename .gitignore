@@ -22,6 +22,9 @@ build/
 *.db-shm
 *.sqlite-wal
 *.sqlite-shm
+*.sqlite
+*.db
+.claude/backups/
 
 # Logs
 logs/

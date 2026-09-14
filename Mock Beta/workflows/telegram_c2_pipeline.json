@@ -1,0 +1,124 @@
+{
+  "$schema": "https://faust.c2/schemas/v1/workflow.json",
+  "id": "telegram_c2_pipeline",
+  "name": "Work via Telegram Autonomous Workflow",
+  "version": "1.0.0",
+  "description": "Deterministic ingestion, security gating, execution, and debriefing loop via Telegram C2.",
+  "invariants": {
+    "zero_llm_primacy": true,
+    "max_token_burn_idle": 0,
+    "delivery_guarantee": "at_least_once"
+  },
+  "nodes": [
+    {
+      "id": "telegram_ingress",
+      "name": "Telegram Dumb I/O Ingress",
+      "type": "deterministic_daemon",
+      "execution_mode": "zero_llm",
+      "target": "http://127.0.0.1:20130/messages/pop",
+      "retry_policy": {
+        "max_retries": 3,
+        "backoff_ms": 500,
+        "continue_on_error": false
+      },
+      "depends_on": []
+    },
+    {
+      "id": "security_gate",
+      "name": "Chat ID & Manager Whitelist Gate",
+      "type": "deterministic_filter",
+      "execution_mode": "zero_llm",
+      "condition": "payload.chat_id == -1004405650953 and payload.sender_id == 8016442589",
+      "on_failure": "abort_and_log",
+      "depends_on": ["telegram_ingress"]
+    },
+    {
+      "id": "directive_classifier",
+      "name": "Command & Intent Classifier",
+      "type": "hybrid_classifier",
+      "execution_mode": "regex_first_fallback_faust_st",
+      "rules": {
+        "^/status": "action_telemetry_dump",
+        "^/stop": "action_abort_execution",
+        "^/voice\\s+(on|off)": "action_toggle_voice",
+        "default": "action_cognitive_dispatch"
+      },
+      "depends_on": ["security_gate"]
+    },
+    {
+      "id": "intake_notify",
+      "name": "Acoustic & Telegram Intake Alert",
+      "type": "deterministic_multicast",
+      "execution_mode": "deterministic_multicast",
+      "actions": [
+        {
+          "target": "http://127.0.0.1:20130/send",
+          "payload": {
+            "emoji": "🔄",
+            "text": "Prescript Received: {{payload.text}}"
+          }
+        },
+        {
+          "target": "http://127.0.0.1:20129/speak",
+          "payload": {
+            "text": "Executing your directive, Manager."
+          }
+        }
+      ],
+      "depends_on": ["directive_classifier"]
+    },
+    {
+      "id": "execution_router",
+      "name": "C2 Dispatcher & Checksum Verifier",
+      "type": "deterministic_dag_shredder",
+      "execution_mode": "zero_llm",
+      "script": ".claude/skills/c2-dispatch/scripts/faust_dispatcher.py",
+      "depends_on": ["intake_notify"]
+    },
+    {
+      "id": "cognitive_execution",
+      "name": "Multi-Tier Tactical Execution",
+      "type": "cognitive_agent_matrix",
+      "execution_mode": "faust_multi_combo",
+      "tiers": {
+        "tier_2_architecture": "faust-theorist + faust-critic",
+        "tier_3_machinist": "faust-machinist-logic / faust-machinist-ui"
+      },
+      "compiler_self_healing_retries": 4,
+      "depends_on": ["execution_router"]
+    },
+    {
+      "id": "debrief_egress",
+      "name": "Egress Debrief & Speech Synthesis",
+      "type": "deterministic_multicast",
+      "execution_mode": "deterministic_multicast",
+      "actions": [
+        {
+          "target": "http://127.0.0.1:20130/send",
+          "payload": {
+            "emoji": "✅",
+            "text": "{{cognitive_execution.report}}"
+          }
+        },
+        {
+          "target": "http://127.0.0.1:20129/speak",
+          "payload": {
+            "text": "{{cognitive_execution.voice_summary}}"
+          }
+        }
+      ],
+      "depends_on": ["cognitive_execution"]
+    },
+    {
+      "id": "transactional_ack",
+      "name": "Commit Transaction & Purge Queue",
+      "type": "deterministic_ack",
+      "execution_mode": "zero_llm",
+      "target": "http://127.0.0.1:20130/messages/ack",
+      "payload": {
+        "update_id": "{{payload.update_id}}"
+      },
+      "depends_on": ["debrief_egress"]
+    }
+  ]
+}
