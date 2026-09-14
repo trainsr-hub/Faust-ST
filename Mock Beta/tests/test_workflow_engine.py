@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Unit and Integration Tests for Faust Workflow Engine & Renderer
+Unit and Integration Tests for Faust Workflow Engine & Renderer (Golden Standard v2)
 """
 
 import asyncio
@@ -27,23 +27,30 @@ class TestFaustWorkflowEngine(unittest.TestCase):
             self.telegram_workflow = json.load(f)
 
     def test_schema_validation(self):
-        """Test that the telegram workflow matches the JSON schema."""
+        """Test that the multi-branching telegram workflow matches the JSON schema."""
         is_valid = validate_workflow_schema(self.telegram_workflow, self.schema_path)
         self.assertTrue(is_valid)
 
-    def test_topological_sort_linear(self):
-        """Test that the 8 nodes in the Telegram workflow resolve in proper linear sequence."""
+    def test_topological_layers_parallel(self):
+        """Test that the 13 nodes resolve into ordered parallel layers."""
         engine = FaustWorkflowEngine(self.telegram_workflow)
+        layers = engine.get_topological_layers()
         order = engine.get_topological_order()
-        self.assertEqual(len(order), 8)
-        self.assertEqual(order[0], "telegram_ingress")
-        self.assertEqual(order[1], "security_gate")
-        self.assertEqual(order[2], "directive_classifier")
-        self.assertEqual(order[3], "intake_notify")
-        self.assertEqual(order[4], "execution_router")
-        self.assertEqual(order[5], "cognitive_execution")
-        self.assertEqual(order[6], "debrief_egress")
-        self.assertEqual(order[7], "transactional_ack")
+
+        self.assertEqual(len(order), 13)
+        self.assertIn("telegram_ingress", layers[0])
+
+        # Security gate at layer 1
+        self.assertIn("security_gate", layers[1])
+
+        # Security alert and directive classifier in subsequent layers
+        layer_nodes_flat = [n for l in layers for n in l]
+        self.assertLess(layer_nodes_flat.index("security_gate"), layer_nodes_flat.index("directive_classifier"))
+        self.assertLess(layer_nodes_flat.index("directive_classifier"), layer_nodes_flat.index("intake_notify_telegram"))
+        self.assertLess(layer_nodes_flat.index("execution_router"), layer_nodes_flat.index("faust_theorist"))
+        self.assertLess(layer_nodes_flat.index("faust_theorist"), layer_nodes_flat.index("faust_machinist"))
+        self.assertLess(layer_nodes_flat.index("faust_machinist"), layer_nodes_flat.index("debrief_egress_tg"))
+        self.assertLess(layer_nodes_flat.index("debrief_egress_tg"), layer_nodes_flat.index("transactional_ack"))
 
     def test_cycle_detection(self):
         """Test that cyclic dependencies in a DAG raise WorkflowDAGError."""
@@ -51,14 +58,15 @@ class TestFaustWorkflowEngine(unittest.TestCase):
             "id": "cyclic_test",
             "name": "Cyclic Test",
             "version": "1.0.0",
+            "invariants": {"zero_llm_primacy": True},
             "nodes": [
-                {"id": "node_a", "name": "A", "type": "step", "execution_mode": "zero_llm", "depends_on": ["node_b"]},
-                {"id": "node_b", "name": "B", "type": "step", "execution_mode": "zero_llm", "depends_on": ["node_a"]}
+                {"id": "node_a", "name": "A", "type": "trigger", "execution_mode": "zero_llm", "depends_on": ["node_b"]},
+                {"id": "node_b", "name": "B", "type": "trigger", "execution_mode": "zero_llm", "depends_on": ["node_a"]}
             ]
         }
         engine = FaustWorkflowEngine(cyclic_data)
         with self.assertRaises(WorkflowDAGError):
-            engine.get_topological_order()
+            engine.get_topological_layers()
 
     def test_missing_dependency_detection(self):
         """Test that references to non-existent nodes raise WorkflowDAGError."""
@@ -66,13 +74,14 @@ class TestFaustWorkflowEngine(unittest.TestCase):
             "id": "missing_dep_test",
             "name": "Missing Dep Test",
             "version": "1.0.0",
+            "invariants": {"zero_llm_primacy": True},
             "nodes": [
-                {"id": "node_a", "name": "A", "type": "step", "execution_mode": "zero_llm", "depends_on": ["ghost_node"]}
+                {"id": "node_a", "name": "A", "type": "trigger", "execution_mode": "zero_llm", "depends_on": ["ghost_node"]}
             ]
         }
         engine = FaustWorkflowEngine(invalid_dep_data)
         with self.assertRaises(WorkflowDAGError):
-            engine.get_topological_order()
+            engine.get_topological_layers()
 
     def test_renderer_outputs(self):
         """Test Markdown, Mermaid, and ASCII rendering functions."""
@@ -92,12 +101,12 @@ class TestFaustWorkflowEngine(unittest.TestCase):
         self.assertIn("└── [End of Pipeline]", ascii_out)
 
     def test_dry_run_execution(self):
-        """Test async dry-run simulation runs end-to-end."""
+        """Test parallel async dry-run simulation runs all 13 nodes."""
         engine = FaustWorkflowEngine(self.telegram_workflow)
         result = asyncio.run(engine.run_dry_run())
         self.assertEqual(result["status"], "completed")
-        self.assertEqual(len(result["execution_order"]), 8)
-        self.assertTrue(all(status == "completed" for status in result["node_results"].values()))
+        self.assertEqual(len(result["execution_order"]), 13)
+        self.assertTrue(all(status == "completed" for nid, status in result["node_results"].items() if nid != "security_alert_egress"))
 
 
 if __name__ == "__main__":

@@ -1,29 +1,16 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "FaustWorkflowSchema",
-  "description": "Strict JSON Schema for Faust AI-Native Directed Acyclic Graph (DAG) Workflows.",
+  "description": "Strict JSON Schema for Faust AI-Native Directed Acyclic Graph (DAG) Workflows with Multi-Branching and Parallel Fan-Out/Fan-In.",
   "type": "object",
   "required": ["$schema", "id", "name", "version", "invariants", "nodes"],
   "additionalProperties": false,
   "properties": {
-    "$schema": {
-      "type": "string"
-    },
-    "id": {
-      "type": "string",
-      "pattern": "^[a-z0-9_-]+$"
-    },
-    "name": {
-      "type": "string",
-      "minLength": 1
-    },
-    "version": {
-      "type": "string",
-      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
-    },
-    "description": {
-      "type": "string"
-    },
+    "$schema": { "type": "string" },
+    "id": { "type": "string", "pattern": "^[a-z0-9_-]+$" },
+    "name": { "type": "string", "minLength": 1 },
+    "version": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$" },
+    "description": { "type": "string" },
     "invariants": {
       "type": "object",
       "required": ["zero_llm_primacy"],
@@ -64,19 +51,23 @@
       },
       "additionalProperties": true
     },
+    "ConnectionSpec": {
+      "type": "object",
+      "required": ["node_id"],
+      "properties": {
+        "node_id": { "type": "string" },
+        "from_port": { "type": "string" },
+        "to_port": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
     "WorkflowNode": {
       "type": "object",
       "required": ["id", "name", "type", "execution_mode", "depends_on"],
       "additionalProperties": false,
       "properties": {
-        "id": {
-          "type": "string",
-          "pattern": "^[a-z0-9_-]+$"
-        },
-        "name": {
-          "type": "string",
-          "minLength": 1
-        },
+        "id": { "type": "string", "pattern": "^[a-z0-9_-]+$" },
+        "name": { "type": "string", "minLength": 1 },
         "type": {
           "type": "string",
           "enum": [
@@ -90,7 +81,11 @@
             "deterministic_ack",
             "system_exec",
             "code_transform",
-            "database_op"
+            "database_op",
+            "conditional_split",
+            "switch_router",
+            "parallel_fan_out",
+            "synchronize_fan_in"
           ]
         },
         "execution_mode": {
@@ -105,12 +100,12 @@
             "deterministic_multicast"
           ]
         },
-        "target": {
-          "type": "string"
+        "output_ports": {
+          "type": "array",
+          "items": { "type": "string" }
         },
-        "condition": {
-          "type": "string"
-        },
+        "target": { "type": "string" },
+        "condition": { "type": "string" },
         "on_failure": {
           "type": "string",
           "enum": ["abort_and_log", "retry", "continue", "escalate_to_manager"]
@@ -121,30 +116,23 @@
         },
         "actions": {
           "type": "array",
-          "items": {
-            "$ref": "#/definitions/ActionSpec"
-          }
+          "items": { "$ref": "#/definitions/ActionSpec" }
         },
-        "script": {
-          "type": "string"
-        },
+        "script": { "type": "string" },
         "tiers": {
           "type": "object",
           "additionalProperties": { "type": "string" }
         },
-        "compiler_self_healing_retries": {
-          "type": "integer",
-          "minimum": 0
-        },
-        "payload": {
-          "type": ["object", "string"]
-        },
-        "retry_policy": {
-          "$ref": "#/definitions/RetryPolicy"
-        },
+        "compiler_self_healing_retries": { "type": "integer", "minimum": 0 },
+        "payload": { "type": ["object", "string"] },
+        "retry_policy": { "$ref": "#/definitions/RetryPolicy" },
         "depends_on": {
           "type": "array",
           "items": { "type": "string" }
+        },
+        "connections": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/ConnectionSpec" }
         }
       }
     }

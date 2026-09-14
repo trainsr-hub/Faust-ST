@@ -33,6 +33,7 @@ This registry indexes all atomic memory components by their unique **Key IDs**.
 - `[rule:project_boundary_isolation]` → [Project Boundary Isolation](rules/project-boundary-isolation.md) — Faust communication/session harness is strictly isolated from independent application projects (Blue Rose & Universe 25).
 - `[rule:d_drive_storage_invariant]` → [Strict D: Drive Storage Invariant](rules/d-drive-storage-invariant.md) — All software, CLI tools, models, packages, and temp files must ALWAYS be installed and stored on Local Disk D:.
 - `[rule:empirical_verification_and_prior_art]` → [Empirical Verification & Prior Art Invariant](rules/empirical-verification-and-prior-art.md) — Technical choices must be verifiable via outside benchmarks; check community prior art first.
+- `[rule:golden_standard_first]` → [Golden Standard First Architecture](rules/golden-standard-first-architecture.md) — Build the complete industry golden standard first before tailoring for custom needs.
 
 ---
 

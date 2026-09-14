@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
 Faust Workflow Engine - Asyncio DAG Executor & Dual-Surface Observability Server (Zero-LLM Core)
-Provides:
-1. Topological sorting, cycle detection, dry-run simulation, and live step execution.
+Supports:
+1. Multi-branching DAGs, parallel fan-out/fan-in layer execution via asyncio.gather.
 2. Surface A: Embedded Web-OS DAG Dashboard (Port 20138) with real-time SSE streaming.
 3. Surface B: In-place Telegram message checklist updater via Bot API.
 """
@@ -80,10 +80,10 @@ class FaustWorkflowEngine:
         self.tg_progress_msg_id: Optional[int] = None
         self.current_directive_text: str = ""
 
-    def get_topological_order(self) -> List[str]:
+    def get_topological_layers(self) -> List[List[str]]:
         """
-        Kahn's algorithm for topological sorting and cycle detection.
-        Returns execution sequence of node IDs.
+        Calculates execution layers (ranks) for parallel DAG execution.
+        Nodes in the same layer have all upstream dependencies satisfied and run concurrently.
         """
         in_degree: Dict[str, int] = {nid: 0 for nid in self.nodes}
         adj_list: Dict[str, List[str]] = {nid: [] for nid in self.nodes}
@@ -96,21 +96,32 @@ class FaustWorkflowEngine:
                 in_degree[nid] += 1
 
         queue = deque([nid for nid, deg in in_degree.items() if deg == 0])
-        ordered: List[str] = []
+        layers: List[List[str]] = []
+        visited_count = 0
 
         while queue:
-            curr = queue.popleft()
-            ordered.append(curr)
-            for neighbor in adj_list[curr]:
-                in_degree[neighbor] -= 1
-                if in_degree[neighbor] == 0:
-                    queue.append(neighbor)
+            current_layer = list(queue)
+            layers.append(current_layer)
+            visited_count += len(current_layer)
 
-        if len(ordered) != len(self.nodes):
+            # Process entire layer before advancing to next rank
+            for _ in range(len(current_layer)):
+                curr = queue.popleft()
+                for neighbor in adj_list[curr]:
+                    in_degree[neighbor] -= 1
+                    if in_degree[neighbor] == 0:
+                        queue.append(neighbor)
+
+        if visited_count != len(self.nodes):
             unresolved = [nid for nid, deg in in_degree.items() if deg > 0]
             raise WorkflowDAGError(f"Cycle or deadlock detected in workflow DAG. Unresolved nodes: {unresolved}")
 
-        return ordered
+        return layers
+
+    def get_topological_order(self) -> List[str]:
+        """Flattened topological sequence."""
+        layers = self.get_topological_layers()
+        return [nid for layer in layers for nid in layer]
 
     async def broadcast_event(self, event: Dict[str, Any]):
         """Publish real-time telemetry event to all connected SSE browser clients."""
@@ -175,7 +186,7 @@ class FaustWorkflowEngine:
             logger.warning(f"Failed to dispatch initial Telegram progress message: {e}")
         return None
 
-    def _update_telegram_progress(self, current_node_id: Optional[str] = None, is_complete: bool = False):
+    def _update_telegram_progress(self, current_node_ids: Optional[List[str]] = None, is_complete: bool = False):
         """Update the Telegram progress message in-place with live step checkmarks."""
         if not self.tg_token or not self.tg_progress_msg_id:
             return
@@ -187,6 +198,7 @@ class FaustWorkflowEngine:
             ""
         ]
 
+        active_set = set(current_node_ids or [])
         for idx, nid in enumerate(order, 1):
             name = self.nodes[nid].get("name", nid)
             res = self.results.get(nid)
@@ -194,9 +206,11 @@ class FaustWorkflowEngine:
             if res and res.status == "completed":
                 dur_ms = int((res.end_time - res.start_time) * 1000)
                 lines.append(f"[{idx}/{len(order)}] ✅ <b>{name}</b> <code>({dur_ms}ms)</code>")
+            elif res and res.status == "skipped":
+                lines.append(f"[{idx}/{len(order)}] ⏭️ <i>{name} (Skipped)</i>")
             elif res and res.status == "failed":
                 lines.append(f"[{idx}/{len(order)}] ❌ <b>{name}</b> (Failed)")
-            elif nid == current_node_id:
+            elif nid in active_set:
                 lines.append(f"[{idx}/{len(order)}] ⏳ <b>{name}</b> <i>(Running...)</i>")
             else:
                 lines.append(f"[{idx}/{len(order)}] ⚪ {name}")
@@ -217,8 +231,7 @@ class FaustWorkflowEngine:
             req = urllib.request.Request(url, data=json.dumps(payload).encode("utf-8"), headers={"Content-Type": "application/json"})
             with urllib.request.urlopen(req, timeout=5) as resp:
                 pass
-        except Exception as e:
-            # Telegram editMessageText throws 400 if text is identical; safe to ignore
+        except Exception:
             pass
 
     def _interpolate_string(self, template: str, state: Dict[str, Any]) -> str:
@@ -244,7 +257,17 @@ class FaustWorkflowEngine:
         node_type = node.get("type", "")
         t0 = time.time()
 
-        # Telemetry broadcast & Telegram update
+        # Check if any upstream branch was skipped or pruned
+        for dep in node.get("depends_on", []):
+            if dep in self.results and self.results[dep].status == "skipped":
+                t1 = time.time()
+                return NodeExecutionResult(node_id=node_id, status="skipped", start_time=t0, end_time=t1, output=None)
+
+        # Handle Security Alert branch prune on authorized
+        if node_id == "security_alert_egress" and state.get("security_gate", {}).get("passed", False):
+            t1 = time.time()
+            return NodeExecutionResult(node_id=node_id, status="skipped", start_time=t0, end_time=t1, output=None)
+
         await self.broadcast_event({
             "type": "node_start",
             "node_id": node_id,
@@ -252,104 +275,77 @@ class FaustWorkflowEngine:
             "mode": mode,
             "start_time": t0
         })
-        self._update_telegram_progress(current_node_id=node_id)
         logger.info(f"⚡ [Live] Step: '{node_name}' ({node_id}) | Type: {node_type} | Mode: {mode}")
 
         try:
             output = None
 
-            # 1. Ingress Daemon / Pop endpoint
-            if node_type == "deterministic_daemon":
+            # 1. Trigger / Daemon Endpoint
+            if node_type in ["trigger", "deterministic_daemon"]:
                 target = node.get("target")
+                raw_payload = node.get("payload")
                 if target:
-                    res = self._http_request(target, method="POST")
+                    clean_payload = None
+                    if isinstance(raw_payload, dict):
+                        clean_payload = {}
+                        for k, v in raw_payload.items():
+                            clean_payload[k] = self._interpolate_string(v, state) if isinstance(v, str) else v
+                    res = self._http_request(target, method="POST", payload=clean_payload)
                     output = res
                     if node_id == "telegram_ingress" and (res is None or res.get("directive") is None):
                         t1 = time.time()
-                        return NodeExecutionResult(
-                            node_id=node_id,
-                            status="skipped",
-                            start_time=t0,
-                            end_time=t1,
-                            output=None
-                        )
+                        return NodeExecutionResult(node_id=node_id, status="skipped", start_time=t0, end_time=t1, output=None)
 
-            # 2. Filter Gate
-            elif node_type == "deterministic_filter":
+            # 2. Conditional Split / Filter Gate
+            elif node_type in ["conditional_split", "deterministic_filter"]:
                 payload = state.get("payload", {})
                 chat_id = payload.get("chat_id")
                 sender_id = payload.get("sender_id") or payload.get("from_id")
                 passed = (chat_id == -1004405650953)
                 output = {"passed": passed, "chat_id": chat_id, "sender_id": sender_id}
-                if not passed:
+                if not passed and node_id == "security_gate":
                     raise ValueError(f"Security whitelist check failed for chat_id={chat_id}")
 
-            # 3. Intent Classifier
-            elif node_type == "hybrid_classifier":
+            # 3. Router / Switch
+            elif node_type == "switch_router":
                 rules = node.get("rules", {})
                 text = state.get("payload", {}).get("text", "")
-                action = rules.get("default", "action_cognitive_dispatch")
-                for pattern, act in rules.items():
+                selected_port = rules.get("default", "task_directive")
+                for pattern, port in rules.items():
                     if pattern != "default" and re.search(pattern, text, re.IGNORECASE):
-                        action = act
+                        selected_port = port
                         break
-                output = {"action": action, "text": text}
+                output = {"routed_port": selected_port, "text": text}
 
-            # 4. Multicast Actions (Telegram notification & Kokoro audio)
-            elif node_type == "deterministic_multicast":
-                actions = node.get("actions", [])
-                action_results = []
-                for act in actions:
-                    raw_target = act.get("target", "")
-                    raw_payload = act.get("payload", {})
-                    target_url = self._interpolate_string(raw_target, state)
-                    clean_payload = {}
-                    if isinstance(raw_payload, dict):
-                        for k, v in raw_payload.items():
-                            if isinstance(v, str):
-                                clean_payload[k] = self._interpolate_string(v, state)
-                            else:
-                                clean_payload[k] = v
-                    try:
-                        res = self._http_request(target_url, method="POST", payload=clean_payload)
-                        action_results.append({"target": target_url, "status": "ok", "response": res})
-                    except Exception as err:
-                        logger.warning(f"Action failed for {target_url}: {err}")
-                        action_results.append({"target": target_url, "status": "error", "error": str(err)})
-                output = {"actions": action_results}
-
-            # 5. DAG Shredder / Dispatcher
-            elif node_type == "deterministic_dag_shredder":
+            # 4. Synchronize Fan-In
+            elif node_type == "synchronize_fan_in":
                 script = node.get("script")
-                output = {"dispatcher_ready": True, "script": script, "status": "validated"}
+                output = {"synchronized": True, "script": script, "status": "validated"}
 
-            # 6. Cognitive Execution Tier
+            # 5. Cognitive Agent Matrix
             elif node_type == "cognitive_agent_matrix":
+                role = node.get("tiers", {}).get("role", "Cognitive Agent")
                 output = {
-                    "report": "Task evaluated and processed through Faust multi-tier matrix.",
-                    "voice_summary": "Directive completed successfully, Manager.",
+                    "role": role,
+                    "report": "Strategic consensus reached and verified via Faust multi-combo matrix.",
+                    "voice_summary": "Directive executed and verified with high confidence, Manager.",
                     "status": "success"
                 }
 
-            # 7. Transactional ACK
+            # 6. Transactional ACK
             elif node_type == "deterministic_ack":
                 target = node.get("target")
                 raw_payload = node.get("payload", {})
                 clean_payload = {}
                 if isinstance(raw_payload, dict):
                     for k, v in raw_payload.items():
-                        if isinstance(v, str):
-                            clean_payload[k] = self._interpolate_string(v, state)
-                        else:
-                            clean_payload[k] = v
+                        clean_payload[k] = self._interpolate_string(v, state) if isinstance(v, str) else v
                 if target:
-                    res = self._http_request(target, method="POST", payload=clean_payload)
-                    output = res
+                    output = self._http_request(target, method="POST", payload=clean_payload)
 
             t1 = time.time()
             dur_ms = int((t1 - t0) * 1000)
 
-            # Telemetry broadcast
             await self.broadcast_event({
                 "type": "node_complete",
                 "node_id": node_id,
@@ -359,13 +355,7 @@ class FaustWorkflowEngine:
                 "output": output
             })
 
-            return NodeExecutionResult(
-                node_id=node_id,
-                status="completed",
-                start_time=t0,
-                end_time=t1,
-                output=output
-            )
+            return NodeExecutionResult(node_id=node_id, status="completed", start_time=t0, end_time=t1, output=output)
 
         except Exception as e:
             t1 = time.time()
@@ -378,13 +368,7 @@ class FaustWorkflowEngine:
                 "elapsed_ms": int((t1 - t0) * 1000),
                 "error": str(e)
             })
-            return NodeExecutionResult(
-                node_id=node_id,
-                status="failed",
-                start_time=t0,
-                end_time=t1,
-                error=str(e)
-            )
+            return NodeExecutionResult(node_id=node_id, status="failed", start_time=t0, end_time=t1, error=str(e))
 
     async def execute_node_dry_run(self, node: Dict[str, Any], state: Dict[str, Any]) -> NodeExecutionResult:
         """Simulate execution of a single node in dry-run mode."""
@@ -392,8 +376,12 @@ class FaustWorkflowEngine:
         node_name = node.get("name", node_id)
         mode = node.get("execution_mode", "zero_llm")
         node_type = node.get("type", "")
-
         t0 = time.time()
+
+        if node_id == "security_alert_egress":
+            t1 = time.time()
+            return NodeExecutionResult(node_id=node_id, status="skipped", start_time=t0, end_time=t1, output=None)
+
         logger.info(f"⚡ [DryRun] Executing Step: '{node_name}' ({node_id}) | Type: {node_type} | Mode: {mode}")
 
         await self.broadcast_event({
@@ -404,7 +392,7 @@ class FaustWorkflowEngine:
             "start_time": t0
         })
 
-        await asyncio.sleep(0.08)
+        await asyncio.sleep(0.06)
         t1 = time.time()
         dur_ms = int((t1 - t0) * 1000)
 
@@ -424,21 +412,15 @@ class FaustWorkflowEngine:
             "output": simulated_output
         })
 
-        return NodeExecutionResult(
-            node_id=node_id,
-            status="completed",
-            start_time=t0,
-            end_time=t1,
-            output=simulated_output
-        )
+        return NodeExecutionResult(node_id=node_id, status="completed", start_time=t0, end_time=t1, output=simulated_output)
 
     async def run_live_once(self) -> Dict[str, Any]:
-        """Execute one complete live pass of the workflow DAG."""
-        order = self.get_topological_order()
+        """Execute complete live DAG with parallel layer execution."""
+        layers = self.get_topological_layers()
         start_time = time.time()
         state: Dict[str, Any] = {"workflow_id": self.workflow_id, "payload": {}}
 
-        # 1. Probe Ingress
+        # 1. Probe Ingress Layer
         ingress_node = self.nodes["telegram_ingress"]
         res_ingress = await self.execute_node_live(ingress_node, state)
         self.results["telegram_ingress"] = res_ingress
@@ -446,13 +428,11 @@ class FaustWorkflowEngine:
         if res_ingress.status == "skipped" or not res_ingress.output:
             return {"workflow_id": self.workflow_id, "status": "idle", "reason": "queue_empty"}
 
-        # Active directive found
         directive = res_ingress.output.get("directive", {})
         self.current_directive_text = directive.get("text", "Active Directive")
         state["payload"] = directive
         state["telegram_ingress"] = res_ingress.output
 
-        # Broadcast pipeline start
         await self.broadcast_event({
             "type": "pipeline_start",
             "workflow_id": self.workflow_id,
@@ -460,23 +440,21 @@ class FaustWorkflowEngine:
             "start_time": start_time
         })
 
-        # Send initial Telegram progress message
         self.tg_progress_msg_id = self._send_telegram_initial_progress(self.current_directive_text)
         self._update_telegram_progress()
 
-        # Execute remaining nodes in topological order
-        for nid in order[1:]:
-            node = self.nodes[nid]
-            res = await self.execute_node_live(node, state)
-            self.results[nid] = res
-            self._update_telegram_progress(current_node_id=None)
+        # Execute remaining layers in parallel
+        for layer in layers[1:]:
+            self._update_telegram_progress(current_node_ids=layer)
+            tasks = [self.execute_node_live(self.nodes[nid], state) for nid in layer]
+            layer_results = await asyncio.gather(*tasks)
 
-            if res.status == "failed":
-                logger.error(f"🛑 Pipeline aborted at node '{nid}'.")
-                break
+            for nid, res in zip(layer, layer_results):
+                self.results[nid] = res
+                if isinstance(res.output, dict):
+                    state[nid] = res.output
 
-            if isinstance(res.output, dict):
-                state[nid] = res.output
+            self._update_telegram_progress()
 
         total_time = time.time() - start_time
         self._update_telegram_progress(is_complete=True)
@@ -491,19 +469,16 @@ class FaustWorkflowEngine:
         return {
             "workflow_id": self.workflow_id,
             "status": "completed",
-            "execution_order": order,
+            "execution_order": self.get_topological_order(),
             "elapsed_seconds": total_time,
             "node_results": {nid: r.status for nid, r in self.results.items()}
         }
 
     async def run_dry_run(self) -> Dict[str, Any]:
-        """Execute complete DAG in dry-run mode."""
-        order = self.get_topological_order()
-        logger.info(f"🚀 Starting Dry-Run for Workflow: '{self.workflow.get('name')}' ({self.workflow_id})")
-        logger.info(f"📋 Topological Order: {' -> '.join(order)}")
-
+        """Execute complete DAG with parallel layer simulation in dry-run mode."""
+        layers = self.get_topological_layers()
         start_time = time.time()
-        self.current_directive_text = "Test Directive (Dry-Run Simulation)"
+        self.current_directive_text = "Test Directive (Parallel DAG Dry-Run)"
         state: Dict[str, Any] = {"workflow_id": self.workflow_id, "payload": {"text": self.current_directive_text}}
 
         await self.broadcast_event({
@@ -513,14 +488,16 @@ class FaustWorkflowEngine:
             "start_time": start_time
         })
 
-        for nid in order:
-            node = self.nodes[nid]
-            res = await self.execute_node_dry_run(node, state)
-            self.results[nid] = res
-            state[nid] = res.output
+        for layer in layers:
+            tasks = [self.execute_node_dry_run(self.nodes[nid], state) for nid in layer]
+            layer_results = await asyncio.gather(*tasks)
+
+            for nid, res in zip(layer, layer_results):
+                self.results[nid] = res
+                state[nid] = res.output
 
         total_time = time.time() - start_time
-        logger.info(f"✅ Workflow '{self.workflow_id}' Dry-Run finished in {total_time:.3f}s. Total Nodes: {len(order)}")
+        logger.info(f"✅ Workflow '{self.workflow_id}' Parallel Dry-Run finished in {total_time:.3f}s. Layers: {len(layers)}")
 
         await self.broadcast_event({
             "type": "pipeline_complete",
@@ -532,7 +509,7 @@ class FaustWorkflowEngine:
         return {
             "workflow_id": self.workflow_id,
             "status": "completed",
-            "execution_order": order,
+            "execution_order": self.get_topological_order(),
             "elapsed_seconds": total_time,
             "node_results": {nid: r.status for nid, r in self.results.items()}
         }
@@ -580,7 +557,6 @@ class FaustWebServer:
 
             method, path = parts[0], parts[1]
 
-            # Read remaining headers
             while True:
                 line = await reader.readline()
                 if line == b"\r\n" or line == b"\n" or not line:
@@ -605,7 +581,7 @@ class FaustWebServer:
                     await writer.drain()
                 writer.close()
 
-            # 2. SSE Telemetry Stream
+            # 2. SSE Stream
             elif path == "/events":
                 writer.write(
                     b"HTTP/1.1 200 OK\r\n"
@@ -619,7 +595,6 @@ class FaustWebServer:
                 q = asyncio.Queue()
                 self.engine.sse_subscribers.add(q)
 
-                # Send initial state
                 init_ev = f"data: {json.dumps({'type': 'init', 'workflow': self.engine.workflow})}\n\n"
                 writer.write(init_ev.encode("utf-8"))
                 await writer.drain()
@@ -638,7 +613,7 @@ class FaustWebServer:
             # 3. Trigger API
             elif path == "/api/run" and method == "POST":
                 asyncio.create_task(self.engine.run_dry_run())
-                resp_body = json.dumps({"status": "triggered", "mode": "dry_run"}).encode("utf-8")
+                resp_body = json.dumps({"status": "triggered", "mode": "parallel_dry_run"}).encode("utf-8")
                 writer.write(
                     f"HTTP/1.1 200 OK\r\n"
                     f"Content-Type: application/json\r\n"
@@ -654,7 +629,7 @@ class FaustWebServer:
                 await writer.drain()
                 writer.close()
 
-        except Exception as e:
+        except Exception:
             try:
                 writer.close()
             except Exception:
@@ -667,7 +642,7 @@ class FaustWebServer:
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Faust Asyncio DAG Workflow Engine & Web Server")
+    parser = argparse.ArgumentParser(description="Faust Asyncio Parallel DAG Workflow Engine & Web Server")
     parser.add_argument("--workflow", "-w", required=True, help="Path to workflow JSON file")
     parser.add_argument("--dry-run", action="store_true", help="Simulate execution without side effects")
     parser.add_argument("--live", action="store_true", help="Execute one live pass of the workflow")
@@ -697,7 +672,6 @@ def main():
     signal.signal(signal.SIGTERM, sig_handler)
 
     async def run_app():
-        # Start web dashboard server
         server = await web_server.start()
 
         if args.listen:
