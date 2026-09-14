@@ -68,3 +68,14 @@ if directive:
 - `daemons/start_audio_daemon.bat`: Launch Audio daemon on port 20129.
 - `daemons/start_all_daemons.bat`: One-click launch for all Faust background daemons in hidden background processes.
 - `daemons/stop_all_daemons.bat`: Cleanly terminate all running Faust daemons.
+- `start_telegram_worker.bat`: Launch the event-driven Telegram worker with in-place checklist updates.
+
+---
+
+## 6. Event-Driven Worker & In-Place Progress Protocol (Superseding `/standby`)
+
+The event-driven worker (`scripts/event_worker.py`) replaces the legacy `/standby` polling loop:
+- **Zero Idle Token Burn**: Sits silently until a directive is pushed from Telegram.
+- **In-Place Checklist Updates**: Sends a single initial card to Telegram and updates it via `editMessageText` (`[1/6] ✅ Ingress`, `[2/6] ✅ Routing`, `[3/6] ⏳ Execution...`).
+- **Transactional Integrity**: Performs `/messages/ack` on completion to commit the SQLite transaction.
+

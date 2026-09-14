@@ -47,5 +47,23 @@ Every dispatch must begin with at most **one** functional leading emoji that ind
 
 ---
 
+### 3. Event-Driven In-Place Progress Architecture (Superseding `/standby`)
+
+To eliminate idle token burn and polling latency, the system utilizes an **Event-Driven Worker** (`event_worker.py`):
+1. **Zero-Token Standby**: The background daemon holds long-polling connections without invoking LLMs.
+2. **In-Place Progress Cards**: On directive intake, a single status card is dispatched and edited in-place via Telegram's `editMessageText` API as tasks advance:
+   ```text
+   🔄 Prescript: "Refactor backend queries"
+   [1/6] ✅ Ingress & Whitelist Gate (12ms)
+   [2/6] ✅ Intent Routing & Acoustic Alert (74ms)
+   [3/6] ⏳ C2 Dispatcher & Blueprint Validation (Running...)
+   [4/6] ⚪ Multi-Agent Execution & Code Synthesis
+   [5/6] ⚪ Egress Debrief & Speech Synthesis
+   [6/6] ⚪ Commit SQLite Transaction
+   ```
+3. **Transactional ACK**: Upon completion, the card is updated to `⚡ Execution Complete` and acknowledged via `/messages/ack`.
+
+---
+
 **Why:** Prevents emoji overuse and "cheap AI slop" appearance while giving the Manager immediate visual clarity on message priority and required action.
 **How to apply:** Prefix outbound dispatches via `faust_plugins.notify(text, emoji)` with the single corresponding functional emoji. Link to [[faust-plugin-architecture]], [[user-profile]], and [[private-codex-identity]].
