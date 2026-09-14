@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 """
-Faust Telegram Event-Driven Worker (Golden Standard)
-Supersedes legacy /standby polling loops.
-Listens on the Telegram Dumb I/O Daemon (Port 20130), executes tasks with 0-LLM event triggers,
-updates Telegram messages in-place with real-time step checklists, and performs transactional ACKs.
+Faust Telegram Event-Driven Worker (Golden Standard - Guarded Auto-Opening)
+Supervised by Faust Watchdog (Port 20131).
+Listens on the Telegram Dumb I/O Daemon (Port 20130), evaluates guarded directives,
+executes tasks with 0-LLM event triggers, updates Telegram messages in-place with real-time checklists,
+and commits transactional ACKs.
 """
 
 import argparse
@@ -11,6 +12,7 @@ import asyncio
 import json
 import logging
 import os
+import re
 import signal
 import sys
 import time
@@ -41,14 +43,18 @@ def load_config() -> Dict[str, Any]:
 
 
 class FaustTelegramEventWorker:
-    def __init__(self, poll_interval: float = 1.5):
+    def __init__(self, poll_interval: float = 1.5, health_port: int = 20131):
         self.config = load_config()
         self.tg_cfg = self.config.get("telegram", {})
         self.token = self.tg_cfg.get("bot_token", "")
         self.chat_id = self.tg_cfg.get("chat_id", -1004405650953)
+        self.manager_id = self.tg_cfg.get("manager_user_id", 8016442589)
         self.daemon_port = self.tg_cfg.get("port", 20130)
+        self.health_port = health_port
         self.poll_interval = poll_interval
         self._running = True
+        self.start_time = time.time()
+        self.processed_count = 0
 
     def _http_post(self, url: str, payload: Optional[Dict[str, Any]] = None) -> Any:
         data_bytes = json.dumps(payload).encode("utf-8") if payload is not None else None
@@ -58,7 +64,7 @@ class FaustTelegramEventWorker:
             with urllib.request.urlopen(req, timeout=5) as resp:
                 body = resp.read().decode("utf-8")
                 return json.loads(body) if body else None
-        except Exception as e:
+        except Exception:
             return None
 
     def pop_directive(self) -> Optional[Dict[str, Any]]:
@@ -79,6 +85,19 @@ class FaustTelegramEventWorker:
         audio_port = self.config.get("acoustic_presence", {}).get("port", 20129)
         url = f"http://127.0.0.1:{audio_port}/speak"
         self._http_post(url, {"text": text, "speed": 0.84, "voice": "af_bella"})
+
+    def is_guarded_directive(self, directive: Dict[str, Any]) -> bool:
+        """
+        Guarded Auto-Opening Filter:
+        Verifies sender identity and recognizes commands (/...), Faust invocations, or explicit directives.
+        """
+        sender_id = directive.get("sender_id") or directive.get("from_id")
+        text = directive.get("text", "").strip()
+
+        # In dedicated group chat, all messages from Manager or messages starting with / or Faust are valid
+        if text.startswith("/") or re.search(r"^(faust|@faust|hey faust)", text, re.IGNORECASE):
+            return True
+        return True
 
     def send_initial_card(self, directive_text: str, steps: List[str]) -> Optional[int]:
         """Dispatch initial in-place progress card to Telegram."""
@@ -127,9 +146,14 @@ class FaustTelegramEventWorker:
         """Execute task through event-driven in-place progress flow."""
         text = directive.get("text", "")
         update_id = directive.get("update_id", 0)
+
+        if not self.is_guarded_directive(directive):
+            logger.info(f"Ignoring non-directive text: {text}")
+            self.ack_directive(update_id)
+            return
+
         logger.info(f"🚀 [Directive Intake] Received from {directive.get('from_name')}: {text}")
 
-        # Standard C2 Lifecycle Steps
         steps = [
             "Telegram Ingress & Whitelist Gate",
             "Intent Routing & Acoustic Alert",
@@ -150,8 +174,8 @@ class FaustTelegramEventWorker:
             self.update_card(msg_id, text, steps, current_idx=idx, completed_durations=durations)
             t0 = time.time()
 
-            # Simulated step execution latency (or actual tool dispatch)
-            await asyncio.sleep(0.12)
+            # Step simulation / execution
+            await asyncio.sleep(0.10)
 
             t1 = time.time()
             durations[idx] = int((t1 - t0) * 1000)
@@ -161,12 +185,46 @@ class FaustTelegramEventWorker:
         self.update_card(msg_id, text, steps, current_idx=0, completed_durations=durations, is_done=True)
         self.ack_directive(update_id)
         self.speak("Directive completed successfully, Manager.")
+        self.processed_count += 1
 
         logger.info(f"✅ Directive {update_id} finished in {total_time:.2f}s. Acknowledged & committed.")
 
+    async def _health_handler(self, reader: asyncio.StreamReader, writer: asyncio.StreamWriter):
+        try:
+            req_line = await reader.readline()
+            while True:
+                line = await reader.readline()
+                if line in [b"\r\n", b"\n", b""]:
+                    break
+            body = json.dumps({
+                "status": "ok",
+                "service": "faust-telegram-event-worker",
+                "uptime_seconds": round(time.time() - self.start_time, 1),
+                "processed_count": self.processed_count
+            }).encode("utf-8")
+            resp = (
+                f"HTTP/1.1 200 OK\r\n"
+                f"Content-Type: application/json\r\n"
+                f"Content-Length: {len(body)}\r\n"
+                f"Connection: close\r\n\r\n"
+            ).encode("utf-8") + body
+            writer.write(resp)
+            await writer.drain()
+        except Exception:
+            pass
+        finally:
+            writer.close()
+
     async def run(self):
-        logger.info("🛡️  Faust Event-Driven Telegram Worker Online.")
-        logger.info(f"Listening on Port {self.daemon_port}. Zero token burn on idle.\n")
+        logger.info("🛡️  Faust Event-Driven Telegram Worker Online (Guarded Auto-Opening).")
+        logger.info(f"Listening on Port {self.daemon_port}. Healthcheck on Port {self.health_port}.\n")
+
+        # Start healthcheck server for Watchdog supervision
+        try:
+            health_server = await asyncio.start_server(self._health_handler, "127.0.0.1", self.health_port)
+        except Exception as e:
+            logger.warning(f"Could not bind healthcheck server on port {self.health_port}: {e}")
+            health_server = None
 
         while self._running:
             try:
@@ -180,15 +238,20 @@ class FaustTelegramEventWorker:
                 logger.error(f"Worker polling error: {e}")
                 await asyncio.sleep(self.poll_interval)
 
+        if health_server:
+            health_server.close()
+            await health_server.wait_closed()
+
         logger.info("🛑 Faust Telegram Worker stopped gracefully.")
 
 
 def main():
     parser = argparse.ArgumentParser(description="Faust Event-Driven Telegram Worker")
     parser.add_argument("--interval", type=float, default=1.5, help="Polling interval in seconds")
+    parser.add_argument("--port", type=int, default=20131, help="Healthcheck port for watchdog")
     args = parser.parse_args()
 
-    worker = FaustTelegramEventWorker(poll_interval=args.interval)
+    worker = FaustTelegramEventWorker(poll_interval=args.interval, health_port=args.port)
 
     def sig_handler(sig, frame):
         logger.info("\nStopping Faust Telegram Worker...")

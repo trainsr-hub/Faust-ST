@@ -48,6 +48,12 @@ DAEMONS = {
         "port": 20130,
         "max_retries": 5,
     },
+    "telegram_worker": {
+        "script": TELEGRAM_SKILL_DIR / "scripts" / "event_worker.py",
+        "url": "http://127.0.0.1:20131/health",
+        "port": 20131,
+        "max_retries": 5,
+    },
     "cortex": {
         "script": BASE_DIR / "cortex_daemon.py",
         "url": "http://127.0.0.1:20135/health",
