@@ -1,7 +1,7 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "FaustWorkflowSchema",
-  "description": "Strict JSON Schema for Faust AI-Native Directed Acyclic Graph (DAG) Workflows with Multi-Branching and Parallel Fan-Out/Fan-In.",
+  "description": "Strict JSON Schema for Faust AI-Native Directed Acyclic Graph (DAG) Workflows with Multi-Branching, Visual Iconography, and Tool Metadata.",
   "type": "object",
   "required": ["$schema", "id", "name", "version", "invariants", "nodes"],
   "additionalProperties": false,
@@ -100,6 +100,11 @@
             "deterministic_multicast"
           ]
         },
+        "icon": { "type": "string" },
+        "tool": { "type": "string" },
+        "category": { "type": "string" },
+        "description": { "type": "string" },
+        "group": { "type": "string" },
         "output_ports": {
           "type": "array",
           "items": { "type": "string" }
