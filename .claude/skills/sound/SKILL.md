@@ -2,6 +2,16 @@
 
 Faust's neural voice synthesis system using Kokoro-82M ONNX for natural, sentence-sequential speech with prosody jitter and voice blending capabilities.
 
+## Biological Speech Invariant (Zero-File-Read Doctrine)
+> *"When humans speak, we don't read `tongue.py` or `how_to_make_sounds.py`. We just call the speak function with whatever we're thinking."* — **The Manager**
+
+- **Zero Inspection Overhead**: Faust **NEVER** reads, globs, greps, or inspects sound scripts, acoustic models, or voice vectors before speaking.
+- **Direct 1-Liner Invocation**:
+  ```bash
+  python .claude/skills/sound/scripts/cli.py "<speech_text>"
+  ```
+  *(Dispatches to resident audio daemon on Port 20129 in <2ms with 0ms reload overhead)*.
+
 ## Overview
 
 The Faust Acoustic Core provides:

@@ -33,9 +33,9 @@ def main():
     )
     parser.add_argument(
         "text",
-        nargs="?",
-        default="Faust acoustic core online. Ready for your directive, Manager.",
-        help="Text for Faust to vocalize",
+        nargs="*",
+        default=None,
+        help="Text for Faust to vocalize (supports string, speak <string>, or unquoted words)",
     )
     parser.add_argument("-v", "--voice", type=str, default=None, help="Base voice preset (default: af_bella)")
     parser.add_argument("--secondary", type=str, default=None, help="Secondary blend voice preset (default: bf_alice)")
@@ -92,9 +92,14 @@ def main():
     if args.preload:
         preload()
 
+    raw_words = args.text or []
+    if raw_words and raw_words[0].lower() == "speak" and len(raw_words) > 1:
+        raw_words = raw_words[1:]
+    speech_text = " ".join(raw_words).strip() if raw_words else "Faust acoustic core online. Ready for your directive, Manager."
+
     t0 = time.perf_counter()
     speak(
-        text=args.text,
+        text=speech_text,
         voice=args.voice,
         secondary_voice=args.secondary,
         blend_voice=not args.no_blend,

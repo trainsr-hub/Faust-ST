@@ -26,7 +26,7 @@ metadata:
 ### Launchers & Tools
 - **Daemon Launcher**: `.claude/skills/sound/daemon/start_audio_daemon.bat` or `.claude/daemons/start_all_daemons.bat`
 - **Performance Benchmark**: `python .claude/skills/sound/scripts/benchmark_sound.py`
-- **CLI Vocalization**: `python .claude/skills/sound/scripts/cli.py speak "Your message here"`
+- **CLI Vocalization**: `python .claude/skills/sound/scripts/cli.py "Your message here"`
 
 **Why:** Eliminates the ~1,000ms process startup and model loading delay on every terminal interaction, enabling instantaneous speech start.
 **How to apply:** Keep the daemon active in the background or launch it alongside the OmniRoute / Telegram daemons.

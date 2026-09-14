@@ -12,6 +12,7 @@ metadata:
 Faust's capabilities are packaged as self-contained sovereign skills in `.claude/skills/`:
 
 ### 1. Sound Skill (`.claude/skills/sound/`)
+- **Biological Speech Reflex**: Zero file reads required before speaking. Run directly via CLI: `python .claude/skills/sound/scripts/cli.py "<speech_text>"`. Never inspect sound engine files to speak.
 - **Acoustic Core**: Kokoro-82M ONNX neural TTS engine (`assets/models/kokoro-v1.0.onnx`, `voices-v1.0.bin`).
 - **Synthesis Standard**: Sentence-sequential synthesis with voice blending (primary `af_bella` + random female pool), Fourier pitch shifting (`-0.3` st), dynamic peak normalization, prosody micro-jitter, and `0.3s` sample-accurate pauses.
 - **Smart Dual-Mode**: Dispatches to resident audio daemon (`daemons/audio_daemon.py` on port 20129) in <2ms with 0ms reload overhead; falls back to in-process synthesis if daemon is offline.
