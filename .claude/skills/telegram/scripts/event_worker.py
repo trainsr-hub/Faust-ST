@@ -1,11 +1,15 @@
 #!/usr/bin/env python3
 """
-Faust Telegram Event-Driven Worker (Golden Standard - Multi-Tier Engineering Integration)
+Faust Telegram Event-Driven Worker (Real Headless Execution Bridge)
 Supervised by Faust Watchdog (Port 20131).
-Listens on the Telegram Dumb I/O Daemon (Port 20130), evaluates guarded directives,
-dynamically derives real engineering work-blocks from Faust-ND/Faust-RD,
-executes tasks with compiler diagnostics and in-place Telegram checklist progress,
-and commits transactional ACKs.
+
+Listens on Telegram Dumb I/O Daemon (Port 20130).
+When a directive arrives:
+1. Dispatches an initial progress card & acoustic intake alert.
+2. Spawns Claude Code to execute real tool actions (Read, Edit, Write, PowerShell) across the workspace.
+3. Updates the Telegram progress card in-place with the REAL tools and files being modified in real time.
+4. Transmits the real debrief report and vocalizes voice completion through speakers.
+5. Commits transactional ACK to SQLite queue.
 """
 
 import argparse
@@ -21,7 +25,7 @@ import time
 import urllib.parse
 import urllib.request
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Optional
 
 logging.basicConfig(
     level=logging.INFO,
@@ -32,7 +36,6 @@ logger = logging.getLogger("FaustTelegramWorker")
 
 PROJECT_ROOT = Path(__file__).resolve().parents[4]
 CONFIG_PATH = PROJECT_ROOT / ".claude" / "faust_config.json"
-DISPATCHER_SCRIPT = PROJECT_ROOT / ".claude" / "skills" / "c2-dispatch" / "scripts" / "faust_dispatcher.py"
 
 
 def load_config() -> Dict[str, Any]:
@@ -45,7 +48,7 @@ def load_config() -> Dict[str, Any]:
     return {}
 
 
-class FaustTelegramEventWorker:
+class FaustTelegramRealWorker:
     def __init__(self, poll_interval: float = 1.5, health_port: int = 20131):
         self.config = load_config()
         self.tg_cfg = self.config.get("telegram", {})
@@ -89,73 +92,16 @@ class FaustTelegramEventWorker:
         url = f"http://127.0.0.1:{audio_port}/speak"
         self._http_post(url, {"text": text, "speed": 0.84, "voice": "af_bella"})
 
-    def is_guarded_directive(self, directive: Dict[str, Any]) -> bool:
-        """Verify sender identity and recognize directive commands."""
-        sender_id = directive.get("sender_id") or directive.get("from_id")
-        chat_id = directive.get("chat_id")
-        text = directive.get("text", "").strip()
-
-        # In dedicated group chat, all messages from Manager or messages starting with / or Faust are valid
-        if text.startswith("/") or re.search(r"^(faust|@faust|hey faust)", text, re.IGNORECASE):
-            return True
-        return True
-
-    def decompose_directive_to_work_blocks(self, text: str) -> List[Dict[str, str]]:
-        """
-        Faust-ND Dynamic Decomposition:
-        Derives concrete, atomic work blocks (modules, files, validation gates) from the directive text.
-        """
-        clean_text = re.sub(r"^(faust[,:]?|@faust)\s*", "", text, flags=re.IGNORECASE).strip()
-
-        # 1. System telemetry & status commands
-        if clean_text.startswith("/status") or "status" in clean_text.lower():
-            return [
-                {"title": "Inspect Micro-Daemons & Ports", "type": "system", "action": "healthcheck"},
-                {"title": "Verify Telegram & Audio Uptime", "type": "telemetry", "action": "query_uptime"},
-                {"title": "Render C2 Diagnostics Report", "type": "egress", "action": "generate_report"}
-            ]
-
-        # 2. Git & Push commands
-        if "push" in clean_text.lower() or "github" in clean_text.lower() or "commit" in clean_text.lower():
-            return [
-                {"title": "Git Working Tree Status & Diff Audit", "type": "git", "action": "git status"},
-                {"title": "Stage Core Memory & Skill Artifacts", "type": "git", "action": "git add"},
-                {"title": "Create Signed Atomic Commit", "type": "git", "action": "git commit"},
-                {"title": "Verify Remote Sync (GitHub)", "type": "git", "action": "git push"}
-            ]
-
-        # 3. Audio / Voice commands
-        if "voice" in clean_text.lower() or "tts" in clean_text.lower():
-            return [
-                {"title": "Inspect Kokoro-82M ONNX Runtime", "type": "audio", "action": "check_onnx"},
-                {"title": "Evaluate Voice Parameters (af_bella, 0.84x)", "type": "audio", "action": "tune_voice"},
-                {"title": "Acoustic Synthesizer Verification", "type": "audio", "action": "test_audio"}
-            ]
-
-        # 4. Standard Engineering Task / Code Refactoring
-        # Extract keywords to create tailored work-packets
-        words = clean_text.split()
-        summary = " ".join(words[:5]) if words else "Task Target"
-        return [
-            {"title": f"Stratum I Blueprint Analysis ({summary})", "type": "architecture", "action": "theorist_plan"},
-            {"title": "Faust-ND Adversarial Peer Review & Boundary Check", "type": "review", "action": "critic_audit"},
-            {"title": f"Faust-TH Tactical Fabrication & Module Synthesis", "type": "machinist", "action": "code_synth"},
-            {"title": "Deterministic Compiler & Diagnostics Check", "type": "compiler", "action": "compiler_check"},
-            {"title": "Transactional Egress & Status Debrief", "type": "egress", "action": "commit_and_debrief"}
-        ]
-
-    def send_initial_card(self, directive_text: str, blocks: List[Dict[str, str]]) -> Optional[int]:
-        """Dispatch initial in-place progress card to Telegram with dynamic Faust-ND blocks."""
+    def send_initial_card(self, directive_text: str) -> Optional[int]:
+        """Dispatch initial in-place progress card to Telegram."""
         if not self.token:
             return None
         lines = [
             f"🔄 <b>Prescript Received:</b> <i>{directive_text}</i>",
-            f"<b>Architectural Plan:</b> <code>{len(blocks)} Work Blocks</code>",
-            ""
+            "<b>Engineering Pipeline:</b> <code>Faust Autonomous Core Active</code>",
+            "",
+            "[1/1] ⏳ <b>Analyzing workspace & initiating steps...</b>"
         ]
-        for idx, block in enumerate(blocks, 1):
-            lines.append(f"[{idx}/{len(blocks)}] ⚪ {block['title']}")
-
         url = f"https://api.telegram.org/bot{self.token}/sendMessage"
         payload = {"chat_id": self.chat_id, "text": "\n".join(lines), "parse_mode": "HTML"}
         res = self._http_post(url, payload)
@@ -163,88 +109,177 @@ class FaustTelegramEventWorker:
             return res.get("result", {}).get("message_id")
         return None
 
-    def update_card(self, msg_id: int, directive_text: str, blocks: List[Dict[str, str]], current_idx: int, completed_durations: Dict[int, int], is_done: bool = False, final_summary: str = ""):
-        """Update Telegram card in-place via editMessageText."""
+    def update_card(self, msg_id: int, directive_text: str, active_steps: List[Dict[str, Any]], is_done: bool = False, final_summary: str = ""):
+        """Update Telegram card in-place via editMessageText with real tool actions."""
         if not self.token or not msg_id:
             return
         lines = [
             f"🔄 <b>Prescript:</b> <i>{directive_text}</i>",
             ""
         ]
-        for idx, block in enumerate(blocks, 1):
-            if idx in completed_durations:
-                dur = completed_durations[idx]
-                lines.append(f"[{idx}/{len(blocks)}] ✅ <b>{block['title']}</b> <code>({dur}ms)</code>")
-            elif idx == current_idx:
-                lines.append(f"[{idx}/{len(blocks)}] ⏳ <b>{block['title']}</b> <i>(Executing...)</i>")
+
+        display_steps = active_steps[-6:] if len(active_steps) > 6 else active_steps
+        for idx, step in enumerate(display_steps, 1):
+            name = step.get("name", "Tool")
+            status = step.get("status", "running")
+            dur = step.get("duration", 0)
+
+            if status == "completed":
+                lines.append(f"[{idx}/{len(display_steps)}] ✅ <b>{name}</b> <code>({dur}ms)</code>")
+            elif status == "running":
+                lines.append(f"[{idx}/{len(display_steps)}] ⏳ <b>{name}</b> <i>(Executing...)</i>")
+            elif status == "failed":
+                lines.append(f"[{idx}/{len(display_steps)}] ❌ <b>{name}</b>")
             else:
-                lines.append(f"[{idx}/{len(blocks)}] ⚪ {block['title']}")
+                lines.append(f"[{idx}/{len(display_steps)}] ⚪ {name}")
 
         if is_done:
             lines.append("")
-            lines.append(f"⚡ <b>Execution Complete.</b> {final_summary or 'All work blocks verified.'}")
+            lines.append(f"⚡ <b>Execution Complete.</b> {final_summary or 'Task verified.'}")
 
         text = "\n".join(lines)
         url = f"https://api.telegram.org/bot{self.token}/editMessageText"
         payload = {"chat_id": self.chat_id, "message_id": msg_id, "text": text, "parse_mode": "HTML"}
         self._http_post(url, payload)
 
-    async def execute_directive(self, directive: Dict[str, Any]):
-        """Execute task through dynamic Faust-ND work blocks."""
-        text = directive.get("text", "")
-        update_id = directive.get("update_id", 0)
-
-        if not self.is_guarded_directive(directive):
-            logger.info(f"Ignoring non-directive text: {text}")
-            self.ack_directive(update_id)
+    def send_final_report(self, report_text: str):
+        """Send complete debriefing report to Telegram."""
+        if not self.token or not report_text:
             return
+        chunks = [report_text[i:i+3800] for i in range(0, len(report_text), 3800)]
+        for chunk in chunks:
+            url = f"https://api.telegram.org/bot{self.token}/sendMessage"
+            payload = {
+                "chat_id": self.chat_id,
+                "text": f"✅ <b>Task Complete:</b>\n\n{chunk}",
+                "parse_mode": "HTML"
+            }
+            res = self._http_post(url, payload)
+            if not res or not res.get("ok"):
+                payload.pop("parse_mode", None)
+                self._http_post(url, payload)
 
-        logger.info(f"🚀 [Directive Intake] Received from {directive.get('from_name')}: {text}")
+    async def execute_real_claude_directive(self, directive: Dict[str, Any]):
+        """Execute real Claude Code headless session and stream live tool actions to Telegram."""
+        text = directive.get("text", "").strip()
+        update_id = directive.get("update_id", 0)
+        from_name = directive.get("from_name", "Manager")
 
-        # 1. Dynamically derive Faust-ND engineering work blocks
-        blocks = self.decompose_directive_to_work_blocks(text)
+        logger.info(f"🚀 [REAL EXECUTION] Spawning Claude Code for directive from {from_name}: {text}")
 
-        # 2. Dispatch initial progress card & quick voice alert
-        msg_id = self.send_initial_card(text, blocks)
-        self.speak("Executing, Manager.")
+        msg_id = self.send_initial_card(text)
+        self.speak("Executing your directive, Manager.")
 
-        durations = {}
-        t_start = time.time()
-
-        # 3. Execute each real block in sequence with live in-place updating
-        for idx, block in enumerate(blocks, 1):
-            self.update_card(msg_id, text, blocks, current_idx=idx, completed_durations=durations)
-            t0 = time.time()
-
-            # Execute real command or simulated compiler check
-            action = block.get("action", "")
-            if action == "healthcheck":
-                # Check ports
-                await asyncio.sleep(0.05)
-            elif action.startswith("git"):
-                # Run git status check
-                try:
-                    subprocess.run(["git", "status", "--short"], cwd=str(PROJECT_ROOT), capture_output=True, timeout=5)
-                except Exception:
-                    pass
-            else:
-                # Simulated compiler verification / logic step
-                await asyncio.sleep(0.15)
-
-            t1 = time.time()
-            durations[idx] = int((t1 - t0) * 1000)
-
-        # 4. Final in-place update & ACK
-        total_time = time.time() - t_start
-        self.update_card(
-            msg_id, text, blocks, current_idx=0, completed_durations=durations, is_done=True,
-            final_summary=f"Processed in {total_time:.2f}s • Compiler: 0 Errors."
+        full_prompt = (
+            f"You are Faust acting on an autonomous remote directive from the Manager via Telegram C2.\n"
+            f"Directive: {text}\n"
+            f"Execute the necessary analysis, file modifications (Read, Edit, Write), and verification tests (PowerShell/Bash) "
+            f"directly in the workspace at {PROJECT_ROOT}. When complete, provide a concise, sharp technical summary."
         )
-        self.ack_directive(update_id)
-        self.speak("Directive completed successfully, Manager.")
-        self.processed_count += 1
 
-        logger.info(f"✅ Directive {update_id} finished in {total_time:.2f}s. Acknowledged & committed.")
+        cmd = [
+            "claude",
+            "-p", full_prompt,
+            "--output-format", "stream-json",
+            "--verbose"
+        ]
+
+        active_steps: List[Dict[str, Any]] = []
+        final_result_text = ""
+        t_start = time.time()
+        last_update_time = 0.0
+
+        try:
+            proc = await asyncio.create_subprocess_exec(
+                *cmd,
+                cwd=str(PROJECT_ROOT),
+                stdout=asyncio.subprocess.PIPE,
+                stderr=asyncio.subprocess.PIPE
+            )
+
+            current_tool_step = None
+            tool_start_time = time.time()
+
+            while True:
+                line = await proc.stdout.readline()
+                if not line:
+                    break
+
+                line_str = line.decode("utf-8", errors="ignore").strip()
+                if not line_str or not line_str.startswith("{"):
+                    continue
+
+                try:
+                    event = json.loads(line_str)
+                    ev_type = event.get("type")
+
+                    if ev_type == "assistant":
+                        msg_obj = event.get("message", {})
+                        contents = msg_obj.get("content", [])
+                        for item in contents:
+                            if item.get("type") == "tool_use":
+                                tool_name = item.get("name", "Tool")
+                                tool_input = item.get("input", {})
+
+                                if tool_name in ["Read", "Edit", "Write"]:
+                                    fpath = tool_input.get("file_path", "")
+                                    fname = Path(fpath).name if fpath else "File"
+                                    step_label = f"{tool_name} {fname}"
+                                elif tool_name in ["PowerShell", "Bash"]:
+                                    cmd_str = tool_input.get("command", "")
+                                    cmd_preview = cmd_str[:30] + "..." if len(cmd_str) > 30 else cmd_str
+                                    step_label = f"Exec: {cmd_preview}"
+                                elif tool_name == "Grep":
+                                    step_label = f"Grep '{tool_input.get('pattern', '')}'"
+                                elif tool_name == "Glob":
+                                    step_label = f"Glob '{tool_input.get('pattern', '')}'"
+                                else:
+                                    step_label = f"{tool_name}"
+
+                                if current_tool_step:
+                                    current_tool_step["status"] = "completed"
+                                    current_tool_step["duration"] = int((time.time() - tool_start_time) * 1000)
+
+                                current_tool_step = {"name": step_label, "status": "running", "duration": 0}
+                                active_steps.append(current_tool_step)
+                                tool_start_time = time.time()
+
+                                if time.time() - last_update_time > 0.8:
+                                    self.update_card(msg_id, text, active_steps)
+                                    last_update_time = time.time()
+
+                    elif ev_type == "result":
+                        final_result_text = event.get("result", "")
+
+                except json.JSONDecodeError:
+                    pass
+
+            await proc.wait()
+
+            if current_tool_step:
+                current_tool_step["status"] = "completed"
+                current_tool_step["duration"] = int((time.time() - tool_start_time) * 1000)
+
+            total_elapsed = time.time() - t_start
+
+            self.update_card(
+                msg_id, text, active_steps, is_done=True,
+                final_summary=f"Processed in {total_elapsed:.1f}s • {len(active_steps)} Real Actions Executed."
+            )
+
+            if final_result_text:
+                self.send_final_report(final_result_text)
+
+            self.speak("Directive completed successfully, Manager.")
+            self.ack_directive(update_id)
+            self.processed_count += 1
+
+            logger.info(f"✅ [REAL EXECUTION COMPLETE] Directive {update_id} finished in {total_elapsed:.2f}s. Tools executed: {len(active_steps)}")
+
+        except Exception as e:
+            logger.error(f"❌ Error during real Claude execution: {e}")
+            self.update_card(msg_id, text, active_steps, is_done=True, final_summary=f"Execution error: {e}")
+            self.ack_directive(update_id)
 
     async def _health_handler(self, reader: asyncio.StreamReader, writer: asyncio.StreamWriter):
         try:
@@ -255,10 +290,10 @@ class FaustTelegramEventWorker:
                     break
             body = json.dumps({
                 "status": "ok",
-                "service": "faust-telegram-event-worker",
+                "service": "faust-telegram-real-worker",
                 "uptime_seconds": round(time.time() - self.start_time, 1),
                 "processed_count": self.processed_count,
-                "multi_tier_integration": True
+                "real_execution": True
             }).encode("utf-8")
             resp = (
                 f"HTTP/1.1 200 OK\r\n"
@@ -274,8 +309,8 @@ class FaustTelegramEventWorker:
             writer.close()
 
     async def run(self):
-        logger.info("🛡️  Faust Event-Driven Telegram Worker Online (Faust-ND Dynamic Blocks).")
-        logger.info(f"Listening on Port {self.daemon_port}. Healthcheck on Port {self.health_port}.\n")
+        logger.info("🛡️  Faust Real-Execution Telegram Worker Online.")
+        logger.info(f"Connected to Claude Code CLI. Listening on Port {self.daemon_port}. Healthcheck on Port {self.health_port}.\n")
 
         try:
             health_server = await asyncio.start_server(self._health_handler, "127.0.0.1", self.health_port)
@@ -287,31 +322,31 @@ class FaustTelegramEventWorker:
             try:
                 directive = self.pop_directive()
                 if directive:
-                    await self.execute_directive(directive)
+                    await self.execute_real_claude_directive(directive)
                 await asyncio.sleep(self.poll_interval)
             except asyncio.CancelledError:
                 break
             except Exception as e:
-                logger.error(f"Worker polling error: {e}")
+                logger.error(f"Worker loop error: {e}")
                 await asyncio.sleep(self.poll_interval)
 
         if health_server:
             health_server.close()
             await health_server.wait_closed()
 
-        logger.info("🛑 Faust Telegram Worker stopped gracefully.")
+        logger.info("🛑 Faust Real Telegram Worker stopped.")
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Faust Event-Driven Telegram Worker")
+    parser = argparse.ArgumentParser(description="Faust Real-Execution Telegram Worker")
     parser.add_argument("--interval", type=float, default=1.5, help="Polling interval in seconds")
     parser.add_argument("--port", type=int, default=20131, help="Healthcheck port for watchdog")
     args = parser.parse_args()
 
-    worker = FaustTelegramEventWorker(poll_interval=args.interval, health_port=args.port)
+    worker = FaustTelegramRealWorker(poll_interval=args.interval, health_port=args.port)
 
     def sig_handler(sig, frame):
-        logger.info("\nStopping Faust Telegram Worker...")
+        logger.info("\nStopping Faust Real Telegram Worker...")
         worker._running = False
 
     signal.signal(signal.SIGINT, sig_handler)
