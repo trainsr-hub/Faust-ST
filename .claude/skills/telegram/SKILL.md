@@ -77,5 +77,7 @@ if directive:
 The event-driven worker (`scripts/event_worker.py`) replaces the legacy `/standby` polling loop:
 - **Zero Idle Token Burn**: Sits silently until a directive is pushed from Telegram.
 - **In-Place Checklist Updates**: Sends a single initial card to Telegram and updates it via `editMessageText` (`[1/6] ✅ Ingress`, `[2/6] ✅ Routing`, `[3/6] ⏳ Execution...`).
+- **Single In-Place Card (Zero Chat Spam)**: The in-place progress card is the sole visual indicator. Eliminates separate completion report message dumps.
+- **Windowless Headless Execution**: Spawns `claude` and subprocesses with `CREATE_NO_WINDOW` (`0x08000000`) so zero console windows pop up on the Manager's screen.
 - **Transactional Integrity**: Performs `/messages/ack` on completion to commit the SQLite transaction.
 

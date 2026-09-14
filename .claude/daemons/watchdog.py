@@ -92,7 +92,7 @@ def spawn_daemon(name: str, script_path: Path) -> subprocess.Popen:
 
     # Spawn detached background process
     if os.name == "nt":
-        creationflags = subprocess.CREATE_NEW_PROCESS_GROUP | subprocess.DETACHED_PROCESS
+        creationflags = subprocess.CREATE_NEW_PROCESS_GROUP | subprocess.DETACHED_PROCESS | subprocess.CREATE_NO_WINDOW
         proc = subprocess.Popen(
             [python_exe, str(script_path)],
             cwd=str(PROJECT_ROOT),

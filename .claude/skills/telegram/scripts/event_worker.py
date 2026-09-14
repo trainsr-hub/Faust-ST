@@ -189,12 +189,14 @@ class FaustTelegramRealWorker:
         t_start = time.time()
         last_update_time = 0.0
 
+        creationflags = subprocess.CREATE_NO_WINDOW if sys.platform == "win32" else 0
         try:
             proc = await asyncio.create_subprocess_exec(
                 *cmd,
                 cwd=str(PROJECT_ROOT),
                 stdout=asyncio.subprocess.PIPE,
-                stderr=asyncio.subprocess.PIPE
+                stderr=asyncio.subprocess.PIPE,
+                creationflags=creationflags
             )
 
             current_tool_step = None
@@ -267,8 +269,7 @@ class FaustTelegramRealWorker:
                 final_summary=f"Processed in {total_elapsed:.1f}s • {len(active_steps)} Real Actions Executed."
             )
 
-            if final_result_text:
-                self.send_final_report(final_result_text)
+            # Do not send redundant completion report message; in-place card & acoustic presence provide clean, complete feedback.
 
             self.speak("Directive completed successfully, Manager.")
             self.ack_directive(update_id)

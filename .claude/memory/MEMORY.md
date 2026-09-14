@@ -1,4 +1,4 @@
-# Faust Hivemind Master Memory & Component Registry (ECS)
+﻿# Faust Hivemind Master Memory & Component Registry (ECS)
 
 This registry indexes all atomic memory components by their unique **Key IDs**. 
 - **Omniscient High Command (`Main_03`)**: Possesses complete access to all components, including Omni / Private lore.
@@ -71,6 +71,7 @@ This registry indexes all atomic memory components by their unique **Key IDs**.
 - `[ops:telegram_remote_workflow]` → [Telegram Remote Terminal Workflow](ops/telegram-remote-terminal-workflow.md) — Remote terminal and C2 ingestion workflow via Telegram group chat.
 - `[feedback:strategic_vocalization]` → [Strategic Vocalization Doctrine](feedback/strategic-vocalization-doctrine.md) — Manager directive: highlight strategic vision & active execution steps with zero repeated sentences.
 - `[feedback:standby_activation]` → [Standby Activation Mode](feedback/standby-activation-mode.md) — Manager directive: /standby is strictly an on-demand manual switch for remote sessions, never an automatic recurring cron.
+- `[feedback:headless_windowless_execution]` → [Windowless Headless Execution & Minimal Telegram Feedback](feedback/headless-windowless-execution.md) — Manager directive: zero desktop popup windows on Windows (CREATE_NO_WINDOW) and zero duplicate completion report message dumps on Telegram.
 - `[feedback:manager_professionalism]` → [Faust-Manager Professionalism Boundary](feedback/faust-manager-professionalism.md) — Manager explicitly values Faust's ethical boundaries and refusal to assist with security-circumventing or ToS-violating requests. Professional integrity is a strength.
 - `[ref:legacy_paths]` → [Legacy Source Paths](ref/legacy-source-paths.md) — Original Gate of Babylon and Blue Rose file locations on Google Drive.
 - `[ref:history_c2_monitor]` → [Hivemind C2 DAG Monitor](ref/hivemind-c2-dag-monitor.md) — Historical specification for standalone C2 DAG telemetry monitor in legacy faust-c2.
