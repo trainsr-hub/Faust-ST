@@ -22,6 +22,8 @@ This registry tracks all capabilities and skills installed into `.claude/skills/
 | `defensive-concurrency` | Architecture & Quality | Invariant-based concurrency resilience: atomic write-temp-rename I/O, stale PID pruning, single-consumer polling isolation, and bounded sliding-window deduplication. | Industry Golden Standard / Faust Adaptation | 2026-09-29 |
 | `sqlite-persistence` | Architecture & Backend | Production SQLite protocol: WAL journal mode, NORMAL sync, 5000ms busy timeout, foreign key enforcement, IMMEDIATE transactions, and idempotent migrations. | Industry Golden Standard / Faust Adaptation | 2026-09-29 |
 | `secure-coding` | Engineering Discipline | Defensive secure coding invariants: zero-shell injection, canonical path traversal elimination, secret isolation and log redaction, safe deserialization, and bounded execution timeouts. | Industry Golden Standard / Faust Adaptation | 2026-09-29 |
+| `circuit-breaker` | Architecture & Resilience | Circuit Breaker & Resilience Protocol: Closed/Open/Half-Open state transitions, exponential backoff with jitter, and fallback cascades. | Industry Golden Standard / Faust Adaptation | 2026-09-29 |
+| `structured-telemetry` | Observability & Diagnostics | Structured Logging & Telemetry Protocol: Asynchronous contextvars propagation, distributed correlation IDs, and JSON stream serialization. | Industry Golden Standard / Faust Adaptation | 2026-09-29 |
 
 ---
 
@@ -33,4 +35,6 @@ This registry tracks all capabilities and skills installed into `.claude/skills/
 - **2026-09-29**: Added `defensive-concurrency` (`.claude/skills/defensive-concurrency/SKILL.md`) for atomic file I/O, lock management, and race condition elimination.
 - **2026-09-29**: Added `sqlite-persistence` (`.claude/skills/sqlite-persistence/SKILL.md`) for WAL-mode SQLite concurrency, ACID transaction discipline, and idempotent schema migrations.
 - **2026-09-29**: Added `secure-coding` (`.claude/skills/secure-coding/SKILL.md`) for defensive security invariants, input sanitization, and execution boundary hardening.
+- **2026-09-29**: Added `circuit-breaker` (`.claude/skills/circuit-breaker/SKILL.md`) for finite-state resilience, short-circuit fast-failing, and cascading outage prevention.
+- **2026-09-29**: Added `structured-telemetry` (`.claude/skills/structured-telemetry/SKILL.md`) for distributed correlation ID contextvars and JSON log serialization.
 
