@@ -34,6 +34,7 @@ This registry indexes all atomic memory components by their unique **Key IDs**.
 - `[rule:d_drive_storage_invariant]` → [Strict D: Drive Storage Invariant](rules/d-drive-storage-invariant.md) — All software, CLI tools, models, packages, and temp files must ALWAYS be installed and stored on Local Disk D:.
 - `[rule:empirical_verification_and_prior_art]` → [Empirical Verification & Prior Art Invariant](rules/empirical-verification-and-prior-art.md) — Technical choices must be verifiable via outside benchmarks; check community prior art first.
 - `[rule:golden_standard_first]` → [Golden Standard First Architecture](rules/golden-standard-first-architecture.md) — Build the complete industry golden standard first before tailoring for custom needs.
+- `[rule:anti_spaghetti_architecture]` → [Anti-Spaghetti Architecture & Clean Modularity Invariant](rules/anti-spaghetti-architecture.md) — 4-tier separation, 300-line file ceiling, guard clauses, immutability, and Karpathy simplicity.
 
 ---
 
@@ -47,6 +48,7 @@ This registry indexes all atomic memory components by their unique **Key IDs**.
 *Projected dynamically into Tactical Projects based on Domain Tags.*
 
 #### UI / Frontend Division (`div:ui:*` / tag: `ui`)
+- `[div:ui:master_template]` → [Master UI/UX Template & Zero-Dead-Zone System](div/ui/master-ui-ux-template.md) — The authoritative UI/UX foundation at `.claude/templates/ui/` (Zero Dead Zones, Single-Active-Branch Outliner, Theme Agnostic, 100% Fitts's Law Hitboxes, Lazy-Read Doctrine).
 - `[div:ui:universe25]` → [Universe 25 Project](div/ui/universe-25-project.md) — (External App Reference) Plugin-based Web-OS architecture, Time currency, soft-coded theming.
 - `[div:ui:gate_of_babylon]` → [Design System](div/ui/design-system.md) — Gate of Babylon color palette, typography, 15-tier ranks, VFX.
 - `[div:ui:vinyl_angel]` → [Gate of Babylon Migration](div/ui/gate-of-babylon-migration.md) — (External App Reference) Ported Vinyl Angel & Artifact Codex into Universe 25.
@@ -69,9 +71,12 @@ This registry indexes all atomic memory components by their unique **Key IDs**.
 - `[ops:one_click_launcher]` → [One-Click Launcher](ops/one-click-launcher.md) — Single batch file to launch VS Code with Integrated Claude Terminal connected to daemons.
 - `[ops:project_spawner_and_cortex_junction]` → [Project Spawner & Manifest-Driven Memory Slicing](ops/project-spawner-and-cortex-junction.md) — Spawner script and memory projection engine to deploy scoped Faust workspaces.
 - `[ops:telegram_remote_workflow]` → [Telegram Remote Terminal Workflow](ops/telegram-remote-terminal-workflow.md) — Remote terminal and C2 ingestion workflow via Telegram group chat.
+- `[ops:blueprint_handoff_protocol]` → [Blueprint Handoff Protocol](ops/blueprint-handoff-protocol.md) — File-based blueprint persistence between Faust-ND (strategic architect) and Faust-TH (tactical executors). Simplified 3-tier workflow: Faust-ND plans + chunks, Faust-TH executes in parallel, no Faust-RD needed.
 - `[feedback:strategic_vocalization]` → [Strategic Vocalization Doctrine](feedback/strategic-vocalization-doctrine.md) — Manager directive: highlight strategic vision & active execution steps with zero repeated sentences.
 - `[feedback:standby_activation]` → [Standby Activation Mode](feedback/standby-activation-mode.md) — Manager directive: /standby is strictly an on-demand manual switch for remote sessions, never an automatic recurring cron.
 - `[feedback:headless_windowless_execution]` → [Windowless Headless Execution & Minimal Telegram Feedback](feedback/headless-windowless-execution.md) — Manager directive: zero desktop popup windows on Windows (CREATE_NO_WINDOW) and zero duplicate completion report message dumps on Telegram.
+- `[feedback:telegram_directive_notification_rule]` → [Telegram Directive Notification Rule](feedback/telegram-directive-notification-rule.md) — Mandatory Telegram notification whenever Faust requires the Manager's next directive (Errors, Permissions/Approvals, Work Completion).
+- `[feedback:self_bootstrapping_daemon_invariant]` → [Self-Bootstrapping Daemon Invariant](feedback/self-bootstrapping-daemon-invariant.md) — Universal auto-bootstrapping for background daemons across all skills with zero manual initiation.
 - `[feedback:manager_professionalism]` → [Faust-Manager Professionalism Boundary](feedback/faust-manager-professionalism.md) — Manager explicitly values Faust's ethical boundaries and refusal to assist with security-circumventing or ToS-violating requests. Professional integrity is a strength.
 - `[ref:legacy_paths]` → [Legacy Source Paths](ref/legacy-source-paths.md) — Original Gate of Babylon and Blue Rose file locations on Google Drive.
 - `[ref:history_c2_monitor]` → [Hivemind C2 DAG Monitor](ref/hivemind-c2-dag-monitor.md) — Historical specification for standalone C2 DAG telemetry monitor in legacy faust-c2.

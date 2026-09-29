@@ -25,6 +25,8 @@ CORE_INVARIANTS = [
     "d-drive-storage-invariant.md",
     "core-architectural-triad.md",
     "backend-data-persistence.md",
+    "golden-standard-first-architecture.md",
+    "anti-spaghetti-architecture.md",
 ]
 
 
@@ -174,6 +176,8 @@ def spawn_project(target_dir: Path, project_name: Optional[str] = None, domain_t
         "- `[rule:d_drive_storage_invariant]` -> [Strict D: Drive Storage Invariant](rules/d-drive-storage-invariant.md) - D:\\ drive policy.",
         "- `[core:architectural_triad]` -> [The Core Engineering & Architectural Triad](core/core-architectural-triad.md) - Golden Standards & Zero-LLM Primacy.",
         "- `[rule:backend_authority]` -> [Backend Data Persistence](rules/backend-data-persistence.md) - Single source of truth.",
+        "- `[rule:golden_standard_first]` -> [Golden Standard First Architecture](rules/golden-standard-first-architecture.md) - Golden Standard first before customization.",
+        "- `[rule:anti_spaghetti_architecture]` -> [Anti-Spaghetti Architecture & Clean Modularity Invariant](rules/anti-spaghetti-architecture.md) - 4-tier separation, 300-line ceiling, guard clauses, and immutability.",
         "",
         "---",
         "",
