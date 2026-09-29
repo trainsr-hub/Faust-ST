@@ -1,7 +1,7 @@
 @echo off
 setlocal enabledelayedexpansion
 REM Faust Multi-Daemon Sovereign Launcher & Watchdog
-REM Cleans stale processes, then starts Audio Daemon (20129), Telegram Daemon (20130), Telegram Event Worker (20131), Cortex (20135), and Watchdog
+REM Cleans stale processes, then starts Audio Daemon (20129), Telegram Daemon (20130), Telegram Event Worker (20133), Cortex (20135), and Watchdog
 cd /d "%~dp0\..\.."
 
 echo ===================================================
@@ -24,7 +24,7 @@ echo [2/5] Launching Telegram Ingress Daemon on Port 20130...
 start "" %PY_CMD% ".claude\skills\telegram\daemon\telegram_daemon.py"
 %SystemRoot%\System32\ping.exe -n 2 127.0.0.1 >nul
 
-echo [3/5] Launching Event-Driven Telegram Worker on Port 20131...
+echo [3/5] Launching Event-Driven Telegram Worker on Port 20133...
 start "" %PY_CMD% ".claude\skills\telegram\scripts\event_worker.py"
 %SystemRoot%\System32\ping.exe -n 2 127.0.0.1 >nul
 
@@ -39,7 +39,7 @@ echo ===================================================
 echo [FAUST C2] All Sovereign Daemons and Watchdog Initialized.
 echo   - Audio Service:    http://127.0.0.1:20129/health
 echo   - Telegram Ingress: http://127.0.0.1:20130/health
-echo   - Telegram Worker:  http://127.0.0.1:20131/health
+echo   - Telegram Worker:  http://127.0.0.1:20133/health
 echo   - Cortex Service:   http://127.0.0.1:20135/health
 echo   - Watchdog:         Active (Self-Healing + Faust-ND Escalation)
 echo ===================================================

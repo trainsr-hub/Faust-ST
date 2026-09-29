@@ -43,9 +43,9 @@ for /f "tokens=5" %%a in ('netstat -ano ^| findstr ":20135" ^| findstr "LISTENIN
     taskkill /F /PID %%a >nul 2>&1
 )
 
-REM 5. Terminate processes listening on port 20131 (Telegram Event Worker)
-for /f "tokens=5" %%a in ('netstat -ano ^| findstr ":20131" ^| findstr "LISTENING"') do (
-    echo Terminating Telegram Worker PID %%a on port 20131...
+REM 5. Terminate processes listening on port 20133 (Telegram Event Worker)
+for /f "tokens=5" %%a in ('netstat -ano ^| findstr ":20133" ^| findstr "LISTENING"') do (
+    echo Terminating Telegram Worker PID %%a on port 20133...
     taskkill /F /PID %%a >nul 2>&1
 )
 

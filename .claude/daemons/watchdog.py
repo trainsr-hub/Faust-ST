@@ -50,8 +50,8 @@ DAEMONS = {
     },
     "telegram_worker": {
         "script": TELEGRAM_SKILL_DIR / "scripts" / "event_worker.py",
-        "url": "http://127.0.0.1:20131/health",
-        "port": 20131,
+        "url": "http://127.0.0.1:20133/health",
+        "port": 20133,
         "max_retries": 5,
     },
     "cortex": {
@@ -183,8 +183,8 @@ def run_watchdog():
     with open(WATCHDOG_LOCK, "w", encoding="utf-8") as f:
         f.write(str(os.getpid()))
 
-    failure_counts = {"audio": 0, "telegram": 0}
-    procs: Dict[str, Optional[subprocess.Popen]] = {"audio": None, "telegram": None}
+    failure_counts = {name: 0 for name in DAEMONS}
+    procs: Dict[str, Optional[subprocess.Popen]] = {name: None for name in DAEMONS}
 
     try:
         while True:

@@ -52,7 +52,7 @@ def load_config() -> Dict[str, Any]:
 
 
 class FaustTelegramRealWorker:
-    def __init__(self, poll_interval: float = 1.5, health_port: int = 20131):
+    def __init__(self, poll_interval: float = 1.5, health_port: int = 20133):
         self.config = load_config()
         self.tg_cfg = self.config.get("telegram", {})
         self.token = self.tg_cfg.get("bot_token", "")
@@ -382,7 +382,7 @@ class FaustTelegramRealWorker:
 def main():
     parser = argparse.ArgumentParser(description="Faust Real-Execution Telegram Worker")
     parser.add_argument("--interval", type=float, default=1.5, help="Polling interval in seconds")
-    parser.add_argument("--port", type=int, default=20131, help="Healthcheck port for watchdog")
+    parser.add_argument("--port", type=int, default=20133, help="Healthcheck port for watchdog")
     args = parser.parse_args()
 
     worker = FaustTelegramRealWorker(poll_interval=args.interval, health_port=args.port)
