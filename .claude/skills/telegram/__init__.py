@@ -23,7 +23,7 @@ LEGACY_CONFIG_PATH = Path(__file__).resolve().parent / "assets" / "telegram_conf
 
 DAEMON_HOST = os.getenv("FAUST_TELEGRAM_HOST", "127.0.0.1")
 DAEMON_PORT = int(os.getenv("FAUST_TELEGRAM_PORT", "20130"))
-WORKER_PORT = int(os.getenv("FAUST_TELEGRAM_WORKER_PORT", "20131"))
+WORKER_PORT = int(os.getenv("FAUST_TELEGRAM_WORKER_PORT", "20133"))
 
 DAEMON_SCRIPT = Path(__file__).resolve().parent / "daemon" / "telegram_daemon.py"
 WORKER_SCRIPT = Path(__file__).resolve().parent / "scripts" / "event_worker.py"

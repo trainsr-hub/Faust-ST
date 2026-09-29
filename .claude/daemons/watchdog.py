@@ -168,6 +168,21 @@ def escalate_to_faust_nd(daemon_name: str, error_context: Dict[str, Any]):
         pass
 
 
+def notify_recovery(daemon_name: str):
+    """Notify Manager on Telegram that an escalated daemon has recovered."""
+    try:
+        skills_dir = PROJECT_ROOT / ".claude" / "skills"
+        if str(skills_dir) not in sys.path:
+            sys.path.insert(0, str(skills_dir))
+        from telegram import notify
+        notify(
+            f"<b>Daemon Recovered:</b> <code>{daemon_name}</code> is healthy and operational.",
+            emoji="✅",
+        )
+    except Exception:
+        pass
+
+
 def run_watchdog():
     log("Initializing Faust Daemon Watchdog Supervisor...")
 
@@ -184,6 +199,7 @@ def run_watchdog():
         f.write(str(os.getpid()))
 
     failure_counts = {name: 0 for name in DAEMONS}
+    escalated_state = {name: False for name in DAEMONS}
     procs: Dict[str, Optional[subprocess.Popen]] = {name: None for name in DAEMONS}
 
     try:
@@ -193,6 +209,9 @@ def run_watchdog():
                 if healthy:
                     if failure_counts[name] > 0:
                         log(f"{name.capitalize()} daemon recovered. Resetting failure counter.")
+                    if escalated_state[name]:
+                        notify_recovery(name)
+                        escalated_state[name] = False
                     failure_counts[name] = 0
                 else:
                     failure_counts[name] += 1
@@ -202,7 +221,9 @@ def run_watchdog():
                     )
 
                     if failure_counts[name] > spec["max_retries"]:
-                        escalate_to_faust_nd(name, {"consecutive_failures": failure_counts[name]})
+                        if not escalated_state[name]:
+                            escalate_to_faust_nd(name, {"consecutive_failures": failure_counts[name]})
+                            escalated_state[name] = True
                         # Back off longer before retrying again
                         time.sleep(30)
                         continue
