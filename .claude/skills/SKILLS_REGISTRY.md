@@ -21,6 +21,7 @@ This registry tracks all capabilities and skills installed into `.claude/skills/
 | `api-contract-design` | Architecture & Quality | Schema-first API contract design with Pydantic/Zod strongly-typed ingress/egress validation, standardized error envelopes, and zero-LLM boundary enforcement. | Industry Golden Standard / Faust Adaptation | 2026-09-29 |
 | `defensive-concurrency` | Architecture & Quality | Invariant-based concurrency resilience: atomic write-temp-rename I/O, stale PID pruning, single-consumer polling isolation, and bounded sliding-window deduplication. | Industry Golden Standard / Faust Adaptation | 2026-09-29 |
 | `sqlite-persistence` | Architecture & Backend | Production SQLite protocol: WAL journal mode, NORMAL sync, 5000ms busy timeout, foreign key enforcement, IMMEDIATE transactions, and idempotent migrations. | Industry Golden Standard / Faust Adaptation | 2026-09-29 |
+| `secure-coding` | Engineering Discipline | Defensive secure coding invariants: zero-shell injection, canonical path traversal elimination, secret isolation and log redaction, safe deserialization, and bounded execution timeouts. | Industry Golden Standard / Faust Adaptation | 2026-09-29 |
 
 ---
 
@@ -31,4 +32,5 @@ This registry tracks all capabilities and skills installed into `.claude/skills/
 - **2026-09-29**: Added `api-contract-design` (`.claude/skills/api-contract-design/SKILL.md`) for schema-first boundary validation and error contract standardization.
 - **2026-09-29**: Added `defensive-concurrency` (`.claude/skills/defensive-concurrency/SKILL.md`) for atomic file I/O, lock management, and race condition elimination.
 - **2026-09-29**: Added `sqlite-persistence` (`.claude/skills/sqlite-persistence/SKILL.md`) for WAL-mode SQLite concurrency, ACID transaction discipline, and idempotent schema migrations.
+- **2026-09-29**: Added `secure-coding` (`.claude/skills/secure-coding/SKILL.md`) for defensive security invariants, input sanitization, and execution boundary hardening.
 
