@@ -123,13 +123,15 @@ class VoiceConfig:
     # Normalization type: "peak" or "rms"
     normalization_type: str = "peak"
 
-    # Voice blending: random 3-way mix around base voice (af_bella: 0.5-0.8, 2 random female: 0.2-0.5)
+    # Voice blending: 3-way mix around base voice (af_bella: 0.5-0.8, af_nicole [<=0.20] + 1 random female: 0.2-0.5)
     voice_blend_enabled: bool = True
     voice_blend_secondary: str = "random_female"
-    voice_blend_num_secondary: int = 2
+    voice_blend_fixed_secondaries: list = field(default_factory=lambda: ["af_nicole"])
+    voice_blend_max_secondary_weights: dict = field(default_factory=lambda: {"af_nicole": 0.20})
+    voice_blend_num_secondary: int = 1
     voice_blend_female_pool: list = field(default_factory=lambda: [
         "bf_alice", "bf_emma", "bf_isabella", "bf_lily",
-        "af_heart", "af_kore", "af_nicole", "af_nova",
+        "af_heart", "af_kore", "af_nova",
         "af_sarah", "af_alloy", "af_aoede", "af_jessica"
     ])
     discarded_voices: list = field(default_factory=lambda: [
@@ -170,6 +172,8 @@ class VoiceConfig:
             "normalization_type",
             "voice_blend_enabled",
             "voice_blend_secondary",
+            "voice_blend_fixed_secondaries",
+            "voice_blend_max_secondary_weights",
             "voice_blend_num_secondary",
             "voice_blend_female_pool",
             "discarded_voices",

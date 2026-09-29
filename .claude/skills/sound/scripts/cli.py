@@ -50,6 +50,8 @@ def main():
     parser.add_argument("--list-voices", action="store_true", help="List all available voices")
     parser.add_argument("--preload", action="store_true", help="Run warmup / preloading sequence")
     parser.add_argument("--status", action="store_true", help="Display persistent ROM acoustic configuration status")
+    parser.add_argument("--to", choices=["speaker", "esp32"], default="speaker", help="Output destination: 'speaker' (PC, default) or 'esp32' (field speaker)")
+    parser.add_argument("--port", type=str, default=None, help="Serial port for ESP32 (default: COM5)")
     parser.add_argument("--mute", "--silent", action="store_true", help="Mute Faust acoustic presence in persistent ROM")
     parser.add_argument("--unmute", "--speak", action="store_true", help="Unmute Faust acoustic presence in persistent ROM")
     parser.add_argument("--toggle", action="store_true", help="Toggle Faust acoustic presence in persistent ROM")
@@ -98,8 +100,7 @@ def main():
     speech_text = " ".join(raw_words).strip() if raw_words else "Faust acoustic core online. Ready for your directive, Manager."
 
     t0 = time.perf_counter()
-    speak(
-        text=speech_text,
+    speak_kwargs = dict(
         voice=args.voice,
         secondary_voice=args.secondary,
         blend_voice=not args.no_blend,
@@ -107,8 +108,15 @@ def main():
         pitch_shift=args.pitch,
         pause_duration=args.pause,
         block=not args.no_block,
-        save_path=args.save,
         normalization_type=args.norm,
+    )
+    if args.port:
+        speak_kwargs["port"] = args.port
+
+    speak(
+        text=speech_text,
+        to=args.to,
+        **speak_kwargs
     )
     latency_ms = (time.perf_counter() - t0) * 1000
     if not args.save and is_daemon_running() and args.no_block:

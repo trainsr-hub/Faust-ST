@@ -63,10 +63,16 @@ Voice settings are managed through `faust_config.json` in the project root under
     "normalization_type": "peak",
     "voice_blend_enabled": true,
     "voice_blend_secondary": "random_female",
-    "voice_blend_num_secondary": 2,
+    "voice_blend_fixed_secondaries": [
+      "af_nicole"
+    ],
+    "voice_blend_max_secondary_weights": {
+      "af_nicole": 0.20
+    },
+    "voice_blend_num_secondary": 1,
     "voice_blend_female_pool": [
       "bf_alice", "bf_emma", "bf_isabella", "bf_lily",
-      "af_heart", "af_kore", "af_nicole", "af_nova",
+      "af_heart", "af_kore", "af_nova",
       "af_sarah", "af_alloy", "af_aoede", "af_jessica"
     ],
     "discarded_voices": [

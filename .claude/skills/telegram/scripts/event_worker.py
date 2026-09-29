@@ -1,5 +1,6 @@
 ﻿#!/usr/bin/env python3
-"Faust Telegram Event-Driven Worker (Real Headless Execution Bridge)"
+"""
+Faust Telegram Event-Driven Worker (Real Headless Execution Bridge)
 Supervised by Faust Watchdog (Port 20131).
 
 Listens on Telegram Dumb I/O Daemon (Port 20130).
@@ -7,10 +8,10 @@ When a directive arrives:
 1. Dispatches an initial progress card & acoustic intake alert.
 2. Spawns Claude Code to execute real tool actions (Read, Edit, Write, PowerShell) across the workspace.
 3. Updates the Telegram progress card in-place with the REAL tools and files being modified in real time.
-4. Enforces 100% strict HTML escaping, plain-text fallback, and total elimination of orphaned hourglass (⏳) emojis.
+4. Enforces 100% strict HTML escaping, plain-text fallback, and total elimination of orphaned hourglass emojis.
 5. Transmits the real debrief report and vocalizes voice completion through speakers.
 6. Commits transactional ACK to SQLite queue.
-"
+"""
 
 import argparse
 import asyncio
@@ -337,7 +338,7 @@ class FaustTelegramRealWorker:
                 "real_execution": True
             }).encode("utf-8")
             resp = (
-                f"HTTP/1.1 200 OK\r\n"
+                f"HTTP/1.0 200 OK\r\n"
                 f"Content-Type: application/json\r\n"
                 f"Content-Length: {len(body)}\r\n"
                 f"Connection: close\r\n\r\n"

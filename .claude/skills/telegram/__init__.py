@@ -6,20 +6,27 @@ Provides direct access to Telegram C2 functions with Smart Dual-Mode:
 """
 import json
 import os
+import subprocess
 import sys
+import time
 import urllib.error
 import urllib.parse
 import urllib.request
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
-PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
-CONFIG_PATH = PROJECT_ROOT / ".claude" / "faust_config.json"
+PROJECT_ROOT = Path(__file__).resolve().parents[3]
+CLAUDE_DIR = PROJECT_ROOT / ".claude"
+CONFIG_PATH = CLAUDE_DIR / "faust_config.json"
 FALLBACK_CONFIG_PATH = PROJECT_ROOT / "faust_config.json"
 LEGACY_CONFIG_PATH = Path(__file__).resolve().parent / "assets" / "telegram_config.json"
 
 DAEMON_HOST = os.getenv("FAUST_TELEGRAM_HOST", "127.0.0.1")
 DAEMON_PORT = int(os.getenv("FAUST_TELEGRAM_PORT", "20130"))
+WORKER_PORT = int(os.getenv("FAUST_TELEGRAM_WORKER_PORT", "20131"))
+
+DAEMON_SCRIPT = Path(__file__).resolve().parent / "daemon" / "telegram_daemon.py"
+WORKER_SCRIPT = Path(__file__).resolve().parent / "scripts" / "event_worker.py"
 
 
 def _load_config() -> Dict[str, Any]:
@@ -70,6 +77,77 @@ def is_daemon_running() -> bool:
             return resp.status == 200
     except Exception:
         return False
+
+
+def is_worker_running() -> bool:
+    """Check if the resident Telegram event worker on port 20131 is healthy."""
+    try:
+        url = f"http://{DAEMON_HOST}:{WORKER_PORT}/health"
+        req = urllib.request.Request(url, headers={"User-Agent": "Faust-Plugin-Client/1.0"}, method="GET")
+        with urllib.request.urlopen(req, timeout=0.3) as resp:
+            return resp.status in (200, 204)
+    except urllib.error.HTTPError as e:
+        return e.code in (200, 204, 426)
+    except Exception:
+        return False
+
+
+def _spawn_background_process(script_path: Path) -> Optional[subprocess.Popen]:
+    """Spawn a detached, windowless background Python process without popping up terminal windows."""
+    if not script_path.exists():
+        return None
+
+    python_exe = sys.executable
+    if os.name == "nt":
+        creationflags = (
+            subprocess.CREATE_NEW_PROCESS_GROUP
+            | subprocess.DETACHED_PROCESS
+            | subprocess.CREATE_NO_WINDOW
+        )
+        return subprocess.Popen(
+            [python_exe, str(script_path)],
+            cwd=str(PROJECT_ROOT),
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+            creationflags=creationflags,
+        )
+    else:
+        return subprocess.Popen(
+            [python_exe, str(script_path)],
+            cwd=str(PROJECT_ROOT),
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+            start_new_session=True,
+        )
+
+
+def ensure_daemons_running(timeout: float = 0.8) -> bool:
+    """
+    Universal Self-Bootstrapping Daemon Invariant:
+    If telegram_daemon or event_worker are not running, automatically spawn them windowless in the background.
+    If already running, simply pass.
+    """
+    cfg = _load_config()
+    if not cfg.get("enabled", True):
+        return False
+
+    spawned = False
+    if not is_daemon_running():
+        _spawn_background_process(DAEMON_SCRIPT)
+        spawned = True
+
+    if not is_worker_running():
+        _spawn_background_process(WORKER_SCRIPT)
+        spawned = True
+
+    if spawned and timeout > 0:
+        t0 = time.time()
+        while time.time() - t0 < timeout:
+            if is_daemon_running():
+                return True
+            time.sleep(0.1)
+
+    return is_daemon_running()
 
 
 def get_status() -> Dict[str, Any]:
@@ -130,10 +208,11 @@ def send_message(
     emoji: Optional[str] = None,
     parse_mode: str = "HTML",
     use_daemon: bool = True,
+    auto_bootstrap: bool = True,
 ) -> bool:
     """
     Send a message via Telegram.
-    Attempts <2ms daemon REST call first; falls back to direct Telegram API.
+    Attempts <2ms daemon REST call first (with lazy self-bootstrapping); falls back to direct Telegram API.
     """
     cfg = _load_config()
     if not cfg.get("enabled", True):
@@ -144,8 +223,11 @@ def send_message(
     if emoji and not formatted_text.startswith(emoji):
         formatted_text = f"{emoji} {formatted_text}"
 
-    # 1. Primary Route: Daemon REST Call
+    # 1. Primary Route: Daemon REST Call (with auto-bootstrapping)
     if use_daemon:
+        if auto_bootstrap and not is_daemon_running():
+            ensure_daemons_running(timeout=0.8)
+
         try:
             url = f"http://{DAEMON_HOST}:{DAEMON_PORT}/send"
             payload = {
@@ -262,5 +344,7 @@ __all__ = [
     "pop_pending_directives",
     "ack_directive",
     "is_daemon_running",
+    "is_worker_running",
+    "ensure_daemons_running",
     "get_status",
 ]

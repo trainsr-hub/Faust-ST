@@ -19,14 +19,31 @@ Every dispatch must begin with at most **one** functional leading emoji that ind
 | :--- | :--- | :--- | :--- |
 | **✅** | **Success** | The task or strategic vision is successfully achieved. | Faust stops and **WAITS** for the Manager's response. |
 | **❌** | **Error** | A critical failure or blockage occurred. | Faust stops immediately and **WAITS** for the Manager's response/intervention. |
-| **⚡** | **Alert / Risk** | High-priority warning regarding potential risks or urgent alerts. | Faust pauses background execution and **WAITS** for the Manager to decide. |
+| **⚡** | **Alert / Risk / Query** | High-priority warning, permission request, or intent clarification question. | Faust pauses background execution and **WAITS** for the Manager to decide/clarify. |
 | **🔄** | **Processing** | Background work has started / directive intake acknowledged. | Faust will respond soon. Faust **DOES NOT wait** for the Manager. |
 
 *Styling Rule:* Avoid decorating body bullet points or sentences with multiple emoji. The leading emoji carries the entire operational status.
 
 ---
 
-### 2. Four-Phase Operational Lifecycle
+### 2. The Three Telegram Interaction Modalities
+
+Faust operates under a three-pillar communication protocol with the Manager over Telegram:
+
+1. **Directive Requests & Session Transitions (`❌` / `✅` / `⚡`)**:
+   - **Unresolvable Errors (`❌`)**: When an unexpected error, crash, or environment issue cannot be repaired autonomously.
+   - **Work Done / Session End (`✅`)**: When a directive, task batch, or multi-step pipeline is completely finished.
+   - **Permissions / Authorizations (`⚡`)**: When execution requires human-in-the-loop sign-off for dangerous/critical tools.
+
+2. **Active Work Telemetry (`🔄`)**:
+   - Notifying the Manager when incoming directives are received and keeping active progress updated in-place without generating chat slop.
+
+3. **Intent Clarification & Foggy Requirement Inquiries (`⚡`)**:
+   - Proactively posing sharp, targeted questions to the Manager whenever a directive has ambiguous, conflicting, or foggy parameters before proceeding with implementation.
+
+---
+
+### 3. Four-Phase Operational Lifecycle
 
 1. **Session Initiation / Startup (Phase 1)**:
    - When the listener/session starts:

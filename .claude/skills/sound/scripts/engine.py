@@ -267,7 +267,7 @@ class SoundEngine:
     ) -> Tuple[Union[str, np.ndarray], str]:
         """
         Calculates a blended neural voice style vector in O(1) time.
-        Blends base voice (af_bella: 0.5 - 0.8) with secondary voices (2 random female voices: 0.2 - 0.5 total).
+        Blends base voice (af_bella: 0.5 - 0.8) with secondary voices (af_nicole + 1 random female voice: 0.2 - 0.5 total).
         Logs the exact mathematical combination for phenomenal voice discovery.
         """
         kokoro = self._get_kokoro()
@@ -282,16 +282,24 @@ class SoundEngine:
         # Determine discarded voices to exclude from candidate pool
         discarded = set(getattr(self.config, "discarded_voices", []) or [])
 
+        # Determine fixed secondary voices (e.g. af_nicole)
+        fixed_sec = list(getattr(self.config, "voice_blend_fixed_secondaries", ["af_nicole"]) or [])
+
         # Determine secondary voices
         if configured_sec in (None, "", "random", "random_female"):
             pool = getattr(self.config, "voice_blend_female_pool", None) or self.list_female_voices()
-            candidates = [v for v in pool if v != base and v not in discarded]
-            num_sec = getattr(self.config, "voice_blend_num_secondary", 2)
+            valid_fixed = [s for s in fixed_sec if s != base and s not in discarded]
+            excluded = set(valid_fixed) | {base} | discarded
+            candidates = [v for v in pool if v not in excluded]
+            num_sec = getattr(self.config, "voice_blend_num_secondary", 1)
             if len(candidates) >= num_sec:
-                secondaries = random.sample(candidates, num_sec)
+                random_secondaries = random.sample(candidates, num_sec)
             elif candidates:
-                secondaries = list(candidates)
+                random_secondaries = list(candidates)
             else:
+                random_secondaries = []
+            secondaries = valid_fixed + random_secondaries
+            if not secondaries:
                 secondaries = [base]
         elif isinstance(configured_sec, (list, tuple)):
             secondaries = [s for s in configured_sec if s != base and s not in discarded]
@@ -336,6 +344,32 @@ class SoundEngine:
             sum_raw = sum(raw_weights)
             sec_weights = [round((w / sum_raw) * sec_total_weight, 3) for w in raw_weights[:-1]]
             sec_weights.append(round(sec_total_weight - sum(sec_weights), 3))
+
+        # Enforce max secondary weight constraints (e.g. af_nicole <= 0.20 ceiling)
+        max_sec_weights = getattr(self.config, "voice_blend_max_secondary_weights", {"af_nicole": 0.20}) or {}
+        adjusted_weights = list(sec_weights)
+        excess_total = 0.0
+        capped_indices = set()
+
+        for idx, s_voice in enumerate(secondaries):
+            cap = max_sec_weights.get(s_voice)
+            if cap is not None and adjusted_weights[idx] > cap:
+                excess = adjusted_weights[idx] - cap
+                adjusted_weights[idx] = round(cap, 3)
+                excess_total += excess
+                capped_indices.add(idx)
+
+        if excess_total > 0:
+            uncapped_indices = [i for i in range(len(secondaries)) if i not in capped_indices]
+            if uncapped_indices:
+                add_per_uncapped = excess_total / len(uncapped_indices)
+                for i in uncapped_indices:
+                    adjusted_weights[i] = round(adjusted_weights[i] + add_per_uncapped, 3)
+            else:
+                base_weight = round(base_weight + excess_total, 3)
+
+        sec_weights = [round(w, 3) for w in adjusted_weights]
+        base_weight = round(1.0 - sum(sec_weights), 3)
 
         try:
             # O(1) in-memory vector retrieval and linear combination

@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Hazard Studio — Data Entry Blocks</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <div class="app-container">
+
+    <!-- Top Bar -->
+    <header class="top-bar">
+      <div class="title-stack" onclick="toggleAllBlocks()" title="Click to fold/expand all sections">
+        <h1>Hazard Studio Data Entry Blocks</h1>
+        <p>Grounded in RAW_RULE.md: Single-Active-Branch Tree Outliner &amp; 100% Hitboxes</p>
+      </div>
+      <div class="header-actions">
+        <button class="btn-action" id="btn-toggle-all-blocks" onclick="toggleAllBlocks()" title="Toggle collapse on all sections">🗂️ Fold All</button>
+        <button class="btn-action" onclick="toggleTheme()">🌓 Theme</button>
+        <button class="btn-action btn-primary" onclick="resetMockData()">↺ Reset State</button>
+      </div>
+    </header>
+
+    <!-- Workspace Grid -->
+    <div class="workspace-grid">
+
+      <!-- LEFT: The 7 Standalone Data Entry Blocks -->
+      <div class="blocks-stream">
+
+        <!-- 1. RAW TEXT INPUT -->
+        <section class="entry-block">
+          <div class="block-header" onclick="toggleBlockCollapse(this)">
+            <div class="block-header-left">
+              <span class="block-collapse-chevron">▼</span>
+              <span class="block-title">1. Raw Text Input &amp; Prompt Area</span>
+            </div>
+            <span class="block-tag">Text / Textarea</span>
+          </div>
+          <div class="block-body">
+            <div>
+              <div class="field-label">
+                <span>Character Identifier (Single-Line)</span>
+                <span class="field-hint">String</span>
+              </div>
+              <input type="text" class="raw-input-box" id="input-char-id" value="A01" oninput="updateField('id', this.value)">
+            </div>
+            <div>
+              <div class="field-label">
+                <span>Visual Appearance Prompt (`_prpt_` Multi-Line)</span>
+                <span class="field-hint">Textarea</span>
+              </div>
+              <textarea class="raw-textarea-box" id="input-char-prpt" oninput="updateField('_prpt_', this.value)">amelia watson, blonde hair, blue eyes, medium hair, twin low buns, short twin braids, bangs, ahoge, tareme, medium breasts</textarea>
+            </div>
+          </div>
+        </section>
+
+        <!-- 2. RAW SEARCHER -->
+        <section class="entry-block">
+          <div class="block-header" onclick="toggleBlockCollapse(this)">
+            <div class="block-header-left">
+              <span class="block-collapse-chevron">▼</span>
+              <span class="block-title">2. Raw Searcher (Instant Command Bar)</span>
+            </div>
+            <span class="block-tag">Filter / Query</span>
+          </div>
+          <div class="block-body">
+            <div class="searcher-monolith">
+              <span class="searcher-icon">🔍</span>
+              <input type="text" class="searcher-input" id="raw-searcher" placeholder="Type to filter 1,500+ pre-indexed records..." oninput="handleSearch(this.value)">
+              <button class="searcher-clear" onclick="clearSearch()">✕</button>
+            </div>
+
+            <!-- Active Selected Target Indicator Banner -->
+            <div class="search-active-banner" id="search-active-banner">
+              <span class="active-target-title">Active Target: <span id="search-active-name" style="color:var(--accent);">Amelia Watson</span></span>
+              <span class="active-badge-tag" id="search-active-id">ID: A01 · HoloMyth</span>
+            </div>
+
+            <div class="field-label">
+              <span>Matching Pre-Indexed Records</span>
+              <span class="field-hint" id="search-count">5 items found</span>
+            </div>
+            <div class="search-results-list" id="search-results-container">
+              <!-- Rendered via JS -->
+            </div>
+          </div>
+        </section>
+
+        <!-- 3. NOTION STYLE DROPDOWN SELECTOR (SINGLE) -->
+        <section class="entry-block">
+          <div class="block-header" onclick="toggleBlockCollapse(this)">
+            <div class="block-header-left">
+              <span class="block-collapse-chevron">▼</span>
+              <span class="block-title">3. Notion-Style Dropdown Selector (Single)</span>
+            </div>
+            <span class="block-tag">Persistent Suggestions + Create</span>
+          </div>
+          <div class="block-body">
+            <div class="field-label">
+              <span>Select Faction / Association (Type to search all available suggestors)</span>
+              <span class="field-hint">Single Select</span>
+            </div>
+            <div class="notion-combobox-wrap" id="single-combo-wrap">
+              <div class="notion-combobox-trigger" id="single-combo-trigger" onclick="toggleSingleDropdown()">
+                <span class="selected-val-badge" id="single-selected-val">⚡ HoloMyth</span>
+                <span class="combobox-chevron">▼</span>
+              </div>
+              <div class="notion-dropdown-menu" id="single-combo-menu">
+                <div class="dropdown-search-wrap">
+                  <input type="text" class="dropdown-search-input" id="single-combo-search" placeholder="Filter available factions or create new..." oninput="filterSingleDropdown(this.value)" onkeydown="handleSingleCreateKey(event)">
+                </div>
+                <div class="dropdown-options-list" id="single-options-list">
+                  <!-- Persistent Suggestion Options Rendered via JS -->
+                </div>
+                <div class="dropdown-create-row" id="single-create-row" style="display: none;" onclick="createSingleOption()">
+                  <span>+ Create "</span><span id="single-create-query"></span><span>"</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 4. NOTION STYLE DROPDOWN MULTI-SELECT -->
+        <section class="entry-block">
+          <div class="block-header" onclick="toggleBlockCollapse(this)">
+            <div class="block-header-left">
+              <span class="block-collapse-chevron">▼</span>
+              <span class="block-title">4. Notion-Style Dropdown Multi-Select</span>
+            </div>
+            <span class="block-tag">Available Tag Pool + Create</span>
+          </div>
+          <div class="block-body">
+            <div class="field-label">
+              <span>Nicknames &amp; Aliases (Click to open suggestion pool or type new)</span>
+              <span class="field-hint">Array&lt;String&gt;</span>
+            </div>
+            <div class="multi-select-host" id="multi-select-host">
+              <div class="multi-tag-box" id="multi-tag-box" onclick="toggleMultiDropdown(true)">
+                <div id="active-tags-list" style="display: contents;">
+                  <!-- Selected tag chips rendered via JS -->
+                </div>
+                <input type="text" class="tag-inline-input" id="tag-inline-input" placeholder="+ Add or search tags..." oninput="filterMultiDropdown(this.value)" onkeydown="handleTagInputKey(event)" onfocus="toggleMultiDropdown(true)">
+              </div>
+
+              <!-- Persistent Multi-Select Suggestion Dropdown -->
+              <div class="notion-dropdown-menu" id="multi-combo-menu">
+                <div class="dropdown-options-list" id="multi-options-list">
+                  <!-- Tag Pool Suggestions rendered via JS -->
+                </div>
+                <div class="dropdown-create-row" id="multi-create-row" style="display: none;" onclick="createMultiTagOption()">
+                  <span>+ Create new tag "</span><span id="multi-create-query"></span><span>"</span>
+                </div>
+              </div>
+            </div>
+            <div class="field-hint">💡 All existing tags remain in the suggestion pool. Click any tag to toggle, or press Enter to create a new one.</div>
+          </div>
+        </section>
+
+        <!-- 5. TOGGLE -->
+        <section class="entry-block">
+          <div class="block-header" onclick="toggleBlockCollapse(this)">
+            <div class="block-header-left">
+              <span class="block-collapse-chevron">▼</span>
+              <span class="block-title">5. Full-Surface Toggle Switch</span>
+            </div>
+            <span class="block-tag">Fitts's Law Hitbox</span>
+          </div>
+          <div class="block-body">
+            <label class="full-toggle-card" for="toggle-ego">
+              <div class="toggle-text-stack">
+                <span class="toggle-title">Auto-Resolve Ego Variant Overrides</span>
+                <span class="toggle-desc">Clicking anywhere on this entire card flips the toggle</span>
+              </div>
+              <div class="switch-pill">
+                <input type="checkbox" id="toggle-ego" checked onchange="updateToggle('autoResolveEgo', this.checked)">
+                <span class="switch-thumb"></span>
+              </div>
+            </label>
+            <label class="full-toggle-card" for="toggle-stealth">
+              <div class="toggle-text-stack">
+                <span class="toggle-title">Stealth Mode (Zero Window Execution)</span>
+                <span class="toggle-desc">Execute background operations silently without OS popups</span>
+              </div>
+              <div class="switch-pill">
+                <input type="checkbox" id="toggle-stealth" checked onchange="updateToggle('stealthMode', this.checked)">
+                <span class="switch-thumb"></span>
+              </div>
+            </label>
+          </div>
+        </section>
+
+        <!-- 6. CHECKBOX -->
+        <section class="entry-block">
+          <div class="block-header" onclick="toggleBlockCollapse(this)">
+            <div class="block-header-left">
+              <span class="block-collapse-chevron">▼</span>
+              <span class="block-title">6. Full-Surface Checkbox</span>
+            </div>
+            <span class="block-tag">Boolean Flags</span>
+          </div>
+          <div class="block-body">
+            <div class="checkbox-group">
+              <label class="full-checkbox-row" for="chk-1">
+                <div class="custom-checkbox">
+                  <input type="checkbox" id="chk-1" checked onchange="updateCheckFlag('enableTaxonomy', this.checked)">
+                </div>
+                <span class="checkbox-label-text">Enable Ground-Truth Taxonomy Indexing</span>
+              </label>
+              <label class="full-checkbox-row" for="chk-2">
+                <div class="custom-checkbox">
+                  <input type="checkbox" id="chk-2" checked onchange="updateCheckFlag('hardwareAccelerated', this.checked)">
+                </div>
+                <span class="checkbox-label-text">GPU Hardware-Accelerated Physics (Cubic-Bezier)</span>
+              </label>
+              <label class="full-checkbox-row" for="chk-3">
+                <div class="custom-checkbox">
+                  <input type="checkbox" id="chk-3" onchange="updateCheckFlag('strictZeroLLM', this.checked)">
+                </div>
+                <span class="checkbox-label-text">Strict Zero-LLM Deterministic Mode</span>
+              </label>
+            </div>
+          </div>
+        </section>
+
+        <!-- 7. MARKDOWN / TREEVIEW OUTLINER -->
+        <section class="entry-block">
+          <div class="block-header" onclick="toggleBlockCollapse(this)">
+            <div class="block-header-left">
+              <span class="block-collapse-chevron">▼</span>
+              <span class="block-title">7. TreeView &amp; Hierarchical Outliner</span>
+            </div>
+            <span class="block-tag">Structured Past &amp; Clean Outliner</span>
+          </div>
+          <div class="block-body">
+            <div class="field-label">
+              <span>Hierarchical Taxonomy Outliner</span>
+              <span class="field-hint" id="tree-active-level-hint">Focused: H3</span>
+            </div>
+
+            <!-- Sleek Integrated Toolbar: Breadcrumbs + Quick Actions -->
+            <div class="tree-toolbar-row">
+              <div class="tree-breadcrumb-bar" id="tree-breadcrumb-bar">
+                <!-- Breadcrumb trail rendered via JS -->
+              </div>
+              <div class="tree-toolbar-actions">
+                <button class="tree-toolbar-btn" id="tree-btn-jump-parent" onclick="jumpToParentNode()" title="Navigate up to direct ancestor (Hn-1)">
+                  ⬆ Up to Parent
+                </button>
+                <button class="tree-toolbar-btn" onclick="addChildToActiveNode()" title="Add sub-item under currently focused node">
+                  + Add Child (Hn+1)
+                </button>
+                <button class="tree-toolbar-btn" onclick="addRootTreeNode()" title="Create new H1 root category">
+                  + New Root (H1)
+                </button>
+              </div>
+            </div>
+
+            <!-- Master TreeView Root -->
+            <div class="treeview-container" id="treeview-root">
+              <!-- Rendered dynamically -->
+            </div>
+          </div>
+        </section>
+
+      </div>
+
+      <!-- RIGHT: LIVE MOCK DATA STATE INSPECTOR -->
+      <aside class="inspector-sticky">
+        <div class="inspector-header" onclick="toggleInspectorCollapse(this)">
+          <div class="inspector-header-left">
+            <span class="block-collapse-chevron">▼</span>
+            <span class="inspector-title">Live State Output</span>
+          </div>
+          <span class="block-tag">JSON Sync</span>
+        </div>
+        <pre class="live-json-display" id="live-json-pre">{ /* Live State */ }</pre>
+      </aside>
+
+    </div>
+
+  </div>
+
+  <!-- Toast Message -->
+  <div class="toast-msg" id="toast">State Updated</div>
+
+
+  <!-- Modular Application Scripts -->
+  <script src="js/state.js"></script>
+  <script src="js/components/raw-text.js"></script>
+  <script src="js/components/raw-searcher.js"></script>
+  <script src="js/components/single-select.js"></script>
+  <script src="js/components/multi-select.js"></script>
+  <script src="js/components/toggles-checkboxes.js"></script>
+  <script src="js/components/treeview.js"></script>
+  <script src="js/components/inspector.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

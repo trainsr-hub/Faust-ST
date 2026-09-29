@@ -71,6 +71,8 @@ class VoiceConfigUpdate(BaseModel):
     voice: Optional[str] = None
     secondary_voice: Optional[Union[str, List[str]]] = None
     voice_blend_enabled: Optional[bool] = None
+    voice_blend_fixed_secondaries: Optional[List[str]] = None
+    voice_blend_max_secondary_weights: Optional[Dict[str, float]] = None
     voice_blend_num_secondary: Optional[int] = None
     voice_blend_female_pool: Optional[List[str]] = None
     discarded_voices: Optional[List[str]] = None
@@ -137,8 +139,10 @@ async def toggle_voice_config():
 async def synthesize_voice_endpoint(request: VoiceSynthesisRequest):
     """Synthesize voice with requested parameters and return audio as a streaming WAV."""
     try:
+        import asyncio
         engine = get_engine()
-        samples, sample_rate = engine.synthesize(
+        samples, sample_rate = await asyncio.to_thread(
+            engine.synthesize,
             text=request.text,
             voice=request.voice,
             secondary_voice=request.secondary_voice,
