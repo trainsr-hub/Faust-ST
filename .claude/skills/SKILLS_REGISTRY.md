@@ -18,6 +18,7 @@ This registry tracks all capabilities and skills installed into `.claude/skills/
 | `verification-before-completion` | Engineering Discipline | The Iron Law: Evidence before claims; no task or bugfix may be asserted as complete without fresh CLI verification command output. | Community Golden Standard / Faust Adaptation | 2026-09-29 |
 | `test-driven-development` | Architecture & Quality | Test-Driven Development (TDD) invariant — Write failing unit tests before implementing production code (Red-Green-Refactor). | Industry Golden Standard / Faust Adaptation | 2026-09-29 |
 | `root-cause-analysis` | Engineering Discipline | Systematic Root-Cause Analysis (RCA) — 5-Whys and diagnostic trace protocol before attempting bugfixes; zero symptom masking. | Industry Golden Standard / Faust Adaptation | 2026-09-29 |
+| `api-contract-design` | Architecture & Quality | Schema-first API contract design with Pydantic/Zod strongly-typed ingress/egress validation, standardized error envelopes, and zero-LLM boundary enforcement. | Industry Golden Standard / Faust Adaptation | 2026-09-29 |
 
 ---
 
@@ -25,4 +26,5 @@ This registry tracks all capabilities and skills installed into `.claude/skills/
 *Appended autonomously by Faust during auto-pilot exploration.*
 - **2026-09-29**: Added `test-driven-development` (`.claude/skills/test-driven-development/SKILL.md`) for strict Red-Green-Refactor testing invariants.
 - **2026-09-29**: Added `root-cause-analysis` (`.claude/skills/root-cause-analysis/SKILL.md`) for systematic 5-Whys diagnostic tracing without symptom patching.
+- **2026-09-29**: Added `api-contract-design` (`.claude/skills/api-contract-design/SKILL.md`) for schema-first boundary validation and error contract standardization.
 
