@@ -25,6 +25,7 @@ This registry tracks all capabilities and skills installed into `.claude/skills/
 | `circuit-breaker` | Architecture & Resilience | Circuit Breaker & Resilience Protocol: Closed/Open/Half-Open state transitions, exponential backoff with jitter, and fallback cascades. | Industry Golden Standard / Faust Adaptation | 2026-09-29 |
 | `structured-telemetry` | Observability & Diagnostics | Structured Logging & Telemetry Protocol: Asynchronous contextvars propagation, distributed correlation IDs, and JSON stream serialization. | Industry Golden Standard / Faust Adaptation | 2026-09-29 |
 | `idempotent-execution` | Architecture & Distributed Systems | Idempotent Execution & Deduplication Protocol: State-locking finite state machine, payload hashing, SQLite response caching, and at-most-once execution guarantees. | Industry Golden Standard / Faust Adaptation | 2026-09-29 |
+| `rate-limiting` | Architecture & Traffic Management | Rate Limiting & Traffic Shaping Protocol: Token-bucket and sliding-window rate limiters, burst control, and 429 backoff defense. | Industry Golden Standard / Faust Adaptation | 2026-09-29 |
 
 ---
 
@@ -39,4 +40,5 @@ This registry tracks all capabilities and skills installed into `.claude/skills/
 - **2026-09-29**: Added `circuit-breaker` (`.claude/skills/circuit-breaker/SKILL.md`) for finite-state resilience, short-circuit fast-failing, and cascading outage prevention.
 - **2026-09-29**: Added `structured-telemetry` (`.claude/skills/structured-telemetry/SKILL.md`) for distributed correlation ID contextvars and JSON log serialization.
 - **2026-09-29**: Added `idempotent-execution` (`.claude/skills/idempotent-execution/SKILL.md`) for atomic state-locking leases, payload fingerprinting, and at-most-once execution guarantees.
+- **2026-09-29**: Added `rate-limiting` (`.claude/skills/rate-limiting/SKILL.md`) for token-bucket traffic shaping, burst control, and HTTP 429 backoff defense.
 
