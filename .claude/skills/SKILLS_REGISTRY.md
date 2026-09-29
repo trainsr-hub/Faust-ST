@@ -16,8 +16,13 @@ This registry tracks all capabilities and skills installed into `.claude/skills/
 | `clean-code` | Architecture & Coding | Anti-spaghetti architecture protocol: 4-tier separation, 300-line ceiling, 40-line function limit, max 3 indent levels, guard clauses, and immutability. | Community Golden Standard / Faust Adaptation | 2026-09-29 |
 | `surgical-refactor` | Architecture & Coding | Step-by-step 6-phase surgical decomposition of god files without behavioral regression. | Community Golden Standard / Faust Adaptation | 2026-09-29 |
 | `verification-before-completion` | Engineering Discipline | The Iron Law: Evidence before claims; no task or bugfix may be asserted as complete without fresh CLI verification command output. | Community Golden Standard / Faust Adaptation | 2026-09-29 |
+| `test-driven-development` | Architecture & Quality | Test-Driven Development (TDD) invariant — Write failing unit tests before implementing production code (Red-Green-Refactor). | Industry Golden Standard / Faust Adaptation | 2026-09-29 |
+| `root-cause-analysis` | Engineering Discipline | Systematic Root-Cause Analysis (RCA) — 5-Whys and diagnostic trace protocol before attempting bugfixes; zero symptom masking. | Industry Golden Standard / Faust Adaptation | 2026-09-29 |
 
 ---
 
 ## Pending & Autonomous Additions Log
 *Appended autonomously by Faust during auto-pilot exploration.*
+- **2026-09-29**: Added `test-driven-development` (`.claude/skills/test-driven-development/SKILL.md`) for strict Red-Green-Refactor testing invariants.
+- **2026-09-29**: Added `root-cause-analysis` (`.claude/skills/root-cause-analysis/SKILL.md`) for systematic 5-Whys diagnostic tracing without symptom patching.
+
