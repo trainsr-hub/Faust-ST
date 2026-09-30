@@ -1,0 +1,25 @@
+﻿{
+  "system_name": "faust_workflow_correction_test",
+  "module_count": 2,
+  "sha256_checksum": "test_checksum_placeholder",
+  "modules": [
+    {
+      "id": "packet_001",
+      "target_file": "test_faust_rd.py",
+      "division": "system",
+      "dependencies": [],
+      "contracts": {},
+      "constraints": ["syntax_valid"],
+      "validation_command": "python -m py_compile test_faust_rd.py"
+    },
+    {
+      "id": "packet_002", 
+      "target_file": "test_faust_th.ts",
+      "division": "ui",
+      "dependencies": ["packet_001"],
+      "contracts": {},
+      "constraints": ["type_safe"],
+      "validation_command": "npx tsc --noEmit test_faust_th.ts"
+    }
+  ]
+}

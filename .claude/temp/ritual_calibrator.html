@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Cognitive Calibration Ritual</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital@0;1&family=Inter:wght@400;500;600&display=swap">
+    <style>
+        :root {
+            --bg-primary: #F9F7F4;
+            --bg-secondary: #EFEDE9;
+            --text-primary: #1a1a1a;
+            --text-secondary: #4a4a4a;
+            --accent: #4A7C7E;
+            --accent-light: #6B9B9D;
+            --border: #E0DDD8;
+            --success: #6B8E6B;
+            color-scheme: light;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root:not([data-theme="light"]) {
+                --bg-primary: #1a1a1a;
+                --bg-secondary: #2a2a2a;
+                --text-primary: #F9F7F4;
+                --text-secondary: #C0C0C0;
+                --accent: #6B9B9D;
+                --accent-light: #7DAAA9;
+                --border: #3a3a3a;
+                --success: #8BA88B;
+                color-scheme: dark;
+            }
+        }
+
+        :root[data-theme="dark"] {
+            --bg-primary: #1a1a1a;
+            --bg-secondary: #2a2a2a;
+            --text-primary: #F9F7F4;
+            --text-secondary: #C0C0C0;
+            --accent: #6B9B9D;
+            --accent-light: #7DAAA9;
+            --border: #3a3a3a;
+            --success: #8BA88B;
+            color-scheme: dark;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+        }
+
+        body {
+            font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            font-size: 16px;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background: var(--bg-primary);
+            padding: 2rem max(2rem, env(safe-area-inset-left)) 2rem max(2rem, env(safe-area-inset-right));
+            padding-top: max(2rem, env(safe-area-inset-top));
+            padding-bottom: max(2rem, env(safe-area-inset-bottom));
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        header {
+            margin-bottom: 2.5rem;
+            text-align: center;
+            border-bottom: 2px solid var(--accent);
+            padding-bottom: 1.5rem;
+        }
+
+        h1 {
+            font-family: "Crimson Text", serif;
+            font-size: 2.5rem;
+            font-weight: 400;
+            letter-spacing: -0.02em;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .subtitle {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            font-style: italic;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        .rituals {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        @media (max-width: 700px) {
+            .rituals {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+        }
+
+        .ritual-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .ritual-header {
+            display: flex;
+            align-items: baseline;
+            gap: 0.75rem;
+            border-bottom: 2px solid var(--accent);
+            padding-bottom: 1rem;
+        }
+
+        .ritual-time {
+            font-family: "Crimson Text", serif;
+            font-size: 1.75rem;
+            font-weight: 600;
+            color: var(--accent);
+        }
+
+        .ritual-label {
+            font-size: 0.8rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .input-section {
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            border-radius: 3px;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .input-label {
+            font-size: 0.75rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        .input-instruction {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            font-style: italic;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 80px;
+            padding: 0.75rem;
+            border: 1px solid var(--border);
+            border-radius: 3px;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-family: "Inter", sans-serif;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            resize: vertical;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 2px rgba(74, 124, 126, 0.1);
+        }
+
+        .structure {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .structure-item {
+            display: flex;
+            gap: 1rem;
+            align-items: flex-start;
+        }
+
+        .structure-marker {
+            min-width: 24px;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: var(--accent);
+            color: var(--bg-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        .structure-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .structure-title {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--text-primary);
+            letter-spacing: 0.02em;
+        }
+
+        .structure-detail {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        .controls {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+
+        button {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 3px;
+            font-family: "Inter", sans-serif;
+            font-size: 0.9rem;
+            font-weight: 500;
+            letter-spacing: 0.05em;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: var(--bg-primary);
+        }
+
+        .btn-primary:hover {
+            background: var(--accent-light);
+        }
+
+        .btn-primary:active {
+            transform: scale(0.98);
+        }
+
+        .btn-secondary {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            background: var(--border);
+        }
+
+        .status {
+            text-align: center;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            padding: 1rem;
+            background: var(--bg-secondary);
+            border-radius: 3px;
+            margin-top: 1rem;
+        }
+
+        .status.success {
+            background: rgba(107, 142, 107, 0.1);
+            color: var(--success);
+        }
+
+        .timestamp {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            margin-top: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Cognitive Calibration</h1>
+            <p class="subtitle">Water to the Rock — Daily Ritual</p>
+        </header>
+
+        <div class="rituals">
+            <!-- Morning Ritual -->
+            <div class="ritual-card">
+                <div class="ritual-header">
+                    <span class="ritual-time">Morning</span>
+                    <span class="ritual-label">Intake</span>
+                </div>
+
+                <div class="input-section">
+                    <label class="input-label">Read One Sentence</label>
+                    <p class="input-instruction">Choose a sentence from something meaningful. A quote, a passage, a line that catches you.</p>
+                    <textarea id="morning-input" placeholder="Paste or type one sentence here..." data-time="morning"></textarea>
+                </div>
+
+                <div class="structure">
+                    <div class="structure-item">
+                        <div class="structure-marker">T</div>
+                        <div class="structure-content">
+                            <div class="structure-title">The Thought</div>
+                            <textarea class="structure-textarea" id="morning-thought" placeholder="What does this sentence stir in you right now?"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="structure-item">
+                        <div class="structure-marker">P</div>
+                        <div class="structure-content">
+                            <div class="structure-title">The Point</div>
+                            <textarea class="structure-textarea" id="morning-point" placeholder="What's the core insight here? What is true?"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="structure-item">
+                        <div class="structure-marker">R</div>
+                        <div class="structure-content">
+                            <div class="structure-title">The Resolve</div>
+                            <textarea class="structure-textarea" id="morning-resolve" placeholder="What's one small thing you'll do with this today?"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="btn-primary" onclick="saveRitual('morning')">Save Morning Ritual</button>
+                <div class="status" id="morning-status"></div>
+            </div>
+
+            <!-- Evening Ritual -->
+            <div class="ritual-card">
+                <div class="ritual-header">
+                    <span class="ritual-time">Evening</span>
+                    <span class="ritual-label">Reflection</span>
+                </div>
+
+                <div class="input-section">
+                    <label class="input-label">Read One Sentence</label>
+                    <p class="input-instruction">Something that feels relevant to how today unfolded.</p>
+                    <textarea id="evening-input" placeholder="Paste or type one sentence here..." data-time="evening"></textarea>
+                </div>
+
+                <div class="structure">
+                    <div class="structure-item">
+                        <div class="structure-marker">T</div>
+                        <div class="structure-content">
+                            <div class="structure-title">The Thought</div>
+                            <textarea class="structure-textarea" id="evening-thought" placeholder="What does this sentence mean in the context of today?"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="structure-item">
+                        <div class="structure-marker">P</div>
+                        <div class="structure-content">
+                            <div class="structure-title">The Point</div>
+                            <textarea class="structure-textarea" id="evening-point" placeholder="What pattern did you notice? What did you learn?"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="structure-item">
+                        <div class="structure-marker">R</div>
+                        <div class="structure-content">
+                            <div class="structure-title">The Resolve</div>
+                            <textarea class="structure-textarea" id="evening-resolve" placeholder="Tomorrow, what will you do differently?"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="btn-primary" onclick="saveRitual('evening')">Save Evening Ritual</button>
+                <div class="status" id="evening-status"></div>
+            </div>
+        </div>
+
+        <div style="text-align: center; padding: 2rem; color: var(--text-secondary); font-size: 0.9rem; line-height: 1.8;">
+            <p style="margin-bottom: 1rem;"><strong>How this works:</strong></p>
+            <p>Every entry is stored locally. Your data never leaves this page. Start with one ritual — morning or evening — whatever feels natural. Make it a specific time. Same chair, same time, same structure.</p>
+            <p style="margin-top: 1rem; font-style: italic;">Water doesn't think about the rock. It just flows.</p>
+        </div>
+    </div>
+
+    <script>
+        // Load saved data on page load
+        window.addEventListener('load', () => {
+            loadAllRituals();
+        });
+
+        function saveRitual(time) {
+            const input = document.getElementById(`${time}-input`).value;
+            const thought = document.getElementById(`${time}-thought`).value;
+            const point = document.getElementById(`${time}-point`).value;
+            const resolve = document.getElementById(`${time}-resolve`).value;
+
+            if (!input || !thought || !point || !resolve) {
+                showStatus(time, 'All fields are required', false);
+                return;
+            }
+
+            const entry = {
+                input,
+                thought,
+                point,
+                resolve,
+                timestamp: new Date().toISOString(),
+            };
+
+            try {
+                // Get existing entries
+                let entries = JSON.parse(localStorage.getItem(`ritual_${time}`) || '[]');
+                entries.push(entry);
+
+                // Keep last 30 entries
+                if (entries.length > 30) {
+                    entries = entries.slice(-30);
+                }
+
+                localStorage.setItem(`ritual_${time}`, JSON.stringify(entries));
+                showStatus(time, 'Ritual saved. The flow continues.', true);
+
+                // Clear fields after save
+                setTimeout(() => {
+                    document.getElementById(`${time}-input`).value = '';
+                    document.getElementById(`${time}-thought`).value = '';
+                    document.getElementById(`${time}-point`).value = '';
+                    document.getElementById(`${time}-resolve`).value = '';
+                }, 1000);
+            } catch (e) {
+                showStatus(time, 'Error saving. Try again.', false);
+            }
+        }
+
+        function showStatus(time, message, success) {
+            const statusEl = document.getElementById(`${time}-status`);
+            statusEl.textContent = message;
+            statusEl.className = `status ${success ? 'success' : ''}`;
+
+            if (success) {
+                setTimeout(() => {
+                    statusEl.textContent = '';
+                    statusEl.className = 'status';
+                }, 3000);
+            }
+        }
+
+        function loadAllRituals() {
+            try {
+                const morningEntries = JSON.parse(localStorage.getItem('ritual_morning') || '[]');
+                const eveningEntries = JSON.parse(localStorage.getItem('ritual_evening') || '[]');
+
+                // Show latest entries count if they exist
+                if (morningEntries.length > 0) {
+                    console.log(`Morning entries: ${morningEntries.length}`);
+                }
+                if (eveningEntries.length > 0) {
+                    console.log(`Evening entries: ${eveningEntries.length}`);
+                }
+            } catch (e) {
+                console.log('Could not load rituals');
+            }
+        }
+
+        // Theme toggle support
+        const htmlEl = document.documentElement;
+        if (localStorage.getItem('theme') === 'dark') {
+            htmlEl.setAttribute('data-theme', 'dark');
+        } else if (localStorage.getItem('theme') === 'light') {
+            htmlEl.setAttribute('data-theme', 'light');
+        }
+    </script>
+</body>
+</html>

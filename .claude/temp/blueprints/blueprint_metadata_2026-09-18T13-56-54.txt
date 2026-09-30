@@ -1,0 +1,8 @@
+{
+  "blueprint_path": "D:\\My Drive\\Blue AI\\.claude\\temp\\blueprints\\blueprint_2026-09-18T13-56-54_smoke_test.json",
+  "system_name": "smoke_test",
+  "module_count": 2,
+  "hash": "3a552f04dc2bda737cd9c02c103f085a32d4b617a5536eaf152b2b1ee9b23d2e",
+  "timestamp": "2026-09-18T13-56-54",
+  "status": "ready_for_dispatch"
+}

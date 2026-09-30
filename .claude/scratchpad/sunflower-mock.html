@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sunflower Composition</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #87CEEB 0%, #E0F6FF 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 20px;
+        }
+
+        .container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            aspect-ratio: 1;
+        }
+
+        svg {
+            width: 100%;
+            height: 100%;
+            filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.1));
+        }
+
+        .info {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 14px;
+            color: #333;
+            backdrop-filter: blur(10px);
+        }
+
+        .info strong {
+            color: #FF9500;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <svg viewBox="0 0 600 700" xmlns="http://www.w3.org/2000/svg">
+            <!-- Sky background -->
+            <defs>
+                <radialGradient id="sunGradient" cx="50%" cy="30%">
+                    <stop offset="0%" style="stop-color:#FFD700;stop-opacity:0.3" />
+                    <stop offset="100%" style="stop-color:#FFA500;stop-opacity:0" />
+                </radialGradient>
+
+                <filter id="petal-shadow">
+                    <feDropShadow dx="2" dy="2" stdDeviation="3" flood-opacity="0.2"/>
+                </filter>
+            </defs>
+
+            <!-- Sun glow in background -->
+            <circle cx="300" cy="80" r="120" fill="url(#sunGradient)"/>
+
+            <!-- Stem -->
+            <path d="M 300 350 Q 290 450 285 600" stroke="#2D5016" stroke-width="8" fill="none" stroke-linecap="round"/>
+            <path d="M 300 350 Q 310 450 315 600" stroke="#3A6B1F" stroke-width="6" fill="none" stroke-linecap="round" opacity="0.8"/>
+
+            <!-- Leaves on stem -->
+            <ellipse cx="265" cy="420" rx="25" ry="45" fill="#4CAF50" opacity="0.8" transform="rotate(-35 265 420)"/>
+            <ellipse cx="335" cy="480" rx="25" ry="45" fill="#66BB6A" opacity="0.8" transform="rotate(35 335 480)"/>
+            <ellipse cx="275" cy="560" rx="22" ry="40" fill="#558B2F" opacity="0.7" transform="rotate(-40 275 560)"/>
+
+            <!-- Petals (outer ring - yellow/gold) -->
+            <g id="petals" filter="url(#petal-shadow)">
+                <!-- Outer petals - 36 petals in a circle -->
+                <g id="petal-group">
+                    <ellipse cx="300" cy="120" rx="20" ry="55" fill="#FFD700" opacity="0.95"/>
+                    <ellipse cx="300" cy="120" rx="15" ry="50" fill="#FFED4E" opacity="0.7"/>
+                </g>
+            </g>
+
+            <!-- Petals rotated around center -->
+            <use href="#petal-group" transform="rotate(10 300 280)"/>
+            <use href="#petal-group" transform="rotate(20 300 280)"/>
+            <use href="#petal-group" transform="rotate(30 300 280)"/>
+            <use href="#petal-group" transform="rotate(40 300 280)"/>
+            <use href="#petal-group" transform="rotate(50 300 280)"/>
+            <use href="#petal-group" transform="rotate(60 300 280)"/>
+            <use href="#petal-group" transform="rotate(70 300 280)"/>
+            <use href="#petal-group" transform="rotate(80 300 280)"/>
+            <use href="#petal-group" transform="rotate(90 300 280)"/>
+            <use href="#petal-group" transform="rotate(100 300 280)"/>
+            <use href="#petal-group" transform="rotate(110 300 280)"/>
+            <use href="#petal-group" transform="rotate(120 300 280)"/>
+            <use href="#petal-group" transform="rotate(130 300 280)"/>
+            <use href="#petal-group" transform="rotate(140 300 280)"/>
+            <use href="#petal-group" transform="rotate(150 300 280)"/>
+            <use href="#petal-group" transform="rotate(160 300 280)"/>
+            <use href="#petal-group" transform="rotate(170 300 280)"/>
+            <use href="#petal-group" transform="rotate(180 300 280)"/>
+            <use href="#petal-group" transform="rotate(190 300 280)"/>
+            <use href="#petal-group" transform="rotate(200 300 280)"/>
+            <use href="#petal-group" transform="rotate(210 300 280)"/>
+            <use href="#petal-group" transform="rotate(220 300 280)"/>
+            <use href="#petal-group" transform="rotate(230 300 280)"/>
+            <use href="#petal-group" transform="rotate(240 300 280)"/>
+            <use href="#petal-group" transform="rotate(250 300 280)"/>
+            <use href="#petal-group" transform="rotate(260 300 280)"/>
+            <use href="#petal-group" transform="rotate(270 300 280)"/>
+            <use href="#petal-group" transform="rotate(280 300 280)"/>
+            <use href="#petal-group" transform="rotate(290 300 280)"/>
+            <use href="#petal-group" transform="rotate(300 300 280)"/>
+            <use href="#petal-group" transform="rotate(310 300 280)"/>
+            <use href="#petal-group" transform="rotate(320 300 280)"/>
+            <use href="#petal-group" transform="rotate(330 300 280)"/>
+            <use href="#petal-group" transform="rotate(340 300 280)"/>
+            <use href="#petal-group" transform="rotate(350 300 280)"/>
+
+            <!-- Seed head (Fibonacci spiral pattern - brown/orange) -->
+            <circle cx="300" cy="280" r="90" fill="#8B6914" opacity="0.3"/>
+
+            <!-- Procedurally generated seed pattern (Fibonacci spiral approximation) -->
+            <g id="seeds" fill="#CC8800" opacity="0.9">
+                <!-- Seeds arranged in approximate Fibonacci spiral pattern -->
+                <circle cx="300" cy="280" r="3"/>
+                <circle cx="303" cy="278" r="3"/>
+                <circle cx="306" cy="276" r="3"/>
+                <circle cx="308" cy="273" r="2.8"/>
+                <circle cx="310" cy="270" r="2.8"/>
+                <circle cx="311" cy="267" r="2.8"/>
+                <circle cx="312" cy="264" r="2.6"/>
+                <circle cx="312" cy="261" r="2.6"/>
+                <circle cx="311" cy="258" r="2.6"/>
+                <circle cx="310" cy="255" r="2.6"/>
+                <circle cx="308" cy="252" r="2.4"/>
+                <circle cx="305" cy="250" r="2.4"/>
+                <circle cx="302" cy="249" r="2.4"/>
+                <circle cx="299" cy="248" r="2.4"/>
+                <circle cx="296" cy="249" r="2.4"/>
+                <circle cx="294" cy="252" r="2.4"/>
+                <circle cx="292" cy="255" r="2.4"/>
+                <circle cx="291" cy="258" r="2.4"/>
+                <circle cx="291" cy="261" r="2.4"/>
+                <circle cx="292" cy="264" r="2.4"/>
+                <circle cx="294" cy="267" r="2.4"/>
+                <circle cx="297" cy="269" r="2.4"/>
+                <circle cx="300" cy="270" r="2.4"/>
+                <circle cx="303" cy="269" r="2.4"/>
+                <circle cx="306" cy="267" r="2.4"/>
+                <circle cx="308" cy="264" r="2.4"/>
+                <circle cx="309" cy="260" r="2.4"/>
+                <circle cx="309" cy="256" r="2.4"/>
+                <circle cx="307" cy="253" r="2.4"/>
+                <circle cx="304" cy="251" r="2.4"/>
+                <circle cx="301" cy="250" r="2.4"/>
+                <circle cx="298" cy="250" r="2.4"/>
+                <circle cx="295" cy="251" r="2.4"/>
+                <circle cx="293" cy="253" r="2.4"/>
+                <circle cx="292" cy="256" r="2.4"/>
+                <circle cx="292" cy="259" r="2.4"/>
+                <circle cx="293" cy="262" r="2.4"/>
+                <circle cx="295" cy="265" r="2.4"/>
+                <circle cx="298" cy="267" r="2.4"/>
+                <circle cx="301" cy="268" r="2.4"/>
+
+                <!-- More seeds radiating outward -->
+                <circle cx="304" cy="288" r="2.4"/>
+                <circle cx="305" cy="292" r="2.4"/>
+                <circle cx="304" cy="296" r="2.4"/>
+                <circle cx="301" cy="299" r="2.4"/>
+                <circle cx="297" cy="300" r="2.4"/>
+                <circle cx="293" cy="298" r="2.4"/>
+                <circle cx="290" cy="294" r="2.4"/>
+                <circle cx="289" cy="290" r="2.4"/>
+                <circle cx="290" cy="286" r="2.4"/>
+                <circle cx="293" cy="284" r="2.4"/>
+            </g>
+
+            <!-- Seed head center glow -->
+            <circle cx="300" cy="280" r="65" fill="none" stroke="#D4A017" stroke-width="2" opacity="0.4" stroke-dasharray="5,5"/>
+            <circle cx="300" cy="280" r="70" fill="none" stroke="#FFD700" stroke-width="1" opacity="0.3"/>
+        </svg>
+
+        <div class="info">
+            <strong>Faust's Deterministic Drawing:</strong> This sunflower is rendered via SVG mathematics—procedural petals (36 arranged in circular harmony), Fibonacci-approximated seed spiral, and natural coloration. No generative AI required.
+        </div>
+    </div>
+</body>
+</html>

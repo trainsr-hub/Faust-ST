@@ -19,6 +19,7 @@ import time
 import queue
 import random
 import logging
+import hashlib
 import threading
 import urllib.request
 import urllib.parse
@@ -205,6 +206,7 @@ class DedupManager:
         self.max_history = max_history
         self.processed_update_ids = deque(maxlen=max_history)
         self.processed_message_ids = deque(maxlen=max_history)
+        self.recent_egress: Dict[str, float] = {}
         self.lock = threading.Lock()
         self._load_disk_state()
 
@@ -250,6 +252,21 @@ class DedupManager:
             if message_id in self.processed_message_ids:
                 return True
             self.processed_message_ids.append(message_id)
+            return False
+
+    def is_duplicate_egress(self, text: str, window_seconds: float = 120.0) -> bool:
+        """
+        Sliding-window deduplication for outbound Telegram transmissions.
+        Suppresses identical outgoing messages within window_seconds to prevent runaway loops
+        and daemon supervisor alert storms.
+        """
+        msg_hash = hashlib.sha256(text.strip().encode("utf-8")).hexdigest()
+        now = time.time()
+        with self.lock:
+            self.recent_egress = {h: ts for h, ts in self.recent_egress.items() if now - ts < window_seconds}
+            if msg_hash in self.recent_egress:
+                return True
+            self.recent_egress[msg_hash] = now
             return False
 
 
@@ -547,6 +564,7 @@ class SendMessageRequest(BaseModel):
     emoji: Optional[str] = Field(default=None, description="Optional leading functional emoji (✅, ❌, ⚡, 🔄)")
     chat_id: Optional[int] = Field(default=None, description="Target chat ID (defaults to configured group chat)")
     parse_mode: str = Field(default="HTML", description="Telegram parse mode ('HTML' or 'Markdown')")
+    force: bool = Field(default=False, description="Bypass egress sliding-window deduplication")
 
 
 class AckDirectiveRequest(BaseModel):
@@ -708,6 +726,18 @@ def send_message_endpoint(req: SendMessageRequest):
     text = req.text.strip()
     if req.emoji and not text.startswith(req.emoji):
         text = f"{req.emoji} {text}"
+
+    # Egress sliding-window deduplication guard (prevents alert storms from spamming the Manager)
+    egress_window = float(config_state.get("egress_dedup_window", 120.0))
+    if not req.force and dedup_manager and dedup_manager.is_duplicate_egress(text, window_seconds=egress_window):
+        logger.warning(f"Egress message suppressed (duplicate within {egress_window}s): {text[:60]}")
+        return {
+            "status": "ok",
+            "delivered": False,
+            "suppressed": True,
+            "reason": "duplicate_suppressed",
+            "chat_id": target_chat,
+        }
 
     success = send_telegram_raw(token, target_chat, text, parse_mode=req.parse_mode)
     if not success:

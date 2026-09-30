@@ -356,9 +356,12 @@ class FaustTelegramRealWorker:
 
         try:
             health_server = await asyncio.start_server(self._health_handler, "127.0.0.1", self.health_port)
+        except OSError as e:
+            logger.error(f"Port {self.health_port} already in use. Exiting. ({e})")
+            sys.exit(0)
         except Exception as e:
-            logger.warning(f"Could not bind healthcheck server on port {self.health_port}: {e}")
-            health_server = None
+            logger.error(f"Could not bind healthcheck server on port {self.health_port}: {e}. Exiting.")
+            sys.exit(1)
 
         while self._running:
             try:

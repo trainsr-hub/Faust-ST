@@ -16,31 +16,5 @@
       "WebFetch(*)",
       "WebSearch(*)"
     ]
-  },
-  "hooks": {
-    "UserPromptSubmit": [
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "python .claude/scripts/faust_turn_hook.py",
-            "timeout": 30
-          }
-        ]
-      }
-    ],
-    "Stop": [
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "python .claude/scripts/faust_turn_hook.py",
-            "timeout": 30
-          }
-        ]
-      }
-    ]
   }
 }

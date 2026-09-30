@@ -1,0 +1,39 @@
+{
+  "system_name": "smoke_test",
+  "module_count": 2,
+  "modules": [
+    {
+      "id": "module_001_hello_py",
+      "target_file": ".claude/temp/smoke_test_hello.py",
+      "division": "logic",
+      "dependencies": [],
+      "implementation_spec": "Write a Python file that prints Hello from Faust-TH",
+      "contracts": {
+        "output": "Python script that prints a string"
+      },
+      "constraints": [
+        "Python 3.10+"
+      ],
+      "validation_command": "python .claude/temp/smoke_test_hello.py",
+      "retry_budget": 4
+    },
+    {
+      "id": "module_002_hello_txt",
+      "target_file": ".claude/temp/smoke_test_result.txt",
+      "division": "system",
+      "dependencies": [
+        "module_001_hello_py"
+      ],
+      "implementation_spec": "Write a text file confirming the smoke test passed",
+      "contracts": {
+        "output": "Plain text file with confirmation message"
+      },
+      "constraints": [
+        "UTF-8 encoding"
+      ],
+      "validation_command": "type .claude\\temp\\smoke_test_result.txt",
+      "retry_budget": 4
+    }
+  ],
+  "_hash": "3a552f04dc2bda737cd9c02c103f085a32d4b617a5536eaf152b2b1ee9b23d2e"
+}
