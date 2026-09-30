@@ -1,0 +1,2862 @@
+<title>Wardrobe Studio</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap');
+
+:root {
+  --void: #0d0f14;
+  --surface: #151921;
+  --surface-raised: #1c2230;
+  --border: #2a3142;
+  --text: #e4e8f0;
+  --text-muted: #7a8599;
+  --accent: #e8a54b;
+  --accent-dim: #b88432;
+
+  --layer-outer: #e87fa0;
+  --layer-main: #e8a54b;
+  --layer-base: #5eb3e8;
+  --layer-underwear: #7ae89a;
+  --layer-other: #b89fe8;
+  --cyan: #06b6d4;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--void);
+  color: var(--text);
+  font-family: 'DM Sans', -apple-system, sans-serif;
+  min-height: 100vh;
+  line-height: 1.5;
+}
+
+.app {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  min-height: 100vh;
+}
+
+/* Sidebar - Mannequin Panel */
+.sidebar {
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.sidebar-title {
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin: 0 0 4px 0;
+}
+
+.sidebar-subtitle {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin: 0 0 20px 0;
+}
+
+.mannequin-wrap {
+  width: 180px;
+  flex-shrink: 0;
+}
+
+.mannequin-svg {
+  width: 100%;
+  height: auto;
+  filter: drop-shadow(0 8px 24px rgba(232, 165, 75, 0.08));
+}
+
+.chunk {
+  fill: #1e2938;
+  stroke: var(--border);
+  stroke-width: 1;
+  transition: all 0.25s ease;
+}
+
+.chunk.covered { fill-opacity: 0.9; }
+.chunk.covered.outer-layer { fill: var(--layer-outer); stroke: var(--layer-outer); }
+.chunk.covered.main-layer { fill: var(--layer-main); stroke: var(--layer-main); }
+.chunk.covered.base-layer { fill: var(--layer-base); stroke: var(--layer-base); }
+.chunk.covered.underwear-layer { fill: var(--layer-underwear); stroke: var(--layer-underwear); }
+.chunk.covered.other-layer { fill: var(--layer-other); stroke: var(--layer-other); }
+
+/* Facial zone styling */
+.eye-chunk { fill: #1e2938; }
+.mouth-chunk { fill: #1e2938; }
+.eye-bridge { stroke: #1e2938; }
+.chunk.covered.eye-chunk, .chunk.covered.mouth-chunk { fill-opacity: 0.9; }
+
+/* Expose / Cutout Zones Grid */
+.expose-grid .zone-checkbox {
+  border-style: dashed;
+  border-color: rgba(244, 63, 94, 0.4);
+}
+.expose-grid .zone-checkbox:hover {
+  border-color: rgba(244, 63, 94, 0.7);
+  background: rgba(244, 63, 94, 0.08);
+}
+.expose-grid .zone-checkbox.active {
+  background: #f43f5e;
+  border-color: #f43f5e;
+  color: #fff;
+  box-shadow: 0 0 12px rgba(244, 63, 94, 0.4);
+}
+
+.layer-legend {
+  margin-top: 20px;
+  width: 100%;
+}
+
+.legend-title {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-muted);
+  margin-bottom: 10px;
+}
+
+.legend-items {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.legend-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.legend-dot.outer { background: var(--layer-outer); }
+.legend-dot.main { background: var(--layer-main); }
+.legend-dot.base { background: var(--layer-base); }
+.legend-dot.underwear { background: var(--layer-underwear); }
+.legend-dot.other { background: var(--layer-other); }
+
+.add-item-btn {
+  margin-top: auto;
+  width: 100%;
+  padding: 12px;
+  background: var(--border);
+  border: none;
+  border-radius: 8px;
+  color: var(--text);
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.add-item-btn:hover {
+  background: var(--accent);
+  color: var(--void);
+}
+
+/* Main Content */
+.main {
+  padding: 24px 32px;
+  overflow-y: auto;
+}
+
+.main-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.main-title {
+  font-size: 20px;
+  font-weight: 600;
+  margin: 0;
+  color: var(--text);
+}
+
+.compiled-prompt {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px 16px;
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  color: var(--text-muted);
+  max-width: 500px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+  transition: all 0.2s;
+  user-select: none;
+}
+
+.compiled-prompt:hover {
+  border-color: var(--accent);
+  background: var(--surface-raised);
+}
+
+.compiled-prompt span {
+  color: var(--accent);
+}
+
+/* Layer Tabs */
+.layer-tabs {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 20px;
+  background: var(--surface);
+  padding: 4px;
+  border-radius: 10px;
+  width: fit-content;
+}
+
+.layer-tab {
+  padding: 8px 16px;
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: all 0.2s;
+}
+
+.layer-tab:hover { color: var(--text); }
+
+.layer-tab.active {
+  background: var(--surface-raised);
+  color: var(--void);
+}
+
+.layer-tab[data-layer="all"].active { background: var(--accent); color: var(--void); }
+.layer-tab[data-layer="outer"].active { background: var(--layer-outer); }
+.layer-tab[data-layer="main"].active { background: var(--layer-main); }
+.layer-tab[data-layer="base"].active { background: var(--layer-base); }
+.layer-tab[data-layer="underwear"].active { background: var(--layer-underwear); }
+.layer-tab[data-layer="other"].active { background: var(--layer-other); }
+
+/* Item Grid & Kanban Board */
+.items-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.items-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+  letter-spacing: 0.3px;
+}
+
+.items-count {
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+/* Kanban Board Container */
+.kanban-board {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  width: 100%;
+  margin-bottom: 24px;
+}
+
+/* Full-width Section: Height dynamically fits options */
+.kanban-section {
+  width: 100%;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 18px 20px 20px;
+  box-sizing: border-box;
+  height: auto;
+  transition: border-color 0.2s, background-color 0.2s, box-shadow 0.2s, height 0.3s ease;
+  overflow: hidden;
+}
+
+.kanban-section.collapsed {
+  padding-bottom: 18px;
+}
+
+.kanban-section.collapsed .kanban-section-header {
+  padding-bottom: 0;
+  margin-bottom: 0;
+  border-bottom-color: transparent;
+}
+
+.kanban-section:hover {
+  border-color: rgba(232, 165, 75, 0.35);
+}
+
+.kanban-section.drag-over {
+  border-color: var(--cyan);
+  background: rgba(6, 182, 212, 0.04);
+  box-shadow: 0 0 16px rgba(6, 182, 212, 0.15);
+}
+
+.kanban-section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 12px;
+  margin-bottom: 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.kanban-section-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.kanban-section-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  background: var(--surface-raised);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 17px;
+}
+
+.kanban-section-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0;
+  letter-spacing: 0.3px;
+}
+
+.kanban-section-desc {
+  font-size: 11px;
+  color: var(--text-muted);
+  font-weight: 400;
+}
+
+.kanban-section-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.kanban-section-count {
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 20px;
+  background: rgba(6, 182, 212, 0.1);
+  border: 1px solid rgba(6, 182, 212, 0.3);
+  color: var(--cyan);
+}
+
+.kanban-toggle-btn {
+  background: var(--surface-raised);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  width: 24px;
+  height: 24px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 12px;
+  color: var(--text);
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.kanban-toggle-btn:hover {
+  background: var(--surface);
+  border-color: var(--accent);
+}
+
+.kanban-section-content {
+  width: 100%;
+  height: auto;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.kanban-section.collapsed .kanban-section-content {
+  display: none;
+}
+
+.kanban-section.collapsed .kanban-toggle-btn {
+  transform: rotate(-90deg);
+}
+
+.kanban-empty-lane {
+  padding: 24px;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 12px;
+  font-style: italic;
+  background: rgba(255, 255, 255, 0.015);
+  border: 1px dashed var(--border);
+  border-radius: 8px;
+}
+
+.item-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+  gap: 14px;
+  width: 100%;
+  height: auto;
+}
+
+.item-card {
+  position: relative;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.item-card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+.item-card.equipped {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px rgba(232, 165, 75, 0.3);
+}
+
+.item-card.equipped::before {
+  content: 'EQUIPPED';
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  font-family: 'Space Mono', monospace;
+  font-size: 8px;
+  font-weight: 700;
+  color: var(--void);
+  background: var(--accent);
+  padding: 2px 6px;
+  border-radius: 4px;
+  z-index: 1;
+}
+
+.item-image {
+  width: 100%;
+  aspect-ratio: 3/4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--surface-raised);
+  border-bottom: 1px solid var(--border);
+}
+
+.item-image svg {
+  width: 70%;
+  height: 70%;
+}
+
+.item-info {
+  padding: 12px;
+}
+
+.item-name {
+  font-size: 11px;
+  font-weight: 500;
+  margin: 0 0 6px 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--text);
+}
+
+.item-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.item-tag {
+  font-size: 9px;
+  font-family: 'Space Mono', monospace;
+  color: var(--text-muted);
+  background: var(--surface-raised);
+  padding: 2px 6px;
+  border-radius: 3px;
+}
+
+.item-tag.garment-type-tag {
+  color: var(--cyan);
+  background: rgba(6, 182, 212, 0.12);
+  border: 1px solid rgba(6, 182, 212, 0.35);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.item-card.is-combo {
+  border-color: rgba(6, 182, 212, 0.4);
+}
+.item-card.is-combo:hover {
+  border-color: var(--cyan);
+  box-shadow: 0 4px 16px rgba(6, 182, 212, 0.2);
+}
+
+.item-edit-btn {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  width: 26px;
+  height: 26px;
+  border-radius: 6px;
+  background: rgba(13, 15, 20, 0.75);
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 5;
+  font-size: 13px;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(4px);
+}
+.item-edit-btn:hover {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--void);
+  transform: scale(1.08);
+}
+
+.item-prompt-preview {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  color: var(--text-muted);
+  line-height: 1.35;
+  margin: 4px 0 6px 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  background: rgba(13, 15, 20, 0.5);
+  padding: 3px 6px;
+  border-radius: 4px;
+  border-left: 2px solid var(--accent);
+}
+
+.item-card.is-combo .item-prompt-preview {
+  border-left-color: var(--cyan);
+  color: #a5d8ff;
+}
+
+.combo-tag {
+  background: rgba(6, 182, 212, 0.15) !important;
+  color: var(--cyan) !important;
+  border: 1px solid rgba(6, 182, 212, 0.4) !important;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+/* Equipped Panel */
+.equipped-panel {
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border);
+}
+
+.equipped-title {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-muted);
+  margin-bottom: 12px;
+}
+
+.equipped-items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.equipped-chip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--surface-raised);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 6px 10px;
+  font-size: 10px;
+}
+
+.equipped-chip .layer-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+
+.equipped-chip button {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 0;
+  font-size: 12px;
+  line-height: 1;
+}
+
+.equipped-chip button:hover {
+  color: #e87fa0;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+/* Modal */
+.modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(13, 15, 20, 0.95);
+  z-index: 1000;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.modal.active {
+  display: flex;
+}
+
+.modal-content {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  width: 100%;
+  max-width: 600px;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 32px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.modal-title {
+  font-size: 20px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.modal-close {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 24px;
+  cursor: pointer;
+  padding: 0;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-close:hover {
+  color: var(--text);
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-group.full {
+  grid-column: 1 / -1;
+}
+
+.form-label {
+  font-size: 11px;
+  font-family: 'Space Mono', monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-muted);
+}
+
+.form-input,
+.form-select,
+.form-textarea {
+  background: var(--void);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 12px;
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  transition: border-color 0.2s;
+}
+
+.form-input:focus,
+.form-select:focus,
+.form-textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+  background: rgba(232, 165, 75, 0.05);
+}
+
+.form-textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.zones-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.zone-checkbox {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px;
+  background: var(--surface-raised);
+  border: 2px solid var(--border);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-muted);
+  user-select: none;
+}
+
+.zone-checkbox:hover {
+  border-color: var(--text);
+  background: var(--void);
+}
+
+.zone-checkbox input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.zone-checkbox input:checked ~ label {
+  color: var(--void);
+  font-weight: 600;
+}
+
+.zone-checkbox.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--void);
+}
+
+.zone-checkbox.active:hover {
+  background: var(--accent-dim);
+  border-color: var(--accent-dim);
+}
+
+#layerGrid {
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+}
+
+/* Layer checkboxes — each layer option has its own distinct text color and accent */
+.layer-checkbox {
+  padding: 10px 4px;
+  text-align: center;
+  white-space: nowrap;
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.layer-checkbox span {
+  color: inherit;
+}
+
+.layer-checkbox.layer-outer {
+  color: var(--layer-outer);
+  border-color: rgba(232, 127, 160, 0.45);
+  background: rgba(232, 127, 160, 0.08);
+}
+.layer-checkbox.layer-outer:hover {
+  border-color: var(--layer-outer);
+  background: rgba(232, 127, 160, 0.18);
+}
+.layer-checkbox.layer-outer.active {
+  background: var(--layer-outer);
+  border-color: var(--layer-outer);
+  color: #0d0f14;
+  box-shadow: 0 0 12px rgba(232, 127, 160, 0.35);
+}
+
+.layer-checkbox.layer-main {
+  color: var(--layer-main);
+  border-color: rgba(232, 165, 75, 0.45);
+  background: rgba(232, 165, 75, 0.08);
+}
+.layer-checkbox.layer-main:hover {
+  border-color: var(--layer-main);
+  background: rgba(232, 165, 75, 0.18);
+}
+.layer-checkbox.layer-main.active {
+  background: var(--layer-main);
+  border-color: var(--layer-main);
+  color: #0d0f14;
+  box-shadow: 0 0 12px rgba(232, 165, 75, 0.35);
+}
+
+.layer-checkbox.layer-base {
+  color: var(--layer-base);
+  border-color: rgba(94, 179, 232, 0.45);
+  background: rgba(94, 179, 232, 0.08);
+}
+.layer-checkbox.layer-base:hover {
+  border-color: var(--layer-base);
+  background: rgba(94, 179, 232, 0.18);
+}
+.layer-checkbox.layer-base.active {
+  background: var(--layer-base);
+  border-color: var(--layer-base);
+  color: #0d0f14;
+  box-shadow: 0 0 12px rgba(94, 179, 232, 0.35);
+}
+
+.layer-checkbox.layer-underwear {
+  color: var(--layer-underwear);
+  border-color: rgba(122, 232, 154, 0.45);
+  background: rgba(122, 232, 154, 0.08);
+}
+.layer-checkbox.layer-underwear:hover {
+  border-color: var(--layer-underwear);
+  background: rgba(122, 232, 154, 0.18);
+}
+.layer-checkbox.layer-underwear.active {
+  background: var(--layer-underwear);
+  border-color: var(--layer-underwear);
+  color: #0d0f14;
+  box-shadow: 0 0 12px rgba(122, 232, 154, 0.35);
+}
+
+.layer-checkbox.layer-other {
+  color: var(--layer-other);
+  border-color: rgba(184, 159, 232, 0.45);
+  background: rgba(184, 159, 232, 0.08);
+}
+.layer-checkbox.layer-other:hover {
+  border-color: var(--layer-other);
+  background: rgba(184, 159, 232, 0.18);
+}
+.layer-checkbox.layer-other.active {
+  background: var(--layer-other);
+  border-color: var(--layer-other);
+  color: #0d0f14;
+  box-shadow: 0 0 12px rgba(184, 159, 232, 0.35);
+}
+
+/* Combo Inheritance Selector */
+.inherit-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 6px;
+  max-height: 130px;
+  overflow-y: auto;
+  background: var(--void);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px;
+  margin-top: 4px;
+}
+
+/* Anatomical Groups & Accordions */
+.anatomical-groups-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 310px;
+  overflow-y: auto;
+  background: var(--void);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px;
+}
+
+.anatomical-group {
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--surface);
+  overflow: hidden;
+  transition: border-color 0.2s;
+}
+
+.anatomical-group:hover {
+  border-color: rgba(6, 182, 212, 0.4);
+}
+
+.group-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 7px 10px;
+  background: var(--surface-raised);
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.15s;
+}
+
+.group-header:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.group-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.group-chevron {
+  font-size: 10px;
+  color: var(--text-muted);
+  transition: transform 0.2s ease;
+  display: inline-block;
+  width: 12px;
+}
+
+.anatomical-group.collapsed .group-chevron {
+  transform: rotate(-90deg);
+}
+
+.group-title {
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: 0.3px;
+}
+
+.group-actions,
+.group-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.folded-badge {
+  font-family: 'Space Mono', monospace;
+  font-size: 9px;
+  font-weight: 600;
+  color: #f59e0b;
+  background: rgba(245, 158, 11, 0.12);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  padding: 2px 6px;
+  border-radius: 4px;
+  letter-spacing: 0.2px;
+}
+
+.macro-btn {
+  padding: 3px 8px;
+  background: rgba(6, 182, 212, 0.12);
+  border: 1px solid var(--cyan);
+  border-radius: 4px;
+  color: var(--cyan);
+  font-family: 'Space Mono', monospace;
+  font-size: 9px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.macro-btn:hover {
+  background: var(--cyan);
+  color: var(--void);
+}
+
+.macro-btn.active {
+  background: var(--cyan);
+  color: var(--void);
+  box-shadow: 0 0 8px rgba(6, 182, 212, 0.4);
+}
+
+.group-badge {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--text-muted);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 1px 6px;
+  border-radius: 10px;
+  min-width: 18px;
+  text-align: center;
+}
+
+.group-badge.has-active {
+  color: var(--cyan);
+  border-color: var(--cyan);
+  background: rgba(6, 182, 212, 0.12);
+}
+
+.group-content {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  gap: 6px;
+  padding: 8px 10px;
+  background: var(--surface);
+}
+
+.anatomical-group.collapsed .group-content {
+  display: none;
+}
+
+.inherit-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 8px;
+  background: var(--surface-raised);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  color: var(--text-muted);
+  user-select: none;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.inherit-checkbox:hover {
+  border-color: var(--cyan);
+  color: var(--text);
+  background: rgba(6, 182, 212, 0.08);
+}
+
+.inherit-checkbox input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.inherit-checkbox.active {
+  background: rgba(6, 182, 212, 0.18);
+  border-color: var(--cyan);
+  color: #e0f7fa;
+  font-weight: 600;
+}
+
+.inherit-preview-box {
+  margin-top: 8px;
+  padding: 8px 12px;
+  background: rgba(6, 182, 212, 0.05);
+  border: 1px dashed rgba(6, 182, 212, 0.35);
+  border-radius: 6px;
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  color: var(--cyan);
+  line-height: 1.4;
+  word-break: break-word;
+}
+
+.preview-section {
+  background: var(--void);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.preview-img {
+  width: 120px;
+  height: 160px;
+  margin: 0 auto 16px;
+  background: var(--surface-raised);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.preview-img svg {
+  width: 80%;
+  height: 80%;
+}
+
+.preview-title {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+}
+
+.preview-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.modal-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.btn {
+  flex: 1;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  font-family: 'Space Mono', monospace;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 11px;
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: var(--void);
+}
+
+.btn-primary:hover {
+  background: var(--accent-dim);
+  transform: translateY(-1px);
+}
+
+.btn-secondary {
+  background: var(--border);
+  color: var(--text);
+}
+
+.btn-secondary:hover {
+  background: var(--surface-raised);
+}
+</style>
+
+<div class="app">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <h2 class="sidebar-title">Mannequin</h2>
+    <p class="sidebar-subtitle">Anime female</p>
+
+    <div class="mannequin-wrap">
+      <svg class="mannequin-svg" viewBox="0 0 100 310" xmlns="http://www.w3.org/2000/svg">
+        <!-- Cranial & Facial Zones -->
+        <ellipse data-zone="head" class="chunk" cx="50" cy="20" rx="18" ry="20"/>
+        <path data-zone="forehead" class="chunk" d="M35,14 C39,6 61,6 65,14 C60,17 40,17 35,14 Z"/>
+        <ellipse data-zone="one-eye" class="chunk eye-chunk eye-left" cx="43" cy="21" rx="3.5" ry="2.8"/>
+        <ellipse data-zone="both-eyes" class="chunk eye-chunk eye-right" cx="57" cy="21" rx="3.5" ry="2.8"/>
+        <path data-zone="both-eyes" class="chunk eye-bridge" d="M46.5,21 Q50,20 53.5,21" fill="none" stroke-width="1.2"/>
+        <path data-zone="mouth" class="chunk mouth-chunk" d="M44,28 Q50,27 56,28 Q55,33 50,33.5 Q45,33 44,28 Z"/>
+
+        <!-- Body & Limb Zones -->
+        <rect data-zone="neck" class="chunk" x="46" y="39" width="8" height="9" rx="1"/>
+        <path data-zone="torso-top" class="chunk" d="M34,48 C31,49 29,52 29,56 L29,72 C29,75 31,77 34,77 L66,77 C69,77 71,75 71,72 L71,56 C71,52 69,49 66,48 C62,47 56,46 50,46 C44,46 38,47 34,48 Z"/>
+        <path data-zone="torso-bottom" class="chunk" d="M29,72 L29,100 C29,103 31,105 34,105 L66,105 C69,105 71,103 71,100 L71,72 C71,75 69,77 66,77 L34,77 C31,77 29,75 29,72 Z"/>
+        <rect data-zone="pelvis" class="chunk" x="29" y="105" width="42" height="16" rx="2"/>
+        <path data-zone="arm" class="chunk" d="M29,54 L22,55 L18,95 L24,96 L29,58 Z M71,54 L78,55 L82,95 L76,96 L71,58 Z"/>
+        <path data-zone="forearm" class="chunk" d="M18,95 L14,96 L12,118 L18,119 L25,96 Z M82,95 L86,96 L88,118 L82,119 L75,96 Z"/>
+        <!-- Articulated Wrist Hitboxes -->
+        <rect data-zone="wrist" class="chunk" x="12" y="119" width="6" height="4" rx="1"/>
+        <rect data-zone="wrist" class="chunk" x="82" y="119" width="6" height="4" rx="1"/>
+        <ellipse data-zone="hand" class="chunk" cx="15" cy="127" rx="4" ry="6"/>
+        <ellipse data-zone="hand" class="chunk" cx="85" cy="127" rx="4" ry="6"/>
+        <path data-zone="thigh-upper" class="chunk" d="M32,121 L43,121 L42,146 L31,146 Z M57,121 L68,121 L69,146 L58,146 Z"/>
+        <path data-zone="thigh-lower" class="chunk" d="M31,146 L42,146 L42,170 L31,170 Z M58,146 L69,146 L69,170 L58,170 Z"/>
+        <path data-zone="shin" class="chunk" d="M31,172 L42,172 L41,225 L30,225 Z M58,172 L69,172 L70,225 L59,225 Z"/>
+        <path data-zone="foot" class="chunk" d="M29,225 L42,225 C42,230 40,232 36,233 L26,233 C24,231 24,228 26,226 Z M58,225 L71,225 C73,226 73,228 71,233 L61,233 C57,232 55,230 58,225 Z"/>
+      </svg>
+    </div>
+
+    <div class="layer-legend">
+      <div class="legend-title">Layers</div>
+      <div class="legend-items">
+        <div class="legend-item"><span class="legend-dot outer"></span>Outer</div>
+        <div class="legend-item"><span class="legend-dot main"></span>Main</div>
+        <div class="legend-item"><span class="legend-dot base"></span>Base</div>
+        <div class="legend-item"><span class="legend-dot underwear"></span>Underwear</div>
+        <div class="legend-item"><span class="legend-dot other"></span>Other</div>
+      </div>
+    </div>
+
+    <button class="add-item-btn" onclick="openCreateModal()">+ Create Item</button>
+  </aside>
+
+  <!-- Main -->
+  <main class="main">
+    <div class="main-header">
+      <h1 class="main-title">Wardrobe Studio</h1>
+      <div class="compiled-prompt" id="compiledPrompt">Click items to equip</div>
+    </div>
+
+    <div class="layer-tabs">
+      <button class="layer-tab active" data-layer="all">All Layers</button>
+      <button class="layer-tab" data-layer="outer">Outer</button>
+      <button class="layer-tab" data-layer="main">Main</button>
+      <button class="layer-tab" data-layer="base">Base</button>
+      <button class="layer-tab" data-layer="underwear">Underwear</button>
+      <button class="layer-tab" data-layer="other">Other</button>
+    </div>
+
+    <div class="items-header">
+      <span class="items-title" id="itemsTitle">Outer Layer Items</span>
+      <span class="items-count" id="itemsCount">0 items</span>
+    </div>
+
+    <div class="kanban-board" id="kanbanBoard"></div>
+
+    <div class="equipped-panel">
+      <div class="equipped-title">Currently Equipped</div>
+      <div class="equipped-items" id="equippedItems"></div>
+    </div>
+  </main>
+</div>
+
+<!-- Create Item Modal -->
+<div class="modal" id="createModal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2 class="modal-title" id="modalTitle">Create Custom Item</h2>
+      <button class="modal-close" onclick="closeCreateModal()">✕</button>
+    </div>
+
+    <div class="preview-section">
+      <div class="preview-title">Preview</div>
+      <div class="preview-img" id="previewImg"></div>
+      <div class="preview-name" id="previewName">New Item</div>
+    </div>
+
+    <div class="form-grid">
+      <div class="form-group">
+        <label class="form-label">Item Name *</label>
+        <input class="form-input" id="itemName" placeholder="e.g. Blue Shirt" onkeyup="updatePreview()">
+      </div>
+
+      <div class="form-group full">
+        <label class="form-label">Layers *</label>
+        <div class="zones-grid" id="layerGrid">
+          <label class="zone-checkbox layer-checkbox layer-outer"><input type="checkbox" value="outer"><span>Outer</span></label>
+          <label class="zone-checkbox layer-checkbox layer-main active"><input type="checkbox" value="main" checked><span>Main</span></label>
+          <label class="zone-checkbox layer-checkbox layer-base"><input type="checkbox" value="base"><span>Base</span></label>
+          <label class="zone-checkbox layer-checkbox layer-underwear"><input type="checkbox" value="underwear"><span>Underwear</span></label>
+          <label class="zone-checkbox layer-checkbox layer-other"><input type="checkbox" value="other"><span>Other</span></label>
+        </div>
+      </div>
+
+      <div class="form-group full">
+        <label class="form-label">Tags</label>
+        <input class="form-input" id="itemTags" placeholder="casual, summer, school">
+      </div>
+
+      <div class="form-group full">
+        <label class="form-label">Garment Type *</label>
+        <div class="zones-grid" id="garmentTypeGrid">
+          <label class="zone-checkbox"><input type="radio" name="garmentType" value="full"><span>Full (Suit/Leotard)</span></label>
+          <label class="zone-checkbox"><input type="radio" name="garmentType" value="top"><span>Top (Shirt/Bra)</span></label>
+          <label class="zone-checkbox"><input type="radio" name="garmentType" value="bottom"><span>Bottom (Pants/Skirt)</span></label>
+          <label class="zone-checkbox"><input type="radio" name="garmentType" value="legs"><span>Legs (Thighhigh/Socks)</span></label>
+          <label class="zone-checkbox"><input type="radio" name="garmentType" value="foot"><span>Foot (Shoes/Boots)</span></label>
+          <label class="zone-checkbox"><input type="radio" name="garmentType" value="accessory"><span>Accessory</span></label>
+        </div>
+      </div>
+
+      <div class="form-group full">
+        <label class="form-label">Coverage Zones <span style="font-weight: normal; color: var(--text-muted); text-transform: none;">— Grouped by anatomical region</span></label>
+        <div class="anatomical-groups-container" id="zoneGrid">
+          <!-- 1. FACE -->
+          <div class="anatomical-group" data-group="face">
+            <div class="group-header">
+              <div class="group-title-wrap">
+                <span class="group-chevron">▼</span>
+                <span class="group-title">Face</span>
+              </div>
+              <div class="group-actions">
+                <span class="group-badge">0</span>
+              </div>
+            </div>
+            <div class="group-content">
+              <label class="zone-checkbox"><input type="checkbox" value="head"><span>Head</span></label>
+              <label class="zone-checkbox"><input type="checkbox" value="forehead"><span>Forehead</span></label>
+              <label class="zone-checkbox"><input type="checkbox" value="one-eye"><span>One Eye</span></label>
+              <label class="zone-checkbox"><input type="checkbox" value="both-eyes"><span>Both Eyes</span></label>
+              <label class="zone-checkbox"><input type="checkbox" value="mouth"><span>Mouth</span></label>
+            </div>
+          </div>
+
+          <!-- 2. TOP -->
+          <div class="anatomical-group" data-group="top">
+            <div class="group-header">
+              <div class="group-title-wrap">
+                <span class="group-chevron">▼</span>
+                <span class="group-title">Top</span>
+              </div>
+              <div class="group-actions">
+                <span class="group-badge">0</span>
+              </div>
+            </div>
+            <div class="group-content">
+              <label class="zone-checkbox"><input type="checkbox" value="neck"><span>Neck</span></label>
+              <label class="zone-checkbox"><input type="checkbox" value="torso-top"><span>Torso Top</span></label>
+              <label class="zone-checkbox"><input type="checkbox" value="torso-bottom"><span>Torso Bot</span></label>
+            </div>
+          </div>
+
+          <!-- 3. BOTTOM with PANTS MACRO -->
+          <div class="anatomical-group" data-group="bottom">
+            <div class="group-header">
+              <div class="group-title-wrap">
+                <span class="group-chevron">▼</span>
+                <span class="group-title">Bottom</span>
+              </div>
+              <div class="group-actions">
+                <button type="button" class="macro-btn" id="coveragePantsMacroBtn" onclick="togglePantsMacro(event)" title="Cascade auto-covers Pelvis + Thighs and folds Thighs accordion">👖 Pants Macro</button>
+                <span class="group-badge">0</span>
+              </div>
+            </div>
+            <div class="group-content">
+              <label class="zone-checkbox"><input type="checkbox" value="pelvis"><span>Pelvis</span></label>
+            </div>
+          </div>
+
+          <!-- 4. THIGHS with AUTO-FOLD BADGE -->
+          <div class="anatomical-group" data-group="thighs" id="coverageThighsGroup">
+            <div class="group-header">
+              <div class="group-title-wrap">
+                <span class="group-chevron">▼</span>
+                <span class="group-title">Thighs</span>
+                <span class="folded-badge" id="coverageThighsFoldedBadge" style="display: none;">[Folded — Covered by Pants]</span>
+              </div>
+              <div class="group-actions">
+                <span class="group-badge">0</span>
+              </div>
+            </div>
+            <div class="group-content">
+              <label class="zone-checkbox"><input type="checkbox" value="thigh-upper"><span>Thigh Up</span></label>
+              <label class="zone-checkbox"><input type="checkbox" value="thigh-lower"><span>Thigh Low</span></label>
+            </div>
+          </div>
+
+          <!-- 5. ARM -->
+          <div class="anatomical-group" data-group="arm">
+            <div class="group-header">
+              <div class="group-title-wrap">
+                <span class="group-chevron">▼</span>
+                <span class="group-title">Arm</span>
+              </div>
+              <div class="group-actions">
+                <span class="group-badge">0</span>
+              </div>
+            </div>
+            <div class="group-content">
+              <label class="zone-checkbox"><input type="checkbox" value="arm"><span>Arm</span></label>
+              <label class="zone-checkbox"><input type="checkbox" value="forearm"><span>Forearm</span></label>
+            </div>
+          </div>
+
+          <!-- 6. WRIST -->
+          <div class="anatomical-group" data-group="wrist">
+            <div class="group-header">
+              <div class="group-title-wrap">
+                <span class="group-chevron">▼</span>
+                <span class="group-title">Wrist</span>
+              </div>
+              <div class="group-actions">
+                <span class="group-badge">0</span>
+              </div>
+            </div>
+            <div class="group-content">
+              <label class="zone-checkbox"><input type="checkbox" value="wrist"><span>Wrist</span></label>
+            </div>
+          </div>
+
+          <!-- 7. HAND -->
+          <div class="anatomical-group" data-group="hand">
+            <div class="group-header">
+              <div class="group-title-wrap">
+                <span class="group-chevron">▼</span>
+                <span class="group-title">Hand</span>
+              </div>
+              <div class="group-actions">
+                <span class="group-badge">0</span>
+              </div>
+            </div>
+            <div class="group-content">
+              <label class="zone-checkbox"><input type="checkbox" value="hand"><span>Hand</span></label>
+            </div>
+          </div>
+
+          <!-- 8. FEET -->
+          <div class="anatomical-group" data-group="feet">
+            <div class="group-header">
+              <div class="group-title-wrap">
+                <span class="group-chevron">▼</span>
+                <span class="group-title">Feet</span>
+              </div>
+              <div class="group-actions">
+                <span class="group-badge">0</span>
+              </div>
+            </div>
+            <div class="group-content">
+              <label class="zone-checkbox"><input type="checkbox" value="shin"><span>Shin</span></label>
+              <label class="zone-checkbox"><input type="checkbox" value="foot"><span>Foot</span></label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group full">
+        <label class="form-label">Expose Zones (Uncovered / Cutout) <span style="font-weight: normal; color: var(--text-muted); text-transform: none;">— Explicitly exposes/uncovers zones (crop tops, keyholes, cutouts)</span></label>
+        <div class="anatomical-groups-container" id="exposeZoneGrid">
+          <!-- 1. FACE -->
+          <div class="anatomical-group" data-group="face">
+            <div class="group-header">
+              <div class="group-title-wrap">
+                <span class="group-chevron">▼</span>
+                <span class="group-title">Face</span>
+              </div>
+              <div class="group-actions">
+                <span class="group-badge">0</span>
+              </div>
+            </div>
+            <div class="group-content">
+              <label class="zone-checkbox expose-checkbox"><input type="checkbox" value="head"><span>Head</span></label>
+              <label class="zone-checkbox expose-checkbox"><input type="checkbox" value="forehead"><span>Forehead</span></label>
+              <label class="zone-checkbox expose-checkbox"><input type="checkbox" value="one-eye"><span>One Eye</span></label>
+              <label class="zone-checkbox expose-checkbox"><input type="checkbox" value="both-eyes"><span>Both Eyes</span></label>
+              <label class="zone-checkbox expose-checkbox"><input type="checkbox" value="mouth"><span>Mouth</span></label>
+            </div>
+          </div>
+
+          <!-- 2. TOP -->
+          <div class="anatomical-group" data-group="top">
+            <div class="group-header">
+              <div class="group-title-wrap">
+                <span class="group-chevron">▼</span>
+                <span class="group-title">Top</span>
+              </div>
+              <div class="group-actions">
+                <span class="group-badge">0</span>
+              </div>
+            </div>
+            <div class="group-content">
+              <label class="zone-checkbox expose-checkbox"><input type="checkbox" value="neck"><span>Neck</span></label>
+              <label class="zone-checkbox expose-checkbox"><input type="checkbox" value="torso-top"><span>Torso Top</span></label>
+              <label class="zone-checkbox expose-checkbox"><input type="checkbox" value="torso-bottom"><span>Torso Bot</span></label>
+            </div>
+          </div>
+
+          <!-- 3. BOTTOM -->
+          <div class="anatomical-group" data-group="bottom">
+            <div class="group-header">
+              <div class="group-title-wrap">
+                <span class="group-chevron">▼</span>
+                <span class="group-title">Bottom</span>
+              </div>
+              <div class="group-actions">
+                <span class="group-badge">0</span>
+              </div>
+            </div>
+            <div class="group-content">
+              <label class="zone-checkbox expose-checkbox"><input type="checkbox" value="pelvis"><span>Pelvis</span></label>
+            </div>
+          </div>
+
+          <!-- 4. THIGHS -->
+          <div class="anatomical-group" data-group="thighs">
+            <div class="group-header">
+              <div class="group-title-wrap">
+                <span class="group-chevron">▼</span>
+                <span class="group-title">Thighs</span>
+              </div>
+              <div class="group-actions">
+                <span class="group-badge">0</span>
+              </div>
+            </div>
+            <div class="group-content">
+              <label class="zone-checkbox expose-checkbox"><input type="checkbox" value="thigh-upper"><span>Thigh Up</span></label>
+              <label class="zone-checkbox expose-checkbox"><input type="checkbox" value="thigh-lower"><span>Thigh Low</span></label>
+            </div>
+          </div>
+
+          <!-- 5. ARM -->
+          <div class="anatomical-group" data-group="arm">
+            <div class="group-header">
+              <div class="group-title-wrap">
+                <span class="group-chevron">▼</span>
+                <span class="group-title">Arm</span>
+              </div>
+              <div class="group-actions">
+                <span class="group-badge">0</span>
+              </div>
+            </div>
+            <div class="group-content">
+              <label class="zone-checkbox expose-checkbox"><input type="checkbox" value="arm"><span>Arm</span></label>
+              <label class="zone-checkbox expose-checkbox"><input type="checkbox" value="forearm"><span>Forearm</span></label>
+            </div>
+          </div>
+
+          <!-- 6. WRIST -->
+          <div class="anatomical-group" data-group="wrist">
+            <div class="group-header">
+              <div class="group-title-wrap">
+                <span class="group-chevron">▼</span>
+                <span class="group-title">Wrist</span>
+              </div>
+              <div class="group-actions">
+                <span class="group-badge">0</span>
+              </div>
+            </div>
+            <div class="group-content">
+              <label class="zone-checkbox expose-checkbox"><input type="checkbox" value="wrist"><span>Wrist</span></label>
+            </div>
+          </div>
+
+          <!-- 7. HAND -->
+          <div class="anatomical-group" data-group="hand">
+            <div class="group-header">
+              <div class="group-title-wrap">
+                <span class="group-chevron">▼</span>
+                <span class="group-title">Hand</span>
+              </div>
+              <div class="group-actions">
+                <span class="group-badge">0</span>
+              </div>
+            </div>
+            <div class="group-content">
+              <label class="zone-checkbox expose-checkbox"><input type="checkbox" value="hand"><span>Hand</span></label>
+            </div>
+          </div>
+
+          <!-- 8. FEET -->
+          <div class="anatomical-group" data-group="feet">
+            <div class="group-header">
+              <div class="group-title-wrap">
+                <span class="group-chevron">▼</span>
+                <span class="group-title">Feet</span>
+              </div>
+              <div class="group-actions">
+                <span class="group-badge">0</span>
+              </div>
+            </div>
+            <div class="group-content">
+              <label class="zone-checkbox expose-checkbox"><input type="checkbox" value="shin"><span>Shin</span></label>
+              <label class="zone-checkbox expose-checkbox"><input type="checkbox" value="foot"><span>Foot</span></label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group full">
+        <label class="form-label">Prompt Token String (__prpt_)</label>
+        <textarea class="form-input" id="itemPrompt" rows="2" placeholder="e.g. white collared dress shirt, long sleeves, buttoned cuffs" onkeyup="updateInheritPreview()"></textarea>
+      </div>
+
+      <div class="form-group full">
+        <label class="form-label">Combo Inheritance (__inherit) <span style="font-weight: normal; color: var(--text-muted); text-transform: none;">— Select catalog items to inherit prompt tokens & zones</span></label>
+        <div class="inherit-grid" id="inheritGrid"></div>
+        <div class="inherit-preview-box" id="inheritPreview"><span style="color: var(--text-muted);">No items inherited yet.</span></div>
+      </div>
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn btn-secondary" onclick="closeCreateModal()">Cancel</button>
+      <button class="btn btn-primary" id="saveItemBtn" onclick="saveItem()">Create Item</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// === CLOTHING SVG GENERATORS ===
+function generateClothingSVG(type, color) {
+  const typeMap = {
+    'shirt': `<svg viewBox="0 0 100 130" xmlns="http://www.w3.org/2000/svg">
+      <rect x="20" y="10" width="60" height="80" fill="${color}" rx="4"/>
+      <rect x="10" y="30" width="20" height="50" fill="${color}" rx="3"/>
+      <rect x="70" y="30" width="20" height="50" fill="${color}" rx="3"/>
+      <path d="M40 10 L35 25 L40 30 L45 25 Z" fill="rgba(255,255,255,0.2)"/>
+    </svg>`,
+    'jacket': `<svg viewBox="0 0 100 130" xmlns="http://www.w3.org/2000/svg">
+      <path d="M20 20 L20 80 C20 90 25 100 35 100 L50 100 L50 20 Z" fill="${color}"/>
+      <path d="M80 20 L80 80 C80 90 75 100 65 100 L50 100 L50 20 Z" fill="${color}"/>
+      <rect x="35" y="80" width="30" height="20" fill="rgba(0,0,0,0.2)"/>
+    </svg>`,
+    'skirt': `<svg viewBox="0 0 100 130" xmlns="http://www.w3.org/2000/svg">
+      <path d="M30 20 L35 100 L50 110 L65 100 L70 20 Z" fill="${color}"/>
+      <line x1="40" y1="30" x2="42" y2="100" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+      <line x1="50" y1="30" x2="50" y2="110" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+      <line x1="60" y1="30" x2="58" y2="100" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+    </svg>`,
+    'shorts': `<svg viewBox="0 0 100 130" xmlns="http://www.w3.org/2000/svg">
+      <path d="M30 20 L35 60 L50 70 L65 60 L70 20 Z" fill="${color}"/>
+      <path d="M35 60 L40 65 L45 70 L50 70 L55 70 L60 65 L65 60" stroke="rgba(255,255,255,0.1)" stroke-width="1" fill="none"/>
+    </svg>`,
+    'thighhigh': `<svg viewBox="0 0 100 130" xmlns="http://www.w3.org/2000/svg">
+      <rect x="35" y="40" width="15" height="70" fill="${color}"/>
+      <rect x="50" y="40" width="15" height="70" fill="${color}"/>
+      <circle cx="42" cy="38" r="3" fill="rgba(255,255,255,0.3)"/>
+      <circle cx="57" cy="38" r="3" fill="rgba(255,255,255,0.3)"/>
+    </svg>`,
+    'boot': `<svg viewBox="0 0 100 130" xmlns="http://www.w3.org/2000/svg">
+      <path d="M30 40 L32 100 C32 110 38 115 45 115 L55 115 C62 115 68 110 68 100 L70 40 Z" fill="${color}"/>
+      <rect x="32" y="95" width="36" height="20" fill="rgba(0,0,0,0.2)"/>
+    </svg>`,
+    'accessory': `<svg viewBox="0 0 100 130" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="50" cy="50" r="25" fill="${color}"/>
+      <circle cx="50" cy="50" r="20" fill="rgba(255,255,255,0.1)"/>
+      <path d="M50 30 L55 45 L50 50 L45 45 Z" fill="rgba(255,255,255,0.2)"/>
+    </svg>`,
+  };
+
+  return typeMap[type] || typeMap['accessory'];
+}
+
+// === MODAL FUNCTIONS ===
+let editingItemId = null;
+
+function openCreateModal() {
+  editingItemId = null;
+  document.getElementById('modalTitle').textContent = 'Create Custom Item';
+  document.getElementById('saveItemBtn').textContent = 'Create Item';
+  document.getElementById('createModal').classList.add('active');
+  populateInheritGrid();
+  updatePreview();
+  updateInheritPreview();
+
+  // Reset macro and accordion states
+  const macroBtn = document.getElementById('coveragePantsMacroBtn');
+  if (macroBtn) macroBtn.classList.remove('active');
+  const foldedBadge = document.getElementById('coverageThighsFoldedBadge');
+  if (foldedBadge) foldedBadge.style.display = 'none';
+  document.querySelectorAll('.anatomical-group').forEach(g => g.classList.remove('collapsed'));
+  updateGroupBadges();
+}
+
+function openEditModal(itemId, event) {
+  if (event) {
+    event.stopPropagation();
+  }
+  const item = ITEMS[itemId];
+  if (!item) return;
+
+  editingItemId = itemId;
+  document.getElementById('modalTitle').textContent = `Edit Item — ${item.displayName.split('—')[0].trim()}`;
+  document.getElementById('saveItemBtn').textContent = 'Save Changes';
+
+  // Fill text inputs
+  document.getElementById('itemName').value = item.displayName || '';
+  document.getElementById('itemTags').value = (item.tags || []).filter(t => t !== 'combo').join(', ');
+  document.getElementById('itemPrompt').value = item.__prpt_ || '';
+
+  // Layers
+  const itemLayers = item.coverageLayers || [];
+  document.querySelectorAll('#layerGrid .layer-checkbox').forEach(cb => {
+    const val = cb.querySelector('input').value;
+    const isChecked = itemLayers.includes(val);
+    cb.classList.toggle('active', isChecked);
+    cb.querySelector('input').checked = isChecked;
+  });
+
+  // Garment type is a separate classification from the item's anatomical zones.
+  const garmentType = item.garmentType || 'accessory';
+  document.querySelectorAll('#garmentTypeGrid .zone-checkbox').forEach(cb => {
+    const input = cb.querySelector('input');
+    const isSelected = input.value === garmentType;
+    input.checked = isSelected;
+    cb.classList.toggle('active', isSelected);
+  });
+
+  // Zones
+  const itemZones = item.coverageZones || [];
+  document.querySelectorAll('#zoneGrid .zone-checkbox').forEach(cb => {
+    const val = cb.querySelector('input').value;
+    const isChecked = itemZones.includes(val);
+    cb.classList.toggle('active', isChecked);
+    cb.querySelector('input').checked = isChecked;
+  });
+
+  // Expose zones
+  const itemExposeZones = item.exposeZones || [];
+  document.querySelectorAll('#exposeZoneGrid .expose-checkbox').forEach(cb => {
+    const val = cb.querySelector('input').value;
+    const isChecked = itemExposeZones.includes(val);
+    cb.classList.toggle('active', isChecked);
+    cb.querySelector('input').checked = isChecked;
+  });
+
+  // Check pants macro and fold state
+  document.querySelectorAll('.anatomical-group').forEach(g => g.classList.remove('collapsed'));
+  checkPantsMacroState();
+  const macroBtn = document.getElementById('coveragePantsMacroBtn');
+  if (macroBtn && macroBtn.classList.contains('active')) {
+    const foldedBadge = document.getElementById('coverageThighsFoldedBadge');
+    if (foldedBadge) foldedBadge.style.display = 'inline-block';
+  }
+  updateGroupBadges();
+
+  // Populate inherit grid excluding current item to prevent circular self-inheritance
+  populateInheritGrid(itemId);
+
+  const inherits = item.__inherit || [];
+  document.querySelectorAll('#inheritGrid .inherit-checkbox').forEach(cb => {
+    const val = cb.querySelector('input').value;
+    const isChecked = inherits.includes(val);
+    cb.classList.toggle('active', isChecked);
+    cb.querySelector('input').checked = isChecked;
+  });
+
+  document.getElementById('createModal').classList.add('active');
+  updatePreview();
+  updateInheritPreview();
+}
+
+function closeCreateModal() {
+  document.getElementById('createModal').classList.remove('active');
+  editingItemId = null;
+  document.getElementById('itemName').value = '';
+  document.getElementById('itemTags').value = '';
+  document.getElementById('itemPrompt').value = '';
+
+  // Reset layers to default (main checked)
+  document.querySelectorAll('#layerGrid .layer-checkbox').forEach(cb => {
+    const val = cb.querySelector('input').value;
+    const isDefault = val === 'main';
+    cb.classList.toggle('active', isDefault);
+    cb.querySelector('input').checked = isDefault;
+  });
+
+  // Reset garment type to the neutral default.
+  document.querySelectorAll('#garmentTypeGrid .zone-checkbox').forEach(cb => {
+    const input = cb.querySelector('input');
+    const isDefault = input.value === 'accessory';
+    input.checked = isDefault;
+    cb.classList.toggle('active', isDefault);
+  });
+
+  // Reset zones
+  document.querySelectorAll('#zoneGrid .zone-checkbox').forEach(cb => {
+    cb.classList.remove('active');
+    cb.querySelector('input').checked = false;
+  });
+
+  // Reset expose zones
+  document.querySelectorAll('#exposeZoneGrid .expose-checkbox').forEach(cb => {
+    cb.classList.remove('active');
+    cb.querySelector('input').checked = false;
+  });
+
+  // Reset inherit grid
+  document.querySelectorAll('#inheritGrid .inherit-checkbox').forEach(cb => {
+    cb.classList.remove('active');
+    cb.querySelector('input').checked = false;
+  });
+  document.getElementById('inheritPreview').innerHTML = '<span style="color: var(--text-muted);">No items inherited yet.</span>';
+
+  // Reset macro and accordion states
+  const macroBtn = document.getElementById('coveragePantsMacroBtn');
+  if (macroBtn) macroBtn.classList.remove('active');
+  const foldedBadge = document.getElementById('coverageThighsFoldedBadge');
+  if (foldedBadge) foldedBadge.style.display = 'none';
+  document.querySelectorAll('.anatomical-group').forEach(g => g.classList.remove('collapsed'));
+  updateGroupBadges();
+}
+
+function populateInheritGrid(excludeId = null) {
+  const container = document.getElementById('inheritGrid');
+  if (!container) return;
+
+  const catalogItems = Object.values(ITEMS).filter(item => item.id !== excludeId);
+  container.innerHTML = catalogItems.map(item => `
+    <label class="inherit-checkbox" data-id="${item.id}">
+      <input type="checkbox" value="${item.id}" onchange="handleInheritToggle(this)">
+      <span>${item.displayName.split('—')[0].trim()}</span>
+    </label>
+  `).join('');
+}
+
+function handleInheritToggle(input) {
+  const label = input.closest('.inherit-checkbox');
+  if (input.checked) {
+    label.classList.add('active');
+  } else {
+    label.classList.remove('active');
+  }
+  updateInheritPreview();
+}
+
+function updateInheritPreview() {
+  const previewBox = document.getElementById('inheritPreview');
+  if (!previewBox) return;
+
+  const selectedInherits = Array.from(document.querySelectorAll('#inheritGrid input:checked')).map(i => i.value);
+  const localPrompt = (document.getElementById('itemPrompt')?.value || '').trim();
+
+  if (selectedInherits.length === 0 && !localPrompt) {
+    previewBox.innerHTML = '<span style="color: var(--text-muted);">No items inherited yet.</span>';
+    return;
+  }
+
+  const tempItem = {
+    id: '__temp__',
+    displayName: document.getElementById('itemName')?.value || 'New Item',
+    __prpt_: localPrompt,
+    __inherit: selectedInherits
+  };
+
+  const resolved = resolveItemPrompt(tempItem);
+  previewBox.textContent = resolved || '(empty prompt)';
+}
+
+// Auto-derive color purely from item name — no user input
+const COLOR_MAP = {
+  white: '#e8e8e8',  ivory: '#f5f0d8',  black: '#2a2a2a',
+  dark:  '#2a2a2a',  grey:  '#888888',   gray:  '#888888',
+  red:   '#c94040',  crimson: '#991133', pink: '#e87fa0',
+  blue:  '#4a7ab5',  navy: '#2a3a5a',    sky: '#7ac4e8',
+  green: '#3a8a3a',  olive: '#6a7a3a',
+  brown: '#6b4a2a',  tan: '#c8a87a',     khaki: '#b8a05a',
+  gold:  '#d4af37',  yellow: '#d4c037',  amber: '#e8a54b',
+  purple: '#7a4ab5', violet: '#9a69c8',  lavender: '#c8a8e8',
+  orange: '#e87a3a', coral: '#e87060',
+  silver: '#aaaaaa', beige: '#c8b89a',   cream: '#f0e8d0',
+};
+
+function autoColor(name) {
+  const n = name.toLowerCase();
+  for (const [key, color] of Object.entries(COLOR_MAP)) {
+    if (n.includes(key)) return color;
+  }
+  // Fall back to first selected layer's color
+  const firstLayer = document.querySelector('#layerGrid .layer-checkbox.active input')?.value || 'main';
+  return { outer: '#1a1a1a', main: '#4a6080', base: '#5eb3e8', underwear: '#f0f0f0', other: '#d4af37' }[firstLayer] || '#4a6080';
+}
+
+function updatePreview() {
+  const name = document.getElementById('itemName').value || 'New Item';
+  const color = autoColor(name);
+
+  document.getElementById('previewName').textContent = name;
+
+  const typeGuess = name.toLowerCase().includes('shirt')  ? 'shirt'    :
+                    name.toLowerCase().includes('jacket') ? 'jacket'   :
+                    name.toLowerCase().includes('skirt')  ? 'skirt'    :
+                    name.toLowerCase().includes('short')  ? 'shorts'   :
+                    name.toLowerCase().includes('thigh')  ? 'thighhigh':
+                    name.toLowerCase().includes('boot')   ? 'boot'     : 'accessory';
+
+  document.getElementById('previewImg').innerHTML = generateClothingSVG(typeGuess, color);
+  updateInheritPreview();
+}
+
+function saveItem() {
+  const name = document.getElementById('itemName').value.trim();
+  const tagsStr = document.getElementById('itemTags').value.trim();
+  const promptStr = document.getElementById('itemPrompt').value.trim();
+  const garmentType = document.querySelector('input[name="garmentType"]:checked')?.value || 'accessory';
+  const inheritIds = Array.from(document.querySelectorAll('#inheritGrid input:checked')).map(i => i.value);
+
+  if (!name) {
+    alert('Item name is required');
+    return;
+  }
+
+  const zones = Array.from(document.querySelectorAll('#zoneGrid .zone-checkbox.active input'))
+    .map(input => input.value);
+
+  const exposeZones = Array.from(document.querySelectorAll('#exposeZoneGrid .expose-checkbox.active input'))
+    .map(input => input.value);
+
+  const layers = Array.from(document.querySelectorAll('#layerGrid .layer-checkbox.active input'))
+    .map(input => input.value);
+
+  if (layers.length === 0) {
+    alert('At least one layer must be selected');
+    return;
+  }
+
+  const tags = tagsStr ? tagsStr.split(',').map(t => t.trim()).filter(Boolean) : [];
+  if (inheritIds.length > 0 && !tags.includes('combo')) {
+    tags.unshift('combo');
+  }
+
+  const color = autoColor(name);
+
+  if (editingItemId && ITEMS[editingItemId]) {
+    // EDIT FLOW: Update existing item in place
+    const item = ITEMS[editingItemId];
+    item.displayName = name;
+    item.imageColor = color;
+    item.coverageZones = zones;
+    item.exposeZones = exposeZones;
+    item.coverageLayers = layers;
+    item.garmentType = garmentType;
+    item.tags = tags;
+    item.__prpt_ = promptStr;
+    item.__inherit = inheritIds;
+
+    // Synchronize equipped item reference if currently equipped
+    const equippedEntry = equippedItems.find(e => e.id === editingItemId);
+    if (equippedEntry) {
+      equippedEntry.item = item;
+      // Re-align equipped layer if the item no longer belongs to that layer
+      if (!layers.includes(equippedEntry.layer)) {
+        equippedEntry.layer = layers[0];
+      }
+    }
+  } else {
+    // CREATE FLOW
+    const id = name.toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_|_$/g, '');
+    ITEMS[id] = {
+      id,
+      displayName: name,
+      imageColor: color,
+      coverageZones: zones,
+      exposeZones: exposeZones,
+      coverageLayers: layers,
+      garmentType: garmentType,
+      tags,
+      __prpt_: promptStr,
+      __inherit: inheritIds
+    };
+  }
+
+  closeCreateModal();
+  renderItems();
+  updateMannequin();
+  renderEquipped();
+  updateCompiledPrompt();
+}
+
+// === RECURSIVE PROMPT & ZONE RESOLUTION ===
+function resolveItemPrompt(item, visited = new Set()) {
+  if (!item || visited.has(item.id)) return '';
+  visited.add(item.id);
+
+  const tokens = [];
+
+  // 1. Inherit from referenced parent items
+  if (Array.isArray(item.__inherit) && item.__inherit.length > 0) {
+    item.__inherit.forEach(inheritId => {
+      const parentItem = ITEMS[inheritId];
+      if (parentItem) {
+        const resolvedParent = resolveItemPrompt(parentItem, visited);
+        if (resolvedParent) tokens.push(resolvedParent);
+      }
+    });
+  }
+
+  // 2. Append local item prompt token string
+  if (item.__prpt_ && item.__prpt_.trim()) {
+    tokens.push(item.__prpt_.trim());
+  } else if (tokens.length === 0 && item.displayName) {
+    tokens.push(item.displayName.split('—')[0].trim().toLowerCase());
+  }
+
+  return tokens.join(', ');
+}
+
+function resolveItemZones(item, visited = new Set()) {
+  if (!item || visited.has(item.id)) return { covered: [], exposed: [] };
+  visited.add(item.id);
+
+  const coveredSet = new Set(item.coverageZones || []);
+  const exposedSet = new Set(item.exposeZones || []);
+
+  if (Array.isArray(item.__inherit) && item.__inherit.length > 0) {
+    item.__inherit.forEach(inheritId => {
+      const parentItem = ITEMS[inheritId];
+      if (parentItem) {
+        const parentResult = resolveItemZones(parentItem, visited);
+        parentResult.covered.forEach(z => coveredSet.add(z));
+        parentResult.exposed.forEach(z => exposedSet.add(z));
+      }
+    });
+  }
+
+  return { covered: Array.from(coveredSet), exposed: Array.from(exposedSet) };
+}
+
+// === CLOTHING ITEMS DATA ===
+let ITEMS = {
+  "shirt_collar_long_white": {
+    id: "shirt_collar_long_white",
+    displayName: "Collared Long Sleeve — White",
+    imageColor: "#e8e8e8",
+    coverageZones: ["torso-top", "torso-bottom", "arm", "forearm"],
+    garmentType: "top",
+    coverageLayers: ["main", "base"],
+    tags: ["formal", "casual", "school"],
+    __prpt_: "white collared dress shirt, long sleeves, buttoned cuffs, clean front",
+    __inherit: []
+  },
+  "tank_top_black": {
+    id: "tank_top_black",
+    displayName: "Tank Top — Black",
+    imageColor: "#2a2a2a",
+    coverageZones: ["torso-bottom"],
+    garmentType: "top",
+    coverageLayers: ["base"],
+    tags: ["casual", "summer"],
+    __prpt_: "black sleeveless tank top, scoop neckline, ribbed cotton",
+    __inherit: []
+  },
+  "jacket_black_leather": {
+    id: "jacket_black_leather",
+    displayName: "Black Leather Jacket",
+    imageColor: "#1a1a1a",
+    coverageZones: ["torso-top", "torso-bottom", "arm", "forearm"],
+    garmentType: "top",
+    coverageLayers: ["outer"],
+    tags: ["casual", "cool"],
+    __prpt_: "black motorcycle leather jacket, asymmetrical silver zipper, wide lapels",
+    __inherit: []
+  },
+  "skirt_pleated_brown": {
+    id: "skirt_pleated_brown",
+    displayName: "Pleated Skirt — Brown",
+    imageColor: "#5a4a3a",
+    coverageZones: ["pelvis", "thigh-upper"],
+    garmentType: "bottom",
+    coverageLayers: ["main"],
+    tags: ["school", "formal", "feminine"],
+    __prpt_: "brown high-waisted pleated miniskirt, sharp accordion folds, belt loops",
+    __inherit: []
+  },
+  "shorts_denim": {
+    id: "shorts_denim",
+    displayName: "Denim Shorts",
+    imageColor: "#4a6a8a",
+    coverageZones: ["pelvis", "thigh-upper"],
+    garmentType: "bottom",
+    coverageLayers: ["main"],
+    tags: ["casual", "summer"],
+    __prpt_: "frayed denim cutoff shorts, washed indigo blue, brass rivets",
+    __inherit: []
+  },
+  "thighhigh_white": {
+    id: "thighhigh_white",
+    displayName: "White Thighhighs",
+    imageColor: "#f8f8f8",
+    coverageZones: ["thigh-upper", "thigh-lower", "shin"],
+    garmentType: "legs",
+    coverageLayers: ["underwear"],
+    tags: ["feminine", "cute"],
+    __prpt_: "opaque white thigh-high stockings, elastic ribbed band, zettai ryouiki",
+    __inherit: []
+  },
+  "boots_brown_leather": {
+    id: "boots_brown_leather",
+    displayName: "Brown Leather Boots",
+    imageColor: "#5c3d2e",
+    coverageZones: ["shin", "foot"],
+    garmentType: "foot",
+    coverageLayers: ["main"],
+    tags: ["formal", "cool"],
+    __prpt_: "tall polished brown leather riding boots, buckle strap, low heel",
+    __inherit: []
+  },
+  "ribbon_red": {
+    id: "ribbon_red",
+    displayName: "Red Ribbon",
+    imageColor: "#e84545",
+    coverageZones: [],
+    garmentType: "accessory",
+    coverageLayers: ["other"],
+    tags: ["decorative", "feminine", "cute"],
+    __prpt_: "crimson silk bow hair ribbon, tied knot, flowing tails",
+    __inherit: []
+  },
+  "combo_school_formal": {
+    id: "combo_school_formal",
+    displayName: "School Uniform — Formal Ensemble",
+    imageColor: "#5a4a3a",
+    coverageZones: [],
+    garmentType: "full",
+    coverageLayers: ["main", "outer"],
+    tags: ["school", "combo", "formal"],
+    __inherit: ["shirt_collar_long_white", "skirt_pleated_brown", "thighhigh_white", "boots_brown_leather", "ribbon_red"],
+    __prpt_: "prestigious private academy uniform, brass button accents, tailored fit"
+  },
+  "combo_biker_casual": {
+    id: "combo_biker_casual",
+    displayName: "Biker Rebel — Leather Ensemble",
+    imageColor: "#1a1a1a",
+    coverageZones: [],
+    garmentType: "full",
+    coverageLayers: ["outer", "main"],
+    tags: ["casual", "combo", "cool"],
+    __inherit: ["jacket_black_leather", "tank_top_black", "shorts_denim", "boots_brown_leather"],
+    __prpt_: "rebellious biker street style, silver metal chains, attitude"
+  },
+  "eyepatch_leather_black": {
+    id: "eyepatch_leather_black",
+    displayName: "Leather Eyepatch — Black",
+    imageColor: "#1a1a1a",
+    coverageZones: ["one-eye"],
+    exposeZones: [],
+    garmentType: "accessory",
+    coverageLayers: ["other"],
+    tags: ["accessory", "pirate", "cyberpunk"],
+    __prpt_: "black leather eyepatch with silver buckle, worn over left eye, rugged texture",
+    __inherit: []
+  },
+  "glasses_round_gold": {
+    id: "glasses_round_gold",
+    displayName: "Round Gold Glasses",
+    imageColor: "#d4af37",
+    coverageZones: ["both-eyes"],
+    exposeZones: [],
+    garmentType: "accessory",
+    coverageLayers: ["other"],
+    tags: ["accessory", "intellectual", "vintage"],
+    __prpt_: "round spectacles with thin gold frames, clear lenses, vintage intellectual style",
+    __inherit: []
+  },
+  "mask_surgical_black": {
+    id: "mask_surgical_black",
+    displayName: "Surgical Mask — Black",
+    imageColor: "#2a2a2a",
+    coverageZones: ["mouth"],
+    exposeZones: [],
+    garmentType: "accessory",
+    coverageLayers: ["other"],
+    tags: ["accessory", "medical", "cyberpunk"],
+    __prpt_: "black disposable surgical mask, pleated design, ear loops, medical protection",
+    __inherit: []
+  },
+  "headband_ninja": {
+    id: "headband_ninja",
+    displayName: "Ninja Headband",
+    imageColor: "#ff0000",
+    coverageZones: ["forehead"],
+    exposeZones: [],
+    garmentType: "accessory",
+    coverageLayers: ["other"],
+    tags: ["accessory", "martial-arts", "stealth"],
+    __prpt_: "red cloth headband tied at forehead, ninja stealth gear, sweat-absorbing fabric",
+    __inherit: []
+  },
+  "crop_top_white": {
+    id: "crop_top_white",
+    displayName: "White Crop Top",
+    imageColor: "#f8f8f8",
+    coverageZones: ["torso-top", "torso-bottom"],
+    exposeZones: ["torso-bottom"],
+    garmentType: "top",
+    coverageLayers: ["base"],
+    tags: ["casual", "summer", "feminine"],
+    __prpt_: "white cropped t-shirt ending above navel, short sleeves, soft cotton, belly cutout exposes lower layer",
+    __inherit: []
+  },
+  "shorts_distressed_cutout": {
+    id: "shorts_distressed_cutout",
+    displayName: "Distressed Cutout Shorts",
+    imageColor: "#4a6a8a",
+    coverageZones: ["pelvis", "thigh-upper", "thigh-lower"],
+    exposeZones: ["thigh-lower"],
+    garmentType: "bottom",
+    coverageLayers: ["main"],
+    tags: ["casual", "summer", "edgy"],
+    __prpt_: "denim shorts with strategic ripped thigh cutouts, frayed edges, reveals lower layer thigh skin",
+    __inherit: []
+  },
+  "pants_trousers_black": {
+    id: "pants_trousers_black",
+    displayName: "Tailored Trousers — Black",
+    imageColor: "#1a1a1a",
+    coverageZones: ["pelvis", "thigh-upper", "thigh-lower"],
+    exposeZones: [],
+    garmentType: "bottom",
+    coverageLayers: ["main"],
+    tags: ["formal", "casual"],
+    __prpt_: "black tailored straight-leg trousers, sharp pleats, formal creased slacks",
+    __inherit: []
+  },
+  "bracelet_silver_cuff": {
+    id: "bracelet_silver_cuff",
+    displayName: "Silver Cuff Bracelet",
+    imageColor: "#c0c0c0",
+    coverageZones: ["wrist"],
+    exposeZones: [],
+    garmentType: "accessory",
+    coverageLayers: ["other"],
+    tags: ["accessory", "jewelry", "cool"],
+    __prpt_: "polished silver cuff bracelet worn around wrist, metallic sheen, minimalist accessory",
+    __inherit: []
+  },
+  "watch_leather_gold": {
+    id: "watch_leather_gold",
+    displayName: "Gold Leather Watch",
+    imageColor: "#d4af37",
+    coverageZones: ["wrist"],
+    exposeZones: [],
+    garmentType: "accessory",
+    coverageLayers: ["other"],
+    tags: ["accessory", "formal", "vintage"],
+    __prpt_: "vintage gold wristwatch with brown leather strap, analog dial, elegant timepiece",
+    __inherit: []
+  },
+  "shirt_collar_long_blue": {
+    id: "shirt_collar_long_blue",
+    displayName: "Collared Long Sleeve — Blue",
+    imageColor: "#4a7abf",
+    coverageZones: ["torso-top", "torso-bottom", "arm", "forearm"],
+    exposeZones: [],
+    garmentType: "top",
+    coverageLayers: ["main", "base"],
+    tags: ["formal", "casual"],
+    __prpt_: "light blue collared dress shirt, long sleeves, buttoned cuffs",
+    __inherit: []
+  },
+  "vest_brown": {
+    id: "vest_brown",
+    displayName: "Brown Vest",
+    imageColor: "#5a4a3a",
+    coverageZones: ["torso-top", "torso-bottom", "pelvis"],
+    exposeZones: [],
+    garmentType: "top",
+    coverageLayers: ["outer", "main"],
+    tags: ["formal", "school"],
+    __prpt_: "tailored brown waistcoat vest, V-neckline, button front",
+    __inherit: []
+  },
+  "capelet_plaid": {
+    id: "capelet_plaid",
+    displayName: "Plaid Capelet",
+    imageColor: "#4a3a2a",
+    coverageZones: ["torso-top", "arm"],
+    exposeZones: [],
+    garmentType: "top",
+    coverageLayers: ["outer", "main"],
+    tags: ["formal", "cute", "school"],
+    __prpt_: "brown plaid detective capelet shoulder cloak, brass toggle clasp",
+    __inherit: []
+  },
+  "skirt_pleated_navy": {
+    id: "skirt_pleated_navy",
+    displayName: "Pleated Skirt — Navy",
+    imageColor: "#1e3a5f",
+    coverageZones: ["pelvis", "thigh-upper"],
+    exposeZones: [],
+    garmentType: "bottom",
+    coverageLayers: ["main"],
+    tags: ["school", "formal", "feminine"],
+    __prpt_: "navy blue pleated miniskirt, sailor style pleats",
+    __inherit: []
+  },
+  "thighhigh_black": {
+    id: "thighhigh_black",
+    displayName: "Black Thighhighs",
+    imageColor: "#1a1a1a",
+    coverageZones: ["thigh-upper", "thigh-lower", "shin"],
+    exposeZones: [],
+    garmentType: "legs",
+    coverageLayers: ["underwear"],
+    tags: ["feminine", "cool"],
+    __prpt_: "semi-sheer black thigh-high stockings, snug fit",
+    __inherit: []
+  },
+  "socks_crew_white": {
+    id: "socks_crew_white",
+    displayName: "Crew Socks — White",
+    imageColor: "#f0f0f0",
+    coverageZones: ["shin", "foot"],
+    exposeZones: [],
+    garmentType: "legs",
+    coverageLayers: ["underwear"],
+    tags: ["casual"],
+    __prpt_: "crisp white cotton crew socks, ribbed ankles",
+    __inherit: []
+  },
+  "shoes_loafer_black": {
+    id: "shoes_loafer_black",
+    displayName: "Black Loafers",
+    imageColor: "#1a1a1a",
+    coverageZones: ["foot"],
+    exposeZones: [],
+    garmentType: "foot",
+    coverageLayers: ["main"],
+    tags: ["formal", "school"],
+    __prpt_: "shiny black leather penny loafers, low block heel",
+    __inherit: []
+  },
+  "choker_black_velvet": {
+    id: "choker_black_velvet",
+    displayName: "Black Velvet Choker",
+    imageColor: "#1a1a1a",
+    coverageZones: ["neck"],
+    exposeZones: [],
+    garmentType: "accessory",
+    coverageLayers: ["other"],
+    tags: ["decorative", "feminine", "formal"],
+    __prpt_: "black velvet ribbon choker, silver pendant charm",
+    __inherit: []
+  },
+  "hairclip_gold": {
+    id: "hairclip_gold",
+    displayName: "Gold Hair Clip",
+    imageColor: "#d4af37",
+    coverageZones: ["head"],
+    exposeZones: [],
+    garmentType: "accessory",
+    coverageLayers: ["other"],
+    tags: ["decorative", "feminine", "formal"],
+    __prpt_: "geometric gold bobby pin hair clip",
+    __inherit: []
+  },
+  "bag_school_red": {
+    id: "bag_school_red",
+    displayName: "Red School Bag",
+    imageColor: "#c01c1c",
+    coverageZones: [],
+    exposeZones: [],
+    garmentType: "accessory",
+    coverageLayers: ["other"],
+    tags: ["decorative", "school", "casual"],
+    __prpt_: "red randoseru leather school backpack",
+    __inherit: []
+  },
+  "weapon_sword_katana": {
+    id: "weapon_sword_katana",
+    displayName: "Katana Sword",
+    imageColor: "#8a8a8a",
+    coverageZones: [],
+    exposeZones: [],
+    garmentType: "accessory",
+    coverageLayers: ["other"],
+    tags: ["decorative", "weapon", "cool"],
+    __prpt_: "traditional curved katana sword in lacquered scabbard, tsuka-ito wrap",
+    __inherit: []
+  }
+};
+
+const LAYER_LABELS = {
+  outer: 'Outer Layer Items',
+  main: 'Main Layer Items',
+  base: 'Base Layer Items',
+  underwear: 'Underwear Items',
+  other: 'Accessories'
+};
+
+// === GARMENT TYPE REGISTRY ===
+// Keys are "<order>_<id>" — numeric prefix drives section sort order,
+// text suffix is the canonical garmentType id used on items.
+const GARMENT_TYPE_REGISTRY = {
+  '10_full':      { icon: '◈', label: 'Full',      description: 'One-piece garments and complete ensembles' },
+  '20_top':       { icon: '⌁', label: 'Top',       description: 'Shirts, bras, vests, jackets, and capes' },
+  '30_bottom':    { icon: '▽', label: 'Bottom',    description: 'Pants, skirts, shorts, and lower-body garments' },
+  '40_legs':      { icon: '║', label: 'Legs',      description: 'Thighhighs, stockings, tights, and socks' },
+  '50_foot':      { icon: '◒', label: 'Foot',      description: 'Shoes, boots, loafers, and footwear' },
+  '60_accessory': { icon: '✦', label: 'Accessory', description: 'Adornment, jewelry, props, and equipment' }
+};
+
+// Sorted section entries (order ascending by numeric prefix)
+const GARMENT_TYPE_ENTRIES = Object.entries(GARMENT_TYPE_REGISTRY)
+  .sort(([a], [b]) => parseInt(a) - parseInt(b))
+  .map(([key, meta]) => ({
+    id:  key.replace(/^\d+_/, ''),  // bare garmentType id used on items
+    key,
+    ...meta
+  }));
+
+// Lookup helpers kept for legacy use in item card tags
+const GARMENT_TYPE_LABELS = Object.fromEntries(
+  GARMENT_TYPE_ENTRIES.map(e => [e.id, e.label])
+);
+
+const LAYER_COLORS = {
+  outer: 'var(--layer-outer)',
+  main: 'var(--layer-main)',
+  base: 'var(--layer-base)',
+  underwear: 'var(--layer-underwear)',
+  other: 'var(--layer-other)'
+};
+
+// === STATE ===
+let currentLayer = 'all';
+let equippedItems = [];
+
+// === DOM ELEMENTS ===
+const kanbanBoard = document.getElementById('kanbanBoard');
+const itemsTitle = document.getElementById('itemsTitle');
+const itemsCount = document.getElementById('itemsCount');
+const equippedItemsEl = document.getElementById('equippedItems');
+const compiledPromptEl = document.getElementById('compiledPrompt');
+
+// === FUNCTIONS ===
+function getItemsByLayer(layer) {
+  return Object.values(ITEMS).filter(item =>
+    layer === 'all' || item.coverageLayers.includes(layer)
+  );
+}
+
+function isEquipped(itemId) {
+  return equippedItems.some(e => e.id === itemId);
+}
+
+function getItemVisualType(item) {
+  if (item.garmentType === 'top') return 'shirt';
+  if (item.garmentType === 'bottom') return 'skirt';
+  if (item.garmentType === 'legs') return 'thighhigh';
+  if (item.garmentType === 'foot') return 'boot';
+  if (item.garmentType === 'full') return 'jacket';
+
+  const name = item.displayName.toLowerCase();
+  if (name.includes('shirt')) return 'shirt';
+  if (name.includes('jacket')) return 'jacket';
+  if (name.includes('skirt')) return 'skirt';
+  if (name.includes('short')) return 'shorts';
+  if (name.includes('thigh')) return 'thighhigh';
+  if (name.includes('boot')) return 'boot';
+  return 'accessory';
+}
+
+function renderItemCard(item) {
+  const equipped = isEquipped(item.id);
+  const isCombo = (Array.isArray(item.__inherit) && item.__inherit.length > 0) || item.tags.includes('combo');
+  const resolvedPrompt = resolveItemPrompt(item);
+  const svgContent = generateClothingSVG(getItemVisualType(item), item.imageColor || '#3a4a5a');
+
+  return `
+    <div class="item-card ${equipped ? 'equipped' : ''} ${isCombo ? 'is-combo' : ''}" data-id="${item.id}" draggable="true">
+      <button class="item-edit-btn" onclick="openEditModal('${item.id}', event)" title="Edit item">✎</button>
+      <div class="item-image">${svgContent}</div>
+      <div class="item-info">
+        <p class="item-name">${item.displayName}</p>
+        ${resolvedPrompt ? `<div class="item-prompt-preview" title="${resolvedPrompt}">${resolvedPrompt}</div>` : ''}
+        <div class="item-tags">
+          <span class="item-tag garment-type-tag" data-type="${item.garmentType}">${GARMENT_TYPE_LABELS[item.garmentType]}</span>
+          ${isCombo ? `<span class="item-tag combo-tag">COMBO (${item.__inherit?.length || 0})</span>` : ''}
+          ${item.tags.filter(tag => tag !== 'combo').slice(0, 2).map(tag => `<span class="item-tag">${tag}</span>`).join('')}
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+// Session state for kanban collapse persistence
+const KANBAN_SECTION_STATE_KEY = 'wardrobe-studio-kanban-section-state';
+let kanbanSectionState = {};
+
+try {
+  const savedKanbanSectionState = sessionStorage.getItem(KANBAN_SECTION_STATE_KEY);
+  if (savedKanbanSectionState) kanbanSectionState = JSON.parse(savedKanbanSectionState);
+} catch {
+  kanbanSectionState = {};
+}
+
+function renderItems() {
+  const visibleItems = getItemsByLayer(currentLayer);
+  itemsTitle.textContent = currentLayer === 'all' ? 'Wardrobe Catalog' : LAYER_LABELS[currentLayer];
+  itemsCount.textContent = `${visibleItems.length} items`;
+
+  kanbanBoard.innerHTML = GARMENT_TYPE_ENTRIES.map(entry => {
+    const { id: garmentType, icon, label, description } = entry;
+    const sectionItems = visibleItems.filter(item => item.garmentType === garmentType);
+    const isCollapsed = kanbanSectionState[garmentType];
+    const content = sectionItems.length
+      ? `<div class="item-grid">${sectionItems.map(renderItemCard).join('')}</div>`
+      : `<div class="kanban-empty-lane">No ${label.toLowerCase()} items in this layer.</div>`;
+
+    return `
+      <section class="kanban-section ${isCollapsed ? 'collapsed' : ''}" data-garment-type="${garmentType}">
+        <header class="kanban-section-header" onclick="toggleKanbanSection('${garmentType}')" style="cursor:pointer">
+          <div class="kanban-section-title-wrap">
+            <span class="kanban-section-icon" aria-hidden="true">${icon}</span>
+            <div>
+              <h2 class="kanban-section-title">${label}</h2>
+              <span class="kanban-section-desc">${description}</span>
+            </div>
+          </div>
+          <div class="kanban-section-meta">
+            <span class="kanban-section-count">${sectionItems.length}</span>
+            <button class="kanban-toggle-btn" onclick="event.stopPropagation();toggleKanbanSection('${garmentType}')" title="${isCollapsed ? 'Expand' : 'Collapse'}">
+              ${isCollapsed ? '▸' : '▾'}
+            </button>
+          </div>
+        </header>
+        <div class="kanban-section-content">${content}</div>
+      </section>
+    `;
+  }).join('');
+
+  kanbanBoard.querySelectorAll('.item-card').forEach(card => {
+    card.addEventListener('click', event => {
+      if (event.target.closest('.item-edit-btn')) return;
+      toggleEquip(card.dataset.id);
+    });
+
+    card.addEventListener('dragstart', event => {
+      event.dataTransfer.setData('text/plain', card.dataset.id);
+      event.dataTransfer.effectAllowed = 'move';
+      card.classList.add('dragging');
+    });
+
+    card.addEventListener('dragend', () => card.classList.remove('dragging'));
+  });
+
+  kanbanBoard.querySelectorAll('.kanban-section').forEach(section => {
+    section.addEventListener('dragover', event => {
+      event.preventDefault();
+      event.dataTransfer.dropEffect = 'move';
+      section.classList.add('drag-over');
+    });
+
+    section.addEventListener('dragleave', event => {
+      if (!section.contains(event.relatedTarget)) section.classList.remove('drag-over');
+    });
+
+    section.addEventListener('drop', event => {
+      event.preventDefault();
+      section.classList.remove('drag-over');
+      const itemId = event.dataTransfer.getData('text/plain');
+      const item = ITEMS[itemId];
+      const targetType = section.dataset.garmentType;
+
+      if (item && targetType && item.garmentType !== targetType) {
+        item.garmentType = targetType;
+        renderItems();
+      }
+    });
+  });
+}
+
+function toggleEquip(itemId) {
+  const item = ITEMS[itemId];
+  const existingIndex = equippedItems.findIndex(e => e.id === itemId);
+
+  if (existingIndex >= 0) {
+    // Already equipped — clicking again unequips it.
+    equippedItems.splice(existingIndex, 1);
+  } else {
+    // Determine the target layer for this item.
+    let targetLayer = currentLayer;
+    if (currentLayer === 'all' || !item.coverageLayers.includes(currentLayer)) {
+      targetLayer = item.coverageLayers[0];
+    }
+
+    // Enforce one-per-garmentType-per-layer: evict any existing item that
+    // occupies the same garmentType slot in the same target layer.
+    const rivalIndex = equippedItems.findIndex(
+      e => e.layer === targetLayer && ITEMS[e.id].garmentType === item.garmentType
+    );
+    if (rivalIndex >= 0) equippedItems.splice(rivalIndex, 1);
+
+    equippedItems.push({ id: itemId, layer: targetLayer, item });
+  }
+
+  renderItems();
+  updateMannequin();
+  renderEquipped();
+  updateCompiledPrompt();
+}
+
+function toggleKanbanSection(garmentType) {
+  kanbanSectionState[garmentType] = !kanbanSectionState[garmentType];
+
+  try {
+    sessionStorage.setItem(KANBAN_SECTION_STATE_KEY, JSON.stringify(kanbanSectionState));
+  } catch {
+    // The UI continues to function when session storage is unavailable.
+  }
+
+  renderItems();
+}
+
+// 5-Tier Z-Index Permeability Hierarchy:
+// underwear (1) < base (2) < main (3) < outer (4) < other (5)
+const LAYER_Z_INDEX = {
+  underwear: 1,
+  base: 2,
+  main: 3,
+  outer: 4,
+  other: 5
+};
+
+function updateMannequin() {
+  document.querySelectorAll('.chunk').forEach(el => {
+    el.classList.remove('covered', 'outer-layer', 'main-layer', 'base-layer', 'underwear-layer', 'other-layer');
+  });
+
+  const allZones = new Set();
+  document.querySelectorAll('.chunk[data-zone]').forEach(el => {
+    allZones.add(el.dataset.zone);
+  });
+
+  allZones.forEach(zone => {
+    const candidateEntries = [];
+    equippedItems.forEach((eq, eqIdx) => {
+      const { covered, exposed } = resolveItemZones(eq.item);
+      // Item must cover this zone and NOT expose it
+      if (covered.includes(zone) && !exposed.includes(zone)) {
+        const zIndex = LAYER_Z_INDEX[eq.layer] || 0;
+        candidateEntries.push({ eq, zIndex, eqIdx });
+      }
+    });
+
+    if (candidateEntries.length > 0) {
+      // Sort candidates by Z-index descending; tie-break by later equip order
+      candidateEntries.sort((a, b) => {
+        if (b.zIndex !== a.zIndex) return b.zIndex - a.zIndex;
+        return b.eqIdx - a.eqIdx;
+      });
+      const winner = candidateEntries[0];
+      const layerClass = `${winner.eq.layer}-layer`;
+
+      document.querySelectorAll(`.chunk[data-zone="${zone}"]`).forEach(el => {
+        el.classList.add('covered', layerClass);
+      });
+    }
+  });
+}
+
+// Check if an equipped item is visible (has at least one un-occluded chunk, or is a zoneless accessory)
+function isItemVisible(eq, eqIndex) {
+  const { covered, exposed } = resolveItemZones(eq.item);
+  const activeCoveredZones = covered.filter(z => !exposed.includes(z));
+
+  // Accessories without zones (e.g. hair ribbons, katanas, school bags) are always visible
+  if (activeCoveredZones.length === 0) return true;
+
+  const itemZ = LAYER_Z_INDEX[eq.layer] || 0;
+
+  // An item is visible if at least one of its active covered zones is NOT occluded by a higher-Z item
+  return activeCoveredZones.some(zone => {
+    const isOccludedOnThisZone = equippedItems.some((otherEq, otherIdx) => {
+      if (otherEq.id === eq.id && otherIdx === eqIndex) return false;
+      const otherZ = LAYER_Z_INDEX[otherEq.layer] || 0;
+      if (otherZ <= itemZ) return false;
+
+      const otherResult = resolveItemZones(otherEq.item);
+      // Higher Z garment occludes this zone if it covers it and does NOT expose it
+      return otherResult.covered.includes(zone) && !otherResult.exposed.includes(zone);
+    });
+
+    return !isOccludedOnThisZone;
+  });
+}
+
+function renderEquipped() {
+  if (equippedItems.length === 0) {
+    equippedItemsEl.innerHTML = '<div class="empty-state" style="padding: 12px;">No items equipped</div>';
+    return;
+  }
+
+  equippedItemsEl.innerHTML = equippedItems.map((eq, idx) => {
+    const visible = isItemVisible(eq, idx);
+    return `
+      <div class="equipped-chip ${visible ? '' : 'occluded'}" style="${visible ? '' : 'opacity: 0.55;'}">
+        <span class="layer-dot" style="background: ${LAYER_COLORS[eq.layer]}"></span>
+        <span style="${visible ? '' : 'text-decoration: line-through;'}">${eq.item.displayName}</span>
+        ${visible ? '' : '<span style="font-size: 9px; color: var(--gold); margin-left: 4px; font-weight: 600;">(occluded)</span>'}
+        <button onclick="toggleEquip('${eq.id}')" title="Unequip">×</button>
+      </div>
+    `;
+  }).join('');
+}
+
+function updateCompiledPrompt() {
+  if (equippedItems.length === 0) {
+    compiledPromptEl.innerHTML = 'Click items to equip';
+    compiledPromptEl.title = 'Click items to equip';
+    return;
+  }
+
+  // Permeability occlusion: Only visible garments have their prompt tokens take effect
+  const visibleItems = equippedItems.filter((eq, idx) => isItemVisible(eq, idx));
+  const promptParts = visibleItems.map(eq => resolveItemPrompt(eq.item)).filter(Boolean);
+  const fullPrompt = promptParts.join(', ');
+
+  compiledPromptEl.innerHTML = fullPrompt || '<span style="color: var(--text-muted);">(All equipped items occluded)</span>';
+  compiledPromptEl.title = 'Click to copy prompt to clipboard';
+}
+
+compiledPromptEl.addEventListener('click', () => {
+  if (equippedItems.length === 0) return;
+  const visibleItems = equippedItems.filter((eq, idx) => isItemVisible(eq, idx));
+  const promptParts = visibleItems.map(eq => resolveItemPrompt(eq.item)).filter(Boolean);
+  const textToCopy = promptParts.join(', ');
+  if (!textToCopy) return;
+
+  navigator.clipboard.writeText(textToCopy).then(() => {
+    const originalText = compiledPromptEl.innerHTML;
+    compiledPromptEl.innerHTML = '<span style="color: var(--cyan); font-weight: 700;">✓ Prompt copied to clipboard!</span>';
+    setTimeout(() => {
+      compiledPromptEl.innerHTML = originalText;
+    }, 1500);
+  }).catch(() => {
+    // fallback
+  });
+});
+
+// === LAYER TABS ===
+document.querySelectorAll('.layer-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.layer-tab').forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    currentLayer = tab.dataset.layer;
+    renderItems();
+  });
+});
+
+// === PANTS MACRO & ACCORDION STATE HELPERS ===
+function checkPantsMacroState() {
+  const pelvisCb = document.querySelector('#zoneGrid input[value="pelvis"]');
+  const thighUpCb = document.querySelector('#zoneGrid input[value="thigh-upper"]');
+  const thighLowCb = document.querySelector('#zoneGrid input[value="thigh-lower"]');
+  const macroBtn = document.getElementById('coveragePantsMacroBtn');
+  const foldedBadge = document.getElementById('coverageThighsFoldedBadge');
+
+  const allCovered = pelvisCb?.checked && thighUpCb?.checked && thighLowCb?.checked;
+  if (macroBtn) macroBtn.classList.toggle('active', !!allCovered);
+  if (foldedBadge) foldedBadge.style.display = allCovered ? 'inline-block' : 'none';
+  return !!allCovered;
+}
+
+function togglePantsMacro(event) {
+  if (event) event.stopPropagation();
+
+  const pelvisCb = document.querySelector('#zoneGrid input[value="pelvis"]');
+  const thighUpCb = document.querySelector('#zoneGrid input[value="thigh-upper"]');
+  const thighLowCb = document.querySelector('#zoneGrid input[value="thigh-lower"]');
+  const macroBtn = document.getElementById('coveragePantsMacroBtn');
+  const foldedBadge = document.getElementById('coverageThighsFoldedBadge');
+
+  const isActive = macroBtn?.classList.contains('active');
+  const targetState = !isActive;
+
+  [pelvisCb, thighUpCb, thighLowCb].forEach(cb => {
+    if (cb) {
+      cb.checked = targetState;
+      const label = cb.closest('.zone-checkbox');
+      if (label) label.classList.toggle('active', targetState);
+
+      if (targetState) {
+        document.querySelectorAll(`#exposeZoneGrid .expose-checkbox input[value="${cb.value}"]`).forEach(other => {
+          if (other.checked) {
+            other.checked = false;
+            other.closest('.zone-checkbox')?.classList.remove('active');
+          }
+        });
+      }
+    }
+  });
+
+  if (macroBtn) macroBtn.classList.toggle('active', targetState);
+
+  if (targetState) {
+    if (foldedBadge) foldedBadge.style.display = 'inline-block';
+  } else {
+    if (foldedBadge) foldedBadge.style.display = 'none';
+  }
+
+  updateGroupBadges();
+}
+
+function updateGroupBadges() {
+  document.querySelectorAll('.anatomical-group').forEach(group => {
+    const badge = group.querySelector('.group-badge');
+    if (!badge) return;
+    const checkedCount = group.querySelectorAll('.group-content input[type="checkbox"]:checked').length;
+    badge.textContent = checkedCount;
+    badge.classList.toggle('has-active', checkedCount > 0);
+  });
+}
+
+// === ZONE & LAYER CHECKBOX STYLING ===
+document.querySelectorAll('.zone-checkbox').forEach(label => {
+  const input = label.querySelector('input');
+  input.addEventListener('change', () => {
+    if (input.name === 'garmentType') {
+      document.querySelectorAll('#garmentTypeGrid .zone-checkbox').forEach(typeLabel => {
+        typeLabel.classList.toggle('active', typeLabel.querySelector('input').checked);
+      });
+      return;
+    }
+
+    if (input.checked) {
+      label.classList.add('active');
+      // Mutual exclusion: uncheck from the other grid
+      if (label.classList.contains('expose-checkbox')) {
+        document.querySelectorAll(`#zoneGrid .zone-checkbox input[value="${input.value}"]`).forEach(other => {
+          if (other.checked) {
+            other.checked = false;
+            other.closest('.zone-checkbox').classList.remove('active');
+          }
+        });
+      } else {
+        document.querySelectorAll(`#exposeZoneGrid .expose-checkbox input[value="${input.value}"]`).forEach(other => {
+          if (other.checked) {
+            other.checked = false;
+            other.closest('.zone-checkbox').classList.remove('active');
+          }
+        });
+      }
+    } else {
+      label.classList.remove('active');
+    }
+
+    if (label.classList.contains('layer-checkbox')) {
+      updatePreview();
+    }
+
+    checkPantsMacroState();
+    updateGroupBadges();
+  });
+});
+
+// === INIT ===
+checkPantsMacroState();
+updateGroupBadges();
+renderItems();
+renderEquipped();
+updateCompiledPrompt();
+</script>

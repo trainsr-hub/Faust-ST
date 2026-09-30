@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mock — Phase 2 Wardrobe Studio</title>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --void: #0f1419;
+      --card: #1a1f2e;
+      --border: #2e4168;
+      --gold: #d4af37;
+      --cyan: #06b6d4;
+      --text-bright: #e8eaed;
+      --text-muted: #8b949e;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      background: var(--void);
+      color: var(--text-bright);
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    h1 {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--gold);
+      margin: 0 0 8px 0;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .subtitle {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-bottom: 40px;
+    }
+
+    .project-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--cyan);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 8px;
+    }
+
+    .nav-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      width: 100%;
+      max-width: 600px;
+    }
+
+    .nav-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      text-decoration: none;
+      color: var(--text-bright);
+      transition: all 0.2s ease;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .nav-card:hover {
+      border-color: var(--cyan);
+      transform: translateY(-2px);
+    }
+
+    .nav-card-title {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--gold);
+    }
+
+    .nav-card-desc {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .nav-card-status {
+      font-size: 10px;
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    .status-ready { color: #22c55e; }
+    .status-wip { color: #f59e0b; }
+    .status-todo { color: var(--text-muted); }
+  </style>
+</head>
+<body>
+  <div class="project-label">Phase 2 Wardrobe Studio</div>
+  <h1>MOCK</h1>
+  <div class="subtitle">Standalone dev workspace — components built independently before plugin integration</div>
+
+  <div class="nav-grid">
+    <a href="components/Mannequin.html" class="nav-card">
+      <span class="nav-card-title">Mannequin</span>
+      <span class="nav-card-desc">SVG body silhouette with color-coded layer coverage</span>
+      <span class="nav-card-status status-ready">✓ Ready</span>
+    </a>
+
+    <a href="pages/wardrobe-studio-full.html" class="nav-card">
+      <span class="nav-card-title">Wardrobe Studio</span>
+      <span class="nav-card-desc">Full hitbox grid + mannequin integration</span>
+      <span class="nav-card-status status-ready">✓ Ready</span>
+    </a>
+  </div>
+</body>
+</html>

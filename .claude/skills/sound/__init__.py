@@ -104,6 +104,7 @@ def speak(text: str, to: str = "speaker", **kwargs) -> bool:
     Soft-coded dual-tier architecture:
       Tier 1: Dispatches to resident daemon (0ms latency, zero overhead).
       Tier 2: Transparent in-process fallback if daemon is offline (resilient on any machine).
+    Enhanced: Also sends Telegram notification with the exact same text spoken.
 
     Args:
         text: Speech text to synthesize
@@ -117,30 +118,49 @@ def speak(text: str, to: str = "speaker", **kwargs) -> bool:
         return True
 
     if to == "esp32":
-        return _speak_to_esp32(text, **kwargs)
+        result = _speak_to_esp32(text, **kwargs)
+    else:
+        # 1. Tier 1: Try resident daemon first
+        dispatched = _dispatch(text, "/speak", **kwargs)
+        if dispatched:
+            result = True
+        else:
+            # 2. Tier 2: Transparent in-process fallback if daemon is offline
+            try:
+                engine_kwargs = {}
+                supported = {
+                    "voice", "secondary_voice", "blend_voice", "speed",
+                    "pitch_shift", "pause_duration", "block", "save_path",
+                    "broadcast_subtitle", "normalization_type", "pipelined"
+                }
+                for k, v in kwargs.items():
+                    if k in supported and v is not None:
+                        engine_kwargs[k] = v
 
-    # 1. Tier 1: Try resident daemon first
-    dispatched = _dispatch(text, "/speak", **kwargs)
-    if dispatched:
-        return True
+                engine = get_engine()
+                engine.speak(text=text, **engine_kwargs)
+                result = True
+            except Exception:
+                result = False
 
-    # 2. Tier 2: Transparent in-process fallback if daemon is offline
-    try:
-        engine_kwargs = {}
-        supported = {
-            "voice", "secondary_voice", "blend_voice", "speed",
-            "pitch_shift", "pause_duration", "block", "save_path",
-            "broadcast_subtitle", "normalization_type", "pipelined"
-        }
-        for k, v in kwargs.items():
-            if k in supported and v is not None:
-                engine_kwargs[k] = v
+    # Send Telegram notification with the exact same text spoken
+    if result:
+        try:
+            # Import telegram module to send notification
+            import sys
+            from pathlib import Path
+            SKILLS_DIR = Path(__file__).resolve().parent
+            if str(SKILLS_DIR) not in sys.path:
+                sys.path.insert(0, str(SKILLS_DIR))
 
-        engine = get_engine()
-        engine.speak(text=text, **engine_kwargs)
-        return True
-    except Exception:
-        return False
+            from telegram import notify
+            # Send the exact same text that was spoken, with speaker emoji for clarity
+            notify(f"🔊 {text}", emoji="🔊")
+        except Exception:
+            # If Telegram fails, don't break the speech function
+            pass
+
+    return result
 
 
 def _dispatch(text: str, endpoint: str = "/speak", **kwargs) -> bool:

@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portrait Forge</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,600;9..144,700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+  <main class="app-shell">
+    <header class="app-header">
+      <div class="brand-lockup">
+        <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 2 14.7 8l6.3 2.1-6.3 2.1L12 18l-2.7-5.8L3 10.1 9.3 8 12 2Z"/></svg></span>
+        <div><p class="eyebrow">Portrait character creator</p><h1>Portrait Forge</h1></div>
+      </div>
+      <div class="header-actions">
+        <button class="icon-button" id="theme-toggle" type="button" aria-label="Toggle color theme" title="Toggle theme"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v2m0 14v2M3 12h2m14 0h2M5.6 5.6 7 7m10 10 1.4 1.4M18.4 5.6 17 7M7 17l-1.4 1.4M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10Z"/></svg></button>
+        <button class="button button-ghost" id="randomize-button" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h3l2 3 2-3h3m-10 10h3l2-3 2 3h3M17 5l3 2-3 2M17 17l3 2-3 2"/></svg>Randomize</button>
+        <button class="button button-primary" id="save-button" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h12l2 2v14H5V4Zm3 0v6h8V4m-8 16v-6h8v6"/></svg>Save portrait</button>
+      </div>
+    </header>
+
+    <section class="workspace" aria-label="Character builder">
+      <aside class="preview-panel panel">
+        <div class="panel-heading"><div><p class="section-kicker">Live preview</p><h2>Your character</h2></div><span class="live-pill"><span></span>Rendering</span></div>
+        <div class="portrait-stage" id="portrait-stage"></div>
+        <label class="name-field"><span>Character name</span><input id="character-name" type="text" maxlength="42" value="Akari" placeholder="Name your character"></label>
+        <div class="prompt-card"><div class="prompt-card-head"><span>Image prompt</span><button id="copy-prompt-button" type="button">Copy</button></div><p id="prompt-output"></p></div>
+        <div class="export-actions"><button class="button button-secondary" id="json-export-button" type="button">Export JSON</button><button class="button button-secondary" id="saved-button" type="button">Saved roster <span id="saved-count">0</span></button></div>
+      </aside>
+
+      <section class="customization-panel panel">
+        <div class="panel-heading"><div><p class="section-kicker">Build details</p><h2>Make it yours</h2></div><p class="panel-note">Select a category, then compose a new look.</p></div>
+        <div class="tabs" role="tablist" aria-label="Character categories">
+          <button role="tab" aria-selected="true" aria-controls="skin-panel" id="skin-tab" data-tab="skin">Skin</button>
+          <button role="tab" aria-selected="false" aria-controls="eyes-panel" id="eyes-tab" data-tab="eyes">Eyes</button>
+          <button role="tab" aria-selected="false" aria-controls="hair-panel" id="hair-tab" data-tab="hair">Hair</button>
+        </div>
+        <div class="tab-content" id="customization-content"></div>
+      </section>
+    </section>
+
+    <section class="saved-drawer" id="saved-drawer" hidden aria-labelledby="saved-title">
+      <div class="drawer-head"><div><p class="section-kicker">Local collection</p><h2 id="saved-title">Saved roster</h2></div><button class="icon-button" id="close-saved-button" type="button" aria-label="Close saved roster"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
+      <div class="saved-grid" id="saved-grid"></div>
+    </section>
+  </main>
+  <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+  <script type="module" src="scripts/app.js"></script>
+</body>
+</html>

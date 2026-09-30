@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wardrobe Studio</title>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --void: #0f1419;
+      --card: #1a1f2e;
+      --border: #2e4168;
+      --gold: #d4af37;
+      --cyan: #06b6d4;
+      --text-bright: #e8eaed;
+      --text-muted: #8b949e;
+
+      --layer-outer: #ec4899;
+      --layer-mid: #f59e0b;
+      --layer-base: #3b82f6;
+      --layer-underwear: #22c55e;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      background: var(--void);
+      color: var(--text-bright);
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      padding: 40px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    h1 {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--gold);
+      margin: 0 0 6px 0;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .subtitle {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 28px;
+    }
+
+    .studio-container {
+      display: flex;
+      gap: 32px;
+      width: 100%;
+      max-width: 1200px;
+    }
+
+    .mannequin-panel {
+      flex: 0 0 220px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .mannequin-svg {
+      width: 160px;
+      height: 496px;
+      filter: drop-shadow(0 4px 24px rgba(6, 182, 212, 0.12));
+    }
+
+    
+    /* Base fill for all body chunks */
+    .chunk {
+      fill: #1e2a3a;
+      stroke: #2e4168;
+      stroke-width: 1;
+      stroke-linejoin: round;
+      transition: fill 0.3s ease, stroke 0.3s ease;
+    }
+
+    .chunk.covered {
+      fill-opacity: 0.88;
+    }
+    .chunk.covered.outer-layer  { fill: var(--layer-outer);     stroke: var(--layer-outer); }
+    .chunk.covered.mid-layer    { fill: var(--layer-mid);       stroke: var(--layer-mid); }
+    .chunk.covered.base-layer   { fill: var(--layer-base);      stroke: var(--layer-base); }
+    .chunk.covered.underwear-layer { fill: var(--layer-underwear); stroke: var(--layer-underwear); }
+
+    .wardrobe-panel {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .layer-selector {
+      display: flex;
+      gap: 6px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 5px;
+      margin-bottom: 24px;
+    }
+
+    .layer-btn {
+      padding: 9px 18px;
+      border-radius: 8px;
+      border: none;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      background: transparent;
+      color: var(--text-muted);
+    }
+    .layer-btn:hover { color: var(--text-bright); }
+    .layer-btn.active { color: var(--void); }
+    .layer-btn[data-layer="outer"].active      { background: var(--layer-outer); }
+    .layer-btn[data-layer="mid"].active        { background: var(--layer-mid); }
+    .layer-btn[data-layer="base"].active       { background: var(--layer-base); }
+    .layer-btn[data-layer="underwear"].active  { background: var(--layer-underwear); }
+
+    .hitbox-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    .hitbox-cell {
+      aspect-ratio: 1;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--card);
+      color: var(--text-muted);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.2s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .hitbox-cell:hover {
+      border-color: var(--cyan);
+      color: var(--text-bright);
+      background: #1e2a3a;
+    }
+    .hitbox-cell.active {
+      background: var(--cyan);
+      border-color: var(--cyan);
+      color: var(--void);
+      font-weight: 600;
+    }
+    .hitbox-cell.active::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--cyan);
+      opacity: 0.2;
+      pointer-events: none;
+    }
+
+    .hitbox-label {
+      font-size: 10px;
+      text-align: center;
+      line-height: 1.2;
+    }
+    .hitbox-indicator {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--text-muted);
+    }
+    .hitbox-cell.active .hitbox-indicator {
+      background: var(--void);
+    }
+
+    .info {
+      margin-top: 20px;
+      font-size: 11px;
+      color: var(--text-muted);
+      font-family: 'JetBrains Mono', monospace;
+      text-align: center;
+    }
+    .current-layer { color: var(--cyan); font-weight: 600; }
+  </style>
+</head>
+<body>
+  <h1>WARDROBE STUDIO</h1>
+  <div class="subtitle">Hitbox grid + mannequin integration</div>
+
+  <div class="studio-container">
+    <!-- Mannequin Panel -->
+    <div class="mannequin-panel">
+      <svg class="mannequin-svg" viewBox="0 0 100 310" xmlns="http://www.w3.org/2000/svg">
+
+        <!-- HEAD — large, round anime head -->
+        <ellipse data-zone="head" class="chunk"
+          cx="50" cy="20" rx="18" ry="20"/>
+
+        <!-- NECK -->
+        <rect data-zone="neck" class="chunk"
+          x="46" y="39" width="8" height="9" rx="1"/>
+
+        <!-- TORSO -->
+        <path data-zone="torso" class="chunk"
+          d="M34,48 C31,49 29,52 29,56
+             L29,100
+             C29,103 31,105 34,105
+             L66,105
+             C69,105 71,103 71,100
+             L71,56
+             C71,52 69,49 66,48
+             C62,47 56,46 50,46
+             C44,46 38,47 34,48 Z"/>
+
+        <!-- PELVIS -->
+        <rect data-zone="pelvis" class="chunk"
+          x="29" y="105" width="42" height="16" rx="2"/>
+
+        <!-- ARM (combined L/R) -->
+        <path data-zone="arm" class="chunk"
+          d="M29,54 L22,55 L18,95 L24,96 L29,58 Z
+             M71,54 L78,55 L82,95 L76,96 L71,58 Z"/>
+
+        <!-- FOREARM (combined L/R) -->
+        <path data-zone="forearm" class="chunk"
+          d="M18,95 L14,96 L12,121 L18,122 L25,96 Z
+             M82,95 L86,96 L88,121 L82,122 L75,96 Z"/>
+
+        <!-- HAND (combined L/R) -->
+        <ellipse data-zone="hand" class="chunk"
+          cx="15" cy="127" rx="4" ry="6"/>
+        <ellipse data-zone="hand" class="chunk"
+          cx="85" cy="127" rx="4" ry="6"/>
+
+        <!-- THIGH (combined L/R) -->
+        <path data-zone="thigh" class="chunk"
+          d="M32,121 L43,121 L42,170 L31,170 Z
+             M57,121 L68,121 L69,170 L58,170 Z"/>
+
+        <!-- SHIN (combined L/R) -->
+        <path data-zone="shin" class="chunk"
+          d="M31,172 L42,172 L41,225 L30,225 Z
+             M58,172 L69,172 L70,225 L59,225 Z"/>
+
+        <!-- FOOT (combined L/R) -->
+        <path data-zone="foot" class="chunk"
+          d="M29,225 L42,225 C42,230 40,232 36,233 L26,233 C24,231 24,228 26,226 Z
+             M58,225 L71,225 C73,226 73,228 71,233 L61,233 C57,232 55,230 58,225 Z"/>
+
+      </svg>
+    </div>
+
+    <!-- Wardrobe Panel -->
+    <div class="wardrobe-panel">
+      <div class="layer-selector">
+        <button class="layer-btn active" data-layer="outer">Outer</button>
+        <button class="layer-btn" data-layer="mid">Mid</button>
+        <button class="layer-btn" data-layer="base">Base</button>
+        <button class="layer-btn" data-layer="underwear">Underwear</button>
+      </div>
+
+      <div class="hitbox-grid">
+        <!-- Head -->
+        <div class="hitbox-cell" data-zone="head">
+          <div class="hitbox-label">Head</div>
+          <div class="hitbox-indicator"></div>
+        </div>
+        <!-- Neck -->
+        <div class="hitbox-cell" data-zone="neck">
+          <div class="hitbox-label">Neck</div>
+          <div class="hitbox-indicator"></div>
+        </div>
+        <!-- Torso -->
+        <div class="hitbox-cell active" data-zone="torso">
+          <div class="hitbox-label">Torso</div>
+          <div class="hitbox-indicator"></div>
+        </div>
+        <!-- Pelvis -->
+        <div class="hitbox-cell active" data-zone="pelvis">
+          <div class="hitbox-label">Pelvis</div>
+          <div class="hitbox-indicator"></div>
+        </div>
+        <!-- Arm -->
+        <div class="hitbox-cell" data-zone="arm">
+          <div class="hitbox-label">Arm</div>
+          <div class="hitbox-indicator"></div>
+        </div>
+        <!-- Forearm -->
+        <div class="hitbox-cell" data-zone="forearm">
+          <div class="hitbox-label">Forearm</div>
+          <div class="hitbox-indicator"></div>
+        </div>
+        <!-- Hand -->
+        <div class="hitbox-cell" data-zone="hand">
+          <div class="hitbox-label">Hand</div>
+          <div class="hitbox-indicator"></div>
+        </div>
+        <!-- Thigh -->
+        <div class="hitbox-cell active" data-zone="thigh">
+          <div class="hitbox-label">Thigh</div>
+          <div class="hitbox-indicator"></div>
+        </div>
+        <!-- Shin -->
+        <div class="hitbox-cell" data-zone="shin">
+          <div class="hitbox-label">Shin</div>
+          <div class="hitbox-indicator"></div>
+        </div>
+        <!-- Foot -->
+        <div class="hitbox-cell" data-zone="foot">
+          <div class="hitbox-label">Foot</div>
+          <div class="hitbox-indicator"></div>
+        </div>
+      </div>
+
+      <div class="info">
+        Layer: <span class="current-layer" id="currentLayerDisplay">outer</span>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let currentLayer = 'outer';
+    const coveredZones = new Set(['torso', 'pelvis', 'thigh']);
+
+    function updateMannequin() {
+      document.querySelectorAll('.chunk').forEach(el => {
+        const zone = el.dataset.zone;
+        el.classList.remove('covered', 'outer-layer', 'mid-layer', 'base-layer', 'underwear-layer');
+        if (coveredZones.has(zone)) {
+          el.classList.add('covered', `${currentLayer}-layer`);
+        }
+      });
+    }
+
+    function updateHitboxUI() {
+      document.querySelectorAll('.hitbox-cell').forEach(cell => {
+        const zone = cell.dataset.zone;
+        if (coveredZones.has(zone)) {
+          cell.classList.add('active');
+        } else {
+          cell.classList.remove('active');
+        }
+      });
+    }
+
+    document.querySelectorAll('.layer-btn').forEach(btn => {
+      btn.onclick = () => {
+        document.querySelectorAll('.layer-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentLayer = btn.dataset.layer;
+        document.getElementById('currentLayerDisplay').textContent = currentLayer;
+        updateMannequin();
+      };
+    });
+
+    document.querySelectorAll('.hitbox-cell').forEach(cell => {
+      cell.onclick = () => {
+        const zone = cell.dataset.zone;
+        if (coveredZones.has(zone)) {
+          coveredZones.delete(zone);
+        } else {
+          coveredZones.add(zone);
+        }
+        updateHitboxUI();
+        updateMannequin();
+      };
+    });
+
+    // Initial sync
+    updateHitboxUI();
+    updateMannequin();
+  </script>
+</body>
+</html>

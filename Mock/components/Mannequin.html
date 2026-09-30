@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mannequin Component</title>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --void: #0f1419;
+      --card: #1a1f2e;
+      --border: #2e4168;
+      --gold: #d4af37;
+      --cyan: #06b6d4;
+      --text-bright: #e8eaed;
+      --text-muted: #8b949e;
+      --layer-outer: #ec4899;
+      --layer-mid: #f59e0b;
+      --layer-base: #3b82f6;
+      --layer-underwear: #22c55e;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--void);
+      color: var(--text-bright);
+      font-family: 'Inter', sans-serif;
+      padding: 40px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+    }
+    h1 {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--gold);
+      margin-bottom: 4px;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .subtitle {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 24px;
+    }
+    .mannequin-wrap {
+      width: 200px;
+    }
+    .mannequin-svg {
+      width: 100%;
+      height: auto;
+      filter: drop-shadow(0 4px 20px rgba(6,182,212,0.10));
+    }
+    .chunk {
+      fill: #1e2a3a;
+      stroke: #2e4168;
+      stroke-width: 0.7;
+      transition: fill 0.25s, stroke 0.25s;
+    }
+    .chunk.covered.outer-layer      { fill: var(--layer-outer);     stroke: var(--layer-outer); }
+    .chunk.covered.mid-layer        { fill: var(--layer-mid);        stroke: var(--layer-mid); }
+    .chunk.covered.base-layer       { fill: var(--layer-base);       stroke: var(--layer-base); }
+    .chunk.covered.underwear-layer  { fill: var(--layer-underwear);  stroke: var(--layer-underwear); }
+
+    /* Facial zone styling */
+    .eye-chunk { fill: #1e2a3a; }
+    .mouth-chunk { fill: #1e2a3a; }
+    .eye-bridge { stroke: #1e2a3a; stroke-width: 1.2; fill: none; }
+    .chunk.covered.eye-chunk, .chunk.covered.mouth-chunk { fill-opacity: 0.9; }
+
+    /* Expose/Cutout zone styling */
+    .chunk.covered.eye-chunk.expose-zone, .chunk.covered.mouth-chunk.expose-zone { fill: #1e2a3a; }
+
+    .controls {
+      margin-top: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      align-items: center;
+      width: 100%;
+      max-width: 480px;
+    }
+    .layer-selector {
+      display: flex;
+      gap: 5px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 4px;
+    }
+    .layer-btn {
+      padding: 8px 16px;
+      border-radius: 7px;
+      border: none;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      background: transparent;
+      color: var(--text-muted);
+    }
+    .layer-btn:hover { color: var(--text-bright); }
+    .layer-btn.active { color: var(--void); }
+    .layer-btn[data-layer="outer"].active     { background: var(--layer-outer); }
+    .layer-btn[data-layer="mid"].active       { background: var(--layer-mid); }
+    .layer-btn[data-layer="base"].active      { background: var(--layer-base); }
+    .layer-btn[data-layer="underwear"].active { background: var(--layer-underwear); }
+
+    .zone-toggles {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 5px;
+      width: 100%;
+    }
+    .zone-toggle {
+      padding: 6px;
+      border-radius: 7px;
+      border: 1px solid var(--border);
+      background: var(--card);
+      color: var(--text-muted);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-align: center;
+    }
+    .zone-toggle:hover { border-color: var(--cyan); color: var(--text-bright); }
+    .zone-toggle.active { background: var(--cyan); border-color: var(--cyan); color: var(--void); font-weight: 600; }
+
+    .info {
+      margin-top: 16px;
+      font-size: 11px;
+      color: var(--text-muted);
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .current-layer { color: var(--cyan); font-weight: 600; }
+  </style>
+</head>
+<body>
+  <h1>MANNEQUIN</h1>
+  <div class="subtitle">Anime female — large head, slim limbs</div>
+
+  <div class="mannequin-wrap">
+    <svg class="mannequin-svg" viewBox="0 0 100 310" xmlns="http://www.w3.org/2000/svg">
+
+      <!-- HEAD — large anime head -->
+      <ellipse data-zone="head" class="chunk"
+        cx="50" cy="20" rx="18" ry="20"/>
+
+      <!-- CRANIAL ZONES -->
+      <path data-zone="forehead" class="chunk"
+        d="M35,14 C39,6 61,6 65,14 C60,17 40,17 35,14 Z"/>
+      <ellipse data-zone="one-eye" class="chunk eye-chunk eye-left"
+        cx="43" cy="21" rx="3.5" ry="2.8"/>
+      <ellipse data-zone="both-eyes" class="chunk eye-chunk eye-right"
+        cx="57" cy="21" rx="3.5" ry="2.8"/>
+      <path data-zone="both-eyes" class="chunk eye-bridge"
+        d="M46.5,21 Q50,20 53.5,21" fill="none"/>
+      <path data-zone="mouth" class="chunk mouth-chunk"
+        d="M44,28 Q50,27 56,28 Q55,33 50,33.5 Q45,33 44,28 Z"/>
+
+      <!-- NECK -->
+      <rect data-zone="neck" class="chunk"
+        x="46" y="39" width="8" height="9" rx="1"/>
+
+      <!-- TORSO -->
+      <path data-zone="torso" class="chunk"
+        d="M34,48 C31,49 29,52 29,56
+           L29,100
+           C29,103 31,105 34,105
+           L66,105
+           C69,105 71,103 71,100
+           L71,56
+           C71,52 69,49 66,48
+           C62,47 56,46 50,46
+           C44,46 38,47 34,48 Z"/>
+
+      <!-- PELVIS -->
+      <rect data-zone="pelvis" class="chunk"
+        x="29" y="105" width="42" height="16" rx="2"/>
+
+      <!-- LEFT ARM -->
+      <path data-zone="arm" class="chunk"
+        d="M29,54 L22,55 L18,95 L24,96 L29,58 Z"/>
+
+      <!-- LEFT FOREARM -->
+      <path data-zone="forearm" class="chunk"
+        d="M18,95 L14,96 L12,118 L18,119 L25,96 Z"/>
+
+      <!-- LEFT WRIST -->
+      <rect data-zone="wrist" class="chunk"
+        x="12" y="119" width="6" height="4" rx="1"/>
+
+      <!-- LEFT HAND -->
+      <ellipse data-zone="hand" class="chunk"
+        cx="15" cy="128" rx="4" ry="5.5"/>
+
+      <!-- RIGHT ARM -->
+      <path data-zone="arm" class="chunk"
+        d="M71,54 L78,55 L82,95 L76,96 L71,58 Z"/>
+
+      <!-- RIGHT FOREARM -->
+      <path data-zone="forearm" class="chunk"
+        d="M82,95 L86,96 L88,118 L82,119 L75,96 Z"/>
+
+      <!-- RIGHT WRIST -->
+      <rect data-zone="wrist" class="chunk"
+        x="82" y="119" width="6" height="4" rx="1"/>
+
+      <!-- RIGHT HAND -->
+      <ellipse data-zone="hand" class="chunk"
+        cx="85" cy="128" rx="4" ry="5.5"/>
+
+      <!-- LEFT THIGH -->
+      <path data-zone="thigh" class="chunk"
+        d="M32,121 L43,121 L42,170 L31,170 Z"/>
+
+      <!-- LEFT SHIN -->
+      <path data-zone="shin" class="chunk"
+        d="M31,172 L42,172 L41,225 L30,225 Z"/>
+
+      <!-- LEFT FOOT -->
+      <path data-zone="foot" class="chunk"
+        d="M29,225 L42,225 C42,230 40,232 36,233 L26,233 C24,231 24,228 26,226 Z"/>
+
+      <!-- RIGHT THIGH -->
+      <path data-zone="thigh" class="chunk"
+        d="M57,121 L68,121 L69,170 L58,170 Z"/>
+
+      <!-- RIGHT SHIN -->
+      <path data-zone="shin" class="chunk"
+        d="M58,172 L69,172 L70,225 L59,225 Z"/>
+
+      <!-- RIGHT FOOT -->
+      <path data-zone="foot" class="chunk"
+        d="M58,225 L71,225 C73,227 73,230 71,233 L61,233 C56,232 54,229 58,225 Z"/>
+
+    </svg>
+  </div>
+
+  <div class="controls">
+    <div class="layer-selector">
+      <button class="layer-btn active" data-layer="outer">Outer</button>
+      <button class="layer-btn" data-layer="mid">Mid</button>
+      <button class="layer-btn" data-layer="base">Base</button>
+      <button class="layer-btn" data-layer="underwear">Underwear</button>
+    </div>
+
+    <div class="zone-toggles">
+      <button class="zone-toggle" data-zone="head">Head</button>
+      <button class="zone-toggle" data-zone="forehead">Forehead</button>
+      <button class="zone-toggle" data-zone="one-eye">One Eye</button>
+      <button class="zone-toggle" data-zone="both-eyes">Both Eyes</button>
+      <button class="zone-toggle" data-zone="mouth">Mouth</button>
+      <button class="zone-toggle" data-zone="neck">Neck</button>
+      <button class="zone-toggle active" data-zone="torso">Torso</button>
+      <button class="zone-toggle active" data-zone="pelvis">Hips</button>
+      <button class="zone-toggle" data-zone="arm">Arm</button>
+      <button class="zone-toggle" data-zone="forearm">Forearm</button>
+      <button class="zone-toggle" data-zone="wrist">Wrist</button>
+      <button class="zone-toggle" data-zone="hand">Hand</button>
+      <button class="zone-toggle active" data-zone="thigh">Thigh</button>
+      <button class="zone-toggle" data-zone="shin">Shin</button>
+      <button class="zone-toggle" data-zone="foot">Foot</button>
+    </div>
+  </div>
+
+  <div class="info">
+    Layer: <span class="current-layer" id="currentLayerDisplay">outer</span>
+  </div>
+
+  <script>
+    let currentLayer = 'outer';
+    const coveredZones = new Set(['torso', 'pelvis', 'thigh']);
+
+    function updateMannequin() {
+      const byZone = {};
+      document.querySelectorAll('.chunk').forEach(el => {
+        const z = el.dataset.zone;
+        if (!byZone[z]) byZone[z] = [];
+        byZone[z].push(el);
+      });
+      Object.entries(byZone).forEach(([zone, els]) => {
+        els.forEach(el => {
+          el.classList.remove('covered', 'outer-layer', 'mid-layer', 'base-layer', 'underwear-layer');
+          if (coveredZones.has(zone)) {
+            el.classList.add('covered', `${currentLayer}-layer`);
+          }
+        });
+      });
+    }
+
+    document.querySelectorAll('.layer-btn').forEach(btn => {
+      btn.onclick = () => {
+        document.querySelectorAll('.layer-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentLayer = btn.dataset.layer;
+        document.getElementById('currentLayerDisplay').textContent = currentLayer;
+        updateMannequin();
+      };
+    });
+
+    document.querySelectorAll('.zone-toggle').forEach(btn => {
+      btn.onclick = () => {
+        const zone = btn.dataset.zone;
+        if (coveredZones.has(zone)) {
+          coveredZones.delete(zone);
+          btn.classList.remove('active');
+        } else {
+          coveredZones.add(zone);
+          btn.classList.add('active');
+        }
+        updateMannequin();
+      };
+    });
+
+    updateMannequin();
+  </script>
+</body>
+</html>
