@@ -1,0 +1,493 @@
+<title>Entropy Rose Quote</title>
+<style>
+:root {
+  --bg: #fafaf9;
+  --surface: #ffffff;
+  --surface-alt: #f5f5f4;
+  --fg: #1c1917;
+  --fg-muted: #57534e;
+  --fg-inverse: #ffffff;
+  --accent: #dc2626;
+  --accent-light: #fef2f2;
+  --border: #e7e5e4;
+  --border-hover: #d6d3d1;
+  --radius: 12px;
+  --shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.08);
+  --font-display: 'Merriweather', serif;
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+  --space-2xl: 48px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0c0a09;
+    --surface: #1c1917;
+    --surface-alt: #292524;
+    --fg: #f5f5f4;
+    --fg-muted: #a8a29e;
+    --fg-inverse: #0c0a09;
+    --accent: #ef4444;
+    --accent-light: #2a1a1a;
+    --border: #44403c;
+    --border-hover: #57534e;
+    --shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.4);
+    color-scheme: dark;
+  }
+}
+
+:root[data-theme="dark"] {
+  --bg: #0c0a09;
+  --surface: #1c1917;
+  --surface-alt: #292524;
+  --fg: #f5f5f4;
+  --fg-muted: #a8a29e;
+  --fg-inverse: #0c0a09;
+  --accent: #ef4444;
+  --accent-light: #2a1a1a;
+  --border: #44403c;
+  --border-hover: #57534e;
+  --shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.4);
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.6;
+  margin: 0;
+  padding: var(--space-md);
+  min-height: 100vh;
+}
+
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: var(--space-md);
+}
+
+/* Hero */
+.hero {
+  text-align: center;
+  padding: var(--space-2xl) var(--space-md);
+  border-bottom: 1px solid var(--border);
+  margin-bottom: var(--space-xl);
+}
+
+.hero-title {
+  font-family: var(--font-display);
+  font-size: 2.75rem;
+  font-weight: 700;
+  margin: 0 0 var(--space-sm);
+  background: linear-gradient(135deg, var(--accent) 0%, #dc2626 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-subtitle {
+  font-size: 1.125rem;
+  color: var(--fg-muted);
+  margin: 0;
+  font-weight: 500;
+}
+
+/* Card */
+.card {
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: var(--space-xl);
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border);
+  transition: box-shadow 0.2s, border-color 0.2s;
+}
+
+.card:hover {
+  box-shadow: var(--shadow-lg);
+  border-color: var(--border-hover);
+}
+
+.card-section {
+  border-bottom: 1px solid var(--border);
+  padding-bottom: var(--space-lg);
+  margin-bottom: var(--space-lg);
+}
+
+.card-section:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+  margin-bottom: 0;
+}
+
+/* Quote Display */
+.quote-main {
+  font-family: var(--font-display);
+  font-size: 1.375rem;
+  line-height: 1.8;
+  font-style: italic;
+  padding: var(--space-lg);
+  background: var(--surface-alt);
+  border-radius: var(--radius);
+  border-left: 4px solid var(--accent);
+  margin: var(--space-lg) 0;
+  text-align: center;
+}
+
+.quote-context {
+  font-size: 0.95rem;
+  color: var(--fg-muted);
+  font-style: italic;
+  padding-left: var(--space-lg);
+  border-left: 2px solid var(--border);
+  margin: var(--space-lg) 0;
+}
+
+/* Metadata */
+.metadata-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: var(--space-md);
+  margin-top: var(--space-lg);
+}
+
+.metadata-item {
+  padding: var(--space-md);
+  background: var(--surface-alt);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+}
+
+.metadata-label {
+  font-family: var(--font-mono);
+  font-size: 0.825rem;
+  color: var(--fg-muted);
+  margin-bottom: var(--space-xs);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.metadata-value {
+  font-size: 0.95rem;
+  font-weight: 500;
+  word-break: break-word;
+}
+
+/* Hex ID */
+.hex-id {
+  font-family: var(--font-mono);
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--accent);
+  background: var(--accent-light);
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--radius);
+  display: inline-block;
+  border: 1px solid var(--border);
+  margin-bottom: var(--space-sm);
+}
+
+/* Tag */
+.tag {
+  display: inline-block;
+  background: var(--surface-alt);
+  color: var(--fg-muted);
+  padding: var(--space-xs) var(--space-md);
+  border-radius: 100px;
+  font-family: var(--font-mono);
+  font-size: 0.825rem;
+  font-weight: 500;
+  border: 1px solid var(--border);
+  margin-right: var(--space-xs);
+  margin-bottom: var(--space-xs);
+}
+
+.tag-accent {
+  background: var(--accent-light);
+  color: var(--accent);
+  border-color: rgba(220, 38, 38, 0.2);
+}
+
+/* System Status */
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-xs) var(--space-md);
+  border-radius: 100px;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.status::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.status-ok {
+  background: rgba(16, 185, 129, 0.1);
+  color: rgb(16, 185, 129);
+}
+
+.status-ok::before {
+  background: rgb(16, 185, 129);
+}
+
+.status-info {
+  background: rgba(59, 130, 246, 0.1);
+  color: rgb(59, 130, 246);
+}
+
+.status-info::before {
+  background: rgb(59, 130, 246);
+}
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--radius);
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  font-weight: 500;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--fg);
+  cursor: pointer;
+  transition: all 0.2s;
+  text-decoration: none;
+}
+
+.btn:hover {
+  background: var(--surface-alt);
+  border-color: var(--border-hover);
+}
+
+.btn-accent {
+  background: var(--accent);
+  color: var(--fg-inverse);
+  border-color: var(--accent);
+}
+
+.btn-accent:hover {
+  background: #b91c1c;
+  border-color: #b91c1c;
+}
+
+.btn-group {
+  display: flex;
+  gap: var(--space-sm);
+  margin-top: var(--space-lg);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  body {
+    padding: var(--space-sm);
+  }
+
+  .container {
+    padding: var(--space-sm);
+  }
+
+  .hero-title {
+    font-size: 2rem;
+  }
+
+  .hero {
+    padding: var(--space-xl) var(--space-md);
+  }
+
+  .card {
+    padding: var(--space-lg);
+  }
+
+  .metadata-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .quote-main {
+    font-size: 1.125rem;
+    padding: var(--space-md);
+  }
+}
+</style>
+
+<div class="container">
+  <div class="hero">
+    <h1 class="hero-title">Entropy Rose</h1>
+    <p class="hero-subtitle">Manager's Absolute Truth Quote</p>
+  </div>
+
+  <div class="card">
+    <!-- Hex ID -->
+    <div>
+      <div class="hex-id">0047FB356CE62F42</div>
+      <div class="tag tag-accent">Quote #1</div>
+      <div class="tag">2026-09-30</div>
+    </div>
+
+    <!-- Quote Content -->
+    <div class="card-section">
+      <h2 style="margin: 0 0 var(--space-sm); font-family: var(--font-mono); font-size: 0.95rem; color: var(--fg-muted);">
+        # Quote
+      </h2>
+      <div class="quote-main">
+        "Static hum, thrum—needle drops,<br>
+        Spinning echo, time just stops.<br>
+        Familiar chords fill up the room,<br>
+        Wrapped inside this faded tomb."
+      </div>
+    </div>
+
+    <!-- Context -->
+    <div class="card-section">
+      <h2 style="margin: 0 0 var(--space-sm); font-family: var(--font-mono); font-size: 0.95rem; color: var(--fg-muted);">
+        ## Context
+      </h2>
+      <div class="quote-context">
+        _from 'Vinyl Angel' by Koi no Koe._
+      </div>
+    </div>
+
+    <!-- Metadata -->
+    <div class="card-section">
+      <h3 style="margin: 0 0 var(--space-lg); color: var(--fg-muted); font-size: 1rem; font-weight: 500;">
+        Manager's Refined Schema
+      </h3>
+
+      <div class="metadata-grid">
+        <div class="metadata-item">
+          <div class="metadata-label">source_speaker</div>
+          <div class="metadata-value">["hexIDs"]</div>
+          <div class="tag" style="margin-top: var(--space-xs);">List of author hex IDs</div>
+        </div>
+
+        <div class="metadata-item">
+          <div class="metadata-label">preference</div>
+          <div class="metadata-value">["hexIDs"]</div>
+          <div class="tag" style="margin-top: var(--space-xs);">One-directional responses</div>
+        </div>
+
+        <div class="metadata-item">
+          <div class="metadata-label">backlink</div>
+          <div class="metadata-value">["url_link"]</div>
+          <div class="tag" style="margin-top: var(--space-xs);">URL links placeholder</div>
+        </div>
+
+        <div class="metadata-item">
+          <div class="metadata-label">tags</div>
+          <div class="metadata-value">{}</div>
+          <div class="tag tag-accent" style="margin-top: var(--space-xs);">Manager's strict domain</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- System Status -->
+    <div class="card-section">
+      <h3 style="margin: 0 0 var(--space-lg); color: var(--fg-muted); font-size: 1rem; font-weight: 500;">
+        System Architecture
+      </h3>
+
+      <div class="metadata-grid">
+        <div class="metadata-item">
+          <div class="metadata-label">Storage Engine</div>
+          <div class="metadata-value">O(1) JSON Hash Map</div>
+          <div class="status status-ok" style="margin-top: var(--space-xs);">Active</div>
+        </div>
+
+        <div class="metadata-item">
+          <div class="metadata-label">Search Index</div>
+          <div class="metadata-value">SQLite FTS5</div>
+          <div class="status status-ok" style="margin-top: var(--space-xs);">Synchronized</div>
+        </div>
+
+        <div class="metadata-item">
+          <div class="metadata-label">Event Log</div>
+          <div class="metadata-value">Append-only JSONL</div>
+          <div class="status status-info" style="margin-top: var(--space-xs);">Live</div>
+        </div>
+
+        <div class="metadata-item">
+          <div class="metadata-label">Markdown Bridge</div>
+          <div class="metadata-value">Bidirectional</div>
+          <div class="status status-ok" style="margin-top: var(--space-xs);">Round-trip Verified</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Next Steps -->
+    <div style="margin-top: var(--space-xl); padding-top: var(--space-lg); border-top: 1px solid var(--border);">
+      <h3 style="margin: 0 0 var(--space-md); color: var(--fg-muted); font-size: 1rem; font-weight: 500;">
+        Ready for Manager's Directive
+      </h3>
+
+      <ul style="margin: 0 0 var(--space-lg); padding-left: var(--space-lg); line-height: 1.8;">
+        <li><strong>preference field implemented</strong> — One-directional response tracking via hex ID lists</li>
+        <li><strong>source_speaker streamlined</strong> — List of author hex IDs (Manager's vision)</li>
+        <li><strong>tags field reserved</strong> — Strictly Manager's domain with zero AI intervention</li>
+        <li><strong>backlink placeholder</strong> — Awaiting Manager's next directive on URL format</li>
+        <li><strong>Browser client operational</strong> — bundle.js updated with absolute truth data</li>
+      </ul>
+
+      <div class="btn-group">
+        <button class="btn btn-accent" onclick="copyQuoteData()">Copy Quote Data</button>
+        <button class="btn" onclick="exportMarkdown()">Export as Markdown</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function copyQuoteData() {
+  const quote = {
+    id: "0047FB356CE62F42",
+    index: 1,
+    main_content: "\"Static hum, thrum—needle drops,\\nSpinning echo, time just stops.\\nFamiliar chords fill up the room,\\nWrapped inside this faded tomb.\"",
+    context: "_from 'Vinyl Angel' by Koi no Koe._",
+    date: "2026-09-30",
+    source_speaker: ["hexIDs"],
+    preference: ["hexIDs"],
+    backlink: ["url_link"],
+    tags: {}
+  };
+
+  const text = `---\nid: ${quote.id}\nindex: ${quote.index}\ndate: '${quote.date}'\nsource_speaker: ["hexIDs"]\npreference: ["hexIDs"]\nbacklink: ["url_link"]\ntags: // empty for now\n---\n\n# Quote\n\n${quote.main_content.replace(/\\n/g, '\n')}\n\n## Context\n\n${quote.context}`;
+
+  navigator.clipboard.writeText(text).then(() => {
+    alert("Quote data copied to clipboard");
+  }).catch(err => {
+    console.error("Failed to copy:", err);
+  });
+}
+
+function exportMarkdown() {
+  const markdown = `---\nid: 0047FB356CE62F42\nindex: 1\ndate: '2026-09-30'\nsource_speaker: ["hexIDs"]\npreference: ["hexIDs"]\nbacklink: ["url_link"]\ntags: // empty for now\n---\n\n# Quote\n\n"Static hum, thrum—needle drops,\nSpinning echo, time just stops.\nFamiliar chords fill up the room,\nWrapped inside this faded tomb."\n\n## Context\n\n_from 'Vinyl Angel' by Koi no Koe._`;
+
+  const blob = new Blob([markdown], { type: "text/markdown" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "quote_0047FB356CE62F42.md";
+  a.click();
+  URL.revokeObjectURL(url);
+}
+</script>

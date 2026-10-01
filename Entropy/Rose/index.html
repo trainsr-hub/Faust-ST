@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Entropy Rose — Quote Note System</title>
+
+  <!-- Typography (IBM Plex Sans from Master Template) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Merriweather:ital,wght@0,300;0,400;0,700;1,300;1,400&display=swap" rel="stylesheet">
+
+  <!-- Hazard Studio Design System -->
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div class="app-container">
+    <!-- TOP BAR (Master Template Pattern) -->
+    <header class="top-bar">
+      <div class="title-stack">
+        <h1>Entropy Rose</h1>
+        <p>O(1) Quote Note System — Zero-Dead-Zone Interface</p>
+      </div>
+
+      <div class="header-actions">
+        <button id="newQuoteBtn" class="btn-action btn-primary" title="Create New Quote Note">
+          <span>+</span>
+          <span>New Quote</span>
+        </button>
+        <button id="exportJsonBtn" class="btn-action" title="Export O(1) Hash-Map">
+          <span>⬇</span>
+          <span>Export</span>
+        </button>
+        <button id="importJsonBtn" class="btn-action" title="Import quotes.json">
+          <span>⬆</span>
+          <span>Import</span>
+        </button>
+        <input type="file" id="importFileInput" accept=".json,.jsonl" style="display: none;">
+
+        <button id="resetSeedBtn" class="btn-action" title="Reset to seed data">
+          <span>🔄</span>
+          <span>Reset</span>
+        </button>
+
+        <button id="themeToggleBtn" class="btn-action" title="Toggle Light/Dark Theme">
+          <span>🌓</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- WORKSPACE GRID (Master Template 2-Column Pattern) -->
+    <div class="workspace-grid">
+      <!-- LEFT COLUMN: BLOCKS STREAM -->
+      <div class="blocks-stream">
+
+        <!-- SEARCH BLOCK (Entry Block Pattern with Zero-Dead-Zone) -->
+        <div class="entry-block" id="searchBlock">
+          <div class="block-header">
+            <div class="block-header-left">
+              <span class="block-collapse-chevron">▼</span>
+              <span class="block-tag">SEARCH</span>
+              <span class="block-title">Quote Search Engine</span>
+            </div>
+          </div>
+          <div class="block-body">
+            <div class="field-label">
+              <span>Search quotes, context, speakers</span>
+              <span class="field-hint">Real-time filter</span>
+            </div>
+            <div class="searcher-monolith">
+              <span class="searcher-icon">🔍</span>
+              <input
+                type="text"
+                id="searchQueryInput"
+                class="searcher-input"
+                placeholder="Type to search..."
+                autocomplete="off"
+              >
+              <button class="searcher-clear" id="searchClearBtn" style="display: none;">×</button>
+            </div>
+
+            <!-- Active Search Banner -->
+            <div class="search-active-banner" id="searchActiveBanner" style="display: none;">
+              <div class="active-badge-tag">ACTIVE</div>
+              <span class="active-target-title" id="searchActiveText">Search active</span>
+            </div>
+
+            <!-- Filter Chips -->
+            <div class="sidebar-filter-bar" id="sidebarFilterBar">
+              <!-- Populated by bundle.js -->
+            </div>
+          </div>
+        </div>
+
+        <!-- QUOTES LIST BLOCK -->
+        <div class="entry-block" id="quotesListBlock">
+          <div class="block-header">
+            <div class="block-header-left">
+              <span class="block-collapse-chevron">▼</span>
+              <span class="block-tag">QUOTES</span>
+              <span class="block-title">Quote Collection</span>
+            </div>
+          </div>
+          <div class="block-body">
+            <div class="quotes-scroll-area" id="quotesScrollArea">
+              <!-- Populated by bundle.js with Fitts's Law cards -->
+            </div>
+          </div>
+        </div>
+
+        <!-- READER BLOCK -->
+        <div class="entry-block" id="readerBlock">
+          <div class="block-header">
+            <div class="block-header-left">
+              <span class="block-collapse-chevron">▼</span>
+              <span class="block-tag">READER</span>
+              <span class="block-title">Active Quote Display</span>
+            </div>
+          </div>
+          <div class="block-body">
+            <!-- Quote Display Card -->
+            <article class="quote-display-card" id="quoteDisplayCard">
+              <!-- Top Metadata Bar -->
+              <div class="quote-top-meta">
+                <div class="quote-id-cluster">
+                  <span class="badge-index-large" id="displayIndexBadge">#1</span>
+                  <span class="badge-hex-code" id="displayHexCode" title="Click to copy Hex ID">
+                    0047FB356CE65652
+                  </span>
+                  <span style="font-size: 0.85rem; color: var(--text-muted);" id="displayDate">2026-09-30</span>
+                </div>
+
+                <div class="quote-actions-inline">
+                  <button id="copyActiveBtn" class="btn-action" title="Copy Quote">
+                    📋 Copy
+                  </button>
+                  <button id="copyMarkdownBtn" class="btn-action" title="Copy as Markdown">
+                    📝 MD
+                  </button>
+                  <button id="editActiveBtn" class="btn-action" title="Edit Quote">
+                    ✏️ Edit
+                  </button>
+                  <button id="inspectJsonBtn" class="btn-action" title="Inspect Raw JSON">
+                    { } Raw
+                  </button>
+                  <button id="deleteActiveBtn" class="btn-action" style="color: var(--hazard-high);" title="Delete Quote">
+                    🗑️
+                  </button>
+                </div>
+              </div>
+
+              <!-- Core Quote Text -->
+              <blockquote class="quote-main-content" id="displayMainContent">
+                <!-- Content rendered here -->
+              </blockquote>
+
+              <!-- Context Box -->
+              <div class="quote-context-box" id="displayContextBox">
+                <div class="context-label">Situational Context & Genesis</div>
+                <div class="context-body" id="displayContextBody">
+                  <!-- Context rendered here -->
+                </div>
+              </div>
+
+              <!-- Speaker Attribution -->
+              <div class="speaker-panel">
+                <div class="speaker-left">
+                  <div class="speaker-name" id="displaySpeakerName">Faust</div>
+                  <div class="speaker-role" id="displaySpeakerRole">Strategic Analytical Intellect</div>
+                </div>
+                <span class="speaker-origin-badge" id="displaySpeakerOrigin">Faust-Manager Codex</span>
+              </div>
+
+              <!-- Backlinks -->
+              <div class="backlinks-section">
+                <div class="section-label">Outgoing Links</div>
+                <div class="backlink-pills" id="outgoingBacklinksList">
+                  <!-- Backlinks rendered here -->
+                </div>
+              </div>
+
+              <!-- Response Preferences -->
+              <div class="backlinks-section" id="preferencesSection" style="display: none;">
+                <div class="section-label" style="color: var(--accent);">Response Preferences</div>
+                <div class="backlink-pills" id="preferencesList">
+                  <!-- Response quotes rendered here -->
+                </div>
+              </div>
+
+              <!-- Tags -->
+              <div class="tags-container">
+                <div class="tag-cluster-row" id="tagClusterDomains">
+                  <div class="tag-cluster-title">Domains</div>
+                  <div class="tag-chips-list" id="tagChipsDomains"></div>
+                </div>
+                <div class="tag-cluster-row" id="tagClusterThemes">
+                  <div class="tag-cluster-title">Themes</div>
+                  <div class="tag-chips-list" id="tagChipsThemes"></div>
+                </div>
+                <div class="tag-cluster-row" id="tagClusterSentiment">
+                  <div class="tag-cluster-title">Sentiment</div>
+                  <div class="tag-chips-list" id="tagChipsSentiment"></div>
+                </div>
+                <div class="tag-cluster-row" id="tagClusterCustom">
+                  <div class="tag-cluster-title">Custom</div>
+                  <div class="tag-chips-list" id="tagChipsCustom"></div>
+                </div>
+              </div>
+
+              <!-- Metadata Inspector -->
+              <div class="metadata-inspector" id="metadataInspector" style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border-dim); display: none;">
+                <div class="section-label" style="color: var(--accent); margin-bottom: 1rem;">📋 Metadata Inspector</div>
+
+                <!-- Actions -->
+                <div style="margin-top: 1rem; display: flex; gap: 0.75rem;">
+                  <button id="copyMetadataBtn" class="btn-action">
+                    📋 Copy Metadata
+                  </button>
+                  <button id="editMetadataBtn" class="btn-action">
+                    ✏️ Edit Metadata
+                  </button>
+                  <button id="toggleMetadataBtn" class="btn-action">
+                    📊 Toggle Inspector
+                  </button>
+                </div>
+              </div>
+            </article>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT COLUMN: LIVE JSON INSPECTOR -->
+      <div class="inspector-sticky" id="inspectorSticky">
+        <div class="inspector-header">
+          <div class="inspector-header-left">
+            <span class="block-collapse-chevron">▼</span>
+            <span class="inspector-title">Live JSON State</span>
+          </div>
+        </div>
+        <div class="live-json-display" id="inspectorPre">
+          <!-- JSON state rendered here -->
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL QUOTE EDITOR (Master Template Modal Pattern) -->
+    <div class="modal-overlay" id="quoteModal">
+      <div class="modal-dialog">
+        <div class="modal-header">
+          <h2 id="modalTitle">New Quote Note</h2>
+          <button id="closeModalBtn" style="font-size: 1.4rem; color: var(--text-muted);">&times;</button>
+        </div>
+
+        <form id="quoteForm">
+          <div class="modal-body">
+            <!-- Form groups follow Master Template input patterns -->
+            <div class="form-row">
+              <div class="form-group">
+                <label>Hex ID (O(1) Timestamp)</label>
+                <input type="text" id="formIdInput" class="raw-input-box" readonly style="font-family: 'JetBrains Mono', monospace; background: var(--bg-input); cursor: not-allowed;">
+              </div>
+              <div class="form-group">
+                <label>Index</label>
+                <input type="number" id="formIndexInput" class="raw-input-box" readonly style="font-family: 'JetBrains Mono', monospace; background: var(--bg-input); cursor: not-allowed;">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>Date (YYYY-MM-DD)</label>
+              <input type="date" id="formDateInput" class="raw-input-box" required>
+            </div>
+
+            <div class="form-group">
+              <label>Main Quote Content *</label>
+              <textarea id="formMainContent" class="raw-textarea-box" rows="4" placeholder="Enter the exact quote text..." required></textarea>
+            </div>
+
+            <div class="form-group">
+              <label>Situational Context</label>
+              <textarea id="formContext" class="raw-textarea-box" rows="3" placeholder="Genesis circumstance or operational backdrop..."></textarea>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label>Speaker Name *</label>
+                <input type="text" id="formSpeakerName" class="raw-input-box" placeholder="e.g. Faust, The Manager" required>
+              </div>
+              <div class="form-group">
+                <label>Speaker Role</label>
+                <input type="text" id="formSpeakerRole" class="raw-input-box" placeholder="e.g. Strategic Intellect">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>Origin Medium</label>
+              <input type="text" id="formSpeakerOrigin" class="raw-input-box" placeholder="e.g. Faust-Manager Codex">
+            </div>
+
+            <!-- Manager's Refined Schema Fields -->
+            <div class="form-group">
+              <label>Response Quote IDs (Preference)</label>
+              <div style="display: flex; gap: 0.5rem;">
+                <input type="text" id="formPreferenceTarget" class="raw-input-box" placeholder="Hex ID of responding quote" style="flex: 1;">
+                <button type="button" id="formAddPreferenceBtn" class="btn-action">Add</button>
+              </div>
+              <div id="formPreferencesContainer" style="display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.5rem;"></div>
+            </div>
+
+            <div class="form-group">
+              <label>Backlink URLs</label>
+              <div style="display: flex; gap: 0.5rem;">
+                <input type="text" id="formBacklinkTarget" class="raw-input-box" placeholder="https://example.com/..." style="flex: 1;">
+                <button type="button" id="formAddBacklinkBtn" class="btn-action">Add</button>
+              </div>
+              <div id="formBacklinksContainer" style="display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.5rem;"></div>
+            </div>
+
+            <!-- Tag Fields -->
+            <div class="form-row">
+              <div class="form-group">
+                <label>Domains</label>
+                <input type="text" id="formDomains" class="raw-input-box" placeholder="cybernetics, warfare">
+              </div>
+              <div class="form-group">
+                <label>Themes</label>
+                <input type="text" id="formThemes" class="raw-input-box" placeholder="entropy, sovereignty">
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label>Sentiment</label>
+                <select id="formSentiment" class="raw-input-box">
+                  <option value="analytical">analytical</option>
+                  <option value="stoic">stoic</option>
+                  <option value="transcendent">transcendent</option>
+                  <option value="nihilistic">nihilistic</option>
+                  <option value="triumphant">triumphant</option>
+                  <option value="cynical">cynical</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Custom Tags</label>
+                <input type="text" id="formCustomTags" class="raw-input-box" placeholder="key=value, key=value">
+              </div>
+            </div>
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" id="cancelModalBtn" class="btn-action">Cancel</button>
+            <button type="submit" class="btn-action btn-primary">Save Quote Note</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Inspector Modal -->
+    <div class="modal-overlay" id="inspectorModal">
+      <div class="modal-dialog">
+        <div class="modal-header">
+          <h2>O(1) JSON State Inspector</h2>
+          <button id="closeInspectorBtn" style="font-size: 1.4rem; color: var(--text-muted);">&times;</button>
+        </div>
+        <div class="modal-body">
+          <p style="font-size: 0.85rem; color: var(--text-muted);">
+            Raw client-side hash map. Keys are deterministic hex timestamps.
+          </p>
+          <pre class="inspector-pre" id="inspectorPreModal"></pre>
+        </div>
+        <div class="modal-footer">
+          <button id="copyJsonBtn" class="btn-action">Copy JSON</button>
+          <button id="downloadJsonBtn" class="btn-action btn-primary">Download</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- App Bootstrap -->
+  <script src="js/bundle.js"></script>
+</body>
+</html>
+
+      <!-- Central Reader & Note Canvas -->
+      <section class="reader-workspace" id="readerWorkspace">
+        <div class="reader-container">
+          <!-- Quote Display Card -->
+          <article class="quote-display-card" id="quoteDisplayCard">
+            <!-- Top Metadata Bar -->
+            <div class="quote-top-meta">
+              <div class="quote-id-cluster">
+                <span class="badge-index-large" id="displayIndexBadge">#1</span>
+                <span class="badge-hex-code" id="displayHexCode" title="Click to copy O(1) Hex ID">
+                  0047FB356CE65652
+                </span>
+                <span style="font-size: 0.85rem; color: var(--text-muted);" id="displayDate">2026-09-30</span>
+              </div>
+
+              <div class="quote-actions-inline">
+                <button id="copyActiveBtn" class="btn-secondary" style="height:36px;padding:0 12px;" title="Copy Quote & Attribution">
+                  <span>📋</span> Copy
+                </button>
+                <button id="copyMarkdownBtn" class="btn-secondary" style="height:36px;padding:0 12px;" title="Copy Quote Note as Markdown">
+                  <span>📝</span> Markdown
+                </button>
+                <button id="editActiveBtn" class="btn-secondary" style="height:36px;padding:0 12px;" title="Edit Quote">
+                  <span>✏️</span> Edit
+                </button>
+                <button id="inspectJsonBtn" class="btn-secondary" style="height:36px;padding:0 12px;" title="Inspect Raw JSON">
+                  <span>{ }</span> Raw
+                </button>
+                <button id="deleteActiveBtn" class="btn-secondary" style="height:36px;padding:0 12px;color:#f85149;" title="Delete Quote">
+                  <span>🗑️</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Core Quote Text -->
+            <blockquote class="quote-main-content" id="displayMainContent">
+              <!-- Content rendered here -->
+            </blockquote>
+
+            <!-- Situational Context Box -->
+            <div class="quote-context-box" id="displayContextBox">
+              <div class="context-label">Situational Context & Genesis</div>
+              <div class="context-body" id="displayContextBody">
+                <!-- Context rendered here -->
+              </div>
+            </div>
+
+            <!-- Speaker Attribution -->
+            <div class="speaker-panel">
+              <div class="speaker-left">
+                <div class="speaker-name" id="displaySpeakerName">Faust</div>
+                <div class="speaker-role" id="displaySpeakerRole">Strategic Analytical Intellect</div>
+              </div>
+              <span class="speaker-origin-badge" id="displaySpeakerOrigin">Faust-Manager Codex</span>
+            </div>
+
+            <!-- Bidirectional Graph Backlinks -->
+            <div class="backlinks-section">
+              <div class="section-label">Outgoing Semantic Links</div>
+              <div class="backlink-pills" id="outgoingBacklinksList">
+                <!-- Outgoing graph edges rendered here -->
+              </div>
+            </div>
+
+            <div class="backlinks-section">
+              <div class="section-label">Incoming Citations & Cross-References</div>
+              <div class="backlink-pills" id="incomingBacklinksList">
+                <!-- Incoming citations rendered here -->
+              </div>
+            </div>
+
+            <!-- Response Graph Preferences -->
+            <div class="backlinks-section" id="preferencesSection" style="display: none;">
+              <div class="section-label" style="color: var(--accent-cyan, #00f0ff);">Responses & Conversational Follow-ups (Preference)</div>
+              <div class="backlink-pills" id="preferencesList">
+                <!-- Response quote links rendered here -->
+              </div>
+            </div>
+
+            <!-- Manager's Refined Metadata Display -->
+            <div class="metadata-inspector" id="metadataInspector" style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border-dim); display: none;">
+              <div class="section-label" style="color: var(--accent-purple); margin-bottom: 1rem;">📋 Metadata Inspector (Manager's Schema)</div>
+
+              <!-- ID & Index Row -->
+              <div class="metadata-row">
+                <div class="metadata-field">
+                  <span class="metadata-label">Hex ID:</span>
+                  <code class="metadata-value mono" id="metadataId">-</code>
+                </div>
+                <div class="metadata-field">
+                  <span class="metadata-label">Index:</span>
+                  <code class="metadata-value mono" id="metadataIndex">-</code>
+                </div>
+                <div class="metadata-field">
+                  <span class="metadata-label">Date:</span>
+                  <code class="metadata-value mono" id="metadataDate">-</code>
+                </div>
+              </div>
+
+              <!-- source_speaker (Author IDs) -->
+              <div class="metadata-section">
+                <div class="metadata-section-header">
+                  <span class="metadata-section-title">source_speaker (Author IDs)</span>
+                  <span class="metadata-hint">List of hex IDs</span>
+                </div>
+                <div class="metadata-field">
+                  <code class="metadata-list mono" id="metadataSourceSpeaker">-</code>
+                </div>
+              </div>
+
+              <!-- preference (Responses) -->
+              <div class="metadata-section">
+                <div class="metadata-section-header">
+                  <span class="metadata-section-title">preference (One-directional Responses)</span>
+                  <span class="metadata-hint">List of hex IDs that "talk back about" this quote</span>
+                </div>
+                <div class="metadata-field">
+                  <code class="metadata-list mono" id="metadataPreference">-</code>
+                </div>
+              </div>
+
+              <!-- backlink (URL Links) -->
+              <div class="metadata-section">
+                <div class="metadata-section-header">
+                  <span class="metadata-section-title">backlink (URL Links)</span>
+                  <span class="metadata-hint">External URL references</span>
+                </div>
+                <div class="metadata-field">
+                  <code class="metadata-list mono" id="metadataBacklink">-</code>
+                </div>
+              </div>
+
+              <!-- tags (Manager's Domain) -->
+              <div class="metadata-section">
+                <div class="metadata-section-header">
+                  <span class="metadata-section-title" style="color: var(--text-secondary);">tags</span>
+                  <span class="metadata-hint" style="color: var(--text-muted);">Manager's strict domain — empty for now</span>
+                </div>
+                <div class="metadata-field">
+                  <code class="metadata-value mono" id="metadataTags">{}</code>
+                </div>
+              </div>
+
+              <!-- Metadata Actions -->
+              <div class="metadata-actions" style="margin-top: 1rem; display: flex; gap: 0.75rem;">
+                <button id="copyMetadataBtn" class="btn-secondary" style="padding: 0.5rem 1rem; font-size: 0.875rem;">
+                  📋 Copy as Markdown
+                </button>
+                <button id="editMetadataBtn" class="btn-secondary" style="padding: 0.5rem 1rem; font-size: 0.875rem;">
+                  ✏️ Edit Metadata
+                </button>
+                <button id="toggleMetadataBtn" class="btn-secondary" style="padding: 0.5rem 1rem; font-size: 0.875rem;">
+                  📊 Toggle Inspector
+                </button>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <!-- Modal Quote Editor Drawer -->
+    <div class="modal-overlay" id="quoteModal">
+      <div class="modal-dialog">
+        <div class="modal-header">
+          <h2 id="modalTitle">New Quote Note</h2>
+          <button id="closeModalBtn" style="font-size: 1.4rem; color: var(--text-muted);">&times;</button>
+        </div>
+
+        <form id="quoteForm">
+          <div class="modal-body">
+            <!-- Hidden / Technical Fields -->
+            <div class="form-row">
+              <div class="form-group">
+                <label>Hex ID (O(1) Millisecond Timestamp)</label>
+                <input type="text" id="formIdInput" class="input-monolithic" readonly style="font-family: var(--font-mono); background: var(--bg-card); cursor: not-allowed;">
+              </div>
+              <div class="form-group">
+                <label>Monotonic Index</label>
+                <input type="number" id="formIndexInput" class="input-monolithic" readonly style="font-family: var(--font-mono); background: var(--bg-card); cursor: not-allowed;">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>Calendar Date (YYYY-MM-DD)</label>
+              <input type="date" id="formDateInput" class="input-monolithic" required>
+            </div>
+
+            <!-- Content -->
+            <div class="form-group">
+              <label>Main Quote Content (Multi-line text) *</label>
+              <textarea id="formMainContent" class="textarea-monolithic" rows="4" placeholder="Enter the exact quote text..." required></textarea>
+            </div>
+
+            <div class="form-group">
+              <label>Situational Context / Interpretive Genesis</label>
+              <textarea id="formContext" class="textarea-monolithic" rows="3" placeholder="Genesis circumstance, cybernetic reflection, or operational backdrop..."></textarea>
+            </div>
+
+            <!-- Speaker Details -->
+            <div class="form-row">
+              <div class="form-group">
+                <label>Speaker / Author Name *</label>
+                <input type="text" id="formSpeakerName" class="input-monolithic" placeholder="e.g. Faust, The Manager, Alan Turing" required>
+              </div>
+              <div class="form-group">
+                <label>Speaker Role / Title</label>
+                <input type="text" id="formSpeakerRole" class="input-monolithic" placeholder="e.g. Strategic Analytical Intellect">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>Origin Medium / Work</label>
+              <input type="text" id="formSpeakerOrigin" class="input-monolithic" placeholder="e.g. Faust-Manager Codex, Cybernetics (1948)">
+            </div>
+
+            <!-- Semantic Backlinks -->
+            <div class="form-group">
+              <label>Add Backlink Graph Connection</label>
+              <div style="display: flex; gap: 8px;">
+                <input type="text" id="formBacklinkTarget" class="input-monolithic" placeholder="Target Hex ID (e.g. 0047FB35... or ROOT)" style="flex: 2;">
+                <select id="formBacklinkRelation" class="input-monolithic" style="flex: 1;">
+                  <option value="derives_from">derives_from</option>
+                  <option value="supports">supports</option>
+                  <option value="contradicts">contradicts</option>
+                  <option value="parallels">parallels</option>
+                  <option value="contextualizes">contextualizes</option>
+                </select>
+                <button type="button" id="formAddBacklinkBtn" class="btn-secondary" style="height: 48px;">Add</button>
+              </div>
+              <div id="formBacklinksContainer" style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px;"></div>
+            </div>
+
+            <!-- Response Preferences -->
+            <div class="form-group">
+              <label>Add Response / Follow-up Quote ID (Preference)</label>
+              <div style="display: flex; gap: 8px;">
+                <input type="text" id="formPreferenceTarget" class="input-monolithic" placeholder="Target Hex ID of responding quote (e.g. 0047FB35...)" style="flex: 1;">
+                <button type="button" id="formAddPreferenceBtn" class="btn-secondary" style="height: 48px;">Add</button>
+              </div>
+              <div id="formPreferencesContainer" style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px;"></div>
+            </div>
+
+            <!-- Tag Taxonomy -->
+            <div class="form-row">
+              <div class="form-group">
+                <label>Domains (comma-separated)</label>
+                <input type="text" id="formDomains" class="input-monolithic" placeholder="cybernetics, epistemology, warfare">
+              </div>
+              <div class="form-group">
+                <label>Themes (comma-separated)</label>
+                <input type="text" id="formThemes" class="input-monolithic" placeholder="entropy, symmetry, sovereignty">
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label>Sentiment</label>
+                <select id="formSentiment" class="input-monolithic">
+                  <option value="analytical">analytical</option>
+                  <option value="stoic">stoic</option>
+                  <option value="transcendent">transcendent</option>
+                  <option value="nihilistic">nihilistic</option>
+                  <option value="triumphant">triumphant</option>
+                  <option value="cynical">cynical</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Custom Key=Values (comma-separated)</label>
+                <input type="text" id="formCustomTags" class="input-monolithic" placeholder="resonance=stratum_I_high, authority=manager_vision">
+              </div>
+            </div>
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" id="cancelModalBtn" class="btn-secondary">Cancel</button>
+            <button type="submit" class="btn-primary">Save Quote Note</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Inspector Modal -->
+    <div class="modal-overlay" id="inspectorModal">
+      <div class="modal-dialog">
+        <div class="modal-header">
+          <h2>O(1) JSON State Inspector</h2>
+          <button id="closeInspectorBtn" style="font-size: 1.4rem; color: var(--text-muted);">&times;</button>
+        </div>
+        <div class="modal-body">
+          <p style="font-size: 0.85rem; color: var(--text-secondary);">
+            Raw client-side hash map dictionary. Keys are deterministic 16-character millisecond hex timestamps.
+          </p>
+          <pre class="inspector-pre" id="inspectorPre"></pre>
+        </div>
+        <div class="modal-footer">
+          <button id="copyJsonBtn" class="btn-secondary">Copy JSON</button>
+          <button id="downloadJsonBtn" class="btn-primary">Download quotes.json</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- App Bootstrap (Consolidated bundle for 100% file:/// and HTTP compatibility) -->
+  <script src="js/bundle.js"></script>
+</body>
+</html>

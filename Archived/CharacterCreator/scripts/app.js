@@ -5,13 +5,15 @@ const defaultCharacter = {
   id: '', name: 'Akari',
   skin: { id: 'skin-fair', color: '#F8D7CE', shade: '#E9B6AA' },
   eyes: { id: 'eyes-round', iris: 'round', color: '#3F6DA8' },
-  hair: { id: 'hair-long-straight', length: 'long', style: 'straight', color: '#694231' }
+  hair: { base: 'hair-base-long-straight', parts: ['hair-part-bangs'], color: '#694231' }
 };
 
 const $ = (selector) => document.querySelector(selector);
 const state = { catalog: null, activeTab: 'skin', character: { ...defaultCharacter }, toastTimer: null };
 
 function selectedItem(type, id) { return state.catalog[type].find((item) => item.id === id); }
+function selectedBase(id) { return state.catalog.hair.bases.find((item) => item.id === id); }
+function selectedPart(id) { return state.catalog.hair.parts.find((item) => item.id === id); }
 function escapeHtml(value) { const el = document.createElement('span'); el.textContent = value; return el.innerHTML; }
 
 function optionIcon(type) {
@@ -26,8 +28,11 @@ function describeCharacter() {
   const { character } = state;
   const skin = selectedItem('skin', character.skin.id)?.name.toLowerCase() || 'fair';
   const iris = selectedItem('eyes', character.eyes.id)?.name.toLowerCase() || 'round iris';
-  const hair = selectedItem('hair', character.hair.id)?.name.toLowerCase() || 'styled';
-  return ['anime portrait', `${skin}`, `${iris} in ${colorName(character.eyes.color)}`, `${hair} in ${colorName(character.hair.color)}`, 'clean cel shading', 'soft studio backdrop'].join(', ');
+  const hairBase = selectedBase(character.hair.base);
+  const baseName = hairBase?.name.toLowerCase() || 'styled';
+  const parts = (character.hair.parts || []).map(id => selectedPart(id)?.name).filter(Boolean);
+  const partsDesc = parts.length ? ` + ${parts.join(', ')}` : '';
+  return ['anime portrait', `${skin}`, `${iris} in ${colorName(character.eyes.color)}`, `${baseName}${partsDesc} in ${colorName(character.hair.color)}`, 'clean cel shading', 'soft studio backdrop'].join(', ');
 }
 
 function colorName(hex) {
@@ -36,10 +41,30 @@ function colorName(hex) {
 }
 
 function setFeature(type, id) {
-  const item = selectedItem(type, id);
-  if (type === 'skin') state.character.skin = { id: item.id, color: item.color, shade: item.shade };
-  if (type === 'eyes') state.character.eyes = { ...state.character.eyes, id: item.id, iris: item.iris };
-  if (type === 'hair') state.character.hair = { ...state.character.hair, id: item.id, length: item.length, style: item.style };
+  if (type === 'skin') {
+    const item = selectedItem(type, id);
+    state.character.skin = { id: item.id, color: item.color, shade: item.shade };
+  } else if (type === 'eyes') {
+    const item = selectedItem(type, id);
+    state.character.eyes = { ...state.character.eyes, id: item.id, iris: item.iris };
+  } else if (type === 'hair') {
+    const base = selectedBase(id);
+    if (base) {
+      state.character.hair.base = id;
+    }
+  }
+  sync();
+}
+
+function toggleHairPart(id) {
+  if (!state.character.hair.parts) state.character.hair.parts = [];
+  const parts = state.character.hair.parts;
+  const index = parts.indexOf(id);
+  if (index > -1) {
+    parts.splice(index, 1);
+  } else {
+    parts.push(id);
+  }
   sync();
 }
 
@@ -65,7 +90,35 @@ function renderTab() {
   }
 
   if (tab === 'hair') {
-    host.innerHTML = `<div class="control-section"><div class="control-title"><div><h3>Hair style &amp; length</h3><p>Pick a cut and length.</p></div></div><div class="option-grid">${state.catalog.hair.map((item) => `<button type="button" class="option-card" aria-pressed="${item.id === state.character.hair.id}" data-feature="hair" data-id="${item.id}"><span class="option-icon">${optionIcon('hair')}</span><span>${escapeHtml(item.name)}</span>${hairLengthBadge(item.length)}</button>`).join('')}</div></div>${colorPicker('Hair color', state.catalog.palette.hair, state.character.hair.color)}`;
+    const hair = state.catalog.hair;
+    const activeParts = state.character.hair.parts || [];
+    const hairColor = state.character.hair.color;
+
+    host.innerHTML = `
+      <div class="control-section">
+        <div class="control-title"><div><h3>Hair silhouette</h3><p>Pick a base cut and length.</p></div></div>
+        <div class="option-grid">
+          ${hair.bases.map((item) => `
+            <button type="button" class="option-card" aria-pressed="${item.id === state.character.hair.base}" data-feature="hair" data-id="${item.id}">
+              <span class="option-icon">${optionIcon('hair')}</span>
+              <span>${escapeHtml(item.name)}</span>
+              ${hairLengthBadge(item.length)}
+            </button>
+          `).join('')}
+        </div>
+      </div>
+      <div class="control-section">
+        <div class="control-title"><div><h3>Additive pieces</h3><p>Layer on extra parts (multi‑select).</p></div></div>
+        <div class="parts-grid">
+          ${hair.parts.map((item) => `
+            <button type="button" class="part-chip" aria-pressed="${activeParts.includes(item.id)}" data-part="${item.id}">
+              ${escapeHtml(item.name)}
+            </button>
+          `).join('')}
+        </div>
+      </div>
+      ${colorPicker('Hair color', state.catalog.palette.hair, hairColor)}
+    `;
   }
 }
 
@@ -84,7 +137,14 @@ function showToast(message) { const toast = $('#toast'); toast.textContent = mes
 function renderSavedRoster() {
   const saved = listSavedCharacters();
   $('#saved-grid').innerHTML = saved.length
-    ? saved.map((character) => `<article class="saved-card"><h3>${escapeHtml(character.name || 'Untitled')}</h3><p>${escapeHtml(character.eyes?.iris || 'round')} iris · ${escapeHtml(character.hair?.style || 'straight')} ${escapeHtml(character.hair?.length || 'long')} hair</p><div class="saved-card-actions"><button type="button" data-load="${character.id}">Load</button><button type="button" data-delete="${character.id}">Delete</button></div></article>`).join('')
+    ? saved.map((character) => {
+        const iris = character.eyes?.iris || 'round';
+        const base = selectedBase(character.hair?.base);
+        const baseName = base?.name.toLowerCase() || 'styled';
+        const partsCount = character.hair?.parts?.length || 0;
+        const partsInfo = partsCount ? ` +${partsCount} extra` : '';
+        return `<article class="saved-card"><h3>${escapeHtml(character.name || 'Untitled')}</h3><p>${escapeHtml(iris)} iris · ${escapeHtml(baseName)}${partsInfo}</p><div class="saved-card-actions"><button type="button" data-load="${character.id}">Load</button><button type="button" data-delete="${character.id}">Delete</button></div></article>`;
+      }).join('')
     : '<p class="empty-state">Your roster is waiting. Save a portrait to preserve this build.</p>';
 }
 
@@ -92,12 +152,13 @@ function randomItem(items) { return items[Math.floor(Math.random() * items.lengt
 function randomize() {
   const skin = randomItem(state.catalog.skin);
   const eyes = randomItem(state.catalog.eyes);
-  const hair = randomItem(state.catalog.hair);
+  const hairBase = randomItem(state.catalog.hair.bases);
+  const hairParts = Math.random() > 0.5 ? [randomItem(state.catalog.hair.parts).id] : [];
   state.character = {
     id: '', name: 'New Muse',
     skin: { id: skin.id, color: skin.color, shade: skin.shade },
     eyes: { id: eyes.id, iris: eyes.iris, color: randomItem(state.catalog.palette.eyes) },
-    hair: { id: hair.id, length: hair.length, style: hair.style, color: randomItem(state.catalog.palette.hair) }
+    hair: { base: hairBase.id, parts: hairParts, color: randomItem(state.catalog.palette.hair) }
   };
   sync(); showToast('A fresh portrait is ready.');
 }
@@ -117,6 +178,7 @@ function bindEvents() {
   document.addEventListener('click', (event) => {
     const tab = event.target.closest('[data-tab]'); if (tab) { state.activeTab = tab.dataset.tab; document.querySelectorAll('[role="tab"]').forEach((button) => button.setAttribute('aria-selected', String(button === tab))); renderTab(); }
     const feature = event.target.closest('[data-feature]'); if (feature) setFeature(feature.dataset.feature, feature.dataset.id);
+    const part = event.target.closest('[data-part]'); if (part) toggleHairPart(part.dataset.part);
     const color = event.target.closest('[data-color]'); if (color) { if (state.activeTab === 'eyes') state.character.eyes.color = color.dataset.color; if (state.activeTab === 'hair') state.character.hair.color = color.dataset.color; sync(); }
     const load = event.target.closest('[data-load]'); if (load) { const character = listSavedCharacters().find((item) => item.id === load.dataset.load); if (character) { state.character = character; sync(); $('#saved-drawer').hidden = true; showToast(`${character.name || 'Character'} loaded.`); } }
     const remove = event.target.closest('[data-delete]'); if (remove) { deleteSavedCharacter(remove.dataset.delete); renderSavedRoster(); renderSavedCount(); showToast('Portrait removed from roster.'); }

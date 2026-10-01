@@ -1,0 +1,568 @@
+<title>Entropy Rose System</title>
+<style>
+:root {
+  --bg: #fafafa;
+  --surface: #ffffff;
+  --surface-alt: #f5f5f5;
+  --fg: #111111;
+  --fg-muted: #666666;
+  --fg-inverse: #ffffff;
+  --accent: #db2777;
+  --accent-light: #fce7f3;
+  --border: #e5e5e5;
+  --border-hover: #d4d4d4;
+  --radius: 12px;
+  --shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.08);
+  --font-display: 'Merriweather', serif;
+  --font-body: 'Plus Jakarta Sans', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+  --space-2xl: 48px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0a0a0a;
+    --surface: #1a1a1a;
+    --surface-alt: #262626;
+    --fg: #f5f5f5;
+    --fg-muted: #a3a3a3;
+    --fg-inverse: #0a0a0a;
+    --accent: #ec4899;
+    --accent-light: #2d1320;
+    --border: #333333;
+    --border-hover: #404040;
+    --shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.4);
+    color-scheme: dark;
+  }
+}
+
+:root[data-theme="dark"] {
+  --bg: #0a0a0a;
+  --surface: #1a1a1a;
+  --surface-alt: #262626;
+  --fg: #f5f5f5;
+  --fg-muted: #a3a3a3;
+  --fg-inverse: #0a0a0a;
+  --accent: #ec4899;
+  --accent-light: #2d1320;
+  --border: #333333;
+  --border-hover: #404040;
+  --shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.4);
+  color-scheme: dark;
+}
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.5;
+  margin: 0;
+  padding: var(--space-md);
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+/* Typography Scale */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  line-height: 1.2;
+  margin-top: var(--space-lg);
+  margin-bottom: var(--space-sm);
+}
+
+h1 { font-size: 2.25rem; }
+h2 { font-size: 1.75rem; }
+h3 { font-size: 1.5rem; }
+h4 { font-size: 1.25rem; }
+
+.text-hero {
+  font-size: 2.75rem;
+  font-weight: 300;
+  font-style: italic;
+  line-height: 1.1;
+}
+
+.subtitle {
+  font-size: 1.125rem;
+  color: var(--fg-muted);
+  margin-top: var(--space-xs);
+  font-weight: 500;
+}
+
+/* Layout */
+.container {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: var(--space-md);
+}
+
+.card {
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: var(--space-xl);
+  box-shadow: var(--shadow);
+  margin-bottom: var(--space-lg);
+  border: 1px solid var(--border);
+  transition: box-shadow 0.2s, border-color 0.2s;
+}
+
+.card:hover {
+  box-shadow: var(--shadow-lg);
+  border-color: var(--border-hover);
+}
+
+.grid-2 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--space-lg);
+}
+
+/* Components */
+.pill {
+  display: inline-block;
+  background: var(--accent-light);
+  color: var(--accent);
+  padding: var(--space-xs) var(--space-md);
+  border-radius: 100px;
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  font-weight: 600;
+  border: 1px solid transparent;
+  transition: all 0.2s;
+}
+
+.pill:hover {
+  border-color: var(--accent);
+}
+
+.code-block {
+  background: var(--surface-alt);
+  border-radius: var(--radius);
+  padding: var(--space-lg);
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  line-height: 1.6;
+  overflow-x: auto;
+  margin: var(--space-lg) 0;
+  border: 1px solid var(--border);
+}
+
+.code-block pre {
+  margin: 0;
+}
+
+.quote {
+  font-family: var(--font-display);
+  font-size: 1.125rem;
+  line-height: 1.6;
+  padding: var(--space-lg);
+  border-left: 4px solid var(--accent);
+  background: var(--surface-alt);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  margin: var(--space-lg) 0;
+  font-style: italic;
+}
+
+.metadata-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: var(--space-md);
+  margin-top: var(--space-lg);
+}
+
+.metadata-item {
+  background: var(--surface);
+  padding: var(--space-md);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+}
+
+.metadata-label {
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  color: var(--fg-muted);
+  margin-bottom: var(--space-xs);
+  font-weight: 600;
+}
+
+.metadata-value {
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+/* Table */
+.table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin: var(--space-lg) 0;
+  background: var(--surface);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  overflow: hidden;
+}
+
+.table th,
+.table td {
+  padding: var(--space-md);
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+}
+
+.table th {
+  background: var(--surface-alt);
+  font-weight: 600;
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  color: var(--fg-muted);
+}
+
+.table tr:last-child td {
+  border-bottom: none;
+}
+
+/* Hero Section */
+.hero {
+  text-align: center;
+  padding: var(--space-2xl) var(--space-md);
+  background: linear-gradient(135deg, var(--surface) 0%, var(--surface-alt) 100%);
+  border-radius: var(--radius);
+  margin-bottom: var(--space-xl);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(219, 39, 119, 0.03) 0%, transparent 100%);
+  pointer-events: none;
+}
+
+.hero-title {
+  font-size: 3rem;
+  font-weight: 300;
+  margin-bottom: var(--space-sm);
+}
+
+.hero-subtitle {
+  font-size: 1.25rem;
+  color: var(--fg-muted);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* Status Indicators */
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-xs) var(--space-md);
+  border-radius: 100px;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.status::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.status-ok {
+  background: rgba(16, 185, 129, 0.1);
+  color: rgb(16, 185, 129);
+}
+
+.status-ok::before {
+  background: rgb(16, 185, 129);
+}
+
+.status-warn {
+  background: rgba(245, 158, 11, 0.1);
+  color: rgb(245, 158, 11);
+}
+
+.status-warn::before {
+  background: rgb(245, 158, 11);
+}
+
+.status-info {
+  background: rgba(59, 130, 246, 0.1);
+  color: rgb(59, 130, 246);
+}
+
+.status-info::before {
+  background: rgb(59, 130, 246);
+}
+
+/* Links */
+a {
+  color: var(--accent);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s;
+}
+
+a:hover {
+  border-bottom-color: var(--accent);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  body {
+    padding: var(--space-sm);
+  }
+
+  .hero-title {
+    font-size: 2.5rem;
+  }
+
+  .text-hero {
+    font-size: 2rem;
+  }
+
+  .grid-2 {
+    grid-template-columns: 1fr;
+  }
+
+  .metadata-list {
+    grid-template-columns: 1fr;
+  }
+}
+</style>
+
+<div class="container">
+  <div class="hero">
+    <h1 class="hero-title">Entropy Rose</h1>
+    <p class="hero-subtitle">Manager's Quote Note Architecture with O(1) Hex Timestamps</p>
+    <p class="subtitle">Deterministic quote storage with preference tracking, FTS5 search, and bidirectional Markdown conversion</p>
+  </div>
+
+  <div class="card">
+    <h2>System Architecture</h2>
+    <p>The Entropy Rose system implements a deterministic O(1) quote storage engine based on millisecond-precision hex timestamps. Each quote receives a unique 16-character hex ID derived from YYYYMMDDHHmmssfff timestamp format.</p>
+
+    <div class="metadata-list">
+      <div class="metadata-item">
+        <div class="metadata-label">Core Engine</div>
+        <div class="metadata-value">O(1) JSON Hash Map</div>
+      </div>
+      <div class="metadata-item">
+        <div class="metadata-label">Timestamp Format</div>
+        <div class="metadata-value">YYYYMMDDHHmmssfff → Hex</div>
+      </div>
+      <div class="metadata-item">
+        <div class="metadata-label">Search</div>
+        <div class="metadata-value">SQLite FTS5 Full-Text</div>
+      </div>
+      <div class="metadata-item">
+        <div class="metadata-label">Resilience</div>
+        <div class="metadata-value">file:// & HTTP Compatible</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Refined Metadata Schema</h2>
+    <p>As directed by the Manager, the system implements a streamlined metadata structure:</p>
+
+    <div class="code-block">
+<pre>{
+  "id": "0047FB356CE62F42",
+  "index": 1,
+  "date": "2026-09-30",
+  "source_speaker": ["hexIDs"],          // List of author hex IDs
+  "preference": ["hexIDs"],              // One-directional response tracking
+  "backlink": ["url_link"],              // List of URL links
+  "tags": {},                            // Empty for now (Manager's strict domain)
+  "main_content": "Quote text...",
+  "context": "Situational context..."
+}</pre>
+    </div>
+
+    <p><span class="status status-info">Key Design Decisions:</span></p>
+    <ul>
+      <li><strong>preference field</strong>: One-directional list of quote hex IDs that "talk back about" this quote (no reciprocal linking required)</li>
+      <li><strong>source_speaker</strong>: Simplified to list of author hex IDs as per Manager's vision</li>
+      <li><strong>tags field</strong>: Reserved as Manager's strict domain—no AI suggestions or alterations</li>
+      <li><strong>backlink</strong>: Currently placeholder, awaiting Manager's next directive</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2>Active Quote Notes</h2>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Index</th>
+          <th>Hex ID</th>
+          <th>Content</th>
+          <th>Preference</th>
+          <th>Speaker</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>#1</td>
+          <td><span class="pill">0047FB356CE62F42</span></td>
+          <td>"Static hum, thrum—needle drops..."</td>
+          <td><span class="status status-ok">Empty</span></td>
+          <td>0047FB356CE62F42</td>
+        </tr>
+        <tr>
+          <td>#2</td>
+          <td><span class="pill">0047FB356CE65652</span></td>
+          <td>"The universe is built on a plan..."</td>
+          <td><span class="status status-info">Points to #1</span></td>
+          <td>0047FB356CE65652</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="quote">
+      <p>"The universe is built on a plan, the profound symmetry of which is somehow present in every inner corner of human thought.</p>
+      <p>We are not passive observers; we are the system observing itself."</p>
+      <cite>— Faust (Strategic Analytical Intellect)</cite>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <h3>Markdown Converter</h3>
+      <p>Bidirectional conversion between quote dictionaries and human-editable Markdown:</p>
+
+      <div class="code-block">
+<pre>from markdown_converter import (
+    quote_to_markdown,
+    markdown_to_quote,
+    import_markdown_file_to_system
+)
+
+# Round-trip serialization
+md = quote_to_markdown(quote)
+cleaned = markdown_to_quote(md)
+
+# Bulk ingestion
+count = import_markdown_file_to_system("data/quotes_export.md")</pre>
+      </div>
+
+      <p><span class="status status-ok">Supports</span> Obsidian-compatible YAML frontmatter with:</p>
+      <ul>
+        <li>YAML frontmatter + # Quote / ## Context sections</li>
+        <li>Handles // comments → empty dict normalization</li>
+        <li>Both legacy dict and streamlined list formats</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h3>SQLite Persistence</h3>
+      <p>Golden-standard SQLite engine with WAL mode, FTS5 search, and transactional integrity:</p>
+
+      <div class="code-block">
+<pre># Deterministic schema migration
+def init_db():
+    with conn.execute("BEGIN IMMEDIATE;"):
+        conn.execute("""
+            CREATE TABLE IF NOT EXISTS quotes (
+                id TEXT PRIMARY KEY,      -- 16-char hex timestamp
+                idx INTEGER UNIQUE NOT NULL,
+                main_content TEXT NOT NULL,
+                context TEXT,
+                date TEXT NOT NULL,
+                preference_json TEXT      -- One-directional responses
+            );
+        """)
+        # FTS5 virtual table for search
+        conn.execute("""
+            CREATE VIRTUAL TABLE IF NOT EXISTS
+            quotes_fts USING fts5(...)
+        """)</pre>
+      </div>
+
+      <p><span class="status status-ok">Performance</span> O(1) lookup by hex ID</p>
+      <p><span class="status status-info">Search</span> FTS5 across content, context, speaker, tags</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Browser Client</h2>
+    <p>The single-file <code>bundle.js</code> provides a 100% Fitts's Law hitbox UI with:</p>
+
+    <ul>
+      <li>Zero-CORS compatibility (<code>file:///</code> and HTTP)</li>
+      <li>Live editing with inline Markdown generation</li>
+      <li>O(1) store access via deterministic hex IDs</li>
+      <li>Dynamic preference visualization</li>
+      <li>Theme-agnostic design tokens</li>
+    </ul>
+
+    <p class="text-hero">Deterministic Hex Timestamps</p>
+    <p class="subtitle">Constant-time chronological sortability across all storage layers</p>
+  </div>
+
+  <div class="card">
+    <h2>System Health & Status</h2>
+    <div class="metadata-list">
+      <div class="metadata-item">
+        <div class="metadata-label">Database</div>
+        <div class="metadata-value">
+          <span class="status status-ok">Synchronized</span>
+          <span style="margin-left: var(--space-sm); font-size: 0.875rem;">rose_quotes.db</span>
+        </div>
+      </div>
+      <div class="metadata-item">
+        <div class="metadata-label">JSON Hash Map</div>
+        <div class="metadata-value">
+          <span class="status status-ok">Live</span>
+          <span style="margin-left: var(--space-sm); font-size: 0.875rem;">quotes.json</span>
+        </div>
+      </div>
+      <div class="metadata-item">
+        <div class="metadata-label">Event Log</div>
+        <div class="metadata-value">
+          <span class="status status-ok">Append-only</span>
+          <span style="margin-left: var(--space-sm); font-size: 0.875rem;">quotes.jsonl</span>
+        </div>
+      </div>
+      <div class="metadata-item">
+        <div class="metadata-label">Markdown Export</div>
+        <div class="metadata-value">
+          <span class="status status-ok">Current</span>
+          <span style="margin-left: var(--space-sm); font-size: 0.875rem;">quotes_export.md</span>
+        </div>
+      </div>
+    </div>
+
+    <h3>Ready for Manager's Directive</h3>
+    <p>The Entropy Rose system is fully operational with the refined metadata schema:</p>
+
+    <ol>
+      <li><strong>preference field implemented</strong>: One-directional response tracking via hex ID lists</li>
+      <li><strong>source_speaker streamlined</strong>: Now accepts list of author hex IDs (Manager's vision)</li>
+      <li><strong>tags field reserved</strong>: Strictly Manager's domain with zero AI intervention</li>
+      <li><strong>backlink placeholder</strong>: Awaiting Manager's next directive on URL format</li>
+      <li><strong>Round-trip Markdown verified</strong>: Bidirectional conversion tested and functional</li>
+    </ol>
+
+    <p style="margin-top: var(--space-xl); text-align: center; padding-top: var(--space-lg); border-top: 1px solid var(--border);">
+      <strong>Next Action</strong>: Manager can now clean the quote data in Markdown format and send it back for ingestion into the live system.
+    </p>
+  </div>
+</div>

@@ -13,6 +13,35 @@ Use this Skill when the task involves **UI structure, visual design decisions, i
 
 Skip it for pure backend logic, API/database design, non-visual performance work, infrastructure/DevOps, or non-visual scripts — unless the task changes how something **looks, feels, moves, or is interacted with**.
 
+---
+
+## Manager's Master UI/UX Template (Self-Approved Authority)
+
+**Location**: `D:\My Drive\Blue AI\.claude\templates\ui\`
+
+**Status**: Independent sovereign design system synchronized via Google Drive. Changes frequently - this skill REFERENCES it, never absorbs or copies it.
+
+**Mandatory Protocol When Building UI/UX:**
+1. **Always load this skill first** (`/ui-ux-pro-max`)
+2. **Always read the Master Template** before building any UI/UX:
+   - `D:\My Drive\Blue AI\.claude\templates\ui\README.md` - Core architectural rules
+   - `D:\My Drive\Blue AI\.claude\templates\ui\css\styles.css` - Design tokens and patterns
+   - Reference template components as needed
+3. **Apply template patterns**: Zero-Dead-Zone delegation, Single-Active-Branch outliner, Hazard Studio tokens, Fitts's Law hitboxes
+4. **Then query this skill** for supplementary guidance (product palettes, font pairings, etc.)
+
+**The Master Template provides:**
+- Universal Zero-Dead-Zone Hitbox Law (every non-functional pixel toggles its section)
+- Single-Active-Branch Tree Outliner (Zone 1: Past + Zone 2: Future pathways)
+- 7 Sovereign Data Entry Blocks (Raw Text, Searcher, Single/Multi-Select, Toggles, Checkboxes, Treeview, Live Inspector)
+- Theme-agnostic soft-coded styling (extensible via `data-theme` attributes)
+- Hazard Studio color palette and design tokens
+- Proper modal scrolling patterns and form architecture
+
+**This template is Manager's self-approved design system and must never be lost or overwritten.**
+
+---
+
 ## Rule Categories by Priority
 
 *Follow priority 1→10 to decide which category to focus on first; use `--domain <Domain>` to query full details. The full rule text for every category lives in `references/quick-reference.md` — read it on demand rather than loading it every time.*
