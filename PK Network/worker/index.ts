@@ -664,9 +664,10 @@ app.post('/api/records/:name', async (c) => {
 
     // Auto ID generator if not provided (for non-tables)
     if (!record.id) {
-      const prefix = name.slice(0, 4).toUpperCase();
-      const randHex = Math.random().toString(16).substring(2, 6).toUpperCase();
-      record.id = `${prefix}-${randHex}`;
+      const raw = name.replace(/[^a-zA-Z0-9]/g, '');
+      const prefix = raw.padEnd(4, 'X').slice(0, 4).toUpperCase();
+      const timeHex = Date.now().toString(16).padStart(12, '0').slice(-12).toUpperCase();
+      record.id = `${prefix}${timeHex}`;
     }
 
     // Filter record keys to ONLY those columns that actually exist physically in the table

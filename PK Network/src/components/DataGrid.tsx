@@ -160,10 +160,16 @@ export const DataGrid: React.FC<DataGridProps> = ({
     setDragPosition(null);
   };
 
+  // Always hide hex_id / primary ID from data entry view
+  const entryColumns = useMemo(
+    () => schema.columns.filter((c) => c.type !== 'hex_id' && c.slug !== 'id'),
+    [schema.columns]
+  );
+
   const handleCreateNewInlineRow = async () => {
     const newRec = await onNewRecord();
     if (newRec) {
-      const targetCol = schema.columns.find((c) => c.slug !== 'id') || schema.columns[0];
+      const targetCol = entryColumns[0] || schema.columns[0];
       if (targetCol) setEditingCell({ id: newRec.id, slug: targetCol.slug });
     }
   };
@@ -181,9 +187,9 @@ export const DataGrid: React.FC<DataGridProps> = ({
       />
 
       <div style={{ flex: 1, overflow: 'auto' }}>
-        <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', textAlign: 'left', minWidth: `${Math.max(850, schema.columns.length * 170)}px` }}>
+        <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', textAlign: 'left', minWidth: `${Math.max(650, entryColumns.length * 170)}px` }}>
           <GridHeader
-            columns={schema.columns}
+            columns={entryColumns}
             allSelected={displayRecords.length > 0 && selectedIds.size === displayRecords.length}
             onSelectAll={handleSelectAll}
             sortCol={sortCol}
@@ -194,13 +200,13 @@ export const DataGrid: React.FC<DataGridProps> = ({
           <tbody>
             {isLoading ? (
               <tr>
-                <td colSpan={schema.columns.length + 3} style={{ padding: '3.5rem', textAlign: 'center', color: 'var(--text-dim)' }}>
+                <td colSpan={entryColumns.length + 3} style={{ padding: '3.5rem', textAlign: 'center', color: 'var(--text-dim)' }}>
                   Loading records from Turso Cloud...
                 </td>
               </tr>
             ) : displayRecords.length === 0 ? (
               <tr>
-                <td colSpan={schema.columns.length + 3} style={{ padding: '3.5rem', textAlign: 'center', color: 'var(--text-dim)' }}>
+                <td colSpan={entryColumns.length + 3} style={{ padding: '3.5rem', textAlign: 'center', color: 'var(--text-dim)' }}>
                   No records yet. Click <strong>"+ New Record"</strong> to get started.
                 </td>
               </tr>
@@ -245,7 +251,7 @@ export const DataGrid: React.FC<DataGridProps> = ({
                       <span className="drag-handle" title="Drag to reorder row">⋮⋮</span>
                     </td>
 
-                    {schema.columns.map((col) => (
+                    {entryColumns.map((col) => (
                       <td
                         key={col.slug}
                         style={{

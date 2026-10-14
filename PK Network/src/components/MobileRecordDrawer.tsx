@@ -144,39 +144,32 @@ export const MobileRecordDrawer: React.FC<MobileRecordDrawerProps> = ({
 
         {/* Scrollable Form Body */}
         <form onSubmit={handleSubmit} style={{ flex: 1, overflowY: 'auto', padding: '1.25rem', display: 'flex', flexDirection: 'column', gap: '1.1rem' }}>
-          {schema.columns.map((col) => {
-            const val = formData[col.slug] ?? '';
+          {schema.columns
+            .filter((c) => c.type !== 'hex_id' && c.slug !== 'id')
+            .map((col) => {
+              const val = formData[col.slug] ?? '';
 
-            return (
-              <div key={col.slug}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.35rem' }}>
-                  <label style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-secondary)' }}>
-                    {col.name}
-                  </label>
-                  <span style={{ fontSize: '10px', color: 'var(--text-dim)', fontFamily: 'var(--font-mono)' }}>
-                    {col.slug}
-                  </span>
-                </div>
+              return (
+                <div key={col.slug}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.35rem' }}>
+                    <label style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-secondary)' }}>
+                      {col.name}
+                    </label>
+                    <span style={{ fontSize: '10px', color: 'var(--text-dim)', fontFamily: 'var(--font-mono)' }}>
+                      {col.slug}
+                    </span>
+                  </div>
 
-                {/* Render input based on atomic type */}
-                {col.type === 'hex_id' ? (
-                  <input
-                    className="input-base"
-                    style={{ width: '100%', minHeight: '48px', fontFamily: 'var(--font-mono)', background: 'var(--bg-canvas)' }}
-                    placeholder="Auto-generated (or enter custom ID)"
-                    value={val}
-                    disabled={isEditing}
-                    onChange={(e) => handleFieldChange(col.slug, e.target.value)}
-                  />
-                ) : col.type === 'text_multi' ? (
-                  <textarea
-                    className="input-base"
-                    rows={3}
-                    style={{ width: '100%', minHeight: '64px', resize: 'vertical' }}
-                    value={val}
-                    onChange={(e) => handleFieldChange(col.slug, e.target.value)}
-                  />
-                ) : col.type === 'boolean' ? (
+                  {/* Render input based on atomic type */}
+                  {col.type === 'text_multi' ? (
+                    <textarea
+                      className="input-base"
+                      rows={3}
+                      style={{ width: '100%', minHeight: '64px', resize: 'vertical' }}
+                      value={val}
+                      onChange={(e) => handleFieldChange(col.slug, e.target.value)}
+                    />
+                  ) : col.type === 'boolean' ? (
                   <label style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', cursor: 'pointer', minHeight: '48px', padding: '0 0.5rem', background: 'var(--bg-canvas)', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border-light)' }}>
                     <input
                       type="checkbox"

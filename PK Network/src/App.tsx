@@ -12,6 +12,7 @@ import { NewTableModal } from './components/NewTableModal';
 import { WorkspaceOutliner } from './components/WorkspaceOutliner';
 import { TableSchema, TableRecord, TableGroup, TableMetaRecord } from './types';
 import { api, getAuthKey, checkUrlKey } from './services/api';
+import { generateHexId } from './utils/id';
 
 export const App: React.FC = () => {
   const [mode, setMode] = useState<'schema' | 'data'>('data');
@@ -383,9 +384,8 @@ export const App: React.FC = () => {
   // Notion-Style: Pure Inline Row Creation (Zero Popups)
   const handleAddNewRow = async (): Promise<TableRecord | null> => {
     const idCol = currentSchema.columns.find((c) => c.slug === 'id');
-    const prefix = idCol?.metadata?.prefix || activeTableName.slice(0, 4).toUpperCase();
-    const randHex = Math.random().toString(16).substring(2, 6).toUpperCase();
-    const newId = `${prefix}-${randHex}`;
+    const prefix = idCol?.metadata?.prefix || activeTableName;
+    const newId = generateHexId(prefix, activeTableName);
     const newRecord: TableRecord = { id: newId };
 
     if (currentSchema.columns.some((c) => c.slug === 'date')) {
