@@ -7,9 +7,8 @@ interface TableSettingsModalProps {
   onClose: () => void;
   tableId: string;
   tableMeta?: TableMetaRecord;
-  availableTables: TableMetaRecord[];
   availableGroups?: TableGroup[];
-  onSave: (updates: { name: string; parent_id: string | null; group_id: string | null }) => Promise<void>;
+  onSave: (updates: { name: string; group_id: string | null }) => Promise<void>;
   onDelete: (id: string) => Promise<void>;
 }
 
@@ -18,13 +17,11 @@ export const TableSettingsModal: React.FC<TableSettingsModalProps> = ({
   onClose,
   tableId,
   tableMeta,
-  availableTables,
   availableGroups = [],
   onSave,
   onDelete,
 }) => {
   const [name, setName] = useState<string>('');
-  const [parentId, setParentId] = useState<string>('');
   const [groupId, setGroupId] = useState<string>('');
   const [isSaving, setIsSaving] = useState<boolean>(false);
   const [confirmDelete, setConfirmDelete] = useState<boolean>(false);
@@ -32,15 +29,12 @@ export const TableSettingsModal: React.FC<TableSettingsModalProps> = ({
   useEffect(() => {
     if (isOpen) {
       setName(tableMeta?.name || tableId);
-      setParentId(tableMeta?.parent_id ? String(tableMeta.parent_id) : '');
       setGroupId(tableMeta?.group_id ? String(tableMeta.group_id) : '');
       setConfirmDelete(false);
     }
   }, [isOpen, tableId, tableMeta]);
 
   if (!isOpen) return null;
-
-  const validParents = availableTables.filter((t) => t.id !== tableId);
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -49,7 +43,6 @@ export const TableSettingsModal: React.FC<TableSettingsModalProps> = ({
     try {
       await onSave({
         name: name.trim(),
-        parent_id: parentId ? parentId : null,
         group_id: groupId ? groupId : null,
       });
       onClose();
@@ -169,35 +162,6 @@ export const TableSettingsModal: React.FC<TableSettingsModalProps> = ({
                 outline: 'none',
               }}
             />
-          </div>
-
-          {/* Parent Table Selector */}
-          <div>
-            <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, color: 'var(--text-dim)', marginBottom: '0.4rem' }}>
-              Parent Table (Domain Hierarchy Selector)
-            </label>
-            <select
-              value={parentId}
-              onChange={(e) => setParentId(e.target.value)}
-              style={{
-                width: '100%',
-                minHeight: '44px',
-                padding: '0.65rem 0.85rem',
-                borderRadius: 'var(--radius-sm)',
-                background: 'var(--bg-canvas)',
-                border: '1px solid var(--border-mid)',
-                color: 'var(--text-primary)',
-                fontSize: '14px',
-                outline: 'none',
-              }}
-            >
-              <option value="">None (Top-Level Root Table)</option>
-              {validParents.map((t) => (
-                <option key={t.id} value={t.id}>
-                  {t.name || t.id} ({t.id})
-                </option>
-              ))}
-            </select>
           </div>
 
           {/* Table Group Selector */}

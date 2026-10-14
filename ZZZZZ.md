@@ -266,7 +266,7 @@ On worker initialization, if `_system_tables` does not exist:
 
 ## 📁 TABLE GROUPS & WORKSPACE OUTLINER TAXONOMY (MODEL B)
 
-> **Architectural Paradigm**: Separates high-level workspace organization (Folder Taxonomy via `table_groups` and nested `sub_group_of`) from low-level data flow (`tables.parent_id`). Presented via a collapsible, Notion-style Workspace Outliner.
+> **Architectural Paradigm**: All table grouping, nesting, and taxonomic hierarchy are unified strictly under **Groups** (`table_groups` and nested `sub_group_of`). The legacy `tables.parent_id` hierarchy has been completely retired and eliminated in favor of clean folder grouping.
 
 ### 1. `table_groups` Canonical SQLite Schema
 ```sql
@@ -282,9 +282,10 @@ CREATE TABLE IF NOT EXISTS table_groups (
 );
 ```
 
-### 2. Enhanced `tables` Association
+### 2. Clean `tables` Association (Groups Only)
 ```sql
 ALTER TABLE tables ADD COLUMN group_id TEXT REFERENCES table_groups(id) ON DELETE SET NULL;
+-- Note: parent_id on tables is retired. Tables belong exclusively to groups (or null for ungrouped).
 ```
 
 ### 3. Model B: Collapsible Outliner Sidebar (`WorkspaceOutliner.tsx`)
@@ -298,6 +299,7 @@ ALTER TABLE tables ADD COLUMN group_id TEXT REFERENCES table_groups(id) ON DELET
 * **Inner Logic Governance**:
   - Group creation, renaming, re-parenting, and deletion handled via table/group modal operations.
   - Tables assigned or moved between groups via the **Group Selector** dropdown in `TableSettingsModal.tsx` or fluid Drag & Drop.
+  - Breadcrumbs on `TableTabs.tsx` display the clean workspace folder path (`📁 Group > Sub-Group > Table`).
 
 ### 6. Workspace Outliner Drag & Drop Mechanics (VS Code & Obsidian Parity)
 - **Tables ("Files")**:

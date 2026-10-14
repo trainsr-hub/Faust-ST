@@ -1,6 +1,6 @@
 import React from 'react';
-import { Plus, ChevronRight, Settings } from 'lucide-react';
-import { TableSchema, TableRecord } from '../types';
+import { Plus, ChevronRight, Settings, Folder } from 'lucide-react';
+import { TableSchema, TableRecord, TableGroup } from '../types';
 
 interface TableTabsProps {
   tables: Record<string, TableSchema>;
@@ -10,6 +10,7 @@ interface TableTabsProps {
   onOpenTableSettings: (name: string) => void;
   recordCounts: Record<string, number>;
   tableMetadata?: TableRecord[];
+  groups?: TableGroup[];
 }
 
 export const TableTabs: React.FC<TableTabsProps> = ({
@@ -20,9 +21,13 @@ export const TableTabs: React.FC<TableTabsProps> = ({
   onOpenTableSettings,
   recordCounts,
   tableMetadata = [],
+  groups = [],
 }) => {
   const metaMap = new Map<string, TableRecord>();
   tableMetadata.forEach((m) => metaMap.set(m.id, m));
+
+  const groupMap = new Map<string, TableGroup>();
+  groups.forEach((g) => groupMap.set(g.id, g));
 
   // Determine sorted list of table names
   const allNames = Object.keys(tables);
@@ -37,19 +42,28 @@ export const TableTabs: React.FC<TableTabsProps> = ({
 
   const getDisplayName = (id: string) => metaMap.get(id)?.name || id;
 
-  // Build breadcrumb hierarchy lineage for active table
-  const lineage: { id: string; name: string }[] = [];
-  let curr: string | undefined = activeTable;
-  const visited = new Set<string>();
-
-  while (curr && !visited.has(curr)) {
-    visited.add(curr);
-    lineage.unshift({ id: curr, name: getDisplayName(curr) });
-    const meta = metaMap.get(curr);
-    curr = meta?.parent_id ? String(meta.parent_id) : undefined;
+  // Build breadcrumb from group hierarchy
+  const breadcrumbs: { id: string; name: string; isGroup?: boolean }[] = [];
+  const activeMeta = metaMap.get(activeTable);
+  if (activeMeta?.group_id) {
+    let currGroupId: string | null | undefined = activeMeta.group_id;
+    const visited = new Set<string>();
+    const groupCrumbs: { id: string; name: string; isGroup: boolean }[] = [];
+    while (currGroupId && !visited.has(currGroupId)) {
+      visited.add(currGroupId);
+      const grp = groupMap.get(currGroupId);
+      if (grp) {
+        groupCrumbs.unshift({ id: grp.id, name: grp.natural_name, isGroup: true });
+        currGroupId = grp.sub_group_of;
+      } else {
+        break;
+      }
+    }
+    breadcrumbs.push(...groupCrumbs);
   }
+  breadcrumbs.push({ id: activeTable, name: getDisplayName(activeTable), isGroup: false });
 
-  const hasLineage = lineage.length > 1 && activeTable !== 'tables';
+  const hasLineage = breadcrumbs.length > 1 && activeTable !== 'tables';
 
   return (
     <div style={{
@@ -177,29 +191,36 @@ export const TableTabs: React.FC<TableTabsProps> = ({
           color: 'var(--text-dim)',
         }}>
           <span style={{ textTransform: 'uppercase', letterSpacing: '0.05em', fontWeight: 600, fontSize: '10px', color: 'var(--text-dim)' }}>
-            Hierarchy:
+            Workspace:
           </span>
-          {lineage.map((item, index) => {
-            const isLast = index === lineage.length - 1;
+          {breadcrumbs.map((item, index) => {
+            const isLast = index === breadcrumbs.length - 1;
             return (
               <React.Fragment key={item.id}>
                 {index > 0 && <ChevronRight size={11} style={{ opacity: 0.5 }} />}
-                <button
-                  onClick={() => onSelectTable(item.id)}
-                  style={{
-                    background: 'none',
-                    border: 'none',
-                    padding: '0.1rem 0.3rem',
-                    cursor: 'pointer',
-                    fontSize: '11px',
-                    fontWeight: isLast ? 600 : 400,
-                    color: isLast ? 'var(--accent)' : 'var(--text-secondary)',
-                    borderRadius: 'var(--radius-xs, 3px)',
-                  }}
-                  title={`Switch to ${item.name}`}
-                >
-                  {item.name}
-                </button>
+                {item.isGroup ? (
+                  <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.25rem', color: 'var(--text-dim)', fontSize: '11px' }}>
+                    <Folder size={11} style={{ opacity: 0.7 }} />
+                    <span>{item.name}</span>
+                  </span>
+                ) : (
+                  <button
+                    onClick={() => onSelectTable(item.id)}
+                    style={{
+                      background: 'none',
+                      border: 'none',
+                      padding: '0.1rem 0.3rem',
+                      cursor: 'pointer',
+                      fontSize: '11px',
+                      fontWeight: isLast ? 600 : 400,
+                      color: isLast ? 'var(--accent)' : 'var(--text-secondary)',
+                      borderRadius: 'var(--radius-xs, 3px)',
+                    }}
+                    title={`Active Table: ${item.name}`}
+                  >
+                    {item.name}
+                  </button>
+                )}
               </React.Fragment>
             );
           })}

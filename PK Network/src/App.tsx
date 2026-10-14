@@ -197,14 +197,14 @@ export const App: React.FC = () => {
   };
 
   // Project Logic: Create table
-  const handleCreateNewTable = async (newTable: { id: string; name: string; parent_id: string | null; group_id: string | null }) => {
+  const handleCreateNewTable = async (newTable: { id: string; name: string; group_id: string | null }) => {
     try {
       const res = await api.createNewTable(newTable);
       if (res.table) {
         setTables((prev) => ({ ...prev, [newTable.id]: res.table.schema }));
         setTableMetadata((prev) => [
           ...prev,
-          { id: newTable.id, name: newTable.name, parent_id: newTable.parent_id, group_id: newTable.group_id }
+          { id: newTable.id, name: newTable.name, parent_id: null, group_id: newTable.group_id }
         ]);
         setActiveTableName(newTable.id);
         await loadRecords(newTable.id);
@@ -216,8 +216,8 @@ export const App: React.FC = () => {
     }
   };
 
-  // Project Logic: Update table metadata (natural name, parent selector, group selector)
-  const handleUpdateTableSettings = async (updates: { name: string; parent_id: string | null; group_id: string | null }) => {
+  // Project Logic: Update table metadata (natural name, group selector)
+  const handleUpdateTableSettings = async (updates: { name: string; group_id: string | null }) => {
     try {
       await api.updateTableMeta(activeTableName, updates);
       setTableMetadata((prev) =>
@@ -415,6 +415,7 @@ export const App: React.FC = () => {
         onOpenTableSettings={() => setTableSettingsOpen(true)}
         recordCounts={recordCounts}
         tableMetadata={tableMetadata}
+        groups={groups}
       />
 
       <div style={{ flex: 1, display: 'flex', overflow: 'hidden', position: 'relative' }}>
@@ -488,7 +489,6 @@ export const App: React.FC = () => {
         onClose={() => setTableSettingsOpen(false)}
         tableId={activeTableName}
         tableMeta={tableMetadata.find((m) => m.id === activeTableName)}
-        availableTables={tableMetadata}
         availableGroups={groups}
         onSave={handleUpdateTableSettings}
         onDelete={handleDeleteTable}
@@ -497,7 +497,6 @@ export const App: React.FC = () => {
       <NewTableModal
         isOpen={newTableModalOpen}
         onClose={() => setNewTableModalOpen(false)}
-        availableTables={tableMetadata}
         availableGroups={groups}
         defaultGroupId={defaultNewTableGroupId}
         onCreate={handleCreateNewTable}
