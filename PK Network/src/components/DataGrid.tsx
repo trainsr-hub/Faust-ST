@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Edit2, Trash2 } from 'lucide-react';
+import { Edit2, Trash2, Plus } from 'lucide-react';
 import { TableSchema, TableRecord } from '../types';
 import { GridToolbar } from './GridToolbar';
 import { GridHeader } from './GridHeader';
@@ -9,7 +9,7 @@ interface DataGridProps {
   schema: TableSchema;
   records: TableRecord[];
   onSelectRecord: (record: TableRecord) => void;
-  onNewRecord: () => void;
+  onNewRecord: () => Promise<TableRecord | null>;
   onDeleteRecord: (id: string) => Promise<void>;
   onInlineUpdate: (id: string, field: string, value: any) => Promise<void>;
   onReorderRecords?: (newRecords: TableRecord[]) => void;
@@ -47,25 +47,18 @@ export const DataGrid: React.FC<DataGridProps> = ({
   const filteredRecords = records.filter((r) => {
     if (!search.trim()) return true;
     const q = search.toLowerCase();
-    return Object.values(r).some((v) =>
-      typeof v === 'string' ? v.toLowerCase().includes(q) :
-      typeof v === 'number' ? v.toString().includes(q) :
-      Array.isArray(v) ? v.some((item) => String(item).toLowerCase().includes(q)) : false
-    );
+    return Object.values(r).some((v) => String(v ?? '').toLowerCase().includes(q));
   });
 
   // Sort records
   const displayRecords = [...filteredRecords].sort((a, b) => {
     if (!sortCol) return 0;
-    const valA = a[sortCol];
-    const valB = b[sortCol];
-    if (valA === valB) return 0;
-    if (valA === null || valA === undefined) return 1;
-    if (valB === null || valB === undefined) return -1;
-    if (typeof valA === 'number' && typeof valB === 'number') {
-      return sortAsc ? valA - valB : valB - valA;
-    }
-    return sortAsc ? String(valA).localeCompare(String(valB)) : String(valB).localeCompare(String(valA));
+    const [va, vb] = [a[sortCol], b[sortCol]];
+    if (va === vb) return 0;
+    if (va === null || va === undefined) return 1;
+    if (vb === null || vb === undefined) return -1;
+    const cmp = typeof va === 'number' && typeof vb === 'number' ? va - vb : String(va).localeCompare(String(vb));
+    return sortAsc ? cmp : -cmp;
   });
 
   const toggleSort = (colSlug: string) => {
@@ -120,6 +113,14 @@ export const DataGrid: React.FC<DataGridProps> = ({
     setDragPosition(null);
   };
 
+  const handleCreateNewInlineRow = async () => {
+    const newRec = await onNewRecord();
+    if (newRec) {
+      const targetCol = schema.columns.find((c) => c.slug !== 'id') || schema.columns[0];
+      if (targetCol) setEditingCell({ id: newRec.id, slug: targetCol.slug });
+    }
+  };
+
   return (
     <div style={{ display: 'flex', flexDirection: 'column', flex: 1, height: '100%', overflow: 'hidden', background: 'var(--bg-canvas)' }}>
       <GridToolbar
@@ -129,7 +130,7 @@ export const DataGrid: React.FC<DataGridProps> = ({
         filteredCount={displayRecords.length}
         selectedCount={selectedIds.size}
         onBulkDelete={handleBulkDelete}
-        onNewRecord={onNewRecord}
+        onNewRecord={handleCreateNewInlineRow}
       />
 
       <div style={{ flex: 1, overflow: 'auto' }}>
@@ -167,33 +168,15 @@ export const DataGrid: React.FC<DataGridProps> = ({
                   <tr
                     key={r.id}
                     draggable
-                    onDragStart={(e) => {
-                      setDraggedIdx(rIdx);
-                      e.dataTransfer.effectAllowed = 'move';
-                      e.dataTransfer.setData('text/plain', String(rIdx));
-                    }}
+                    onDragStart={(e) => { setDraggedIdx(rIdx); e.dataTransfer.effectAllowed = 'move'; }}
                     onDragOver={(e) => {
                       e.preventDefault();
-                      e.dataTransfer.dropEffect = 'move';
-                      const rect = e.currentTarget.getBoundingClientRect();
                       setDragOverIdx(rIdx);
-                      setDragPosition(e.clientY < rect.top + rect.height / 2 ? 'top' : 'bottom');
+                      setDragPosition(e.clientY < e.currentTarget.getBoundingClientRect().top + 22 ? 'top' : 'bottom');
                     }}
-                    onDragLeave={() => {
-                      if (dragOverIdx === rIdx) {
-                        setDragOverIdx(null);
-                        setDragPosition(null);
-                      }
-                    }}
-                    onDrop={(e) => {
-                      e.preventDefault();
-                      handleDropRow(rIdx);
-                    }}
-                    onDragEnd={() => {
-                      setDraggedIdx(null);
-                      setDragOverIdx(null);
-                      setDragPosition(null);
-                    }}
+                    onDragLeave={() => dragOverIdx === rIdx && setDragOverIdx(null)}
+                    onDrop={(e) => { e.preventDefault(); handleDropRow(rIdx); }}
+                    onDragEnd={() => { setDraggedIdx(null); setDragOverIdx(null); }}
                     className={`notion-row ${dragClass}`}
                     style={{
                       borderBottom: '1px solid var(--border-table)',
@@ -264,6 +247,42 @@ export const DataGrid: React.FC<DataGridProps> = ({
                   </tr>
                 );
               })
+            )}
+
+            {/* Notion-Style "+ New" Bottom Row */}
+            {!isLoading && (
+              <tr
+                onClick={handleCreateNewInlineRow}
+                className="notion-new-row"
+                style={{
+                  borderBottom: '1px solid var(--border-table)',
+                  cursor: 'pointer',
+                  color: 'var(--text-dim)',
+                  minHeight: '44px',
+                }}
+                title="Click to insert new row"
+              >
+                <td style={{ padding: '0.65rem 0.5rem', textAlign: 'center' }}>
+                  <Plus size={14} style={{ opacity: 0.5 }} />
+                </td>
+                <td className="td-drag-num" style={{ padding: '0.65rem 0.5rem' }}>
+                  <span style={{ fontSize: '11px', opacity: 0.4 }}>+</span>
+                </td>
+                <td
+                  colSpan={schema.columns.length + 1}
+                  style={{
+                    padding: '0.65rem 0.75rem',
+                    fontSize: '13px',
+                    fontWeight: 500,
+                    color: 'var(--text-dim)',
+                  }}
+                >
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem' }}>
+                    <Plus size={14} />
+                    <span>New</span>
+                  </div>
+                </td>
+              </tr>
             )}
           </tbody>
         </table>

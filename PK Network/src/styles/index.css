@@ -301,3 +301,16 @@ button, input, select, textarea {
 .notion-row.drag-over-bottom {
   border-bottom: 2px solid var(--accent) !important;
 }
+
+.notion-new-row {
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.notion-new-row:hover {
+  background: rgba(255, 255, 255, 0.035) !important;
+  color: var(--text-primary) !important;
+}
+
+.notion-new-row:hover div span {
+  color: var(--accent) !important;
+}

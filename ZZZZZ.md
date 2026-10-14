@@ -313,6 +313,13 @@ ALTER TABLE tables ADD COLUMN group_id TEXT REFERENCES table_groups(id) ON DELET
   - **Circularity Invariant**: Guard prevents dropping a folder into itself or any of its own descendant folders.
 - **Optimistic RAM Feedback**: 0ms local UI re-render, followed by asynchronous Edge API persistence (`PATCH /api/table/:name/meta` and `PATCH /api/groups/:id`).
 
+### 7. Notion-Style Inline Row Creation (Zero Popups)
+- **Elimination of Modals/Drawers on Creation**:
+  - Clicking `+ New Record` in the header or toolbar, or clicking the persistent `+ New` bottom row inside the grid directly inserts a fresh record into the table with **zero popups or drawers**.
+  - **Auto-Derivation**: Pre-populates auto ID (`CONT-XXXX`, `QUOT-XXXX`, etc.) and default values (`date`, `idx`).
+  - **Inline Focus**: Immediately focuses the newly created row's first editable column in inline edit mode (`editingCell = { id, slug }`).
+  - **Detail Drawers**: Detailed full-record drawer is reserved strictly for explicit manual inspection via the row action button (`Edit2`), never invoked for routine creation.
+
 ---
 
 ## 🛠️ QUICK RE-START COMMANDS (FOR NEXT SESSION)

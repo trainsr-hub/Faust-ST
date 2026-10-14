@@ -380,6 +380,37 @@ export const App: React.FC = () => {
 
   const currentSchema = tables[activeTableName] || { table_name: activeTableName, columns: [] };
 
+  // Notion-Style: Pure Inline Row Creation (Zero Popups)
+  const handleAddNewRow = async (): Promise<TableRecord | null> => {
+    const idCol = currentSchema.columns.find((c) => c.slug === 'id');
+    const prefix = idCol?.metadata?.prefix || activeTableName.slice(0, 4).toUpperCase();
+    const randHex = Math.random().toString(16).substring(2, 6).toUpperCase();
+    const newId = `${prefix}-${randHex}`;
+    const newRecord: TableRecord = { id: newId };
+
+    if (currentSchema.columns.some((c) => c.slug === 'date')) {
+      newRecord.date = new Date().toISOString().split('T')[0];
+    }
+    if (currentSchema.columns.some((c) => c.slug === 'idx')) {
+      const maxIdx = records.reduce((max, r) => Math.max(max, Number(r.idx) || 0), 0);
+      newRecord.idx = maxIdx + 1;
+    }
+
+    // 0ms Optimistic RAM update
+    setRecords((prev) => [...prev, newRecord]);
+    setRecordCounts((prev) => ({ ...prev, [activeTableName]: (prev[activeTableName] || 0) + 1 }));
+
+    try {
+      await api.createRecord(activeTableName, newRecord);
+      showToast(`Created row ${newId}`);
+      return newRecord;
+    } catch (e: any) {
+      showToast(`Row creation error: ${e.message}`);
+      await loadRecords(activeTableName);
+      return null;
+    }
+  };
+
   const openDrawerForRecord = (record: TableRecord | null) => {
     setSelectedRecord(record);
     // Lazily load relations required by this table's schema only when drawer opens
@@ -401,7 +432,7 @@ export const App: React.FC = () => {
         hasAuthKey={Boolean(getAuthKey())}
         theme={theme}
         toggleTheme={toggleTheme}
-        onNewRecord={() => openDrawerForRecord(null)}
+        onNewRecord={handleAddNewRow}
         isMobile={isMobile}
         onToggleOutliner={() => setOutlinerOpen((prev) => !prev)}
         isOutlinerOpen={outlinerOpen}
@@ -452,7 +483,7 @@ export const App: React.FC = () => {
               schema={currentSchema}
               records={records}
               onSelectRecord={(r) => openDrawerForRecord(r)}
-              onNewRecord={() => openDrawerForRecord(null)}
+              onNewRecord={handleAddNewRow}
               onDeleteRecord={handleDeleteRecord}
               isLoading={isSyncing}
             />
@@ -461,7 +492,7 @@ export const App: React.FC = () => {
               schema={currentSchema}
               records={records}
               onSelectRecord={(r) => openDrawerForRecord(r)}
-              onNewRecord={() => openDrawerForRecord(null)}
+              onNewRecord={handleAddNewRow}
               onDeleteRecord={handleDeleteRecord}
               onInlineUpdate={handleInlineUpdate}
               onReorderRecords={(newRecs) => setRecords(newRecs)}
