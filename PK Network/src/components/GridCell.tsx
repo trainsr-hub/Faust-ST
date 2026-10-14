@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Link2, Check, Copy, Tag } from 'lucide-react';
+import { Link2, Check, Copy, Plus } from 'lucide-react';
 import { ColumnDefinition, TableRecord } from '../types';
+import { NotionMultiSelectPopover, NotionTagPill, parseMultiValue } from './NotionMultiSelect';
 
 interface GridCellProps {
   record: TableRecord;
@@ -26,6 +27,7 @@ export const GridCell: React.FC<GridCellProps> = ({
   const val = record[column.slug];
   const [draftVal, setDraftVal] = useState<any>(val ?? '');
   const [copied, setCopied] = useState<boolean>(false);
+  const cellRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -105,7 +107,76 @@ export const GridCell: React.FC<GridCellProps> = ({
     );
   }
 
-  // Active Inline Edit Mode
+  // Notion-Style Multi-Select: Enum Multi
+  if (column.type === 'enum_multi') {
+    const selectedList = parseMultiValue(val);
+    const availableOptions = column.metadata?.options || [];
+
+    const handleRemoveTag = (tagToRemove: string) => {
+      const next = selectedList.filter((t) => t !== tagToRemove);
+      onCommitEdit(next);
+    };
+
+    return (
+      <div
+        ref={cellRef}
+        onClick={onStartEdit}
+        style={{
+          width: '100%',
+          minHeight: '28px',
+          display: 'flex',
+          alignItems: 'center',
+          flexWrap: 'wrap',
+          gap: '0.3rem',
+          cursor: 'pointer',
+          padding: '0.1rem 0',
+        }}
+      >
+        {selectedList.length === 0 ? (
+          <span
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '0.25rem',
+              color: 'var(--text-dim)',
+              fontSize: '11.5px',
+              padding: '0.1rem 0.35rem',
+              borderRadius: 'var(--radius-sm)',
+              border: '1px dashed transparent',
+              transition: 'all 0.15s ease',
+            }}
+            className="notion-tag-empty-btn"
+          >
+            <Plus size={11} />
+            <span>Add tag</span>
+          </span>
+        ) : (
+          selectedList.map((tag) => (
+            <NotionTagPill
+              key={tag}
+              tag={tag}
+              onRemove={() => handleRemoveTag(tag)}
+            />
+          ))
+        )}
+
+        {/* Floating Notion Multi-Select Popover Menu */}
+        {isEditing && (
+          <NotionMultiSelectPopover
+            selected={selectedList}
+            options={availableOptions}
+            anchorRect={cellRef.current?.getBoundingClientRect() || null}
+            onChange={(newSelected) => {
+              onCommitEdit(newSelected);
+            }}
+            onClose={onCancelEdit}
+          />
+        )}
+      </div>
+    );
+  }
+
+  // Active Inline Edit Mode for Other Types
   if (isEditing) {
     if (column.type === 'enum_single') {
       return (
@@ -166,15 +237,10 @@ export const GridCell: React.FC<GridCellProps> = ({
   }
 
   // Static Presentation Renderers
-  if (Array.isArray(val)) {
+  if (column.type === 'enum_single' && val) {
     return (
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.25rem', cursor: 'pointer' }} onClick={onStartEdit}>
-        {val.length === 0 ? <span style={{ color: 'var(--text-dim)' }}>—</span> : val.map((item) => (
-          <span key={item} className="badge badge-enum">
-            <Tag size={10} />
-            <span>{item}</span>
-          </span>
-        ))}
+      <div onClick={onStartEdit} style={{ cursor: 'pointer', display: 'inline-flex' }}>
+        <NotionTagPill tag={String(val)} />
       </div>
     );
   }
@@ -188,11 +254,13 @@ export const GridCell: React.FC<GridCellProps> = ({
     );
   }
 
-  if (column.type === 'enum_single' && val) {
+  if (Array.isArray(val)) {
     return (
-      <span className="badge badge-enum" style={{ cursor: 'pointer' }} onClick={onStartEdit}>
-        {val}
-      </span>
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.25rem', cursor: 'pointer' }} onClick={onStartEdit}>
+        {val.length === 0 ? <span style={{ color: 'var(--text-dim)' }}>—</span> : val.map((item) => (
+          <NotionTagPill key={item} tag={String(item)} />
+        ))}
+      </div>
     );
   }
 

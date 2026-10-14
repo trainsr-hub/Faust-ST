@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { X, Save, Trash2, Check } from 'lucide-react';
+import { X, Save, Trash2, Check, Plus } from 'lucide-react';
 import { TableSchema, TableRecord, ColumnDefinition } from '../types';
+import { NotionTagPill, parseMultiValue, getTagColor } from './NotionMultiSelect';
 
 interface MobileRecordDrawerProps {
   isOpen: boolean;
@@ -24,6 +25,7 @@ export const MobileRecordDrawer: React.FC<MobileRecordDrawerProps> = ({
   relationOptions = {},
 }) => {
   const [formData, setFormData] = useState<Record<string, any>>({});
+  const [newTagInput, setNewTagInput] = useState<Record<string, string>>({});
 
   useEffect(() => {
     if (record) {
@@ -55,7 +57,7 @@ export const MobileRecordDrawer: React.FC<MobileRecordDrawerProps> = ({
   };
 
   const toggleMultiItem = (slug: string, item: string) => {
-    const list: string[] = Array.isArray(formData[slug]) ? [...formData[slug]] : [];
+    const list = parseMultiValue(formData[slug]);
     const idx = list.indexOf(item);
     if (idx >= 0) {
       list.splice(idx, 1);
@@ -63,6 +65,17 @@ export const MobileRecordDrawer: React.FC<MobileRecordDrawerProps> = ({
       list.push(item);
     }
     handleFieldChange(slug, list);
+  };
+
+  const handleAddCustomTag = (slug: string) => {
+    const tag = (newTagInput[slug] || '').trim();
+    if (!tag) return;
+    const list = parseMultiValue(formData[slug]);
+    if (!list.includes(tag)) {
+      list.push(tag);
+      handleFieldChange(slug, list);
+    }
+    setNewTagInput((prev) => ({ ...prev, [slug]: '' }));
   };
 
   return (
@@ -197,31 +210,84 @@ export const MobileRecordDrawer: React.FC<MobileRecordDrawerProps> = ({
                     ))}
                   </select>
                 ) : col.type === 'enum_multi' ? (
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem', marginTop: '0.2rem' }}>
-                    {(col.metadata?.options || []).map((opt: string) => {
-                      const selectedList = Array.isArray(val) ? val : [];
-                      const isSelected = selectedList.includes(opt);
-                      return (
-                        <button
-                          key={opt}
-                          type="button"
-                          onClick={() => toggleMultiItem(col.slug, opt)}
-                          style={{
-                            minHeight: '40px',
-                            padding: '0.4rem 0.75rem',
-                            borderRadius: 'var(--radius-full)',
-                            border: isSelected ? '1px solid var(--accent)' : '1px solid var(--border-light)',
-                            background: isSelected ? 'var(--accent-bg)' : 'var(--bg-canvas)',
-                            color: isSelected ? 'var(--accent)' : 'var(--text-tertiary)',
-                            fontSize: '12px',
-                            fontWeight: isSelected ? 600 : 400,
-                            cursor: 'pointer',
-                          }}
-                        >
-                          {isSelected && '✓ '} {opt}
-                        </button>
-                      );
-                    })}
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem', marginTop: '0.2rem' }}>
+                    {/* Selected Tags Display */}
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem', minHeight: '32px', alignItems: 'center' }}>
+                      {parseMultiValue(val).length === 0 ? (
+                        <span style={{ color: 'var(--text-dim)', fontSize: '12px' }}>No tags selected</span>
+                      ) : (
+                        parseMultiValue(val).map((tag: string) => (
+                          <NotionTagPill
+                            key={tag}
+                            tag={tag}
+                            onRemove={() => toggleMultiItem(col.slug, tag)}
+                            style={{ fontSize: '12.5px', padding: '0.25rem 0.6rem' }}
+                          />
+                        ))
+                      )}
+                    </div>
+
+                    {/* Predefined Options Toggles */}
+                    {(col.metadata?.options || []).length > 0 && (
+                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.35rem', paddingTop: '0.4rem', borderTop: '1px solid var(--border-table)' }}>
+                        {(col.metadata?.options || []).map((opt: string) => {
+                          const isSelected = parseMultiValue(val).includes(opt);
+                          const color = getTagColor(opt);
+                          return (
+                            <button
+                              key={opt}
+                              type="button"
+                              onClick={() => toggleMultiItem(col.slug, opt)}
+                              style={{
+                                minHeight: '34px',
+                                padding: '0.25rem 0.65rem',
+                                borderRadius: 'var(--radius-sm)',
+                                border: isSelected ? `1px solid ${color.border}` : '1px solid var(--border-light)',
+                                background: isSelected ? color.bg : 'var(--bg-canvas)',
+                                color: isSelected ? color.text : 'var(--text-tertiary)',
+                                fontSize: '11.5px',
+                                fontWeight: isSelected ? 600 : 400,
+                                cursor: 'pointer',
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                gap: '0.35rem',
+                                transition: 'all 0.15s ease',
+                              }}
+                            >
+                              {isSelected && <Check size={12} />}
+                              <span>{opt}</span>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    )}
+
+                    {/* Inline Add Custom Tag Input */}
+                    <div style={{ display: 'flex', gap: '0.4rem', marginTop: '0.2rem' }}>
+                      <input
+                        type="text"
+                        placeholder="Type new tag..."
+                        className="input-base"
+                        style={{ flex: 1, minHeight: '36px', fontSize: '12px' }}
+                        value={newTagInput[col.slug] || ''}
+                        onChange={(e) => setNewTagInput((prev) => ({ ...prev, [col.slug]: e.target.value }))}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter') {
+                            e.preventDefault();
+                            handleAddCustomTag(col.slug);
+                          }
+                        }}
+                      />
+                      <button
+                        type="button"
+                        className="btn"
+                        onClick={() => handleAddCustomTag(col.slug)}
+                        style={{ minHeight: '36px', padding: '0 0.75rem', fontSize: '12px' }}
+                      >
+                        <Plus size={13} />
+                        <span>Add</span>
+                      </button>
+                    </div>
                   </div>
                 ) : col.type === 'relation_single' ? (
                   <select
