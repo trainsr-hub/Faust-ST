@@ -287,11 +287,25 @@ app.get('/api/tables', async (c) => {
     const tables: Record<string, any> = {};
 
     for (const r of res.rows) {
-      try {
-        tables[r.table_name] = JSON.parse(r.schema_json);
-      } catch {
+      if (!r.schema_json) {
         tables[r.table_name] = DEFAULT_SCHEMAS[r.table_name] || null;
+        continue;
       }
+
+      let parsed = r.schema_json;
+      if (typeof parsed === 'string') {
+        try {
+          parsed = JSON.parse(parsed);
+          if (typeof parsed === 'string') {
+            try { parsed = JSON.parse(parsed); } catch {}
+          }
+        } catch (e) {
+          console.error(`[Worker] Failed to parse schema_json for table ${r.table_name}:`, e);
+          parsed = DEFAULT_SCHEMAS[r.table_name] || null;
+        }
+      }
+
+      tables[r.table_name] = parsed;
     }
 
     // Ensure all DEFAULT_SCHEMAS exist in _schema_definitions
@@ -314,6 +328,21 @@ app.get('/api/tables', async (c) => {
     // Load table groups
     const groupsRes = await turso.execute('SELECT * FROM table_groups ORDER BY order_index ASC;');
     const groups = groupsRes.rows;
+
+    // Ensure every table in metadata has at least a valid basic schema
+    for (const m of metadata) {
+      if (!tables[m.id] || !tables[m.id].columns || tables[m.id].columns.length === 0) {
+        const prefix = m.id.slice(0, 4).toUpperCase();
+        tables[m.id] = {
+          table_name: m.id,
+          columns: [
+            { name: `${m.name || m.id} ID`, slug: 'id', type: 'hex_id', metadata: { prefix } },
+            { name: 'Name', slug: 'name', type: 'text_single', metadata: {} },
+            { name: 'Notes', slug: 'notes', type: 'text_multi', metadata: {} },
+          ]
+        };
+      }
+    }
 
     return c.json({ success: true, tables, metadata, groups });
   } catch (err: any) {
