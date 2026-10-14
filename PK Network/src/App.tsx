@@ -9,7 +9,8 @@ import { AuthModal } from './components/AuthModal';
 import { VaultGate } from './components/VaultGate';
 import { TableSettingsModal } from './components/TableSettingsModal';
 import { NewTableModal } from './components/NewTableModal';
-import { TableSchema, TableRecord } from './types';
+import { WorkspaceOutliner } from './components/WorkspaceOutliner';
+import { TableSchema, TableRecord, TableGroup, TableMetaRecord } from './types';
 import { api, getAuthKey, checkUrlKey } from './services/api';
 
 export const App: React.FC = () => {
@@ -19,7 +20,8 @@ export const App: React.FC = () => {
   const [activeTableName, setActiveTableName] = useState<string>('quotes');
   const [records, setRecords] = useState<TableRecord[]>([]);
   const [recordCounts, setRecordCounts] = useState<Record<string, number>>({});
-  const [tableMetadata, setTableMetadata] = useState<TableRecord[]>([]);
+  const [tableMetadata, setTableMetadata] = useState<TableMetaRecord[]>([]);
+  const [groups, setGroups] = useState<TableGroup[]>([]);
   const [relationOptions, setRelationOptions] = useState<Record<string, { id: string; label: string }[]>>({});
 
   const [isConnected, setIsConnected] = useState<boolean>(false);
@@ -31,12 +33,14 @@ export const App: React.FC = () => {
   const [isLocked, setIsLocked] = useState<boolean>(false);
   const [initialUrlKey, setInitialUrlKey] = useState<string>('');
 
-  // Drawer & Modals
+  // Drawer, Outliner & Modals
   const [drawerOpen, setDrawerOpen] = useState<boolean>(false);
   const [selectedRecord, setSelectedRecord] = useState<TableRecord | null>(null);
   const [authModalOpen, setAuthModalOpen] = useState<boolean>(false);
   const [tableSettingsOpen, setTableSettingsOpen] = useState<boolean>(false);
   const [newTableModalOpen, setNewTableModalOpen] = useState<boolean>(false);
+  const [defaultNewTableGroupId, setDefaultNewTableGroupId] = useState<string | null>(null);
+  const [outlinerOpen, setOutlinerOpen] = useState<boolean>(true);
 
   // Responsive Hook
   const [isMobile, setIsMobile] = useState<boolean>(window.innerWidth < 768);
@@ -103,7 +107,17 @@ export const App: React.FC = () => {
         } else {
           try {
             const metaRes = await api.getRecords('tables');
-            if (metaRes.records) setTableMetadata(metaRes.records);
+            if (metaRes.records) setTableMetadata(metaRes.records as any);
+          } catch {}
+        }
+
+        // Populate sovereign table groups taxonomy
+        if (tablesRes.groups && tablesRes.groups.length > 0) {
+          setGroups(tablesRes.groups);
+        } else {
+          try {
+            const grpRes = await api.getGroups();
+            if (grpRes.groups) setGroups(grpRes.groups);
           } catch {}
         }
 
@@ -159,13 +173,39 @@ export const App: React.FC = () => {
     await loadRecords(name);
   };
 
+  const handleOpenAddTableWithGroup = (groupId?: string) => {
+    setDefaultNewTableGroupId(groupId || null);
+    setNewTableModalOpen(true);
+  };
+
+  // Group Logic: Create Group
+  const handleAddGroup = async (parentGroupId?: string) => {
+    const naturalName = window.prompt('Enter new group name:');
+    if (!naturalName || !naturalName.trim()) return;
+    try {
+      const res = await api.createGroup({
+        natural_name: naturalName.trim(),
+        sub_group_of: parentGroupId || null,
+      });
+      if (res.group) {
+        setGroups((prev) => [...prev, res.group]);
+        showToast(`Created group "${res.group.natural_name}"`);
+      }
+    } catch (e: any) {
+      showToast(`Group creation failed: ${e.message}`);
+    }
+  };
+
   // Project Logic: Create table
-  const handleCreateNewTable = async (newTable: { id: string; name: string; parent_id: string | null }) => {
+  const handleCreateNewTable = async (newTable: { id: string; name: string; parent_id: string | null; group_id: string | null }) => {
     try {
       const res = await api.createNewTable(newTable);
       if (res.table) {
         setTables((prev) => ({ ...prev, [newTable.id]: res.table.schema }));
-        setTableMetadata((prev) => [...prev, { id: newTable.id, name: newTable.name, parent_id: newTable.parent_id }]);
+        setTableMetadata((prev) => [
+          ...prev,
+          { id: newTable.id, name: newTable.name, parent_id: newTable.parent_id, group_id: newTable.group_id }
+        ]);
         setActiveTableName(newTable.id);
         await loadRecords(newTable.id);
         showToast(`Created table "${newTable.name}"`);
@@ -176,8 +216,8 @@ export const App: React.FC = () => {
     }
   };
 
-  // Project Logic: Update table metadata (natural name, parent selector)
-  const handleUpdateTableSettings = async (updates: { name: string; parent_id: string | null }) => {
+  // Project Logic: Update table metadata (natural name, parent selector, group selector)
+  const handleUpdateTableSettings = async (updates: { name: string; parent_id: string | null; group_id: string | null }) => {
     try {
       await api.updateTableMeta(activeTableName, updates);
       setTableMetadata((prev) =>
@@ -254,7 +294,7 @@ export const App: React.FC = () => {
         setRecords((prev) => [res.record, ...prev]);
         setRecordCounts((prev) => ({ ...prev, [activeTableName]: (prev[activeTableName] || 0) + 1 }));
         if (activeTableName === 'tables') {
-          setTableMetadata((prev) => [...prev, res.record]);
+          setTableMetadata((prev) => [...prev, res.record as unknown as TableMetaRecord]);
           // Pull new schema definition created on backend
           const fresh = await api.getTables();
           if (fresh.tables) setTables(fresh.tables);
@@ -331,51 +371,72 @@ export const App: React.FC = () => {
         toggleTheme={toggleTheme}
         onNewRecord={() => openDrawerForRecord(null)}
         isMobile={isMobile}
+        onToggleOutliner={() => setOutlinerOpen((prev) => !prev)}
+        isOutlinerOpen={outlinerOpen}
       />
 
       <TableTabs
         tables={tables}
         activeTable={activeTableName}
         onSelectTable={handleSelectTable}
-        onAddTable={() => setNewTableModalOpen(true)}
+        onAddTable={() => handleOpenAddTableWithGroup(undefined)}
         onOpenTableSettings={() => setTableSettingsOpen(true)}
         recordCounts={recordCounts}
         tableMetadata={tableMetadata}
       />
 
-      <main style={{ flex: 1, display: 'flex', overflow: 'hidden', position: 'relative' }}>
-        {mode === 'schema' ? (
-          <SchemaView
-            schema={currentSchema}
-            availableTables={Object.keys(tables)}
-            onSaveSchema={handleSaveSchema}
-            isSaving={isSaving}
-            isMobile={isMobile}
-          />
-        ) : isMobile ? (
-          <MobileCardView
-            schema={currentSchema}
-            records={records}
-            onSelectRecord={(r) => openDrawerForRecord(r)}
-            onNewRecord={() => openDrawerForRecord(null)}
-            onDeleteRecord={handleDeleteRecord}
-            isLoading={isSyncing}
-          />
-        ) : (
-          <DataGrid
-            schema={currentSchema}
-            records={records}
-            onSelectRecord={(r) => openDrawerForRecord(r)}
-            onNewRecord={() => openDrawerForRecord(null)}
-            onDeleteRecord={handleDeleteRecord}
-            onInlineUpdate={handleInlineUpdate}
-            onReorderRecords={(newRecs) => setRecords(newRecs)}
-            isLoading={isSyncing}
-            relationOptions={relationOptions}
-            onEnsureRelation={ensureRelationLoaded}
-          />
-        )}
-      </main>
+      <div style={{ flex: 1, display: 'flex', overflow: 'hidden', position: 'relative' }}>
+        <WorkspaceOutliner
+          isOpen={outlinerOpen}
+          onClose={() => setOutlinerOpen(false)}
+          groups={groups}
+          tables={tables}
+          tableMetadata={tableMetadata}
+          activeTable={activeTableName}
+          onSelectTable={(id) => {
+            handleSelectTable(id);
+            if (isMobile) setOutlinerOpen(false);
+          }}
+          onAddTable={(groupId) => handleOpenAddTableWithGroup(groupId)}
+          onAddGroup={handleAddGroup}
+          recordCounts={recordCounts}
+          isMobile={isMobile}
+        />
+
+        <main style={{ flex: 1, display: 'flex', overflow: 'hidden', position: 'relative', minWidth: 0 }}>
+          {mode === 'schema' ? (
+            <SchemaView
+              schema={currentSchema}
+              availableTables={Object.keys(tables)}
+              onSaveSchema={handleSaveSchema}
+              isSaving={isSaving}
+              isMobile={isMobile}
+            />
+          ) : isMobile ? (
+            <MobileCardView
+              schema={currentSchema}
+              records={records}
+              onSelectRecord={(r) => openDrawerForRecord(r)}
+              onNewRecord={() => openDrawerForRecord(null)}
+              onDeleteRecord={handleDeleteRecord}
+              isLoading={isSyncing}
+            />
+          ) : (
+            <DataGrid
+              schema={currentSchema}
+              records={records}
+              onSelectRecord={(r) => openDrawerForRecord(r)}
+              onNewRecord={() => openDrawerForRecord(null)}
+              onDeleteRecord={handleDeleteRecord}
+              onInlineUpdate={handleInlineUpdate}
+              onReorderRecords={(newRecs) => setRecords(newRecs)}
+              isLoading={isSyncing}
+              relationOptions={relationOptions}
+              onEnsureRelation={ensureRelationLoaded}
+            />
+          )}
+        </main>
+      </div>
 
       <MobileRecordDrawer
         isOpen={drawerOpen}
@@ -394,6 +455,7 @@ export const App: React.FC = () => {
         tableId={activeTableName}
         tableMeta={tableMetadata.find((m) => m.id === activeTableName)}
         availableTables={tableMetadata}
+        availableGroups={groups}
         onSave={handleUpdateTableSettings}
         onDelete={handleDeleteTable}
       />
@@ -402,6 +464,8 @@ export const App: React.FC = () => {
         isOpen={newTableModalOpen}
         onClose={() => setNewTableModalOpen(false)}
         availableTables={tableMetadata}
+        availableGroups={groups}
+        defaultGroupId={defaultNewTableGroupId}
         onCreate={handleCreateNewTable}
       />
 

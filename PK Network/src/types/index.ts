@@ -35,6 +35,26 @@ export interface TableRecord {
   [key: string]: any;
 }
 
+export interface TableGroup {
+  id: string;
+  natural_name: string;
+  sub_group_of?: string | null;
+  order_index?: number;
+  icon?: string;
+  description?: string;
+  created_at?: string;
+}
+
+export interface TableMetaRecord {
+  id: string;
+  name: string;
+  parent_id?: string | null;
+  group_id?: string | null;
+  order_index?: number;
+  icon?: string;
+  description?: string;
+}
+
 export interface FieldTypeMeta {
   category: 'pk' | 'text' | 'scalar' | 'boolean' | 'enum' | 'rel';
   icon: string;

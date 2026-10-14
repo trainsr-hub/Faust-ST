@@ -1,25 +1,36 @@
-import React, { useState } from 'react';
-import { X, Plus, Database } from 'lucide-react';
-import { TableRecord } from '../types';
+import React, { useState, useEffect } from 'react';
+import { X, Plus, Database, Folder } from 'lucide-react';
+import { TableMetaRecord, TableGroup } from '../types';
 
 interface NewTableModalProps {
   isOpen: boolean;
   onClose: () => void;
-  availableTables: TableRecord[];
-  onCreate: (table: { id: string; name: string; parent_id: string | null }) => Promise<void>;
+  availableTables: TableMetaRecord[];
+  availableGroups?: TableGroup[];
+  defaultGroupId?: string | null;
+  onCreate: (table: { id: string; name: string; parent_id: string | null; group_id: string | null }) => Promise<void>;
 }
 
 export const NewTableModal: React.FC<NewTableModalProps> = ({
   isOpen,
   onClose,
   availableTables,
+  availableGroups = [],
+  defaultGroupId = null,
   onCreate,
 }) => {
   const [name, setName] = useState<string>('');
   const [slug, setSlug] = useState<string>('');
   const [parentId, setParentId] = useState<string>('');
+  const [groupId, setGroupId] = useState<string>('');
   const [autoSlug, setAutoSlug] = useState<boolean>(true);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (isOpen) {
+      setGroupId(defaultGroupId || '');
+    }
+  }, [isOpen, defaultGroupId]);
 
   if (!isOpen) return null;
 
@@ -47,10 +58,12 @@ export const NewTableModal: React.FC<NewTableModalProps> = ({
         id: cleanId,
         name: name.trim(),
         parent_id: parentId ? parentId : null,
+        group_id: groupId ? groupId : null,
       });
       setName('');
       setSlug('');
       setParentId('');
+      setGroupId('');
       setAutoSlug(true);
       onClose();
     } catch {
@@ -190,6 +203,35 @@ export const NewTableModal: React.FC<NewTableModalProps> = ({
               {availableTables.map((t) => (
                 <option key={t.id} value={t.id}>
                   {t.name || t.id}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* Table Group Selector */}
+          <div>
+            <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, color: 'var(--text-dim)', marginBottom: '0.4rem' }}>
+              Workspace Group (Outliner Taxonomy)
+            </label>
+            <select
+              value={groupId}
+              onChange={(e) => setGroupId(e.target.value)}
+              style={{
+                width: '100%',
+                minHeight: '44px',
+                padding: '0.65rem 0.85rem',
+                borderRadius: 'var(--radius-sm)',
+                background: 'var(--bg-canvas)',
+                border: '1px solid var(--border-mid)',
+                color: 'var(--text-primary)',
+                fontSize: '14px',
+                outline: 'none',
+              }}
+            >
+              <option value="">None (Ungrouped)</option>
+              {availableGroups.map((g) => (
+                <option key={g.id} value={g.id}>
+                  {g.natural_name} ({g.id})
                 </option>
               ))}
             </select>

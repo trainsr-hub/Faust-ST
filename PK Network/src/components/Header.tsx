@@ -1,5 +1,5 @@
 import React from 'react';
-import { Database, Key, Moon, Sun, RefreshCw, Plus, Layers, Table as TableIcon } from 'lucide-react';
+import { Database, Key, Moon, Sun, RefreshCw, Plus, Layers, Table as TableIcon, PanelLeft } from 'lucide-react';
 
 interface HeaderProps {
   mode: 'schema' | 'data';
@@ -13,6 +13,8 @@ interface HeaderProps {
   toggleTheme: () => void;
   onNewRecord?: () => void;
   isMobile: boolean;
+  onToggleOutliner?: () => void;
+  isOutlinerOpen?: boolean;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -27,6 +29,8 @@ export const Header: React.FC<HeaderProps> = ({
   toggleTheme,
   onNewRecord,
   isMobile,
+  onToggleOutliner,
+  isOutlinerOpen,
 }) => {
   return (
     <header style={{
@@ -42,6 +46,27 @@ export const Header: React.FC<HeaderProps> = ({
     }}>
       {/* Brand & Connection */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+        {onToggleOutliner && (
+          <button
+            onClick={onToggleOutliner}
+            title={isOutlinerOpen ? 'Hide Workspace Outliner' : 'Show Workspace Outliner'}
+            style={{
+              background: isOutlinerOpen ? 'var(--accent-bg)' : 'transparent',
+              border: '1px solid var(--border-light)',
+              borderRadius: 'var(--radius-sm)',
+              color: isOutlinerOpen ? 'var(--accent)' : 'var(--text-secondary)',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              padding: '0.35rem',
+              transition: 'all 0.15s ease',
+            }}
+          >
+            <PanelLeft size={16} />
+          </button>
+        )}
+
         <div style={{
           display: 'flex',
           alignItems: 'center',

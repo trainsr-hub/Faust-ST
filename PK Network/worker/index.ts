@@ -155,6 +155,60 @@ async function ensureTablesTable(turso: TursoClient) {
   }
 }
 
+// Ensure table_groups system table exists and is seeded with core groups
+async function ensureGroupsTable(turso: TursoClient) {
+  await turso.execute(`
+    CREATE TABLE IF NOT EXISTS table_groups (
+      id TEXT PRIMARY KEY,
+      natural_name TEXT NOT NULL,
+      sub_group_of TEXT,
+      order_index INTEGER DEFAULT 0,
+      icon TEXT DEFAULT 'folder',
+      description TEXT,
+      created_at TEXT DEFAULT (datetime('now'))
+    );
+  `);
+
+  // Ensure tables table has group_id column
+  try {
+    const info = await turso.execute('PRAGMA table_info(tables);');
+    const cols = new Set(info.rows.map((r: any) => r.name));
+    if (!cols.has('group_id')) {
+      await turso.execute('ALTER TABLE tables ADD COLUMN group_id TEXT REFERENCES table_groups(id) ON DELETE SET NULL;');
+    }
+  } catch (e) {
+    console.warn('group_id migration check error:', e);
+  }
+
+  // Seed default groups if empty
+  try {
+    const countRes = await turso.execute('SELECT COUNT(*) as cnt FROM table_groups;');
+    const count = Number(countRes.rows[0]?.cnt || 0);
+    if (count === 0) {
+      const defaultGroups = [
+        { id: 'grp_knowledge', natural_name: 'Knowledge Base', sub_group_of: null, order_index: 1, icon: 'library', description: 'Core intellect sources and knowledge vaults' },
+        { id: 'grp_literature', natural_name: 'Literature & Insights', sub_group_of: 'grp_knowledge', order_index: 2, icon: 'book-open', description: 'Collections, authors, and atomic excerpts' },
+        { id: 'grp_taxonomies', natural_name: 'Taxonomies & Vectors', sub_group_of: null, order_index: 3, icon: 'tags', description: 'Themes, tags, and situational usages' },
+        { id: 'grp_operations', natural_name: 'Operations & Systems', sub_group_of: null, order_index: 4, icon: 'cpu', description: 'Active engineering projects and operator profiles' },
+      ];
+
+      for (const g of defaultGroups) {
+        await turso.execute(
+          'INSERT OR REPLACE INTO table_groups (id, natural_name, sub_group_of, order_index, icon, description) VALUES (?, ?, ?, ?, ?, ?);',
+          [g.id, g.natural_name, g.sub_group_of, g.order_index, g.icon, g.description]
+        );
+      }
+
+      // Assign initial tables to default groups
+      await turso.execute("UPDATE tables SET group_id = 'grp_literature' WHERE id IN ('containers', 'specifics', 'quotes');");
+      await turso.execute("UPDATE tables SET group_id = 'grp_taxonomies' WHERE id IN ('themes', 'usages');");
+      await turso.execute("UPDATE tables SET group_id = 'grp_operations' WHERE id IN ('projects', 'users');");
+    }
+  } catch (e) {
+    console.warn('ensureGroupsTable seed error:', e);
+  }
+}
+
 // Map column atomic type to SQLite column DDL
 function getSqlType(type: string): string {
   switch (type) {
@@ -227,6 +281,7 @@ app.get('/api/tables', async (c) => {
     const turso = getTurso(c);
     await ensureSchemaTable(turso);
     await ensureTablesTable(turso);
+    await ensureGroupsTable(turso);
 
     const res = await turso.execute('SELECT table_name, schema_json FROM _schema_definitions;');
     const tables: Record<string, any> = {};
@@ -256,13 +311,100 @@ app.get('/api/tables', async (c) => {
     const metaRes = await turso.execute('SELECT * FROM tables ORDER BY order_index ASC;');
     const metadata = metaRes.rows;
 
-    return c.json({ success: true, tables, metadata });
+    // Load table groups
+    const groupsRes = await turso.execute('SELECT * FROM table_groups ORDER BY order_index ASC;');
+    const groups = groupsRes.rows;
+
+    return c.json({ success: true, tables, metadata, groups });
   } catch (err: any) {
     return c.json({ success: false, error: err.message }, 500);
   }
 });
 
-// API: Update table metadata via Project Logic (Rename natural name, change parent selector)
+// API: Get all groups
+app.get('/api/groups', async (c) => {
+  try {
+    const turso = getTurso(c);
+    await ensureGroupsTable(turso);
+    const res = await turso.execute('SELECT * FROM table_groups ORDER BY order_index ASC;');
+    return c.json({ success: true, groups: res.rows });
+  } catch (err: any) {
+    return c.json({ success: false, error: err.message }, 500);
+  }
+});
+
+// API: Create group or sub-group
+app.post('/api/groups', async (c) => {
+  try {
+    const body = await c.req.json();
+    const turso = getTurso(c);
+    const rawId = String(body.id || body.natural_name || '').toLowerCase();
+    const cleanId = rawId.replace(/[^a-z0-9_]/g, '_').replace(/^_+|_+$/g, '') || `grp_${Date.now()}`;
+    const naturalName = body.natural_name || body.name || 'Untitled Group';
+    const subGroupOf = body.sub_group_of || null;
+
+    const maxOrder = await turso.execute('SELECT MAX(order_index) as m FROM table_groups;');
+    const nextOrder = Number(maxOrder.rows[0]?.m || 0) + 1;
+
+    await turso.execute(
+      'INSERT OR REPLACE INTO table_groups (id, natural_name, sub_group_of, order_index, icon, description) VALUES (?, ?, ?, ?, ?, ?);',
+      [cleanId, naturalName, subGroupOf, nextOrder, body.icon || 'folder', body.description || '']
+    );
+
+    return c.json({
+      success: true,
+      group: {
+        id: cleanId,
+        natural_name: naturalName,
+        sub_group_of: subGroupOf,
+        order_index: nextOrder,
+        icon: body.icon || 'folder'
+      }
+    });
+  } catch (err: any) {
+    return c.json({ success: false, error: err.message }, 500);
+  }
+});
+
+// API: Update group metadata
+app.patch('/api/groups/:id', async (c) => {
+  try {
+    const id = c.req.param('id');
+    const body = await c.req.json();
+    const updates = body.updates || body;
+    const turso = getTurso(c);
+
+    const allowed = ['natural_name', 'sub_group_of', 'order_index', 'icon', 'description'];
+    const keys = Object.keys(updates).filter(k => allowed.includes(k));
+    if (keys.length === 0) return c.json({ success: true });
+
+    const setClause = keys.map(k => `"${k}" = ?`).join(', ');
+    const values = [...keys.map(k => updates[k]), id];
+
+    await turso.execute(`UPDATE table_groups SET ${setClause} WHERE id = ?;`, values);
+    return c.json({ success: true, message: `Group ${id} updated` });
+  } catch (err: any) {
+    return c.json({ success: false, error: err.message }, 500);
+  }
+});
+
+// API: Delete group
+app.delete('/api/groups/:id', async (c) => {
+  try {
+    const id = c.req.param('id');
+    const turso = getTurso(c);
+
+    await turso.execute('UPDATE table_groups SET sub_group_of = NULL WHERE sub_group_of = ?;', [id]);
+    await turso.execute('UPDATE tables SET group_id = NULL WHERE group_id = ?;', [id]);
+    await turso.execute('DELETE FROM table_groups WHERE id = ?;', [id]);
+
+    return c.json({ success: true, message: `Group ${id} deleted and unlinked` });
+  } catch (err: any) {
+    return c.json({ success: false, error: err.message }, 500);
+  }
+});
+
+// API: Update table metadata via Project Logic (Rename natural name, change parent selector, assign group)
 app.patch('/api/table/:name/meta', async (c) => {
   try {
     const name = c.req.param('name');
@@ -270,7 +412,7 @@ app.patch('/api/table/:name/meta', async (c) => {
     const turso = getTurso(c);
 
     const updates = body.updates || body;
-    const allowed = ['name', 'parent_id', 'order_index', 'icon', 'description'];
+    const allowed = ['name', 'parent_id', 'group_id', 'order_index', 'icon', 'description'];
     const keys = Object.keys(updates).filter(k => allowed.includes(k));
     if (keys.length === 0) {
       return c.json({ success: true, message: 'No valid metadata fields to update' });
@@ -320,9 +462,10 @@ app.post('/api/tables/new', async (c) => {
     // 3. Register in tables metadata registry
     const maxOrderRes = await turso.execute('SELECT MAX(order_index) as m FROM tables;');
     const nextOrder = Number(maxOrderRes.rows[0]?.m || 0) + 1;
+    const groupId = body.group_id || null;
     await turso.execute(
-      'INSERT OR REPLACE INTO tables (id, name, parent_id, order_index, icon) VALUES (?, ?, ?, ?, ?);',
-      [cleanId, displayName, parentId, nextOrder, body.icon || 'box']
+      'INSERT OR REPLACE INTO tables (id, name, parent_id, group_id, order_index, icon) VALUES (?, ?, ?, ?, ?, ?);',
+      [cleanId, displayName, parentId, groupId, nextOrder, body.icon || 'box']
     );
 
     return c.json({
@@ -331,6 +474,7 @@ app.post('/api/tables/new', async (c) => {
         id: cleanId,
         name: displayName,
         parent_id: parentId,
+        group_id: groupId,
         order_index: nextOrder,
         schema: initialSchema
       }

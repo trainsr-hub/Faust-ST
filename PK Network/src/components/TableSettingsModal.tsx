@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { X, Trash2, Check, Settings, AlertTriangle } from 'lucide-react';
-import { TableRecord } from '../types';
+import { X, Trash2, Check, Settings, AlertTriangle, Folder } from 'lucide-react';
+import { TableMetaRecord, TableGroup } from '../types';
 
 interface TableSettingsModalProps {
   isOpen: boolean;
   onClose: () => void;
   tableId: string;
-  tableMeta?: TableRecord;
-  availableTables: TableRecord[];
-  onSave: (updates: { name: string; parent_id: string | null }) => Promise<void>;
+  tableMeta?: TableMetaRecord;
+  availableTables: TableMetaRecord[];
+  availableGroups?: TableGroup[];
+  onSave: (updates: { name: string; parent_id: string | null; group_id: string | null }) => Promise<void>;
   onDelete: (id: string) => Promise<void>;
 }
 
@@ -18,11 +19,13 @@ export const TableSettingsModal: React.FC<TableSettingsModalProps> = ({
   tableId,
   tableMeta,
   availableTables,
+  availableGroups = [],
   onSave,
   onDelete,
 }) => {
   const [name, setName] = useState<string>('');
   const [parentId, setParentId] = useState<string>('');
+  const [groupId, setGroupId] = useState<string>('');
   const [isSaving, setIsSaving] = useState<boolean>(false);
   const [confirmDelete, setConfirmDelete] = useState<boolean>(false);
 
@@ -30,6 +33,7 @@ export const TableSettingsModal: React.FC<TableSettingsModalProps> = ({
     if (isOpen) {
       setName(tableMeta?.name || tableId);
       setParentId(tableMeta?.parent_id ? String(tableMeta.parent_id) : '');
+      setGroupId(tableMeta?.group_id ? String(tableMeta.group_id) : '');
       setConfirmDelete(false);
     }
   }, [isOpen, tableId, tableMeta]);
@@ -46,6 +50,7 @@ export const TableSettingsModal: React.FC<TableSettingsModalProps> = ({
       await onSave({
         name: name.trim(),
         parent_id: parentId ? parentId : null,
+        group_id: groupId ? groupId : null,
       });
       onClose();
     } catch {
@@ -190,6 +195,35 @@ export const TableSettingsModal: React.FC<TableSettingsModalProps> = ({
               {validParents.map((t) => (
                 <option key={t.id} value={t.id}>
                   {t.name || t.id} ({t.id})
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* Table Group Selector */}
+          <div>
+            <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, color: 'var(--text-dim)', marginBottom: '0.4rem' }}>
+              Workspace Group (Outliner Taxonomy)
+            </label>
+            <select
+              value={groupId}
+              onChange={(e) => setGroupId(e.target.value)}
+              style={{
+                width: '100%',
+                minHeight: '44px',
+                padding: '0.65rem 0.85rem',
+                borderRadius: 'var(--radius-sm)',
+                background: 'var(--bg-canvas)',
+                border: '1px solid var(--border-mid)',
+                color: 'var(--text-primary)',
+                fontSize: '14px',
+                outline: 'none',
+              }}
+            >
+              <option value="">None (Ungrouped)</option>
+              {availableGroups.map((g) => (
+                <option key={g.id} value={g.id}>
+                  {g.natural_name} ({g.id})
                 </option>
               ))}
             </select>

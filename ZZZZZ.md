@@ -264,6 +264,43 @@ On worker initialization, if `_system_tables` does not exist:
 
 ---
 
+## 📁 TABLE GROUPS & WORKSPACE OUTLINER TAXONOMY (MODEL B)
+
+> **Architectural Paradigm**: Separates high-level workspace organization (Folder Taxonomy via `table_groups` and nested `sub_group_of`) from low-level data flow (`tables.parent_id`). Presented via a collapsible, Notion-style Workspace Outliner.
+
+### 1. `table_groups` Canonical SQLite Schema
+```sql
+CREATE TABLE IF NOT EXISTS table_groups (
+  id TEXT PRIMARY KEY,                 -- Unique identifier / hexid (e.g. 'grp_knowledge', 'grp_literature')
+  natural_name TEXT NOT NULL,          -- Human-readable name (e.g. 'Knowledge Base', 'Literature & Insights')
+  sub_group_of TEXT,                   -- Self-referencing foreign key to table_groups.id (NULL for root groups)
+  order_index INTEGER DEFAULT 0,       -- Sequence ordering among sibling groups
+  icon TEXT DEFAULT 'folder',          -- Lucide icon slug
+  description TEXT,                    -- Purpose and documentation
+  created_at TEXT DEFAULT (datetime('now')),
+  FOREIGN KEY (sub_group_of) REFERENCES table_groups(id) ON DELETE SET NULL
+);
+```
+
+### 2. Enhanced `tables` Association
+```sql
+ALTER TABLE tables ADD COLUMN group_id TEXT REFERENCES table_groups(id) ON DELETE SET NULL;
+```
+
+### 3. Model B: Collapsible Outliner Sidebar (`WorkspaceOutliner.tsx`)
+* **Desktop**: Retractable left-hand navigation pane (`width: 260px` open, `0px` closed) toggled via `[ ☰ Workspace ]` button.
+* **Mobile**: Slide-in drawer with backdrop blur and tactile `min-h-[48px]` touch targets.
+* **Nested Outliner Tree**:
+  - Displays Root Groups with chevron toggles.
+  - Expands nested Sub-Groups.
+  - Lists associated data tables under their designated group.
+  - Highlighting active table, jumping with 0ms RAM switch, auto-unfolding ancestor folders.
+* **Inner Logic Governance**:
+  - Group creation, renaming, re-parenting, and deletion handled via table/group modal operations.
+  - Tables assigned or moved between groups via the **Group Selector** dropdown in `TableSettingsModal.tsx`.
+
+---
+
 ## 🛠️ QUICK RE-START COMMANDS (FOR NEXT SESSION)
 
 ### Running Locally:
