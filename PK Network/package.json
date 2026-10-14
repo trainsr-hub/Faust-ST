@@ -10,7 +10,8 @@
     "build": "tsc -b && vite build",
     "lint": "tsc -b --noEmit",
     "preview": "vite preview",
-    "deploy": "npm run build && wrangler deploy"
+    "deploy": "npm run build && wrangler deploy",
+    "push": "npm run build && wrangler deploy"
   },
   "dependencies": {
     "hono": "^4.6.14",
