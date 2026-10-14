@@ -642,16 +642,23 @@ app.post('/api/records/:name', async (c) => {
       }
     }
 
-    // Handle auto formula default if missing (e.g., =MAX(idx) + 1 or =TODAY())
-    if (record.idx === undefined || record.idx === null || record.idx === '') {
-      try {
-        const maxRes = await turso.execute(`SELECT MAX(idx) as m FROM "${name}";`);
-        const maxVal = maxRes.rows[0]?.m;
-        record.idx = (maxVal !== null && maxVal !== undefined) ? Number(maxVal) + 1 : 1;
-      } catch {}
+    // Check existing columns in the physical table
+    const tableInfo = await turso.execute(`PRAGMA table_info("${name}");`);
+    const validCols = new Set(tableInfo.rows.map((r: any) => r.name));
+
+    // Handle auto formula default if table has 'idx' column
+    if (validCols.has('idx')) {
+      if (record.idx === undefined || record.idx === null || record.idx === '') {
+        try {
+          const maxRes = await turso.execute(`SELECT MAX(idx) as m FROM "${name}";`);
+          const maxVal = maxRes.rows[0]?.m;
+          record.idx = (maxVal !== null && maxVal !== undefined) ? Number(maxVal) + 1 : 1;
+        } catch {}
+      }
     }
 
-    if (!record.date && name !== 'tables') {
+    // Set 'date' default ONLY if the table physically contains a 'date' column
+    if (validCols.has('date') && !record.date && name !== 'tables') {
       record.date = new Date().toISOString().split('T')[0];
     }
 
@@ -662,7 +669,11 @@ app.post('/api/records/:name', async (c) => {
       record.id = `${prefix}-${randHex}`;
     }
 
-    const keys = Object.keys(record);
+    // Filter record keys to ONLY those columns that actually exist physically in the table
+    const keys = Object.keys(record).filter((k) => validCols.has(k));
+    if (keys.length === 0) {
+      keys.push('id');
+    }
     const placeholders = keys.map(() => '?').join(', ');
     const values = keys.map((k) => record[k]);
 
@@ -684,10 +695,14 @@ app.put('/api/records/:name/:id', async (c) => {
     const updates = payload.record || payload;
     const turso = getTurso(c);
 
+    // Check existing columns in the physical table
+    const tableInfo = await turso.execute(`PRAGMA table_info("${name}");`);
+    const validCols = new Set(tableInfo.rows.map((r: any) => r.name));
+
     delete updates.id; // Do not overwrite ID in SET
-    const keys = Object.keys(updates);
+    const keys = Object.keys(updates).filter((k) => validCols.has(k));
     if (keys.length === 0) {
-      return c.json({ success: true, message: 'No fields to update' });
+      return c.json({ success: true, message: 'No matching fields to update' });
     }
 
     const setClause = keys.map((k) => `"${k}" = ?`).join(', ');
