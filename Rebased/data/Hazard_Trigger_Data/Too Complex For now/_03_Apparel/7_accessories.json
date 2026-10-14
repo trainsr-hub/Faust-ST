@@ -1,0 +1,252 @@
+{
+  "glasses": {
+    "display_name": "Eyeglasses",
+    "description": "Smart prescription glasses or semi-rimless frames.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "glasses, eyewear",
+    "keywords": [
+      "accessory",
+      "glasses"
+    ],
+    "require": [],
+    "negate": [],
+    "exclude": [],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "sunglasses": {
+    "display_name": "Sunglasses",
+    "description": "Tinted stylish sunglasses worn on face or perched on head.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "sunglasses, dark eyewear",
+    "keywords": [
+      "accessory",
+      "sunglasses"
+    ],
+    "require": [],
+    "negate": [],
+    "exclude": [],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "hair_ribbon": {
+    "display_name": "Hair Ribbon / Bow",
+    "description": "Silk ribbon tied in hair or pigtails.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "hair ribbon, hair bow",
+    "keywords": [
+      "accessory",
+      "hair_ribbon"
+    ],
+    "require": [],
+    "negate": [],
+    "exclude": [],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "hairclip": {
+    "display_name": "Hairclip / Hairpin",
+    "description": "Decorative hair ornament or clip holding bangs.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "hairclip, hairpin, hair ornament",
+    "keywords": [
+      "accessory",
+      "hairclip"
+    ],
+    "require": [],
+    "negate": [],
+    "exclude": [],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "headband": {
+    "display_name": "Headband",
+    "description": "Cloth or plastic headband worn across crown of hair.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "headband, hairband",
+    "keywords": [
+      "accessory",
+      "headband"
+    ],
+    "require": [],
+    "negate": [],
+    "exclude": [],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "choker": {
+    "display_name": "Neck Choker",
+    "description": "Fitted velvet, leather, or lace band worn around neck.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "choker, neck ribbon",
+    "keywords": [
+      "accessory",
+      "choker"
+    ],
+    "require": [],
+    "negate": [],
+    "exclude": [],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "collar": {
+    "display_name": "Leather Collar & Ring / Leash",
+    "description": "Submissive leather pet collar with metallic D-ring.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "collar, leather collar, neck ring",
+    "keywords": [
+      "accessory",
+      "collar"
+    ],
+    "require": [],
+    "negate": [],
+    "exclude": [],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "necklace": {
+    "display_name": "Pendant Necklace",
+    "description": "Fine chain with crystal, jewel, or metallic pendant.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "necklace, pendant",
+    "keywords": [
+      "accessory",
+      "necklace"
+    ],
+    "require": [],
+    "negate": [],
+    "exclude": [],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "fingerless_gloves": {
+    "display_name": "Fingerless Gloves",
+    "description": "Combat or cyberpunk fingerless hand gloves.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "fingerless gloves, gloves",
+    "keywords": [
+      "accessory",
+      "gloves",
+      "fingerless_gloves"
+    ],
+    "require": [],
+    "negate": [],
+    "exclude": [],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "elbow_gloves": {
+    "display_name": "Elbow-Length Opera Gloves",
+    "description": "Elegant silk or satin gloves extending past forearms to elbows.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "elbow gloves, long gloves",
+    "keywords": [
+      "accessory",
+      "gloves",
+      "elbow_gloves"
+    ],
+    "require": [],
+    "negate": [],
+    "exclude": [],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "cat_ears": {
+    "display_name": "Cat Ears (Nekomimi)",
+    "description": "Furry feline ears perched on head with inner ear fluff.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "cat ears, animal ears, nekomimi",
+    "keywords": [
+      "accessory",
+      "kemonomimi",
+      "cat_ears"
+    ],
+    "require": [],
+    "negate": [],
+    "exclude": [],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "horns": {
+    "display_name": "Demon / Dragon Horns",
+    "description": "Curved demonic or dragon horns sprouting from temples.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "horns, demon horns",
+    "keywords": [
+      "accessory",
+      "horns"
+    ],
+    "require": [],
+    "negate": [],
+    "exclude": [],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "halo": {
+    "display_name": "Angelic Halo",
+    "description": "Luminous ring of holy light floating above head.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "halo, glowing halo, angel",
+    "keywords": [
+      "accessory",
+      "halo"
+    ],
+    "require": [],
+    "negate": [],
+    "exclude": [],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  }
+}

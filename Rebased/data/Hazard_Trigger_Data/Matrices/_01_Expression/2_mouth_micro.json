@@ -1,0 +1,92 @@
+{
+  "closed_mouth": {
+    "display_name": "Closed Mouth",
+    "description": "Lips gently pressed shut in calm or serious composure.",
+    "prompt": "closed mouth",
+    "emotions": ["deadpan", "serious", "neutral"],
+    "keywords": ["mouth", "closed_mouth"],
+    "require": [],
+    "negate": ["open_mouth", "tongue_out"],
+    "exclude": ["open mouth", "tongue out", "parted lips"],
+    "subjects": [0, 0]
+  },
+  "parted_lips": {
+    "display_name": "Parted Lips",
+    "description": "Slightly open lips showing gentle breathing or allure.",
+    "prompt": "parted lips",
+    "emotions": ["seductive", "ecstasy", "embarrassed", "shocked", "happy"],
+    "keywords": ["mouth", "parted_lips"],
+    "require": [],
+    "negate": ["closed_mouth"],
+    "exclude": ["closed mouth"],
+    "subjects": [0, 0]
+  },
+  "open_mouth": {
+    "display_name": "Open Mouth",
+    "description": "Distinctly open mouth in laughter, shock, or passion.",
+    "prompt": "open mouth",
+    "emotions": ["happy", "shocked", "angry", "ahegao"],
+    "keywords": ["mouth", "open_mouth"],
+    "require": [],
+    "negate": ["closed_mouth"],
+    "exclude": ["closed mouth"],
+    "subjects": [0, 0]
+  },
+  "single_fang": {
+    "display_name": "Single Cute Fang",
+    "description": "Playful single anime canine tooth peeking out.",
+    "prompt": "fang, single fang, open mouth",
+    "emotions": ["smug", "happy", "tsundere"],
+    "keywords": ["mouth", "fang"],
+    "require": [],
+    "negate": ["closed_mouth"],
+    "exclude": ["closed mouth"],
+    "subjects": [0, 0]
+  },
+  "tongue_out": {
+    "display_name": "Tongue Out",
+    "description": "Playfully sticking tongue out or seductive tease.",
+    "prompt": "tongue out, open mouth",
+    "emotions": ["smug", "seductive", "ahegao", "happy"],
+    "keywords": ["mouth", "tongue_out"],
+    "require": [],
+    "negate": ["closed_mouth"],
+    "exclude": ["closed mouth"],
+    "subjects": [0, 0]
+  },
+  "biting_lip": {
+    "display_name": "Biting Lower Lip",
+    "description": "Teeth biting down softly on the lower lip in nervousness or passion.",
+    "prompt": "biting lip, biting lower lip",
+    "emotions": ["embarrassed", "nervous", "seductive", "ecstasy"],
+    "keywords": ["mouth", "biting_lip"],
+    "require": [],
+    "negate": [],
+    "exclude": [],
+    "subjects": [0, 0]
+  },
+  "drooling_saliva": {
+    "display_name": "Drooling / Saliva Trail",
+    "description": "Strand of saliva dripping from parted lips.",
+    "prompt": "drooling, saliva trail, open mouth",
+    "emotions": ["ecstasy", "ahegao"],
+    "locked": true,
+    "lockKey": "extreme",
+    "keywords": ["mouth", "drool", "saliva"],
+    "require": [],
+    "negate": ["closed_mouth"],
+    "exclude": ["closed mouth"],
+    "subjects": [0, 0]
+  },
+  "clenched_teeth": {
+    "display_name": "Clenched Teeth",
+    "description": "Teeth firmly gritted in tension, anger, or flustered defense.",
+    "prompt": "clenched teeth, gritted teeth",
+    "emotions": ["angry", "nervous", "tsundere"],
+    "keywords": ["mouth", "clenched_teeth"],
+    "require": [],
+    "negate": [],
+    "exclude": [],
+    "subjects": [0, 0]
+  }
+}

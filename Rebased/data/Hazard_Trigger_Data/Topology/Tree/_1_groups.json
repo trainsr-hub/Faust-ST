@@ -1,0 +1,195 @@
+{
+  "eyes": {
+    "eyes_color": {
+      "eyes_color_specific": [
+        "blue eyes",
+        "light blue eyes",
+        "sky blue eyes",
+        "red eyes",
+        "green eyes",
+        "brown eyes",
+        "purple eyes",
+        "amber eyes",
+        "yellow eyes",
+        "golden eyes"
+      ],
+      "eyes_color_special": [
+        "heterochromia",
+        "gradient eyes",
+        "glowing eyes",
+        "two-tone eyes"
+      ]
+    },
+    "eyes_shape": [
+      "tareme",
+      "tsurime",
+      "slit pupils",
+      "symbol-shaped pupils",
+      "heart-shaped pupils",
+      "bright eyes"
+    ]
+  },
+  "hair": {
+    "hair_color": [
+      "blonde hair",
+      "golden blonde hair",
+      "ash blonde hair",
+      "brown hair",
+      "black hair",
+      "silver hair",
+      "white hair",
+      "pink hair",
+      "blue hair"
+    ],
+    "hair_length": [
+      "short hair",
+      "medium hair",
+      "long hair",
+      "shoulder-length hair"
+    ],
+    "hair_style": [
+      "twin low buns",
+      "short twin braids",
+      "twin braids",
+      "single side braid",
+      "ahoge",
+      "bangs",
+      "blunt bangs",
+      "swept bangs",
+      "ponytail",
+      "twintails",
+      "drill hair",
+      "messy hair"
+    ],
+    "hair_accessories": [
+      "hair ornament",
+      "hair ribbon",
+      "hair bow",
+      "hairclip",
+      "bobby pins"
+    ]
+  },
+  "face_and_expression": {
+    "mouth_expression": [
+      "smile",
+      "confident smile",
+      "open mouth",
+      "closed mouth",
+      "parted lips",
+      "smirk",
+      "fang",
+      "grin",
+      "pout"
+    ],
+    "facial_features": [
+      "mole on cheek",
+      "mole under eye",
+      "blush",
+      "freckles"
+    ]
+  },
+  "body_physique": {
+    "chest_features": [
+      "mole on chest",
+      "collarbone",
+      "cleavage",
+      "small breasts",
+      "medium breasts",
+      "large breasts"
+    ],
+    "belly_features": [
+      "navel",
+      "pierced navel",
+      "abs",
+      "midriff"
+    ],
+    "body_build": [
+      "slender",
+      "petite",
+      "curvy",
+      "toned",
+      "fair skin",
+      "pale skin"
+    ]
+  },
+  "attire_headwear": {
+    "detective_hats": [
+      "deerstalker",
+      "plaid hat",
+      "houndstooth hat",
+      "hat flower",
+      "fedora",
+      "beret"
+    ],
+    "eyewear": [
+      "monocle",
+      "glasses",
+      "round glasses",
+      "sunglasses"
+    ]
+  },
+  "attire_neckwear": [
+    "brown necktie",
+    "cross necktie",
+    "necktie",
+    "red necktie",
+    "bow tie",
+    "choker",
+    "collar"
+  ],
+  "attire_outerwear": [
+    "plaid capelet",
+    "short cape",
+    "trench coat",
+    "houndstooth capelet",
+    "brown coat",
+    "cardigan",
+    "jacket"
+  ],
+  "attire_tops": [
+    "white shirt",
+    "collared shirt",
+    "long sleeves",
+    "rolled sleeves",
+    "brown vest",
+    "houndstooth vest",
+    "plaid vest",
+    "sweater vest",
+    "corset"
+  ],
+  "attire_bottoms": [
+    "brown pleated skirt",
+    "plaid skirt",
+    "houndstooth skirt",
+    "miniskirt",
+    "belt",
+    "leather belt"
+  ],
+  "attire_legwear": [
+    "asymmetrical legwear",
+    "single thighhigh",
+    "white thighhigh",
+    "black thighhighs",
+    "striped thighhighs",
+    "garter straps",
+    "bare legs",
+    "ankle socks"
+  ],
+  "attire_footwear": [
+    "brown boots",
+    "ankle boots",
+    "cross-laced boots",
+    "leather boots",
+    "loafers",
+    "shoes"
+  ],
+  "props_and_items": [
+    "magnifying glass",
+    "pocket watch",
+    "bubba (dog)",
+    "syringe",
+    "concoction",
+    "investigation notes",
+    "vintage camera"
+  ]
+}

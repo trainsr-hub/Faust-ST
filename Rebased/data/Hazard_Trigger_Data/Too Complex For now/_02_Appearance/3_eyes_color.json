@@ -1,0 +1,169 @@
+{
+  "blue_eyes": {
+    "display_name": "Blue Eyes",
+    "description": "Clear azure, sapphire, or deep ocean blue irises.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "blue eyes",
+    "keywords": [
+      "eye_color",
+      "blue_eyes"
+    ],
+    "require": [],
+    "negate": [
+      "red_eyes",
+      "green_eyes"
+    ],
+    "exclude": [
+      "red eyes",
+      "green eyes"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "red_eyes": {
+    "display_name": "Red / Crimson Eyes",
+    "description": "Striking ruby, scarlet, or demonic crimson irises.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "red eyes",
+    "keywords": [
+      "eye_color",
+      "red_eyes"
+    ],
+    "require": [],
+    "negate": [
+      "blue_eyes"
+    ],
+    "exclude": [
+      "blue eyes"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "brown_eyes": {
+    "display_name": "Brown Eyes",
+    "description": "Warm hazel, chocolate, or chestnut brown irises.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "brown eyes",
+    "keywords": [
+      "eye_color",
+      "brown_eyes"
+    ],
+    "require": [],
+    "negate": [],
+    "exclude": [],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "green_eyes": {
+    "display_name": "Green / Emerald Eyes",
+    "description": "Vivid jade or emerald green irises.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "green eyes",
+    "keywords": [
+      "eye_color",
+      "green_eyes"
+    ],
+    "require": [],
+    "negate": [
+      "blue_eyes"
+    ],
+    "exclude": [
+      "blue eyes"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "yellow_eyes": {
+    "display_name": "Yellow / Golden / Amber Eyes",
+    "description": "Luminous gold, amber, or bright yellow irises.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "yellow eyes, golden eyes",
+    "keywords": [
+      "eye_color",
+      "yellow_eyes",
+      "golden_eyes"
+    ],
+    "require": [],
+    "negate": [],
+    "exclude": [],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "purple_eyes": {
+    "display_name": "Purple / Violet Eyes",
+    "description": "Mystical amethyst or violet irises.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "purple eyes",
+    "keywords": [
+      "eye_color",
+      "purple_eyes"
+    ],
+    "require": [],
+    "negate": [],
+    "exclude": [],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "pink_eyes": {
+    "display_name": "Pink Eyes",
+    "description": "Soft rose or bright pink irises.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "pink eyes",
+    "keywords": [
+      "eye_color",
+      "pink_eyes"
+    ],
+    "require": [],
+    "negate": [],
+    "exclude": [],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "heterochromia": {
+    "display_name": "Heterochromia (Mismatched Eyes)",
+    "description": "Distinct contrasting colors between left and right eyes.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "heterochromia, odd eyes",
+    "keywords": [
+      "eye_color",
+      "heterochromia"
+    ],
+    "require": [],
+    "negate": [],
+    "exclude": [],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  }
+}

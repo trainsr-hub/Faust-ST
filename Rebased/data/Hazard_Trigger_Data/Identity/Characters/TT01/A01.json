@@ -1,0 +1,37 @@
+{
+  "default": {
+    "id": "A01",
+    "names": {
+      "names": [
+        "Amelia Watson"
+      ],
+      "nicknames": [
+        "Ame",
+        "Watson"
+      ],
+      "aliases": [
+        "Hololive's #1 Detective"
+      ]
+    },
+    "associate": [
+      "HoloMyth"
+    ],
+    "hazardLevel": {
+      "hazardScore": 3
+    },
+    "taxonomy": {
+      "archetype": [],
+      "personalityTropes": [],
+      "addressment": []
+    },
+    "_prpt_": "watson amelia, medium hair, blonde hair, bangs, hair ornament, blue eyes",
+    "outfit": "deerstalker, plaid capelet, brown vest, white shirt, brown pleated skirt, single thighhigh, brown boots"
+  },
+  "ego_01": {
+    "names": [
+      "The Casual Ame"
+    ],
+    "_prpt_": "amelia watson, blonde hair, blue eyes, short hair, bob cut, bangs, ahoge, tareme, medium breasts",
+    "outfit": "white shirt, brown vest, rolled sleeves, brown pleated skirt, single thighhigh, brown boots"
+  }
+}

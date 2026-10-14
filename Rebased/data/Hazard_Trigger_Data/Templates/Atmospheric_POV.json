@@ -1,0 +1,24 @@
+{
+  "id": "tpl_atmospheric_pov",
+  "name": "Atmospheric POV Interaction",
+  "description": "First-person perspective encounter with dynamic focus and atmospheric lighting.",
+  "category": "POV",
+  "tags": ["pov", "interactive", "cinematic", "first_person"],
+  "createdAt": 1726224000000,
+  "updatedAt": 1726224000000,
+  "selections": {
+    "_01_Subject/1_subjects.json": "1girl_male_pov",
+    "_01_Subject/3_focus.json": "face_focus",
+    "_06_Camera_Framing/1_shot_distance.json": "cowboy_shot",
+    "_06_Camera_Framing/2_camera_angle.json": "slightly_below",
+    "_06_Camera_Framing/3_lens_depth.json": "bokeh",
+    "_07_Background/background.json": "__RANDOM__",
+    "_07_Background/setting.json": "__RANDOM__",
+    "_08_Lighting_Atmosphere/1_lighting.json": "soft_ambient",
+    "_08_Lighting_Atmosphere/2_atmosphere_vfx.json": "particles_floating",
+    "_09_Art_Style/1_medium_style.json": "digital_illustration",
+    "_09_Art_Style/2_quality_tier.json": "masterpiece",
+    "_09_Art_Style/3_model_dialects.json": null,
+    "_10_Engine_Exclusions/1_global_negatives.json": "standard_negative_v1"
+  }
+}

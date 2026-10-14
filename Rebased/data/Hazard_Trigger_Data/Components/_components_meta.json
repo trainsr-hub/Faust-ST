@@ -1,0 +1,395 @@
+{
+  "$schema": "hazard-trigger-components-meta-v1",
+  "version": "1.0.0",
+  "_description": "Static lookup metadata registry for Hazard Trigger component folders and data files.",
+  "folders": {
+    "_01_Subject": {
+      "displayName": "Subject & Identity Core",
+      "description": "Foundational character entity counts, observer perspective vectors, and focal gaze dynamics.",
+      "icon": "Users",
+      "order": 1,
+      "tags": ["subject", "entity", "core", "telemetry"]
+    },
+    "_02_Appearance": {
+      "displayName": "Appearance & Anatomy",
+      "description": "Character hair styles, hair colors, eye features, body physique, and skin biology.",
+      "icon": "Smile",
+      "order": 2,
+      "tags": ["appearance", "hair", "eyes", "body", "biology"]
+    },
+    "_03_Apparel": {
+      "displayName": "Apparel & Wardrobe",
+      "description": "Canonical outfits, tops, bottoms, legwear, footwear, wardrobe states, and accessories.",
+      "icon": "Shirt",
+      "order": 3,
+      "tags": ["apparel", "clothing", "costume", "accessories", "state"]
+    },
+    "_04_Pose_Action": {
+      "displayName": "Pose & Action",
+      "description": "Full-body postures, arm/hand gestures, and multi-character interactions.",
+      "icon": "Activity",
+      "order": 4,
+      "tags": ["pose", "action", "gesture", "interaction"]
+    },
+    "_05_Expression": {
+      "displayName": "Expression & Mood",
+      "description": "Emotional states, facial moods, and mouth micro-expressions.",
+      "icon": "Heart",
+      "order": 5,
+      "tags": ["expression", "emotion", "mouth", "mood"]
+    },
+    "_06_Camera_Framing": {
+      "displayName": "Camera & Composition",
+      "description": "Cinematographic shot distances, camera angles, and depth of field.",
+      "icon": "Camera",
+      "order": 6,
+      "tags": ["camera", "framing", "angle", "composition"]
+    },
+    "_07_Background": {
+      "displayName": "Setting & Background",
+      "description": "World locations, indoor rooms, outdoor vistas, and abstract studio backdrops.",
+      "icon": "Image",
+      "order": 7,
+      "tags": ["background", "setting", "environment", "scenery"]
+    },
+    "_08_Lighting_Atmosphere": {
+      "displayName": "Lighting & Atmosphere",
+      "description": "Illumination setups, time of day, shadows, and floating particle VFX.",
+      "icon": "Sun",
+      "order": 8,
+      "tags": ["lighting", "atmosphere", "vfx", "particles"]
+    },
+    "_09_Art_Style": {
+      "displayName": "Art Style & Dialects",
+      "description": "Visual mediums, aesthetic quality boosters, and model dialect triggers.",
+      "icon": "Palette",
+      "order": 9,
+      "tags": ["style", "medium", "quality", "dialect"]
+    },
+    "_10_Engine_Exclusions": {
+      "displayName": "Engine Exclusions & Negatives",
+      "description": "Negative prompt shields, quality defenses, and collision filters.",
+      "icon": "ShieldAlert",
+      "order": 10,
+      "tags": ["engine", "negative", "exclusions", "safety"]
+    }
+  },
+  "files": {
+    "_01_Subject/1_subjects.json": {
+      "displayName": "Subject & Perspective",
+      "description": "Defines base character counts, gender distribution, and perspective (3rd person / Male POV).",
+      "purpose": "Establishes primary subject entities and observation perspective in the generation scene.",
+      "category": "Subject Core",
+      "icon": "Users",
+      "selectionMode": "single",
+      "required": true,
+      "defaultKey": "1girl_solo",
+      "order": 1,
+      "cardinalityNotes": "Directly injects visible subject counts [females, males] and POV observer dynamics.",
+      "tags": ["core", "cardinality", "gender", "solo", "group", "subject", "pov"]
+    },
+    "_01_Subject/3_focus.json": {
+      "displayName": "Focal Vector & Gaze",
+      "description": "Directs character eye contact, head orientation, and attention toward or away from the camera.",
+      "purpose": "Controls viewer contact dynamics and gaze alignment without altering entity cardinality.",
+      "category": "Attention & Composition",
+      "icon": "Crosshair",
+      "selectionMode": "optional",
+      "required": false,
+      "defaultKey": null,
+      "order": 3,
+      "cardinalityNotes": "Neutral cardinality [0, 0]; modifies gaze prompts and keywords without changing subject counts.",
+      "tags": ["gaze", "focus", "eye-contact", "attention", "composition"]
+    },
+    "_02_Appearance/1_hair_style.json": {
+      "displayName": "Hairstyle & Length",
+      "description": "Defines hair structural cut, twintails, ponytails, bangs, and braids.",
+      "category": "Hair & Head",
+      "icon": "Scissors",
+      "selectionMode": "optional",
+      "required": false,
+      "order": 1,
+      "tags": ["hair", "twintails", "ponytail", "bangs", "braid"]
+    },
+    "_02_Appearance/2_hair_color.json": {
+      "displayName": "Hair Color",
+      "description": "Primary hair pigment or gradient transition.",
+      "category": "Hair & Head",
+      "icon": "Sparkles",
+      "selectionMode": "optional",
+      "required": false,
+      "order": 2,
+      "tags": ["hair", "color", "silver", "blonde", "black", "pink"]
+    },
+    "_02_Appearance/3_eyes_color.json": {
+      "displayName": "Eye Color",
+      "description": "Iris pigmentation and heterochromia.",
+      "category": "Eyes & Vision",
+      "icon": "Eye",
+      "selectionMode": "optional",
+      "required": false,
+      "order": 3,
+      "tags": ["eyes", "color", "red", "blue", "heterochromia"]
+    },
+    "_02_Appearance/4_eyes_pupils.json": {
+      "displayName": "Pupil Features & States",
+      "description": "Heart pupils, glowing eyes, slit pupils, dilated, and empty eyes.",
+      "category": "Eyes & Vision",
+      "icon": "Flame",
+      "selectionMode": "optional",
+      "required": false,
+      "order": 4,
+      "tags": ["pupils", "heart_pupils", "glowing_eyes", "dilated"]
+    },
+    "_02_Appearance/5_body_physique.json": {
+      "displayName": "Body Physique & Bust",
+      "description": "Height, slender/curvy silhouette, and bust sizing.",
+      "category": "Anatomy",
+      "icon": "UserCheck",
+      "selectionMode": "optional",
+      "required": false,
+      "order": 5,
+      "tags": ["body", "physique", "slender", "curvy", "bust"]
+    },
+    "_02_Appearance/6_skin_biology.json": {
+      "displayName": "Skin & Somatic Biology",
+      "description": "Skin tones, blush, perspiration, glistening sheen, and trembling.",
+      "category": "Biology",
+      "icon": "Droplet",
+      "selectionMode": "optional",
+      "required": false,
+      "order": 6,
+      "tags": ["skin", "blush", "sweat", "flushed", "wet_skin"]
+    },
+    "_03_Apparel/1_outfit_archetype.json": {
+      "displayName": "Outfit Archetype",
+      "description": "Canonical costume themes (school uniform, maid, bunny suit, bikini, armor).",
+      "category": "Apparel",
+      "icon": "Shirt",
+      "selectionMode": "optional",
+      "required": false,
+      "order": 1,
+      "tags": ["outfit", "uniform", "maid", "bunny", "bikini"]
+    },
+    "_03_Apparel/2_tops.json": {
+      "displayName": "Tops & Outerwear",
+      "description": "Shirts, crop tops, blouses, sweaters, hoodies, and jackets.",
+      "category": "Apparel",
+      "icon": "Layers",
+      "selectionMode": "optional",
+      "required": false,
+      "order": 2,
+      "tags": ["tops", "shirt", "sweater", "hoodie", "jacket"]
+    },
+    "_03_Apparel/3_bottoms.json": {
+      "displayName": "Bottoms & Skirts",
+      "description": "Pleated skirts, miniskirts, shorts, and denim jeans.",
+      "category": "Apparel",
+      "icon": "Scissors",
+      "selectionMode": "optional",
+      "required": false,
+      "order": 3,
+      "tags": ["bottoms", "skirt", "miniskirt", "shorts", "pants"]
+    },
+    "_03_Apparel/4_legwear.json": {
+      "displayName": "Legwear & Hosiery",
+      "description": "Thighhighs, pantyhose, fishnets, socks, and bare legs.",
+      "category": "Apparel",
+      "icon": "Feather",
+      "selectionMode": "optional",
+      "required": false,
+      "order": 4,
+      "tags": ["legwear", "thighhighs", "pantyhose", "fishnet", "bare_legs"]
+    },
+    "_03_Apparel/5_footwear.json": {
+      "displayName": "Footwear",
+      "description": "Boots, high heels, sneakers, school loafers, and barefoot.",
+      "category": "Apparel",
+      "icon": "Compass",
+      "selectionMode": "optional",
+      "required": false,
+      "order": 5,
+      "tags": ["footwear", "boots", "high_heels", "sneakers", "barefoot"]
+    },
+    "_03_Apparel/6_clothing_state.json": {
+      "displayName": "Wardrobe State & Exposure",
+      "description": "Clothed, skirt lift, unbuttoned, see-through, wet clothes, and nude.",
+      "category": "Apparel State",
+      "icon": "Shield",
+      "selectionMode": "optional",
+      "required": false,
+      "order": 6,
+      "tags": ["state", "clothed", "skirt_lift", "see_through", "nude"]
+    },
+    "_03_Apparel/7_accessories.json": {
+      "displayName": "Accessories & Adornments",
+      "description": "Glasses, ribbons, chokers, collars, gloves, animal ears, and horns.",
+      "category": "Accessories",
+      "icon": "Smile",
+      "selectionMode": "optional",
+      "required": false,
+      "order": 7,
+      "tags": ["accessories", "glasses", "ribbon", "choker", "horns"]
+    },
+    "_04_Pose_Action/1_posture.json": {
+      "displayName": "Body Posture",
+      "description": "Standing, sitting, kneeling, lying on back/stomach, and all fours.",
+      "category": "Pose",
+      "icon": "Activity",
+      "selectionMode": "optional",
+      "required": false,
+      "order": 1,
+      "tags": ["pose", "standing", "sitting", "lying", "all_fours"]
+    },
+    "_04_Pose_Action/2_hand_gestures.json": {
+      "displayName": "Arm & Hand Gestures",
+      "description": "Peace sign, hands on hips, arms crossed, reaching, and touching face.",
+      "category": "Pose",
+      "icon": "Zap",
+      "selectionMode": "optional",
+      "required": false,
+      "order": 2,
+      "tags": ["gesture", "hands", "peace_sign", "reaching"]
+    },
+    "_04_Pose_Action/3_interactions.json": {
+      "displayName": "Character Interactions",
+      "description": "Holding hands, embrace/hugging, lap pillow, and princess carry.",
+      "category": "Interaction",
+      "icon": "Users",
+      "selectionMode": "optional",
+      "required": false,
+      "order": 3,
+      "tags": ["interaction", "holding_hands", "hugging", "lap_pillow"]
+    },
+    "_05_Expression/1_emotions.json": {
+      "displayName": "Facial Emotion & Mood",
+      "description": "Smile, blush, smug, tsundere, serious, crying, seductive, and afterglow.",
+      "category": "Expression",
+      "icon": "Heart",
+      "selectionMode": "optional",
+      "required": false,
+      "order": 1,
+      "tags": ["expression", "emotion", "smile", "blush", "smug"]
+    },
+    "_05_Expression/2_mouth_micro.json": {
+      "displayName": "Mouth Micro-Expressions",
+      "description": "Parted lips, open mouth, cute fang, tongue out, and biting lip.",
+      "category": "Expression",
+      "icon": "Smile",
+      "selectionMode": "optional",
+      "required": false,
+      "order": 2,
+      "tags": ["mouth", "parted_lips", "fang", "tongue_out", "pout"]
+    },
+    "_06_Camera_Framing/1_shot_distance.json": {
+      "displayName": "Shot Distance & Framing",
+      "description": "Close-up, portrait, upper body, cowboy shot, full body, and wide shot.",
+      "category": "Camera",
+      "icon": "Maximize",
+      "selectionMode": "optional",
+      "required": false,
+      "order": 1,
+      "tags": ["framing", "close_up", "upper_body", "full_body"]
+    },
+    "_06_Camera_Framing/2_camera_angle.json": {
+      "displayName": "Camera Angle",
+      "description": "Eye level, low angle, high angle, dutch angle, and profile view.",
+      "category": "Camera",
+      "icon": "Camera",
+      "selectionMode": "optional",
+      "required": false,
+      "order": 2,
+      "tags": ["camera", "angle", "low_angle", "high_angle", "dutch_angle"]
+    },
+    "_06_Camera_Framing/3_lens_depth.json": {
+      "displayName": "Lens & Depth of Field",
+      "description": "Depth of field, bokeh circles, fisheye distortion, and motion blur.",
+      "category": "Camera",
+      "icon": "Aperture",
+      "selectionMode": "optional",
+      "required": false,
+      "order": 3,
+      "tags": ["lens", "depth_of_field", "bokeh", "fisheye"]
+    },
+    "_07_Background/setting.json": {
+      "displayName": "World Setting",
+      "description": "Bedroom, classroom, rooftop, beach, forest, shrine, and sci-fi cockpit.",
+      "category": "Environment",
+      "icon": "MapPin",
+      "selectionMode": "optional",
+      "required": false,
+      "order": 1,
+      "tags": ["setting", "bedroom", "classroom", "beach", "forest"]
+    },
+    "_07_Background/background.json": {
+      "displayName": "Backdrop Type",
+      "description": "Detailed scenery, simple background, white studio, and dark void.",
+      "category": "Environment",
+      "icon": "Image",
+      "selectionMode": "optional",
+      "required": false,
+      "order": 2,
+      "tags": ["background", "scenery", "simple_background", "white_background"]
+    },
+    "_08_Lighting_Atmosphere/1_lighting.json": {
+      "displayName": "Lighting Setup",
+      "description": "Cinematic lighting, volumetric god rays, rim light, golden hour, and moonlight.",
+      "category": "Atmosphere",
+      "icon": "Sun",
+      "selectionMode": "optional",
+      "required": false,
+      "order": 1,
+      "tags": ["lighting", "cinematic", "volumetric", "golden_hour", "moonlight"]
+    },
+    "_08_Lighting_Atmosphere/2_atmosphere_vfx.json": {
+      "displayName": "Atmospheric VFX & Particles",
+      "description": "Floating dust sparkles, falling sakura petals, embers, steam, and auras.",
+      "category": "Atmosphere",
+      "icon": "Sparkles",
+      "selectionMode": "optional",
+      "required": false,
+      "order": 2,
+      "tags": ["vfx", "particles", "petals", "embers", "steam", "aura"]
+    },
+    "_09_Art_Style/1_medium_style.json": {
+      "displayName": "Art Medium & Style",
+      "description": "Anime digital illustration, cel shading, watercolor, and retro 90s style.",
+      "category": "Style",
+      "icon": "Palette",
+      "selectionMode": "optional",
+      "required": false,
+      "order": 1,
+      "tags": ["style", "anime", "cel_shading", "watercolor", "retro"]
+    },
+    "_09_Art_Style/2_quality_tier.json": {
+      "displayName": "Quality Booster Tier",
+      "description": "Masterpiece, ultra-detailed, highres, and sharp focus.",
+      "category": "Style",
+      "icon": "Award",
+      "selectionMode": "optional",
+      "required": false,
+      "order": 2,
+      "tags": ["quality", "masterpiece", "highres", "ultra_detailed"]
+    },
+    "_09_Art_Style/3_model_dialects.json": {
+      "displayName": "Target Model Dialects",
+      "description": "Pony XL score prefixes, NovelAI aesthetic tags, and Flux prompts.",
+      "category": "Style",
+      "icon": "Terminal",
+      "selectionMode": "optional",
+      "required": false,
+      "order": 3,
+      "tags": ["dialect", "pony", "novelai", "sdxl", "flux"]
+    },
+    "_10_Engine_Exclusions/1_global_negatives.json": {
+      "displayName": "Global Negative Presets",
+      "description": "Standard anime negative, Pony low-score filter, and heavy anatomy defense.",
+      "category": "Engine",
+      "icon": "ShieldAlert",
+      "selectionMode": "optional",
+      "required": false,
+      "order": 1,
+      "tags": ["negative", "anatomy_defense", "pony_negative"]
+    }
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "white_shirt_gf": {
+    "display_name": "White Shirt",
+    "prompt": "shirt, white shirt, long sleeves, collared shirt, oversized shirt, choker, open shirt, oversized clothes, partially undressed",
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "1a0c9c903d1": {
+    "display_name": "Black Lingerie",
+    "prompt": "underwear, bra, panties, lace, black bra, black panties",
+    "subjects": [
+      0,
+      0
+    ]
+  }
+}

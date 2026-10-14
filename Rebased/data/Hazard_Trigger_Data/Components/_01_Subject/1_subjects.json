@@ -1,0 +1,112 @@
+{
+  "1girl_solo": {
+    "display_name": "Eva Solo ",
+    "prompt": "1girl, solo",
+    "completed": true,
+    "subjects": [
+      1,
+      0
+    ]
+  },
+  "1girl_male_pov": {
+    "display_name": "1v1",
+    "prompt": "1girl, 1boy, solo, pov, male pov",
+    "completed": true,
+    "subjects": [
+      1,
+      0
+    ]
+  },
+  "2girls_duo": {
+    "display_name": "Rivalry",
+    "prompt": "2girls, multiple girls",
+    "subjects": [
+      2,
+      0
+    ]
+  },
+  "2girls_male_pov": {
+    "display_name": "2v1",
+    "prompt": "2girls, multiple girls, pov, male pov",
+    "impact": [
+      "2girls",
+      "multiple_girls",
+      "duo_visible",
+      "pov",
+      "male_pov",
+      "viewer_male"
+    ],
+    "subjects": [
+      2,
+      0
+    ]
+  },
+  "multiple_girls_3": {
+    "display_name": "Triple Threat",
+    "prompt": "3girls, multiple girls",
+    "impact": [
+      "multiple_girls",
+      "group_visible",
+      "third_person"
+    ],
+    "subjects": [
+      3,
+      0
+    ]
+  },
+  "1girl_1boy_couple": {
+    "display_name": "Sideview (3rd Person)",
+    "prompt": "1girl, 1boy, couple",
+    "impact": [
+      "1girl",
+      "1boy",
+      "hetero",
+      "duo_visible",
+      "third_person"
+    ],
+    "subjects": [
+      1,
+      1
+    ]
+  },
+  "1girl_multiple_boys": {
+    "display_name": "Queen (Reverse Harem)",
+    "prompt": "1girl, multiple boys, solo focus",
+    "impact": [
+      "1girl",
+      "multiple_boys",
+      "group_visible"
+    ],
+    "subjects": [
+      1,
+      3
+    ]
+  },
+  "multiple_girls_1boy": {
+    "display_name": "Harem (3rd Person)",
+    "prompt": "multiple girls, 1boy",
+    "impact": [
+      "multiple_girls",
+      "1boy",
+      "group_visible",
+      "third_person"
+    ],
+    "subjects": [
+      3,
+      1
+    ]
+  },
+  "multiple_girls_multiple_boys": {
+    "display_name": "Group / Crowd",
+    "prompt": "multiple girls, multiple boys, crowd",
+    "impact": [
+      "multiple_girls",
+      "multiple_boys",
+      "crowd_visible"
+    ],
+    "subjects": [
+      3,
+      3
+    ]
+  }
+}

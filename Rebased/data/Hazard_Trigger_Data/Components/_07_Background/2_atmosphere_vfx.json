@@ -1,0 +1,128 @@
+{
+  "floating_particles": {
+    "display_name": "Floating Dust / Sparkles",
+    "description": "Glittering tiny light motes and dust particles drifting through air.",
+    "prompt": "floating particles, sparkles, dust motes",
+    "keywords": [
+      "vfx",
+      "particles",
+      "sparkles"
+    ],
+    "require": [],
+    "negate": [],
+    "exclude": [],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "falling_petals": {
+    "display_name": "Falling Cherry Blossom Petals",
+    "description": "Romantic pink sakura petals fluttering across the breeze.",
+    "prompt": "falling petals, cherry blossom petals, flying petals",
+    "keywords": [
+      "vfx",
+      "petals",
+      "cherry_blossoms"
+    ],
+    "require": [],
+    "negate": [],
+    "exclude": [],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "falling_leaves": {
+    "display_name": "Autumn Falling Leaves",
+    "description": "Golden and crimson maple leaves drifting downward.",
+    "prompt": "falling leaves, autumn leaves, maple leaves",
+    "keywords": [
+      "vfx",
+      "leaves",
+      "autumn"
+    ],
+    "require": [],
+    "negate": [],
+    "exclude": [],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "embers_sparks": {
+    "display_name": "Glowing Embers & Sparks",
+    "description": "Hot fiery embers and burning sparks rising in air.",
+    "prompt": "embers, fire sparks, glowing particles",
+    "keywords": [
+      "vfx",
+      "embers",
+      "fire"
+    ],
+    "require": [],
+    "negate": [],
+    "exclude": [],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "steam_fog": {
+    "display_name": "Steam / Fog / Mist",
+    "description": "Atmospheric rolling vapor, sauna steam, or mystery fog.",
+    "prompt": "steam, fog, mist, vapor",
+    "keywords": [
+      "vfx",
+      "steam",
+      "fog"
+    ],
+    "require": [],
+    "negate": [],
+    "exclude": [],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "hearts_aura": {
+    "display_name": "Floating Hearts Aura",
+    "description": "Cute romantic or lustful floating pink hearts hovering around.",
+    "prompt": "hearts, floating hearts, heart aura",
+    "keywords": [
+      "vfx",
+      "hearts",
+      "aura"
+    ],
+    "require": [],
+    "negate": [],
+    "exclude": [],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "electric_sparks": {
+    "display_name": "Electric Sparks & Lightning",
+    "description": "Crackling arcs of electricity and lightning energy.",
+    "prompt": "electricity, lightning sparks, electric aura",
+    "keywords": [
+      "vfx",
+      "electricity",
+      "lightning"
+    ],
+    "require": [],
+    "negate": [],
+    "exclude": [],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  }
+}

@@ -1,0 +1,160 @@
+{
+  "detailed_scenery": {
+    "display_name": "Detailed Scenery",
+    "description": "Richly rendered scenic environment with full depth.",
+    "prompt": "detailed background, scenery",
+    "keywords": [
+      "background",
+      "detailed_scenery"
+    ],
+    "require": [],
+    "negate": [
+      "simple_background"
+    ],
+    "exclude": [
+      "simple background",
+      "white background",
+      "monochrome background"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "simple_background": {
+    "display_name": "Simple Background",
+    "description": "Minimalist clean background that focuses all attention on the subject.",
+    "prompt": "simple background",
+    "keywords": [
+      "background",
+      "simple_background"
+    ],
+    "require": [],
+    "negate": [
+      "detailed_scenery"
+    ],
+    "exclude": [
+      "detailed background",
+      "scenery",
+      "complex background"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "white_background": {
+    "display_name": "White Studio Background",
+    "description": "Pure white high-key studio background.",
+    "prompt": "simple background, white background",
+    "keywords": [
+      "background",
+      "simple_background",
+      "white_background"
+    ],
+    "require": [],
+    "negate": [
+      "detailed_scenery",
+      "dark_background"
+    ],
+    "exclude": [
+      "detailed background",
+      "scenery",
+      "dark background",
+      "black background"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "dark_background": {
+    "display_name": "Dark Void Background",
+    "description": "Deep dark or black low-key background.",
+    "prompt": "simple background, dark background",
+    "keywords": [
+      "background",
+      "simple_background",
+      "dark_background"
+    ],
+    "require": [],
+    "negate": [
+      "detailed_scenery",
+      "white_background"
+    ],
+    "exclude": [
+      "detailed background",
+      "scenery",
+      "white background",
+      "bright background"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "gradient_background": {
+    "display_name": "Gradient Backdrop",
+    "description": "Smooth color gradient background.",
+    "prompt": "simple background, gradient background",
+    "keywords": [
+      "background",
+      "simple_background",
+      "gradient_background"
+    ],
+    "require": [],
+    "negate": [
+      "detailed_scenery"
+    ],
+    "exclude": [
+      "detailed background",
+      "scenery"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "speed_lines": {
+    "display_name": "Manga Speed Lines",
+    "description": "Dynamic radial or directional motion speed lines.",
+    "prompt": "speed lines, dynamic background",
+    "keywords": [
+      "background",
+      "speed_lines",
+      "action_background"
+    ],
+    "require": [],
+    "negate": [],
+    "exclude": [],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "abstract_background": {
+    "display_name": "Abstract Geometric",
+    "description": "Stylized abstract background with geometric shapes.",
+    "prompt": "abstract background, geometric pattern",
+    "keywords": [
+      "background",
+      "abstract_background"
+    ],
+    "require": [],
+    "negate": [],
+    "exclude": [
+      "scenery"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  }
+}

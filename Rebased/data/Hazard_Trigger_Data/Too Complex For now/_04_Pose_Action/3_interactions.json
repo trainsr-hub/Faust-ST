@@ -1,0 +1,215 @@
+{
+  "solo_action": {
+    "display_name": "Solo Action (Independent)",
+    "description": "Character performing autonomous single-subject actions.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "",
+    "keywords": [
+      "interaction",
+      "solo_action"
+    ],
+    "require": [],
+    "negate": [
+      "duo_interaction"
+    ],
+    "exclude": [],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "holding_hands": {
+    "display_name": "Holding Hands",
+    "description": "Two characters clasping hands together.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "holding hands",
+    "keywords": [
+      "interaction",
+      "duo_interaction",
+      "holding_hands"
+    ],
+    "require": [],
+    "negate": [
+      "solo"
+    ],
+    "exclude": [
+      "solo"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "interlocked_fingers": {
+    "display_name": "Interlocked Fingers",
+    "description": "Intimate lovers' handclasp with interlaced fingers.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "holding hands, interlocked fingers",
+    "keywords": [
+      "interaction",
+      "duo_interaction",
+      "interlocked_fingers"
+    ],
+    "require": [],
+    "negate": [
+      "solo"
+    ],
+    "exclude": [
+      "solo"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "hugging": {
+    "display_name": "Embrace / Hugging",
+    "description": "Two characters wrapped in a warm or passionate hug.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "hugging, embrace",
+    "keywords": [
+      "interaction",
+      "duo_interaction",
+      "hugging"
+    ],
+    "require": [],
+    "negate": [
+      "solo"
+    ],
+    "exclude": [
+      "solo"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "head_on_shoulder": {
+    "display_name": "Head on Shoulder",
+    "description": "One character gently resting their head on their partner's shoulder.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "head on shoulder, leaning on shoulder",
+    "keywords": [
+      "interaction",
+      "duo_interaction",
+      "head_on_shoulder"
+    ],
+    "require": [],
+    "negate": [
+      "solo"
+    ],
+    "exclude": [
+      "solo"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "lap_pillow": {
+    "display_name": "Lap Pillow",
+    "description": "One character resting their head on the seated partner's lap.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "lap pillow, head in lap",
+    "keywords": [
+      "interaction",
+      "duo_interaction",
+      "lap_pillow"
+    ],
+    "require": [],
+    "negate": [
+      "solo"
+    ],
+    "exclude": [
+      "solo"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "princess_carry": {
+    "display_name": "Princess Carry",
+    "description": "One character carrying the other horizontally in their arms.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "princess carry, carried",
+    "keywords": [
+      "interaction",
+      "duo_interaction",
+      "princess_carry"
+    ],
+    "require": [],
+    "negate": [
+      "solo"
+    ],
+    "exclude": [
+      "solo"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "facing_each_other": {
+    "display_name": "Facing Each Other",
+    "description": "Two characters positioned directly eye-to-eye in close proximity.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "facing each other, looking at each other",
+    "keywords": [
+      "interaction",
+      "duo_interaction",
+      "facing_each_other"
+    ],
+    "require": [],
+    "negate": [
+      "solo"
+    ],
+    "exclude": [
+      "solo"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "back_to_back": {
+    "display_name": "Back to Back",
+    "description": "Companions standing or leaning spine-to-spine facing opposite directions.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "back-to-back, standing back-to-back",
+    "keywords": [
+      "interaction",
+      "duo_interaction",
+      "back_to_back"
+    ],
+    "require": [],
+    "negate": [
+      "solo"
+    ],
+    "exclude": [
+      "solo"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  }
+}

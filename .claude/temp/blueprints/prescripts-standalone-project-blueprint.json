@@ -1,0 +1,588 @@
+{
+  "project": "Prescripts Standalone Project",
+  "description": "Complete standalone implementation of Rose 5-tier SQLite schema with Hazard Trigger gacha mechanics, React/TypeScript SPA frontend, FastAPI Python backend, and Master UI/UX template compliance",
+  "target_directory": "D:\\My Drive\\Blue AI\\Rebased\\Prescripts-Standalone",
+  "architecture": {
+    "frontend": "React 18 + TypeScript + Vite + Zustand + Tailwind CSS",
+    "backend": "FastAPI + SQLite + Pydantic + CORS",
+    "database": "SQLite 5-tier relational (quotes, containers, specifics, themes, usages)",
+    "deployment": "Port 20140 (FastAPI) + 5173 (Vite) + run.sh/run.bat launcher"
+  },
+  "execution_phases": [
+    {
+      "phase": 1,
+      "name": "Project Scaffold",
+      "description": "Initialize project structure, package configurations, and development environment",
+      "work_packets": [
+        {
+          "id": "P1_T1",
+          "name": "Root Project Structure",
+          "type": "scaffold",
+          "dependencies": [],
+          "files": [
+            "package.json",
+            "vite.config.ts",
+            "tsconfig.json",
+            "tailwind.config.js",
+            "postcss.config.js",
+            ".gitignore",
+            "README.md",
+            "run.sh",
+            "run.bat"
+          ],
+          "implementation_spec": {
+            "description": "Create root project files with proper TypeScript/Vite configuration",
+            "max_lines_per_file": 150,
+            "key_requirements": [
+              "Vite dev server on port 5173",
+              "TypeScript strict mode enabled",
+              "Tailwind CSS with theme tokens matching Master UI template",
+              "ESLint + Prettier configuration",
+              "Cross-platform launcher scripts"
+            ],
+            "critical_dependencies": [
+              "react@18",
+              "typescript@5",
+              "vite@4",
+              "@vitejs/plugin-react",
+              "tailwindcss@3",
+              "zustand@4"
+            ]
+          }
+        },
+        {
+          "id": "P1_T2",
+          "name": "Backend Project Structure",
+          "type": "scaffold",
+          "dependencies": [],
+          "files": [
+            "backend/requirements.txt",
+            "backend/pyproject.toml",
+            "backend/.env.example",
+            "backend/__init__.py"
+          ],
+          "implementation_spec": {
+            "description": "Initialize Python backend structure with FastAPI dependencies",
+            "max_lines_per_file": 50,
+            "key_requirements": [
+              "FastAPI with CORS middleware",
+              "SQLite with asyncio support",
+              "Pydantic v2 for data validation",
+              "Python 3.9+ compatibility"
+            ],
+            "critical_dependencies": [
+              "fastapi>=0.104.0",
+              "uvicorn[standard]>=0.24.0",
+              "pydantic>=2.5.0",
+              "aiosqlite>=0.19.0"
+            ]
+          }
+        },
+        {
+          "id": "P1_T3",
+          "name": "Frontend Source Structure",
+          "type": "scaffold",
+          "dependencies": ["P1_T1"],
+          "files": [
+            "src/main.tsx",
+            "src/App.tsx",
+            "src/index.css",
+            "src/vite-env.d.ts",
+            "src/types/index.ts",
+            "src/store/index.ts",
+            "src/components/index.ts",
+            "src/api/index.ts",
+            "public/vite.svg",
+            "index.html"
+          ],
+          "implementation_spec": {
+            "description": "Create React application entry points and type definitions",
+            "max_lines_per_file": 100,
+            "key_requirements": [
+              "React 18 with StrictMode",
+              "Zustand store pattern from existing Studio implementations",
+              "TypeScript strict mode compliance",
+              "CSS custom properties for theming",
+              "Barrel exports pattern"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "phase": 2,
+      "name": "Backend Foundation",
+      "description": "Implement SQLite 5-tier schema, Pydantic models, and FastAPI CRUD endpoints",
+      "work_packets": [
+        {
+          "id": "P2_T1",
+          "name": "Database Schema & Connection",
+          "type": "backend_core",
+          "dependencies": ["P1_T2"],
+          "files": [
+            "backend/database.py",
+            "backend/models/db_models.py"
+          ],
+          "implementation_spec": {
+            "description": "Port Rose 5-tier SQLite schema with WAL mode, foreign keys, and connection pooling",
+            "max_lines_per_file": 300,
+            "key_requirements": [
+              "Exact Rose schema replication: quotes(0001), containers(0002), specifics(0003), themes(0004), usages(0005)",
+              "SQLite WAL mode with IMMEDIATE transactions",
+              "Foreign key constraints enforced",
+              "Hex ID prefix validation (0001-0005)",
+              "Connection timeout and retry logic",
+              "Zero sentiment field (removed from original)"
+            ],
+            "database_schema": {
+              "quotes": "id TEXT PRIMARY KEY, idx INTEGER UNIQUE, main_content TEXT NOT NULL, context TEXT, date TEXT, specific_id TEXT, theme_ids TEXT, usage_ids TEXT, preference TEXT, backlinks TEXT",
+              "containers": "id TEXT PRIMARY KEY, name TEXT UNIQUE NOT NULL, type TEXT, notes TEXT",
+              "specifics": "id TEXT PRIMARY KEY, name TEXT NOT NULL, container_id TEXT NOT NULL REFERENCES containers(id), category TEXT, default_usage_ids TEXT, notes TEXT",
+              "themes": "id TEXT PRIMARY KEY, name TEXT NOT NULL, child_of TEXT REFERENCES themes(id), notes TEXT",
+              "usages": "id TEXT PRIMARY KEY, name TEXT NOT NULL, description TEXT, icon TEXT, conflicts_with TEXT"
+            }
+          }
+        },
+        {
+          "id": "P2_T2",
+          "name": "Pydantic Models",
+          "type": "backend_core",
+          "dependencies": ["P2_T1"],
+          "files": [
+            "backend/models/pydantic_models.py",
+            "backend/models/request_models.py",
+            "backend/models/response_models.py"
+          ],
+          "implementation_spec": {
+            "description": "Create strongly-typed Pydantic models matching exact Rose schema",
+            "max_lines_per_file": 250,
+            "key_requirements": [
+              "Pydantic v2 BaseModel inheritance",
+              "Hex ID validation with regex patterns",
+              "JSON serialization for array fields (theme_ids, usage_ids, conflicts_with)",
+              "Request/Response model separation",
+              "Field validation for hex prefixes (0001-0005)",
+              "Date field flexibility (YYYY, YYYY-MM, YYYY-MM-DD)",
+              "Zero untyped dictionaries across all models"
+            ],
+            "model_hierarchy": {
+              "base": "HexID validation, timestamp fields",
+              "entities": "Quote, Container, Specific, Theme, Usage",
+              "requests": "CreateQuote, UpdateQuote, CreateContainer, etc.",
+              "responses": "QuoteResponse, QuoteListResponse, TaxonomyResponse"
+            }
+          }
+        },
+        {
+          "id": "P2_T3",
+          "name": "CRUD Operations Layer",
+          "type": "backend_core",
+          "dependencies": ["P2_T2"],
+          "files": [
+            "backend/crud/quote_operations.py",
+            "backend/crud/container_operations.py",
+            "backend/crud/specific_operations.py",
+            "backend/crud/theme_operations.py",
+            "backend/crud/usage_operations.py"
+          ],
+          "implementation_spec": {
+            "description": "Implement async CRUD operations with proper error handling and transaction management",
+            "max_lines_per_file": 300,
+            "key_requirements": [
+              "Async/await pattern throughout",
+              "IMMEDIATE transaction isolation",
+              "Proper exception handling with specific error types",
+              "Hex ID generation with timestamp encoding",
+              "Foreign key constraint validation",
+              "Projection compilation after mutations",
+              "Atomic batch operations where applicable"
+            ],
+            "operation_coverage": {
+              "create": "All entities with auto-generated hex IDs",
+              "read": "Single by ID, list all, filtered queries",
+              "update": "Partial updates with validation",
+              "delete": "Cascade-aware deletion with cleanup"
+            }
+          }
+        },
+        {
+          "id": "P2_T4",
+          "name": "FastAPI Endpoints",
+          "type": "backend_api",
+          "dependencies": ["P2_T3"],
+          "files": [
+            "backend/main.py",
+            "backend/routers/quotes.py",
+            "backend/routers/containers.py",
+            "backend/routers/specifics.py",
+            "backend/routers/themes.py",
+            "backend/routers/usages.py",
+            "backend/routers/taxonomy.py"
+          ],
+          "implementation_spec": {
+            "description": "RESTful API endpoints with proper HTTP status codes, CORS, and error handling",
+            "max_lines_per_file": 250,
+            "key_requirements": [
+              "FastAPI router pattern with proper dependency injection",
+              "CORS middleware for development (localhost:5173)",
+              "Standardized error responses with detail messages",
+              "Request/response model binding",
+              "HTTP status code compliance (200, 201, 404, 422, 500)",
+              "Port 20140 server binding",
+              "Graceful shutdown handling"
+            ],
+            "endpoint_structure": {
+              "/api/quotes": "GET (list), POST (create)",
+              "/api/quotes/{id}": "GET (read), PUT (update), DELETE (delete)",
+              "/api/containers": "GET (list), POST (create)",
+              "/api/containers/{id}": "GET (read), PUT (update), DELETE (delete)",
+              "/api/specifics": "GET (list), POST (create)",
+              "/api/specifics/{id}": "GET (read), PUT (update), DELETE (delete)",
+              "/api/themes": "GET (list), POST (create)",
+              "/api/themes/{id}": "GET (read), PUT (update), DELETE (delete)",
+              "/api/usages": "GET (list), POST (create)",
+              "/api/usages/{id}": "GET (read), PUT (update), DELETE (delete)",
+              "/api/taxonomy": "GET (compiled projection with denormalized relationships)"
+            }
+          }
+        },
+        {
+          "id": "P2_T5",
+          "name": "Deterministic Graph Resolver",
+          "type": "backend_logic",
+          "dependencies": ["P2_T1"],
+          "files": [
+            "backend/graph_resolver.py",
+            "backend/projection_compiler.py"
+          ],
+          "implementation_spec": {
+            "description": "Port Rose compile_projections.py logic with zero LLM dependencies",
+            "max_lines_per_file": 300,
+            "key_requirements": [
+              "Pure deterministic Python (no AI/ML dependencies)",
+              "Exact replication of Rose CQRS projection compilation",
+              "Denormalized JSON output matching Rose quotes_map.json and taxonomy_index.json",
+              "Hierarchical theme tree resolution (child_of relationships)",
+              "Usage conflict matrix resolution",
+              "Default usage IDs propagation from specifics",
+              "O(1) lookup optimization for frontend consumption"
+            ],
+            "output_format": {
+              "quotes_projection": "{ [hex_id]: { id, index, main_content, context, date, specific, themes[], usages[], preference[], backlinks[] } }",
+              "taxonomy_projection": "{ containers: [], specifics: [], themes: [], usages: [] }"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "phase": 3,
+      "name": "Frontend Implementation",
+      "description": "React/TypeScript SPA with Zustand store, Hazard theme, and Master UI/UX template compliance",
+      "work_packets": [
+        {
+          "id": "P3_T1",
+          "name": "Type Definitions & API Client",
+          "type": "frontend_foundation",
+          "dependencies": ["P2_T2"],
+          "files": [
+            "src/types/entities.ts",
+            "src/types/api.ts",
+            "src/api/client.ts",
+            "src/api/endpoints.ts"
+          ],
+          "implementation_spec": {
+            "description": "TypeScript definitions matching backend Pydantic models and HTTP client",
+            "max_lines_per_file": 200,
+            "key_requirements": [
+              "Exact TypeScript equivalents of Pydantic models",
+              "Fetch-based API client with proper error handling",
+              "Request/response type safety",
+              "Base URL configuration for development/production",
+              "Standardized error response handling",
+              "No axios dependency (use native fetch)"
+            ],
+            "api_patterns": {
+              "error_handling": "Standardized ApiError class with HTTP status codes",
+              "request_types": "CreateQuoteRequest, UpdateQuoteRequest, etc.",
+              "response_types": "QuoteResponse, QuoteListResponse, TaxonomyResponse",
+              "client_methods": "Async functions for each CRUD endpoint"
+            }
+          }
+        },
+        {
+          "id": "P3_T2",
+          "name": "Zustand Store Implementation",
+          "type": "frontend_state",
+          "dependencies": ["P3_T1"],
+          "files": [
+            "src/store/quote-store.ts",
+            "src/store/taxonomy-store.ts",
+            "src/store/ui-store.ts",
+            "src/store/hazard-trigger-store.ts"
+          ],
+          "implementation_spec": {
+            "description": "Zustand state management following Studio pattern with proper TypeScript integration",
+            "max_lines_per_file": 300,
+            "key_requirements": [
+              "Zustand v4 create() pattern",
+              "TypeScript store interfaces",
+              "Immer middleware for immutable updates",
+              "Async action creators with error handling",
+              "Optimistic updates with rollback capability",
+              "Store slicing for modular state management",
+              "LocalStorage persistence for UI preferences only"
+            ],
+            "store_structure": {
+              "quote-store": "quotes[], selectedQuote, loading, error, CRUD actions",
+              "taxonomy-store": "containers[], specifics[], themes[], usages[], denormalized data",
+              "ui-store": "selectedTab, searchQuery, filters, theme preferences",
+              "hazard-trigger-store": "gacha pool state, node weights, exclusion rules (future expansion)"
+            }
+          }
+        },
+        {
+          "id": "P3_T3",
+          "name": "Master UI Template Components",
+          "type": "frontend_ui",
+          "dependencies": ["P3_T2"],
+          "files": [
+            "src/components/ui/Button.tsx",
+            "src/components/ui/Input.tsx",
+            "src/components/ui/Dropdown.tsx",
+            "src/components/ui/MultiSelect.tsx",
+            "src/components/ui/Toggle.tsx",
+            "src/components/ui/Checkbox.tsx",
+            "src/components/ui/TreeView.tsx"
+          ],
+          "implementation_spec": {
+            "description": "Reusable UI components following Master UI/UX template patterns",
+            "max_lines_per_file": 250,
+            "key_requirements": [
+              "Zero-dead-zone delegation (100% clickable surfaces)",
+              "Single-active-branch outliner for TreeView",
+              "Fitts's Law compliance with full-surface hitboxes",
+              "Theme-agnostic design tokens via CSS custom properties",
+              "Hazard color palette integration",
+              "TypeScript prop interfaces with proper typing",
+              "Compound component patterns where applicable"
+            ],
+            "component_features": {
+              "Button": "Primary/secondary variants, loading states, full-width option",
+              "Input": "Text/textarea variants, validation states, focus management",
+              "Dropdown": "Single select with search, create options, persistent suggestions",
+              "MultiSelect": "Tag chips, inline input, suggestion pool management",
+              "Toggle": "Full-card clickable surface, description text",
+              "Checkbox": "Custom styling, full-row clickable surface",
+              "TreeView": "Hierarchical data, breadcrumb navigation, single-path focus"
+            }
+          }
+        },
+        {
+          "id": "P3_T4",
+          "name": "Core Application Components",
+          "type": "frontend_features",
+          "dependencies": ["P3_T3"],
+          "files": [
+            "src/components/QuoteEditor.tsx",
+            "src/components/QuoteList.tsx",
+            "src/components/TaxonomyPanel.tsx",
+            "src/components/SearchInterface.tsx",
+            "src/components/FieldMappingControls.tsx"
+          ],
+          "implementation_spec": {
+            "description": "Main application features integrating UI components with business logic",
+            "max_lines_per_file": 300,
+            "key_requirements": [
+              "Real-time search with debouncing",
+              "Form validation with error display",
+              "Optimistic UI updates",
+              "Keyboard navigation support",
+              "Responsive design for mobile/desktop",
+              "Export functionality (JSON/CSV/ComfyUI format)",
+              "Proper loading and error states"
+            ],
+            "component_responsibilities": {
+              "QuoteEditor": "Create/edit quotes, field validation, submission handling",
+              "QuoteList": "Paginated list, filtering, sorting, selection management",
+              "TaxonomyPanel": "Container/specific/theme/usage management, hierarchical display",
+              "SearchInterface": "Real-time filtering, faceted search, result highlighting",
+              "FieldMappingControls": "Associate quotes with taxonomy entities, conflict resolution"
+            }
+          }
+        },
+        {
+          "id": "P3_T5",
+          "name": "Layout & Routing",
+          "type": "frontend_layout",
+          "dependencies": ["P3_T4"],
+          "files": [
+            "src/components/Layout.tsx",
+            "src/components/Header.tsx",
+            "src/components/Navigation.tsx",
+            "src/components/StatusPanel.tsx",
+            "src/App.tsx"
+          ],
+          "implementation_spec": {
+            "description": "Application layout, navigation, and routing implementation",
+            "max_lines_per_file": 250,
+            "key_requirements": [
+              "Single-page application (no React Router needed initially)",
+              "Tab-based navigation between main views",
+              "Responsive sidebar/panel layout",
+              "Status indicators for API connectivity",
+              "Theme switcher integration",
+              "Keyboard shortcuts for common actions",
+              "Breadcrumb navigation for hierarchical data"
+            ],
+            "layout_structure": {
+              "Header": "Title, theme switcher, export controls, status indicators",
+              "Navigation": "Tab-based view switching, active state management",
+              "Layout": "Responsive grid, sidebar management, main content area",
+              "StatusPanel": "Live JSON inspector, operation status, connection health"
+            }
+          }
+        },
+        {
+          "id": "P3_T6",
+          "name": "Theme Integration & Styling",
+          "type": "frontend_styling",
+          "dependencies": ["P3_T5"],
+          "files": [
+            "src/styles/theme.css",
+            "src/styles/components.css",
+            "src/styles/hazard-palette.css",
+            "src/styles/layout.css"
+          ],
+          "implementation_spec": {
+            "description": "Hazard theme integration with Master UI template design tokens",
+            "max_lines_per_file": 200,
+            "key_requirements": [
+              "CSS custom properties for all color/spacing tokens",
+              "Dark/light theme support with system preference detection",
+              "Hazard-specific color grades (low/med/high/crit)",
+              "Consistent spacing scale (4px base grid)",
+              "Typography scale with proper contrast ratios",
+              "Animation tokens for micro-interactions",
+              "Mobile-first responsive breakpoints"
+            ],
+            "color_system": {
+              "canvas": "Background colors",
+              "surface": "Card/panel backgrounds",
+              "border": "Border color gradations",
+              "text": "Text color hierarchy",
+              "accent": "Primary brand color (Hazard orange)",
+              "hazard": "Threat level indicators (green/yellow/red/purple)"
+            }
+          }
+        },
+        {
+          "id": "P3_T7",
+          "name": "Export & Integration Features",
+          "type": "frontend_features",
+          "dependencies": ["P3_T6"],
+          "files": [
+            "src/utils/export.ts",
+            "src/utils/comfyui-formatter.ts",
+            "src/utils/clipboard.ts",
+            "src/components/ExportDialog.tsx"
+          ],
+          "implementation_spec": {
+            "description": "Data export capabilities for external tool integration",
+            "max_lines_per_file": 200,
+            "key_requirements": [
+              "JSON export with proper formatting",
+              "CSV export for spreadsheet import",
+              "ComfyUI prompt format generation",
+              "Clipboard API integration",
+              "Batch export with filtering options",
+              "Download handling for file exports",
+              "Export format validation and error handling"
+            ],
+            "export_formats": {
+              "json": "Complete quote data with taxonomy relationships",
+              "csv": "Flattened structure for spreadsheet analysis",
+              "comfyui": "Formatted prompts for AI image generation",
+              "clipboard": "Quick copy for individual quotes or selections"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "critical_invariants": [
+    "Hex ID prefixes strictly enforced (0001-0005 for quotes, containers, specifics, themes, usages)",
+    "SQLite WAL mode with IMMEDIATE transactions for data integrity",
+    "Zero sentiment field in quotes table (removed from original Rose schema)",
+    "Foreign key constraints enforced throughout database",
+    "No untyped dictionaries passing between frontend/backend layers",
+    "Master UI/UX template compliance with zero-dead-zones and single-active-branch outliner",
+    "Deterministic graph resolver with zero LLM dependencies",
+    "4-tier clean separation: UI -> Store -> API -> Database",
+    "Maximum 300 lines per file across all modules",
+    "Rose pattern compliance for all CQRS projections"
+  ],
+  "dependency_waves": [
+    {
+      "wave": 1,
+      "parallel_tasks": ["P1_T1", "P1_T2", "P1_T3"],
+      "description": "Project scaffolding can be done in parallel"
+    },
+    {
+      "wave": 2,
+      "sequential_tasks": ["P2_T1", "P2_T2", "P2_T3"],
+      "description": "Backend core must be built sequentially due to dependencies"
+    },
+    {
+      "wave": 3,
+      "parallel_tasks": ["P2_T4", "P2_T5"],
+      "description": "API endpoints and graph resolver can be built in parallel"
+    },
+    {
+      "wave": 4,
+      "sequential_tasks": ["P3_T1", "P3_T2"],
+      "description": "Frontend foundation requires API client before state management"
+    },
+    {
+      "wave": 5,
+      "parallel_tasks": ["P3_T3", "P3_T6"],
+      "description": "UI components and styling can be developed in parallel"
+    },
+    {
+      "wave": 6,
+      "sequential_tasks": ["P3_T4", "P3_T5"],
+      "description": "Application components before layout integration"
+    },
+    {
+      "wave": 7,
+      "parallel_tasks": ["P3_T7"],
+      "description": "Export features as final enhancement"
+    }
+  ],
+  "deployment_configuration": {
+    "development": {
+      "frontend_port": 5173,
+      "backend_port": 20140,
+      "database_path": "./data/prescripts.db",
+      "cors_origins": ["http://localhost:5173"]
+    },
+    "production": {
+      "frontend_build": "npm run build",
+      "backend_command": "uvicorn backend.main:app --host 0.0.0.0 --port 20140",
+      "static_serving": "FastAPI StaticFiles for built frontend",
+      "database_backup": "WAL checkpointing with scheduled snapshots"
+    }
+  },
+  "verification_checklist": [
+    "SQLite database initializes with proper 5-tier schema",
+    "Hex ID generation works with correct prefixes",
+    "Foreign key constraints prevent orphaned records",
+    "CQRS projections compile correctly matching Rose format",
+    "API endpoints return proper HTTP status codes",
+    "Frontend components match Master UI template patterns",
+    "Export functionality generates valid formats",
+    "Theme switching works between light/dark modes",
+    "Responsive design works on mobile and desktop",
+    "Error handling provides meaningful user feedback"
+  ]
+}

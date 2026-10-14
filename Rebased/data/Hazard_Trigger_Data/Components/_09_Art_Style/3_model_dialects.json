@@ -1,0 +1,70 @@
+{
+  "pony_score_booster": {
+    "display_name": "Pony XL / AutismMix (Score 9 Tier)",
+    "description": "Danbooru quality scoring prefixes engineered specifically for Pony diffusion architectures.",
+    "prompt": "score_9, score_8_up, score_7_up, score_6_up, source_anime",
+    "keywords": [
+      "dialect",
+      "pony"
+    ],
+    "require": [],
+    "negate": [],
+    "exclude": [],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "novelai_aesthetic": {
+    "display_name": "NovelAI V3 Aesthetic Booster",
+    "description": "Quality formatting tuned for NovelAI Diffusion models.",
+    "prompt": "masterpiece, best quality, amazing quality, very aesthetic",
+    "keywords": [
+      "dialect",
+      "novelai"
+    ],
+    "require": [],
+    "negate": [],
+    "exclude": [],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "sdxl_standard": {
+    "display_name": "SDXL / Animagine Standard",
+    "description": "Universal SDXL / Animagine quality booster tags.",
+    "prompt": "masterpiece, best quality, aesthetic, highly detailed",
+    "keywords": [
+      "dialect",
+      "sdxl"
+    ],
+    "require": [],
+    "negate": [],
+    "exclude": [],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "flux_cinematic": {
+    "display_name": "Flux Cinematic Syntax",
+    "description": "Natural language aesthetic descriptors for Flux / text-aligned diffusion transformers.",
+    "prompt": "breathtaking anime artwork, sharp focus, vibrant aesthetic color palette, high fidelity",
+    "keywords": [
+      "dialect",
+      "flux"
+    ],
+    "require": [],
+    "negate": [],
+    "exclude": [],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  }
+}

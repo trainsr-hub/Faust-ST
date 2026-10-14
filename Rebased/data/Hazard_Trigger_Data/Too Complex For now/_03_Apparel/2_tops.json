@@ -1,0 +1,280 @@
+{
+  "collared_shirt": {
+    "display_name": "Collared Shirt / Button-Up",
+    "description": "Crisp button-down shirt with structured collar.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "shirt, collared shirt, button up",
+    "keywords": [
+      "top",
+      "shirt"
+    ],
+    "require": [],
+    "negate": [
+      "nude"
+    ],
+    "exclude": [
+      "nude"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "t_shirt": {
+    "display_name": "T-Shirt",
+    "description": "Casual short-sleeved cotton tee.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "t-shirt, short sleeves",
+    "keywords": [
+      "top",
+      "t_shirt"
+    ],
+    "require": [],
+    "negate": [
+      "nude"
+    ],
+    "exclude": [
+      "nude"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "crop_top": {
+    "display_name": "Crop Top",
+    "description": "Short hemline top exposing the midriff and navel.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "crop top, bare shoulders, navel",
+    "keywords": [
+      "top",
+      "crop_top"
+    ],
+    "require": [],
+    "negate": [
+      "nude"
+    ],
+    "exclude": [
+      "nude"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "tank_top": {
+    "display_name": "Tank Top / Sleeveless",
+    "description": "Sleeveless athletic or casual tank top.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "tank top, sleeveless",
+    "keywords": [
+      "top",
+      "tank_top"
+    ],
+    "require": [],
+    "negate": [
+      "nude"
+    ],
+    "exclude": [
+      "nude"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "camisole": {
+    "display_name": "Camisole",
+    "description": "Delicate strap camisole with thin shoulder straps.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "camisole, spaghetti straps",
+    "keywords": [
+      "top",
+      "camisole"
+    ],
+    "require": [],
+    "negate": [
+      "nude"
+    ],
+    "exclude": [
+      "nude"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "knit_sweater": {
+    "display_name": "Knit Sweater",
+    "description": "Cozy oversized or ribbed knitted woolen sweater.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "sweater, knit sweater",
+    "keywords": [
+      "top",
+      "sweater"
+    ],
+    "require": [],
+    "negate": [
+      "nude"
+    ],
+    "exclude": [
+      "nude"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "turtleneck": {
+    "display_name": "Turtleneck Sweater",
+    "description": "High close-fitting turned-over collar sweater.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "turtleneck, turtleneck sweater",
+    "keywords": [
+      "top",
+      "turtleneck"
+    ],
+    "require": [],
+    "negate": [
+      "nude"
+    ],
+    "exclude": [
+      "nude"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "hoodie": {
+    "display_name": "Hoodie / Sweatshirt",
+    "description": "Casual hooded sweatshirt with front pouch or drawstrings.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "hoodie, hooded sweatshirt",
+    "keywords": [
+      "top",
+      "hoodie"
+    ],
+    "require": [],
+    "negate": [
+      "nude"
+    ],
+    "exclude": [
+      "nude"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "cardigan": {
+    "display_name": "Cardigan",
+    "description": "Buttoned open-front knitted garment worn over shirts.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "cardigan, open cardigan",
+    "keywords": [
+      "top",
+      "outer",
+      "cardigan"
+    ],
+    "require": [],
+    "negate": [
+      "nude"
+    ],
+    "exclude": [
+      "nude"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "jacket": {
+    "display_name": "Jacket / Windbreaker",
+    "description": "Zip-up leather, denim, or varsity jacket.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "jacket, open jacket",
+    "keywords": [
+      "top",
+      "outer",
+      "jacket"
+    ],
+    "require": [],
+    "negate": [
+      "nude"
+    ],
+    "exclude": [
+      "nude"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "blouse": {
+    "display_name": "Frilled Blouse",
+    "description": "Feminine blouse with frills, lace, or ribbon accents.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "blouse, frilled blouse",
+    "keywords": [
+      "top",
+      "blouse"
+    ],
+    "require": [],
+    "negate": [
+      "nude"
+    ],
+    "exclude": [
+      "nude"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "off_shoulder_shirt": {
+    "display_name": "Off-Shoulder Top",
+    "description": "Top with neckline sitting below the shoulders exposing collarbones.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "off-shoulder shirt, bare shoulders",
+    "keywords": [
+      "top",
+      "off_shoulder"
+    ],
+    "require": [],
+    "negate": [
+      "nude"
+    ],
+    "exclude": [
+      "nude"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  }
+}

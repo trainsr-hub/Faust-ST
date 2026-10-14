@@ -1,0 +1,176 @@
+{
+  "eyes": {
+    "eyes_shape": [
+      "tareme",
+      "tsurime",
+      "slit pupils",
+      "symbol-shaped pupils",
+      "heart-shaped pupils",
+      "bright eyes",
+      "jitome",
+      "sanpaku"
+    ],
+    "eyes_special": [
+      "heterochromia",
+      "gradient eyes",
+      "glowing eyes",
+      "two-tone eyes",
+      "empty eyes"
+    ],
+    "eyes_color": [
+      "blue eyes",
+      "light blue eyes",
+      "sky blue eyes",
+      "red eyes",
+      "green eyes",
+      "brown eyes",
+      "purple eyes",
+      "amber eyes",
+      "yellow eyes",
+      "golden eyes",
+      "black eyes",
+      "pink eyes",
+      "silver eyes",
+      "white eyes",
+      "orange eyes",
+      "grey eyes"
+    ]
+  },
+  "hair": {
+    "hair_length": [
+      "short hair",
+      "medium hair",
+      "long hair",
+      "very long hair",
+      "shoulder-length hair",
+      "pixie cut",
+      "bald"
+    ],
+    "hair_special_color": [
+      "colored inner hair",
+      "gradient hair",
+      "two-tone hair",
+      "split-color hair",
+      "streaked hair",
+      "colored tips",
+      "multicolored hair"
+    ],
+    "hair_color": [
+      "blonde hair",
+      "golden blonde hair",
+      "ash blonde hair",
+      "brown hair",
+      "black hair",
+      "silver hair",
+      "white hair",
+      "pink hair",
+      "blue hair",
+      "light blue hair",
+      "dark blue hair",
+      "red hair",
+      "purple hair",
+      "green hair",
+      "orange hair",
+      "grey hair"
+    ],
+    "hair_style": {
+      "bangs": [
+        "bangs",
+        "blunt bangs",
+        "swept bangs",
+        "parted bangs",
+        "asymmetrical bangs",
+        "crossed bangs",
+        "hair over one eye",
+        "forehead"
+      ],
+      "sides": [
+        "twintails",
+        "low twintails",
+        "sidelocks",
+        "side ponytail",
+        "twin braids",
+        "single side braid",
+        "twin low buns",
+        "short twin braids",
+        "drill hair"
+      ],
+      "back": [
+        "ponytail",
+        "high ponytail",
+        "low ponytail",
+        "braid",
+        "french braid",
+        "bun",
+        "hair down",
+        "half updo"
+      ],
+      "special": [
+        "ahoge",
+        "antenna hair",
+        "messy hair",
+        "wavy hair",
+        "straight hair",
+        "curly hair",
+        "spiky hair",
+        "pointy hair"
+      ]
+    },
+    "hair_accessories": [
+      "hair ornament",
+      "hair ribbon",
+      "hair bow",
+      "hairclip",
+      "bobby pins",
+      "hair flower",
+      "scrunchie",
+      "hairband"
+    ]
+  },
+  "body_type": {
+    "breast_size": [
+      "flat chest",
+      "small breasts",
+      "medium breasts",
+      "large breasts",
+      "huge breasts",
+      "gigantic breasts"
+    ],
+    "height_and_physique": [
+      "petite",
+      "tall",
+      "slender",
+      "curvy",
+      "toned",
+      "plump",
+      "muscular",
+      "fair skin",
+      "pale skin",
+      "tanned skin",
+      "dark skin"
+    ],
+    "features_and_anatomy": [
+      "mole on chest",
+      "mole under eye",
+      "mole on cheek",
+      "collarbone",
+      "cleavage",
+      "navel",
+      "pierced navel",
+      "abs",
+      "freckles",
+      "horns",
+      "demon horns",
+      "animal ears",
+      "cat ears",
+      "fox ears",
+      "elf ears",
+      "tail",
+      "demon tail",
+      "wings",
+      "halo",
+      "fang",
+      "pointy ears"
+    ]
+  }
+}

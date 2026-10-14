@@ -50,6 +50,7 @@ telegram_config.json
 *.bin
 *.wav
 *.mp3
+!Entropy/Rose/audio/*.wav
 **/models/*.onnx
 **/models/*.bin
 **/samples/*.wav

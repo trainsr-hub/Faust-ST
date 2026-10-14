@@ -1,0 +1,9 @@
+{
+  "_08_Lighting_Atmosphere/2_atmosphere_vfx.json:electric_sparks": true,
+  "_08_Lighting_Atmosphere/2_atmosphere_vfx.json:embers_sparks": true,
+  "_07_Background/2_atmosphere_vfx.json:embers_sparks": true,
+  "_07_Background/2_atmosphere_vfx.json:electric_sparks": true,
+  "_07_Background/2_atmosphere_vfx.json:falling_leaves": true,
+  "_07_Background/2_atmosphere_vfx.json:falling_petals": true,
+  "Matrices/_01_Expression/2_mouth_micro.json:single_fang": true
+}

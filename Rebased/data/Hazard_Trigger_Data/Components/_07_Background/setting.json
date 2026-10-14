@@ -1,0 +1,438 @@
+{
+  "bedroom": {
+    "display_name": "Bedroom",
+    "description": "Standard residential bedroom interior.",
+    "prompt": "bedroom, indoors",
+    "keywords": [
+      "setting",
+      "indoor",
+      "bedroom"
+    ],
+    "require": [],
+    "negate": [
+      "outdoors"
+    ],
+    "exclude": [
+      "outdoors",
+      "nature"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "in_bed": {
+    "display_name": "In Bed",
+    "description": "Subject situated on or within a bed with bedding.",
+    "prompt": "in bed, bedroom, indoors, bed sheet, pillow",
+    "keywords": [
+      "setting",
+      "indoor",
+      "bed",
+      "bedroom"
+    ],
+    "require": [],
+    "negate": [
+      "outdoors"
+    ],
+    "exclude": [
+      "outdoors"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "classroom": {
+    "display_name": "Classroom",
+    "description": "School classroom with desks, chairs, and blackboard.",
+    "prompt": "classroom, school, indoors, desk, chair",
+    "keywords": [
+      "setting",
+      "indoor",
+      "school",
+      "classroom"
+    ],
+    "require": [],
+    "negate": [
+      "outdoors"
+    ],
+    "exclude": [
+      "outdoors"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "bathroom": {
+    "display_name": "Bathroom / Shower",
+    "description": "Tiled domestic bathroom or shower stall.",
+    "prompt": "bathroom, shower, indoors, tiles",
+    "keywords": [
+      "setting",
+      "indoor",
+      "bathroom",
+      "shower"
+    ],
+    "require": [],
+    "negate": [
+      "outdoors"
+    ],
+    "exclude": [
+      "outdoors"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "onsen": {
+    "display_name": "Onsen / Hot Spring",
+    "description": "Traditional hot spring bath with steaming mineral water.",
+    "prompt": "onsen, hot spring, steam, water",
+    "keywords": [
+      "setting",
+      "indoor",
+      "onsen",
+      "hot_spring"
+    ],
+    "require": [],
+    "negate": [],
+    "exclude": [],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "kitchen": {
+    "display_name": "Kitchen",
+    "description": "Residential kitchen area with counters and cookware.",
+    "prompt": "kitchen, counter, indoors",
+    "keywords": [
+      "setting",
+      "indoor",
+      "kitchen"
+    ],
+    "require": [],
+    "negate": [
+      "outdoors"
+    ],
+    "exclude": [
+      "outdoors"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "living_room": {
+    "display_name": "Living Room",
+    "description": "Comfortable home living area with sofa and seating.",
+    "prompt": "living room, sofa, indoors",
+    "keywords": [
+      "setting",
+      "indoor",
+      "living_room"
+    ],
+    "require": [],
+    "negate": [
+      "outdoors"
+    ],
+    "exclude": [
+      "outdoors"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "library": {
+    "display_name": "Library",
+    "description": "Quiet study hall filled with towering bookshelves and books.",
+    "prompt": "library, bookshelf, books, indoors",
+    "keywords": [
+      "setting",
+      "indoor",
+      "library",
+      "books"
+    ],
+    "require": [],
+    "negate": [
+      "outdoors"
+    ],
+    "exclude": [
+      "outdoors"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "bar_lounge": {
+    "display_name": "Bar / Lounge",
+    "description": "Atmospheric bar with counter stools and dim ambient mood.",
+    "prompt": "bar, counter, indoors, dim lighting",
+    "keywords": [
+      "setting",
+      "indoor",
+      "bar",
+      "lounge"
+    ],
+    "require": [],
+    "negate": [
+      "outdoors"
+    ],
+    "exclude": [
+      "outdoors"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "sci_fi_cockpit": {
+    "display_name": "Sci-Fi Cockpit",
+    "description": "Futuristic mecha or spaceship control cabin with HUD displays.",
+    "prompt": "cockpit, pilot seat, holographic display, sci-fi, indoors",
+    "keywords": [
+      "setting",
+      "indoor",
+      "sci_fi",
+      "cockpit"
+    ],
+    "require": [],
+    "negate": [],
+    "exclude": [
+      "nature",
+      "trees"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "cityscape": {
+    "display_name": "Cityscape / Urban Street",
+    "description": "Modern metropolitan street with buildings and city skyline.",
+    "prompt": "cityscape, city, buildings, street, outdoors",
+    "keywords": [
+      "setting",
+      "outdoor",
+      "city",
+      "urban"
+    ],
+    "require": [],
+    "negate": [
+      "indoors"
+    ],
+    "exclude": [
+      "indoors",
+      "bedroom"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "rooftop": {
+    "display_name": "Rooftop",
+    "description": "High-altitude building rooftop overlooking open sky.",
+    "prompt": "rooftop, sky, railing, outdoors",
+    "keywords": [
+      "setting",
+      "outdoor",
+      "rooftop",
+      "sky"
+    ],
+    "require": [],
+    "negate": [
+      "indoors"
+    ],
+    "exclude": [
+      "indoors"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "beach": {
+    "display_name": "Beach / Ocean",
+    "description": "Sunny coastline with sand, ocean waves, and tropical horizon.",
+    "prompt": "beach, ocean, sea, sand, outdoors, tropical",
+    "keywords": [
+      "setting",
+      "outdoor",
+      "beach",
+      "ocean"
+    ],
+    "require": [],
+    "negate": [
+      "indoors"
+    ],
+    "exclude": [
+      "indoors"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "forest": {
+    "display_name": "Forest / Woodland",
+    "description": "Dense woodland with tall trees, greenery, and filtered sunlight.",
+    "prompt": "forest, trees, nature, foliage, outdoors",
+    "keywords": [
+      "setting",
+      "outdoor",
+      "forest",
+      "nature"
+    ],
+    "require": [],
+    "negate": [
+      "indoors"
+    ],
+    "exclude": [
+      "indoors"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "park_cherry_blossoms": {
+    "display_name": "Cherry Blossom Park",
+    "description": "Scenic park surrounded by blooming sakura trees and falling petals.",
+    "prompt": "park, cherry blossoms, sakura trees, petals, outdoors",
+    "keywords": [
+      "setting",
+      "outdoor",
+      "park",
+      "cherry_blossoms"
+    ],
+    "require": [],
+    "negate": [
+      "indoors"
+    ],
+    "exclude": [
+      "indoors"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "japanese_shrine": {
+    "display_name": "Japanese Shrine",
+    "description": "Traditional Shinto shrine grounds with torii gate and stone lanterns.",
+    "prompt": "shrine, torii, traditional japanese architecture, outdoors",
+    "keywords": [
+      "setting",
+      "outdoor",
+      "shrine",
+      "traditional"
+    ],
+    "require": [],
+    "negate": [
+      "indoors"
+    ],
+    "exclude": [
+      "indoors"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "snowy_landscape": {
+    "display_name": "Snowy Landscape",
+    "description": "Cold winter vista with deep snow cover and wintry atmosphere.",
+    "prompt": "snowy landscape, snow, winter, outdoors",
+    "keywords": [
+      "setting",
+      "outdoor",
+      "snow",
+      "winter"
+    ],
+    "require": [],
+    "negate": [
+      "indoors",
+      "tropical"
+    ],
+    "exclude": [
+      "indoors",
+      "tropical"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "starry_sky": {
+    "display_name": "Starry Night Vista",
+    "description": "Open night vista beneath a sprawling cosmos and star-filled sky.",
+    "prompt": "starry sky, night sky, stars, milky way, outdoors",
+    "keywords": [
+      "setting",
+      "outdoor",
+      "night",
+      "sky"
+    ],
+    "require": [],
+    "negate": [
+      "indoors",
+      "day"
+    ],
+    "exclude": [
+      "indoors",
+      "day",
+      "sunlight"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "fantasy_ruins": {
+    "display_name": "Fantasy Ruins",
+    "description": "Ancient overgrown stone temple ruins with mystical atmosphere.",
+    "prompt": "ruins, ancient architecture, stone pillars, fantasy, outdoors",
+    "keywords": [
+      "setting",
+      "outdoor",
+      "ruins",
+      "fantasy"
+    ],
+    "require": [],
+    "negate": [
+      "indoors"
+    ],
+    "exclude": [
+      "indoors"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  }
+}

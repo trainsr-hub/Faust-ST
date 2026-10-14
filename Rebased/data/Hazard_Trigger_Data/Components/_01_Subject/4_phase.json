@@ -1,0 +1,21 @@
+{
+  "phase_1": {
+    "display_name": "Phase 1",
+    "prompt": "half-closed eyes, afterglow, blush, aroused",
+    "keywords": [
+      "eyes"
+    ],
+    "require": [
+      "eyes_open"
+    ],
+    "negate": [],
+    "exclude": [
+      "looking away"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  }
+}

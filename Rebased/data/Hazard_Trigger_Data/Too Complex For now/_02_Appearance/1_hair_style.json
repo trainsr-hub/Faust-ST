@@ -1,0 +1,405 @@
+{
+  "short_hair": {
+    "display_name": "Short Hair",
+    "description": "Hair trimmed cleanly above the shoulders.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "short hair",
+    "keywords": [
+      "appearance",
+      "hair",
+      "short_hair"
+    ],
+    "require": [],
+    "negate": [
+      "long_hair"
+    ],
+    "exclude": [
+      "long hair",
+      "very long hair"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "medium_hair": {
+    "display_name": "Medium Hair (Shoulder Length)",
+    "description": "Hair falling around shoulder collarbone level.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "medium hair, shoulder length",
+    "keywords": [
+      "appearance",
+      "hair",
+      "medium_hair"
+    ],
+    "require": [],
+    "negate": [],
+    "exclude": [],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "long_hair": {
+    "display_name": "Long Hair",
+    "description": "Flowing hair cascading down the back.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "long hair",
+    "keywords": [
+      "appearance",
+      "hair",
+      "long_hair"
+    ],
+    "require": [],
+    "negate": [
+      "short_hair"
+    ],
+    "exclude": [
+      "short hair"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "very_long_hair": {
+    "display_name": "Very Long Hair (Waist/Floor)",
+    "description": "Dramatic hair extending past hips to thighs or floor.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "very long hair",
+    "keywords": [
+      "appearance",
+      "hair",
+      "very_long_hair"
+    ],
+    "require": [],
+    "negate": [
+      "short_hair"
+    ],
+    "exclude": [
+      "short hair"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "twintails": {
+    "display_name": "Twintails",
+    "description": "Classic dual twin pigtails tied on both sides.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "twintails",
+    "keywords": [
+      "appearance",
+      "hair",
+      "twintails"
+    ],
+    "require": [],
+    "negate": [
+      "ponytail"
+    ],
+    "exclude": [
+      "ponytail"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "low_twintails": {
+    "display_name": "Low Twintails",
+    "description": "Gentle twin pigtails tied near the nape or shoulders.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "low twintails",
+    "keywords": [
+      "appearance",
+      "hair",
+      "twintails",
+      "low_twintails"
+    ],
+    "require": [],
+    "negate": [
+      "high_ponytail"
+    ],
+    "exclude": [],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "ponytail": {
+    "display_name": "Ponytail",
+    "description": "Single ponytail gathered cleanly at the back.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "ponytail",
+    "keywords": [
+      "appearance",
+      "hair",
+      "ponytail"
+    ],
+    "require": [],
+    "negate": [
+      "twintails"
+    ],
+    "exclude": [
+      "twintails"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "side_ponytail": {
+    "display_name": "Side Ponytail",
+    "description": "Asymmetrical ponytail swept to one side.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "side ponytail",
+    "keywords": [
+      "appearance",
+      "hair",
+      "ponytail",
+      "side_ponytail"
+    ],
+    "require": [],
+    "negate": [
+      "twintails"
+    ],
+    "exclude": [
+      "twintails"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "high_ponytail": {
+    "display_name": "High Ponytail",
+    "description": "High-tension ponytail positioned at the crown of the head.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "high ponytail",
+    "keywords": [
+      "appearance",
+      "hair",
+      "ponytail",
+      "high_ponytail"
+    ],
+    "require": [],
+    "negate": [
+      "twintails"
+    ],
+    "exclude": [
+      "twintails"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "bob_cut": {
+    "display_name": "Bob Cut",
+    "description": "Chic bob haircut with neat even fringe and sides.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "bob cut, short hair",
+    "keywords": [
+      "appearance",
+      "hair",
+      "bob_cut"
+    ],
+    "require": [],
+    "negate": [
+      "very_long_hair"
+    ],
+    "exclude": [
+      "very long hair"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "braid": {
+    "display_name": "Single Braid",
+    "description": "Neat single plait running down back or side.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "braid, single braid",
+    "keywords": [
+      "appearance",
+      "hair",
+      "braid"
+    ],
+    "require": [],
+    "negate": [],
+    "exclude": [],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "twin_braids": {
+    "display_name": "Twin Braids",
+    "description": "Twin braided plaits framing both sides of face.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "twin braids",
+    "keywords": [
+      "appearance",
+      "hair",
+      "braid",
+      "twin_braids"
+    ],
+    "require": [],
+    "negate": [
+      "ponytail"
+    ],
+    "exclude": [
+      "ponytail"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "hair_bun": {
+    "display_name": "Hair Bun",
+    "description": "Tidy gathered chignon or bun on the back or top of head.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "hair bun",
+    "keywords": [
+      "appearance",
+      "hair",
+      "hair_bun"
+    ],
+    "require": [],
+    "negate": [],
+    "exclude": [],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "double_bun": {
+    "display_name": "Double Bun (Odango)",
+    "description": "Cute twin buns perched symmetrically atop head.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "double bun, odango",
+    "keywords": [
+      "appearance",
+      "hair",
+      "double_bun"
+    ],
+    "require": [],
+    "negate": [],
+    "exclude": [],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "ahoge": {
+    "display_name": "Ahoge (Antenna Hair)",
+    "description": "Quirky single strand or lock of hair sticking upright.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "ahoge, antenna hair",
+    "keywords": [
+      "appearance",
+      "hair",
+      "ahoge"
+    ],
+    "require": [],
+    "negate": [],
+    "exclude": [],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "blunt_bangs": {
+    "display_name": "Blunt Bangs (Straight Fringe)",
+    "description": "Straight horizontal bangs cut cleanly across forehead.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "blunt bangs, straight bangs",
+    "keywords": [
+      "appearance",
+      "hair",
+      "bangs"
+    ],
+    "require": [],
+    "negate": [],
+    "exclude": [],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "messy_hair": {
+    "display_name": "Messy / Disheveled Hair",
+    "description": "Wild, untamed, or bedhead locks.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "messy hair, disheveled hair",
+    "keywords": [
+      "appearance",
+      "hair",
+      "messy_hair"
+    ],
+    "require": [],
+    "negate": [],
+    "exclude": [],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "wavy_hair": {
+    "display_name": "Wavy Hair",
+    "description": "Natural rolling ripples and gentle waves in hair.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "wavy hair",
+    "keywords": [
+      "appearance",
+      "hair",
+      "wavy_hair"
+    ],
+    "require": [],
+    "negate": [],
+    "exclude": [],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  }
+}

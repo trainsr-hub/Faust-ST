@@ -1,0 +1,349 @@
+{
+  "school_uniform_sailor": {
+    "display_name": "Sailor School Uniform (Serafuku)",
+    "description": "Traditional Japanese sailor-collared school uniform with pleated skirt.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "school uniform, sailor suit, serafuku, pleated skirt, neckerchief",
+    "keywords": [
+      "apparel",
+      "outfit",
+      "school_uniform",
+      "sailor"
+    ],
+    "require": [],
+    "negate": [
+      "nude",
+      "bikini"
+    ],
+    "exclude": [
+      "nude",
+      "bikini"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "school_uniform_blazer": {
+    "display_name": "Blazer School Uniform",
+    "description": "Modern academy blazer jacket, collared shirt, necktie/ribbon, and pleated skirt.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "school uniform, blazer, collared shirt, necktie, pleated skirt",
+    "keywords": [
+      "apparel",
+      "outfit",
+      "school_uniform",
+      "blazer"
+    ],
+    "require": [],
+    "negate": [
+      "nude",
+      "bikini"
+    ],
+    "exclude": [
+      "nude",
+      "bikini"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "maid_uniform": {
+    "display_name": "Maid Uniform",
+    "description": "Classic French maid dress with frilled apron and maid headdress.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "maid, maid uniform, apron, frills, maid headdress",
+    "keywords": [
+      "apparel",
+      "outfit",
+      "maid"
+    ],
+    "require": [],
+    "negate": [
+      "nude"
+    ],
+    "exclude": [
+      "nude"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "bunny_suit": {
+    "display_name": "Playboy Bunny Suit",
+    "description": "Glossy strapless leotard, bunny ears headband, bow tie collar, and cuffs.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "bunny suit, bunny ears, collar, bow tie, leotard",
+    "keywords": [
+      "apparel",
+      "outfit",
+      "bunny_suit"
+    ],
+    "require": [],
+    "negate": [
+      "nude"
+    ],
+    "exclude": [
+      "nude"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "bikini": {
+    "display_name": "Two-Piece Bikini",
+    "description": "Classic two-piece triangle or halterneck bikini swimsuit.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "bikini, swimsuit, two-piece swimsuit",
+    "keywords": [
+      "apparel",
+      "outfit",
+      "swimsuit",
+      "bikini"
+    ],
+    "require": [],
+    "negate": [
+      "nude"
+    ],
+    "exclude": [
+      "nude"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "one_piece_swimsuit": {
+    "display_name": "One-Piece Swimsuit",
+    "description": "Sleek one-piece or competition school swimsuit.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "one-piece swimsuit, competition swimsuit",
+    "keywords": [
+      "apparel",
+      "outfit",
+      "swimsuit"
+    ],
+    "require": [],
+    "negate": [
+      "nude"
+    ],
+    "exclude": [
+      "nude"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "lingerie_set": {
+    "display_name": "Lingerie / Underwear Set",
+    "description": "Lace-trimmed bra and matching panties set.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "lingerie, bra, panties, lace trim",
+    "keywords": [
+      "apparel",
+      "outfit",
+      "lingerie",
+      "underwear"
+    ],
+    "require": [],
+    "negate": [
+      "nude"
+    ],
+    "exclude": [
+      "nude"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "casual_wear": {
+    "display_name": "Casual Streetwear",
+    "description": "Everyday casual shirt and shorts/jeans outfit.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "casual, t-shirt, shorts",
+    "keywords": [
+      "apparel",
+      "outfit",
+      "casual"
+    ],
+    "require": [],
+    "negate": [
+      "nude"
+    ],
+    "exclude": [
+      "nude"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "evening_dress": {
+    "display_name": "Evening Gown / Cocktail Dress",
+    "description": "Elegant formal evening gown or cocktail party dress.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "dress, evening gown, elegant dress",
+    "keywords": [
+      "apparel",
+      "outfit",
+      "dress"
+    ],
+    "require": [],
+    "negate": [
+      "nude"
+    ],
+    "exclude": [
+      "nude"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "kimono": {
+    "display_name": "Kimono",
+    "description": "Traditional Japanese silk kimono with ornate sash (obi).",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "kimono, traditional japanese clothing, obi",
+    "keywords": [
+      "apparel",
+      "outfit",
+      "kimono",
+      "traditional"
+    ],
+    "require": [],
+    "negate": [
+      "nude"
+    ],
+    "exclude": [
+      "nude"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "yukata": {
+    "display_name": "Yukata (Summer Robe)",
+    "description": "Lightweight cotton summer kimono worn at Japanese festivals.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "yukata, summer kimono, sash, obi",
+    "keywords": [
+      "apparel",
+      "outfit",
+      "yukata",
+      "traditional"
+    ],
+    "require": [],
+    "negate": [
+      "nude"
+    ],
+    "exclude": [
+      "nude"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "bodysuit_leotard": {
+    "display_name": "Bodysuit / Leotard / Plugsuit",
+    "description": "Form-fitting skin-tight bodysuit, plugsuit, or leotard.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "bodysuit, leotard, skin-tight, plugsuit",
+    "keywords": [
+      "apparel",
+      "outfit",
+      "bodysuit"
+    ],
+    "require": [],
+    "negate": [
+      "nude"
+    ],
+    "exclude": [
+      "nude"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "knight_armor": {
+    "display_name": "Knight Battle Armor",
+    "description": "Fantasy metallic breastplate, pauldrons, and gauntlets.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "armor, breastplate, gauntlets, pauldrons, metal armor",
+    "keywords": [
+      "apparel",
+      "outfit",
+      "armor",
+      "fantasy"
+    ],
+    "require": [],
+    "negate": [
+      "nude"
+    ],
+    "exclude": [
+      "nude"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "gothic_lolita": {
+    "display_name": "Gothic Lolita Dress",
+    "description": "Ornate Victorian-inspired dark frilled gothic dress with lace ribbons.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "gothic lolita, dark dress, frills, lace trim, ribbons",
+    "keywords": [
+      "apparel",
+      "outfit",
+      "gothic_lolita"
+    ],
+    "require": [],
+    "negate": [
+      "nude"
+    ],
+    "exclude": [
+      "nude"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  }
+}

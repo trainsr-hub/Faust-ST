@@ -1,0 +1,3 @@
+.pio/
+tools/fonts_src/
+include/secrets.h

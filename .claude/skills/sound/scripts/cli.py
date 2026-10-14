@@ -113,14 +113,24 @@ def main():
     if args.port:
         speak_kwargs["port"] = args.port
 
-    speak(
+    success = speak(
         text=speech_text,
         to=args.to,
         **speak_kwargs
     )
     latency_ms = (time.perf_counter() - t0) * 1000
-    if not args.save and is_daemon_running() and args.no_block:
-        print(f"[Faust C2] Dispatched to Resident Audio Daemon in {latency_ms:.1f}ms (0ms reload overhead).")
+
+    # Enhanced feedback on execution status
+    if not success:
+        print(f"[Faust C2] [WARN] Speech synthesis FAILED after {latency_ms:.1f}ms. Check daemon health or in-process fallback.")
+    elif args.to == "esp32":
+        print(f"[Faust C2] [OK] ESP32 stream completed in {latency_ms:.1f}ms")
+    elif is_daemon_running() and not args.no_block:
+        print(f"[Faust C2] [OK] Resident Audio Daemon (blocking) completed in {latency_ms:.1f}ms")
+    elif is_daemon_running() and args.no_block:
+        print(f"[Faust C2] [OK] Dispatched to Resident Audio Daemon in {latency_ms:.1f}ms (0ms reload overhead)")
+    else:
+        print(f"[Faust C2] [OK] In-process fallback synthesis completed in {latency_ms:.1f}ms")
 
 
 if __name__ == "__main__":

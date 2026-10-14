@@ -1,0 +1,86 @@
+{
+  "1995b021a4f": {
+    "display_name": "Pose Standing",
+    "category": "Pose",
+    "description": "Character standing upright on two feet with body elevated.",
+    "completed": true,
+    "conflicts_with": [
+      "1995b022b10",
+      "1995b023c21",
+      "1995b024d32"
+    ]
+  },
+  "1995b022b10": {
+    "display_name": "Pose Sitting",
+    "category": "Pose",
+    "description": "Character seated on a chair, ground, or surface.",
+    "completed": true,
+    "conflicts_with": [
+      "1995b021a4f",
+      "1995b023c21",
+      "1995b024d32"
+    ]
+  },
+  "1995b023c21": {
+    "display_name": "Pose Lying Down",
+    "category": "Pose",
+    "description": "Character lying horizontally on back, side, or stomach.",
+    "completed": true,
+    "conflicts_with": [
+      "1995b021a4f",
+      "1995b022b10"
+    ]
+  },
+  "1995b024d32": {
+    "display_name": "Pose Floating",
+    "category": "Pose",
+    "description": "Character suspended or levitating without ground contact.",
+    "completed": true,
+    "conflicts_with": [
+      "1995b021a4f",
+      "1995b022b10"
+    ]
+  },
+  "1995b031e50": {
+    "display_name": "Solo Female (1girl)",
+    "category": "Subject",
+    "description": "Exactly one female character visible in camera frame.",
+    "completed": true,
+    "conflicts_with": [
+      "1995b032f61"
+    ]
+  },
+  "1995b032f61": {
+    "display_name": "Multiple Females (2+ girls)",
+    "category": "Subject",
+    "description": "Two or more female characters visible in scene.",
+    "completed": true,
+    "conflicts_with": [
+      "1995b031e50"
+    ]
+  },
+  "1995b041a72": {
+    "display_name": "Wet Atmosphere / Soaked",
+    "category": "Environment",
+    "description": "Water immersion, rain, swimming, or heavy perspiration.",
+    "completed": true
+  },
+  "1995b051b83": {
+    "display_name": "Close-Up Framing",
+    "category": "Camera",
+    "description": "Tight framing focusing on head and face.",
+    "completed": true,
+    "conflicts_with": [
+      "1995b052c94"
+    ]
+  },
+  "1995b052c94": {
+    "display_name": "Full Body Framing",
+    "category": "Camera",
+    "description": "Wide shot capturing entire character from head to feet.",
+    "completed": true,
+    "conflicts_with": [
+      "1995b051b83"
+    ]
+  }
+}

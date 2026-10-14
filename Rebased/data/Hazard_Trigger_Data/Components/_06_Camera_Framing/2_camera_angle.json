@@ -1,0 +1,171 @@
+{
+  "eye_level": {
+    "display_name": "Eye Level (Straight-On)",
+    "description": "Camera positioned directly level with the subject.",
+    "prompt": "straight-on, eye level",
+    "keywords": [
+      "camera",
+      "angle",
+      "eye_level"
+    ],
+    "require": [],
+    "negate": [
+      "low_angle",
+      "high_angle"
+    ],
+    "exclude": [
+      "from below",
+      "from above"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "low_angle": {
+    "display_name": "Low Angle (From Below / Worm's Eye)",
+    "description": "Camera looking upward from below, enhancing height and dominance.",
+    "prompt": "low angle, from below",
+    "keywords": [
+      "camera",
+      "angle",
+      "low_angle"
+    ],
+    "require": [],
+    "negate": [
+      "high_angle",
+      "eye_level"
+    ],
+    "exclude": [
+      "from above",
+      "top-down"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "high_angle": {
+    "display_name": "High Angle (From Above / Bird's Eye)",
+    "description": "Camera looking downward from elevated perspective.",
+    "prompt": "high angle, from above",
+    "keywords": [
+      "camera",
+      "angle",
+      "high_angle"
+    ],
+    "require": [],
+    "negate": [
+      "low_angle",
+      "eye_level"
+    ],
+    "exclude": [
+      "from below"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "dutch_angle": {
+    "display_name": "Dutch Angle (Tilted Frame)",
+    "description": "Camera deliberately tilted off horizontal axis for tension and dynamic flair.",
+    "prompt": "dutch angle, tilted frame",
+    "keywords": [
+      "camera",
+      "angle",
+      "dutch_angle"
+    ],
+    "require": [],
+    "negate": [],
+    "exclude": [],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "from_side": {
+    "display_name": "Side Profile",
+    "description": "Profile view from either left or right flank.",
+    "prompt": "profile, from side",
+    "keywords": [
+      "camera",
+      "angle",
+      "profile"
+    ],
+    "require": [],
+    "negate": [
+      "from_behind"
+    ],
+    "exclude": [
+      "from behind"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "from_behind": {
+    "display_name": "Back View (From Behind)",
+    "description": "Camera positioned behind the subject showing back and shoulders.",
+    "prompt": "from behind, back view",
+    "keywords": [
+      "camera",
+      "angle",
+      "back_view"
+    ],
+    "require": [],
+    "negate": [
+      "straight_on"
+    ],
+    "exclude": [
+      "straight-on"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "over_the_shoulder": {
+    "display_name": "Over The Shoulder",
+    "description": "Framing behind an observer's shoulder facing the primary subject.",
+    "prompt": "over the shoulder, looking over shoulder",
+    "keywords": [
+      "camera",
+      "angle",
+      "over_the_shoulder"
+    ],
+    "require": [],
+    "negate": [],
+    "exclude": [],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "foreshortening": {
+    "display_name": "Dynamic Foreshortening",
+    "description": "Exaggerated perspective with limbs or props projecting toward lens.",
+    "prompt": "foreshortening, dynamic perspective",
+    "keywords": [
+      "camera",
+      "angle",
+      "foreshortening"
+    ],
+    "require": [],
+    "negate": [],
+    "exclude": [],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  }
+}

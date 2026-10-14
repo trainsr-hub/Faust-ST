@@ -1,0 +1,22 @@
+{
+  "eyes_visible": {
+    "targets": [
+      "eyes"
+    ]
+  },
+  "mouth_visible": {
+    "targets": [
+      "mouth"
+    ]
+  },
+  "chest_exposed": {
+    "targets": [
+      "chest"
+    ]
+  },
+  "belly_exposed": {
+    "targets": [
+      "belly"
+    ]
+  }
+}

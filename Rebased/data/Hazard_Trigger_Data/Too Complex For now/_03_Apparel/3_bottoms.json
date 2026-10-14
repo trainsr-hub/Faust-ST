@@ -1,0 +1,194 @@
+{
+  "pleated_skirt": {
+    "display_name": "Pleated Skirt",
+    "description": "Uniform-style skirt with crisp vertical folds.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "pleated skirt, skirt",
+    "keywords": [
+      "bottom",
+      "skirt",
+      "pleated_skirt"
+    ],
+    "require": [],
+    "negate": [
+      "pants",
+      "shorts",
+      "nude"
+    ],
+    "exclude": [
+      "pants",
+      "shorts",
+      "nude"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "miniskirt": {
+    "display_name": "Miniskirt",
+    "description": "Short hemline skirt ending well above the knees.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "miniskirt, skirt",
+    "keywords": [
+      "bottom",
+      "skirt",
+      "miniskirt"
+    ],
+    "require": [],
+    "negate": [
+      "pants",
+      "shorts",
+      "nude"
+    ],
+    "exclude": [
+      "pants",
+      "shorts",
+      "nude"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "pencil_skirt": {
+    "display_name": "Pencil Skirt (Office)",
+    "description": "Form-fitting, tailored knee-length office skirt.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "pencil skirt, tight skirt",
+    "keywords": [
+      "bottom",
+      "skirt",
+      "pencil_skirt"
+    ],
+    "require": [],
+    "negate": [
+      "pants",
+      "shorts",
+      "nude"
+    ],
+    "exclude": [
+      "pants",
+      "shorts",
+      "nude"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "long_skirt": {
+    "display_name": "Long / Maxi Skirt",
+    "description": "Flowing maxi skirt extending down to ankles.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "long skirt, maxi skirt",
+    "keywords": [
+      "bottom",
+      "skirt",
+      "long_skirt"
+    ],
+    "require": [],
+    "negate": [
+      "miniskirt",
+      "shorts",
+      "nude"
+    ],
+    "exclude": [
+      "miniskirt",
+      "shorts",
+      "nude"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "denim_shorts": {
+    "display_name": "Denim Daisy Dukes / Shorts",
+    "description": "Short casual denim jean shorts with frayed hems.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "shorts, denim shorts, short shorts",
+    "keywords": [
+      "bottom",
+      "shorts",
+      "denim_shorts"
+    ],
+    "require": [],
+    "negate": [
+      "skirt",
+      "nude"
+    ],
+    "exclude": [
+      "skirt",
+      "nude"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "dolphin_shorts": {
+    "display_name": "Dolphin Gym Shorts",
+    "description": "Athletic running shorts with contrast side binding.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "dolphin shorts, gym shorts",
+    "keywords": [
+      "bottom",
+      "shorts",
+      "dolphin_shorts"
+    ],
+    "require": [],
+    "negate": [
+      "skirt",
+      "nude"
+    ],
+    "exclude": [
+      "skirt",
+      "nude"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "jeans": {
+    "display_name": "Denim Jeans / Trousers",
+    "description": "Fitted or straight-leg denim jeans.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "jeans, denim pants, pants",
+    "keywords": [
+      "bottom",
+      "pants",
+      "jeans"
+    ],
+    "require": [],
+    "negate": [
+      "skirt",
+      "shorts",
+      "nude"
+    ],
+    "exclude": [
+      "skirt",
+      "shorts",
+      "nude"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  }
+}

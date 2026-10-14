@@ -160,8 +160,8 @@ bool connectToWifiWithPriority() {
 
 // Helper function to try connecting to a specific network
 bool tryConnectToWifi(const String& ssid, const String& password) {
-  WiFi.disconnect();
-  delay(100);
+  WiFi.disconnect(true);  // true = also clear saved AP config
+  delay(200);
 
   if (password.length() > 0) {
     WiFi.begin(ssid.c_str(), password.c_str());
@@ -170,10 +170,9 @@ bool tryConnectToWifi(const String& ssid, const String& password) {
   }
 
   uint32_t t0 = millis();
-  while (WiFi.status() != WL_CONNECTED && millis() - t0 < 5000) {
-    delay(100);
-    // Check for unexpected disconnection
-    if (WiFi.status() == WL_DISCONNECTED) break;
+  // Extended timeout to 8s: ESP32-C3 association can take 4-6s on congested channels
+  while (WiFi.status() != WL_CONNECTED && millis() - t0 < 8000) {
+    delay(200);
   }
 
   bool connected = (WiFi.status() == WL_CONNECTED);
@@ -194,6 +193,8 @@ static const int MAX_CHARS = 36;
 static const int MAX_LINES = 4;
 static const int LINE_PITCH = 21;
 static const uint32_t ENTROPY_MS = 45;
+static const uint32_t STATIC_CIPHER_DURATION_MS = 400; // Static frozen cipher display before animation starts
+static const uint32_t DRAW_SOUND_DURATION_MS = 400; // Delay before animation starts after draw_sound fires
 static const uint32_t DRAW_TO_COMPLETE_MS = 1250;
 static const uint32_t BETWEEN_COMPLETES_MS = 150;
 static const uint32_t DWELL_PER_LINE_MS = 7000;
@@ -691,8 +692,7 @@ static void showPage(bool animate, bool sound) {
     if (sound) jqPlay(TRACK_COMPLETE);
     return;
   }
-  drawHeader(q, true);
-  clearBody();
+
   uint32_t total = max<uint32_t>(900, ENTROPY_MS * 35);
   for (int r = 0; r < (int)pg.lines.size() && r < MAX_LINES; r++) {
     const std::u16string& s = pg.lines[r].t;
@@ -702,19 +702,46 @@ static void showPage(bool animate, bool sound) {
   }
   animating = true;
   animFrameCount = 0;
+
+  // Draw header and clear body while draw_sound plays
+  drawHeader(q, true);
+  clearBody();
+
   Serial.printf("[anim] START Quote #%s (total=%u ms)\n", q.idx.c_str(), total);
 
-  // Fire draw_sound FIRST — before any SPI framebuffer work, matching mock cadence
-  if (sound) jqPlay(TRACK_DRAW);
+  if (sound) {
+    // Fire draw_sound, then hold STATIC cipher noise for 400ms
+    // Render all cells as random cipher characters (none locked/decoded)
+    jqPlay(TRACK_DRAW);
+    {
+      int y = bodyTop((int)pg.lines.size());
+      const int base = (20 - (fBD13.ascent + fBD13.descent)) / 2 + fBD13.ascent;
+      for (int r = 0; r < (int)pg.lines.size() && r < MAX_LINES; r++) {
+        cv.h = 20;
+        cv.fill(C_BLACK);
+        for (int c = 0; c < gridLen[r]; c++) {
+          int x = 16 + c * fBD13.adv;
+          cv.drawChar(fBD13, x, base, rndCipher(), C_WHITE);
+        }
+        push(y + r * LINE_PITCH, 20);
+      }
+    }
+    delay(STATIC_CIPHER_DURATION_MS);
+  }
 
-  // Instantly render Frame 0 of scramble — zero black void
-  renderAnimationFrame(0);
+  // Re-randomize grid for entropy animation to begin
+  for (int r = 0; r < (int)pg.lines.size() && r < MAX_LINES; r++) {
+    for (int c = 0; c < gridLen[r]; c++) {
+      grid[r][c].cur = rndCipher();
+      grid[r][c].locked = false;
+    }
+  }
 
-  // Time base begins strictly after initial frame is dispatched to screen
+  // Time base starts after static cipher display and draw sound have fully played
   animStart = millis();
   lastFrame = animStart;
 
-  // Arm gap chime scheduler: first complete chime at DRAW_TO_COMPLETE_MS, then every BETWEEN_COMPLETES_MS
+  // Gap chimes: complete_sound fires at DRAW_TO_COMPLETE_MS into animation, then every BETWEEN_COMPLETES_MS
   nextGapChime = sound ? (animStart + DRAW_TO_COMPLETE_MS) : 0xFFFFFFFF;
 }
 
@@ -744,13 +771,8 @@ static void rollQuote() {
   if (now - lastRollTime < 400) return; // Debounce rapid multi-clicks
   lastRollTime = now;
 
-  // Fire draw_sound on button press — immediate tactile response before any stop/load overhead
-  jqPlay(TRACK_DRAW);
-
   animating = false;
   nextGapChime = 0xFFFFFFFF;
-  audio.stop();
-  delay(15);
 
   if (quotes.empty()) {
     if (WiFi.status() == WL_CONNECTED) {
@@ -769,10 +791,10 @@ static void rollQuote() {
   }
   curQuote = i;
   Serial.printf("[roll] Rolling to Quote #%s...\n", quotes[curQuote].idx.c_str());
-  // Pass sound=false: draw_sound already fired on button press; arm gap chime scheduler manually
-  loadQuote(curQuote, true, false);
-  // Arm gap chimes: animStart is now set by showPage(), schedule from it
-  if (animating) nextGapChime = animStart + DRAW_TO_COMPLETE_MS;
+
+  // Fire draw_sound immediately before animation — jqPlay() already holds 25ms for DAC sync.
+  // No audio.stop() needed: JQ8900 auto-restarts on a new playTrack() command.
+  loadQuote(curQuote, true, true);
 
   // Prefetch fresh batch from Cloudflare Worker if RAM pool is running low
   if (quotes.size() < 4 && WiFi.status() == WL_CONNECTED) {
@@ -910,9 +932,11 @@ void setup() {
   if (strlen(WIFI_SSID) > 0 || MOBILE_HOTSPOT_ENABLED) {
     splash("Connecting Wi-Fi...", "Mobile Hotspot Priority");
     WiFi.mode(WIFI_STA);
-    WiFi.setTxPower(WIFI_POWER_15dBm);
+    delay(100);  // Let STA mode settle before touching RF config
+    WiFi.setTxPower(WIFI_POWER_19_5dBm);  // Max TX power — best chance of association
+    WiFi.setSleep(false);                 // Disable modem sleep for stable initial connection
 
-    // Use new mobile hotspot priority connection system
+    // Use mobile hotspot priority connection system
     if (connectToWifiWithPriority()) {
       Serial.printf("[wifi] Connected: %s\n", WiFi.localIP().toString().c_str());
       splash("Syncing prescripts...", "Cloudflare Edge");

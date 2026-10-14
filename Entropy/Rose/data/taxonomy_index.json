@@ -1,0 +1,236 @@
+{
+  "containers": [
+    {
+      "id": "M-00020001A1088D81",
+      "name": "Faust",
+      "type": "intellect",
+      "notes": "Strategic Analytical Intellect"
+    },
+    {
+      "id": "M-00020001A1088D80",
+      "name": "Koi no Koe",
+      "type": "persona",
+      "notes": ""
+    },
+    {
+      "id": "M-00020001A1088D83",
+      "name": "Marcus Aurelius",
+      "type": "author",
+      "notes": "Stoic Emperor"
+    },
+    {
+      "id": "M-00020001A1088D85",
+      "name": "Neon Genesis Evangelion",
+      "type": "anime",
+      "notes": "Studio Gainax"
+    },
+    {
+      "id": "000201A10023406F",
+      "name": "Spiderum - Linh Vũ",
+      "type": "Writer",
+      "notes": ""
+    },
+    {
+      "id": "M-00020001A1088D82",
+      "name": "The Manager",
+      "type": "personal",
+      "notes": "Visionary & Commander"
+    },
+    {
+      "id": "M-00020001A1088D84",
+      "name": "William Blake",
+      "type": "author",
+      "notes": "Romantic Poet & Painter"
+    }
+  ],
+  "specifics": [
+    {
+      "id": "M-00030001A1088D82",
+      "name": "Diary",
+      "category": "diary",
+      "date": "",
+      "default_usage_ids": [
+        "M-00050001A1088D82"
+      ],
+      "notes": "Personal daily life reflections",
+      "container": {
+        "id": "M-00020001A1088D82",
+        "name": "The Manager",
+        "type": "personal",
+        "notes": "Visionary & Commander"
+      }
+    },
+    {
+      "id": "M-00030001A1088D85",
+      "name": "Infant Joy",
+      "category": "poem",
+      "date": "",
+      "default_usage_ids": [
+        "M-00050001A1088D80",
+        "M-00050001A1088D81"
+      ],
+      "notes": "Songs of Innocence (1789)",
+      "container": {
+        "id": "M-00020001A1088D84",
+        "name": "William Blake",
+        "type": "author",
+        "notes": "Romantic Poet & Painter"
+      }
+    },
+    {
+      "id": "M-00030001A1088D84",
+      "name": "Meditations",
+      "category": "book",
+      "date": "",
+      "default_usage_ids": [
+        "M-00050001A1088D83"
+      ],
+      "notes": "Greek notes to himself",
+      "container": {
+        "id": "M-00020001A1088D83",
+        "name": "Marcus Aurelius",
+        "type": "author",
+        "notes": "Stoic Emperor"
+      }
+    },
+    {
+      "id": "M-00030001A1088D81",
+      "name": "System Reflections",
+      "category": "insight",
+      "date": "",
+      "default_usage_ids": [
+        "M-00050001A1088D83"
+      ],
+      "notes": "",
+      "container": {
+        "id": "M-00020001A1088D81",
+        "name": "Faust",
+        "type": "intellect",
+        "notes": "Strategic Analytical Intellect"
+      }
+    },
+    {
+      "id": "M-00030001A1088D87",
+      "name": "Thought on",
+      "category": "thought",
+      "date": "",
+      "default_usage_ids": [
+        "M-00050001A1088D81"
+      ],
+      "notes": "Compact personal take, open-ended without final conclusion",
+      "container": {
+        "id": "M-00020001A1088D82",
+        "name": "The Manager",
+        "type": "personal",
+        "notes": "Visionary & Commander"
+      }
+    },
+    {
+      "id": "000301A111611DBD",
+      "name": "Vinyl Angel",
+      "category": "music",
+      "date": "2025-07",
+      "default_usage_ids": [
+        "000501A1119EA382"
+      ],
+      "notes": "Vinyl Angel acoustic fiction",
+      "container": {
+        "id": "M-00020001A1088D80",
+        "name": "Koi no Koe",
+        "type": "persona",
+        "notes": ""
+      }
+    },
+    {
+      "id": "000301A10025228C",
+      "name": "Đàn ông thích mèo, đàn bà yêu chó",
+      "category": "writing",
+      "date": "2021~2023",
+      "default_usage_ids": [
+        "000501A1003A7B8A"
+      ],
+      "notes": "",
+      "container": {
+        "id": "000201A10023406F",
+        "name": "Spiderum - Linh Vũ",
+        "type": "Writer",
+        "notes": ""
+      }
+    }
+  ],
+  "themes": [
+    {
+      "id": "000401A1003C1686",
+      "name": "Heartbroken",
+      "child_of": "000401A1003B21A8",
+      "parent_name": "Love",
+      "notes": ""
+    },
+    {
+      "id": "000401A1003B21A8",
+      "name": "Love",
+      "child_of": null,
+      "parent_name": "",
+      "notes": ""
+    }
+  ],
+  "usages": [
+    {
+      "id": "M-00050001A1088D83",
+      "name": "Daily Rule",
+      "description": "Actionable principle & meta-habit",
+      "icon": "📜",
+      "conflicts_with": [
+        "M-00050001A1088D80"
+      ]
+    },
+    {
+      "id": "M-00050001A1088D81",
+      "name": "Diary Prompt",
+      "description": "Creative catalyst for morning writing",
+      "icon": "💡",
+      "conflicts_with": []
+    },
+    {
+      "id": "M-00050001A1088D82",
+      "name": "Memory Anchor",
+      "description": "Core realization from personal history",
+      "icon": "⚓",
+      "conflicts_with": [
+        "M-00050001A1088D84"
+      ]
+    },
+    {
+      "id": "M-00050001A1088D84",
+      "name": "Perspective / Levity",
+      "description": "Cosmic scale / meme / curiosity",
+      "icon": "🪐",
+      "conflicts_with": [
+        "M-00050001A1088D82"
+      ]
+    },
+    {
+      "id": "000501A1119EA382",
+      "name": "Recapture",
+      "description": "Lưu lại những thứ đẹp đẽ trong 1 cái lọ. 1 lá bài mà tôi sẽ nhìn ngắm",
+      "icon": "📸",
+      "conflicts_with": []
+    },
+    {
+      "id": "000501A1003A7B8A",
+      "name": "Recite",
+      "description": "A merely recite ~ Đơn thuần là trích dẫn lại để làm rõ quan điểm.",
+      "icon": "💡",
+      "conflicts_with": []
+    },
+    {
+      "id": "M-00050001A1088D80",
+      "name": "Rewrite Craft",
+      "description": "Sentence rhythm & prose training",
+      "icon": "✍️",
+      "conflicts_with": [
+        "M-00050001A1088D83"
+      ]
+    }
+  ]
+}

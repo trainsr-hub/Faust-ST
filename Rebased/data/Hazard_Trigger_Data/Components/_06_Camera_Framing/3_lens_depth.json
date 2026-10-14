@@ -1,0 +1,62 @@
+{
+  "depth_of_field": {
+    "display_name": "Shallow Depth of Field",
+    "description": "Sharp subject focus with beautifully blurred background.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "depth of field, blurry background",
+    "keywords": [
+      "lens",
+      "depth",
+      "depth_of_field"
+    ],
+    "require": [],
+    "negate": [],
+    "exclude": [],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "bokeh": {
+    "display_name": "Bokeh Light Circles",
+    "description": "Soft aesthetic out-of-focus circular light blur.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "bokeh, blurry background",
+    "keywords": [
+      "lens",
+      "depth",
+      "bokeh"
+    ],
+    "require": [],
+    "negate": [],
+    "exclude": [],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "lens_flare": {
+    "display_name": "Cinematic Lens Flare",
+    "description": "Anamorphic or radial light artifacts from bright light sources.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "lens flare, light streak",
+    "keywords": [
+      "lens",
+      "lighting",
+      "lens_flare"
+    ],
+    "require": [],
+    "negate": [],
+    "exclude": [],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  }
+}

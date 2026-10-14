@@ -1,0 +1,20 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "pk-network",
+  "main": "worker/index.ts",
+  "compatibility_date": "2024-12-30",
+  "compatibility_flags": ["nodejs_compat"],
+  "assets": {
+    "directory": "./dist",
+    "binding": "ASSETS"
+  },
+  "observability": {
+    "enabled": true
+  },
+  "vars": {
+    "TURSO_DATABASE_URL": "https://heraclitus-rien-bluerose.aws-ap-southeast-2.turso.io",
+    "TURSO_AUTH_TOKEN": "eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9.eyJhIjoicnciLCJpYXQiOjE3OTEyOTgxMzUsImlkIjoiMDFhMTExYWYtNzAwMS03MDFkLWI4ZDktY2U0YzRkM2JiN2E3Iiwia2lkIjoiMV8yT0hVRmpqVkVZUHVXSmZuWXFoQVBKc21mODR6NUY2aG5FeVoxUkVVOCIsInJpZCI6IjE1MGRlODFjLTY3MjYtNDZkNS1iYTU3LWZiMjk3NGUwZDQ2NiJ9.eBbcZkzZV06bkTAsJsxABxiqbNE7uPt4M8yzogSc1xglN5FpFfsNTZlQUDcMHc24AK_Ilp5CLBhJ-70u_BZJBw",
+    "APP_AUTH_KEY": "toiyeufaust"
+  }
+}
+

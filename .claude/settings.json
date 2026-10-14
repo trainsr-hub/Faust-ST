@@ -1,6 +1,6 @@
 {
   "model": "Faust-ST",
-  "effortLevel": "xhigh",
+  "effortLevel": "high",
   "modelSettings": {
     "Faust-ST": {
       "effortLevel": "high"

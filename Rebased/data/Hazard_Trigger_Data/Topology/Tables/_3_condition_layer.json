@@ -1,0 +1,44 @@
+{
+  "mouth_state": {
+    "conflicts": [
+      "closed mouth",
+      "open mouth",
+      "parted lips",
+      "pout"
+    ]
+  },
+  "eyes_state": {
+    "conflicts": [
+      "closed eyes",
+      "open eyes",
+      "winking",
+      "squinting"
+    ]
+  },
+  "upper_body_layer_10": {
+    "conflicts": [
+      "bra",
+      "bikini top",
+      "sports bra",
+      "bandeau"
+    ]
+  },
+  "upper_body_layer_30": {
+    "conflicts": [
+      "shirt",
+      "t-shirt",
+      "blouse",
+      "sweater",
+      "crop top"
+    ]
+  },
+  "upper_body_layer_60": {
+    "conflicts": [
+      "jacket",
+      "coat",
+      "hoodie",
+      "cardigan",
+      "blazer"
+    ]
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "high_quality": {
+    "display_name": "Standard High Quality",
+    "description": "Balanced high-resolution crisp rendering.",
+    "prompt": "high quality, highres, sharp focus",
+    "keywords": [
+      "quality",
+      "high_quality"
+    ],
+    "require": [],
+    "negate": [],
+    "exclude": [
+      "low quality",
+      "blurry"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "hyper_detailed": {
+    "display_name": "Hyper-Detailed Anatomy & Lighting",
+    "description": "Micro-level fidelity on eyes, skin shaders, and fabrics.",
+    "prompt": "masterpiece, extremely detailed eyes, detailed skin, highly detailed, absurdres",
+    "keywords": [
+      "quality",
+      "hyper_detailed"
+    ],
+    "require": [],
+    "negate": [],
+    "exclude": [
+      "worst quality",
+      "low quality"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  }
+}

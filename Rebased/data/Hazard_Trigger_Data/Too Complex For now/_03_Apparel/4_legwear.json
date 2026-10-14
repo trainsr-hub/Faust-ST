@@ -1,0 +1,221 @@
+{
+  "bare_legs": {
+    "display_name": "Bare Legs",
+    "description": "Natural skin on legs with no hosiery or socks.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "bare legs",
+    "keywords": [
+      "legwear",
+      "bare_legs"
+    ],
+    "require": [],
+    "negate": [
+      "pantyhose",
+      "thighhighs"
+    ],
+    "exclude": [
+      "pantyhose",
+      "thighhighs",
+      "socks"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "ankle_socks": {
+    "display_name": "Ankle Socks",
+    "description": "Short cotton socks cut at or just below ankle bone.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "ankle socks, white socks",
+    "keywords": [
+      "legwear",
+      "socks",
+      "ankle_socks"
+    ],
+    "require": [],
+    "negate": [
+      "thighhighs",
+      "pantyhose"
+    ],
+    "exclude": [
+      "thighhighs",
+      "pantyhose"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "knee_highs": {
+    "display_name": "Knee-High Socks",
+    "description": "Socks reaching up directly below the kneecap.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "knee highs, knee-high socks",
+    "keywords": [
+      "legwear",
+      "socks",
+      "knee_highs"
+    ],
+    "require": [],
+    "negate": [
+      "bare_legs",
+      "pantyhose"
+    ],
+    "exclude": [
+      "bare legs",
+      "pantyhose"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "thighhighs": {
+    "display_name": "Thigh-High Stockings (Zettai Ryouiki)",
+    "description": "Stockings reaching mid-thigh leaving absolute territory gap.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "thighhighs, black thighhighs, zettai ryouiki",
+    "keywords": [
+      "legwear",
+      "thighhighs"
+    ],
+    "require": [],
+    "negate": [
+      "bare_legs"
+    ],
+    "exclude": [
+      "bare legs"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "striped_thighhighs": {
+    "display_name": "Striped Thigh-Highs",
+    "description": "Horizontal striped alternate-colored thighhighs.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "striped thighhighs, thighhighs",
+    "keywords": [
+      "legwear",
+      "thighhighs",
+      "striped"
+    ],
+    "require": [],
+    "negate": [
+      "bare_legs"
+    ],
+    "exclude": [
+      "bare legs"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "black_pantyhose": {
+    "display_name": "Black Pantyhose / Tights",
+    "description": "Opaque black hosiery encasing entire legs and hips.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "pantyhose, black pantyhose, tights",
+    "keywords": [
+      "legwear",
+      "pantyhose",
+      "black_pantyhose"
+    ],
+    "require": [],
+    "negate": [
+      "bare_legs"
+    ],
+    "exclude": [
+      "bare legs"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "sheer_pantyhose": {
+    "display_name": "Sheer / Semi-Transparent Pantyhose",
+    "description": "Delicate sheer hosiery with subtle skin glow showing through.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "sheer pantyhose, semi-transparent pantyhose",
+    "keywords": [
+      "legwear",
+      "pantyhose",
+      "sheer"
+    ],
+    "require": [],
+    "negate": [
+      "bare_legs"
+    ],
+    "exclude": [
+      "bare legs"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "fishnet_pantyhose": {
+    "display_name": "Fishnet Pantyhose",
+    "description": "Diamond open-weave fishnet stockings.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "fishnets, fishnet pantyhose, fishnet legwear",
+    "keywords": [
+      "legwear",
+      "fishnet"
+    ],
+    "require": [],
+    "negate": [
+      "bare_legs"
+    ],
+    "exclude": [
+      "bare legs"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "garter_straps": {
+    "display_name": "Garter Belt & Straps",
+    "description": "Lingerie garter belt with elastic straps clipped to stockings.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "garter belt, garter straps, thighhighs",
+    "keywords": [
+      "legwear",
+      "garter_straps"
+    ],
+    "require": [],
+    "negate": [
+      "bare_legs"
+    ],
+    "exclude": [
+      "bare legs"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  }
+}

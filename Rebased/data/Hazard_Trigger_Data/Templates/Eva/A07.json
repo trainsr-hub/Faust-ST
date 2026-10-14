@@ -1,0 +1,11 @@
+{
+  "id": "A07",
+  "name": "Eva A07 Miku",
+  "debut_date": "2024-12-29",
+  "description": "Hatsune Miku default template archetype",
+  "category": "Eva",
+  "tags": ["eva", "miku", "vocaloid"],
+  "createdAt": 1735430400000,
+  "updatedAt": 1735430400000,
+  "selections": {}
+}

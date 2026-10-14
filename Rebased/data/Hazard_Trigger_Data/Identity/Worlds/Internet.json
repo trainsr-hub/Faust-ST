@@ -1,0 +1,14 @@
+{
+    "Vtuber": {
+        "_prt_": "virtual youtuber",
+        "Hololive": {
+            "_prt_": "hololive",
+            "HoloEN": {
+                "HoloMyth": {}
+            },
+            "HoloJP": {
+                "Gen 3": {}
+            }
+        }
+    }
+}

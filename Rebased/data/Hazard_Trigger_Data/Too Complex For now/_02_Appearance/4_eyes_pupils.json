@@ -1,0 +1,176 @@
+{
+  "normal_pupils": {
+    "display_name": "Standard Pupils",
+    "description": "Natural circular human pupils.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "",
+    "keywords": [
+      "pupils",
+      "normal_pupils"
+    ],
+    "require": [],
+    "negate": [
+      "heart_pupils",
+      "slit_pupils"
+    ],
+    "exclude": [
+      "heart pupils",
+      "slit pupils"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "heart_pupils": {
+    "display_name": "Heart-Shaped Pupils",
+    "description": "Love-struck or lustful heart-shaped pupil design.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "heart-shaped pupils, heart in eye",
+    "keywords": [
+      "pupils",
+      "heart_pupils"
+    ],
+    "require": [],
+    "negate": [
+      "slit_pupils"
+    ],
+    "exclude": [
+      "slit pupils"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "star_pupils": {
+    "display_name": "Star-Shaped Pupils",
+    "description": "Sparkling idol-style star pupils.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "star-shaped pupils, star in eye",
+    "keywords": [
+      "pupils",
+      "star_pupils"
+    ],
+    "require": [],
+    "negate": [],
+    "exclude": [],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "slit_pupils": {
+    "display_name": "Slit Pupils (Cat/Reptilian)",
+    "description": "Predatory vertical slit pupils.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "slit pupils, cat eyes",
+    "keywords": [
+      "pupils",
+      "slit_pupils"
+    ],
+    "require": [],
+    "negate": [
+      "heart_pupils"
+    ],
+    "exclude": [
+      "heart pupils"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "glowing_eyes": {
+    "display_name": "Glowing Eyes",
+    "description": "Magical, supernatural, or luminescent eyes shining in darkness.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "glowing eyes, glowing irises",
+    "keywords": [
+      "pupils",
+      "eyes",
+      "glowing_eyes"
+    ],
+    "require": [],
+    "negate": [],
+    "exclude": [],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "dilated_pupils": {
+    "display_name": "Dilated Pupils",
+    "description": "Wide dilated pupils reacting to arousal, shock, or dim light.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "dilated pupils, wide eyes",
+    "keywords": [
+      "pupils",
+      "dilated_pupils"
+    ],
+    "require": [],
+    "negate": [
+      "constricted_pupils"
+    ],
+    "exclude": [
+      "constricted pupils"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "empty_eyes": {
+    "display_name": "Empty / Yandere Eyes",
+    "description": "Lifeless, unreflective, hollow pupils devoid of highlights.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "empty eyes, blank eyes, lifeless eyes",
+    "keywords": [
+      "pupils",
+      "empty_eyes",
+      "yandere"
+    ],
+    "require": [],
+    "negate": [
+      "glowing_eyes"
+    ],
+    "exclude": [],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "spiral_eyes": {
+    "display_name": "Spiral / Hypnotic Eyes",
+    "description": "Dizzy, mesmerized, or hypnotized spiral pupil patterns.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "spiral eyes, hypnotic eyes",
+    "keywords": [
+      "pupils",
+      "spiral_eyes"
+    ],
+    "require": [],
+    "negate": [],
+    "exclude": [],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  }
+}

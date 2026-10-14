@@ -1,0 +1,166 @@
+{
+  "cinematic_lighting": {
+    "display_name": "Cinematic Lighting",
+    "description": "Rich dimensional film lighting with balanced fill and key lights.",
+    "prompt": "cinematic lighting, dramatic lighting",
+    "keywords": [
+      "lighting",
+      "cinematic_lighting"
+    ],
+    "require": [],
+    "negate": [],
+    "exclude": [],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "volumetric_lighting": {
+    "display_name": "Volumetric Light / God Rays",
+    "description": "Visible light beams cutting through atmospheric haze or dust.",
+    "prompt": "volumetric lighting, god rays, sunbeams, light rays",
+    "keywords": [
+      "lighting",
+      "volumetric_lighting"
+    ],
+    "require": [],
+    "negate": [],
+    "exclude": [],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "rim_lighting": {
+    "display_name": "Rim Lighting / Edge Glow",
+    "description": "Crisp contour illumination tracing the subject's outer silhouette.",
+    "prompt": "rim lighting, edge light",
+    "keywords": [
+      "lighting",
+      "rim_lighting"
+    ],
+    "require": [],
+    "negate": [],
+    "exclude": [],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "backlighting": {
+    "display_name": "Backlighting / Silhouette",
+    "description": "Strong light source positioned directly behind the subject.",
+    "prompt": "backlighting, silhouette",
+    "keywords": [
+      "lighting",
+      "backlighting"
+    ],
+    "require": [],
+    "negate": [],
+    "exclude": [],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "dramatic_shadows": {
+    "display_name": "Dramatic Shadows (Chiaroscuro)",
+    "description": "High-contrast interplay of deep shadows and intense highlights.",
+    "prompt": "dramatic shadows, chiaroscuro, cast shadow",
+    "keywords": [
+      "lighting",
+      "shadows"
+    ],
+    "require": [],
+    "negate": [],
+    "exclude": [],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "soft_ambient": {
+    "display_name": "Soft Ambient Lighting",
+    "description": "Gentle, diffused, flattering light with no harsh shadows.",
+    "prompt": "soft lighting, ambient light",
+    "keywords": [
+      "lighting",
+      "soft_ambient"
+    ],
+    "require": [],
+    "negate": [
+      "dramatic_shadows"
+    ],
+    "exclude": [],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "golden_hour": {
+    "display_name": "Golden Hour (Warm Sunset)",
+    "description": "Low-angle warm amber and golden evening sunlight.",
+    "prompt": "golden hour, sunset, warm lighting, orange light",
+    "keywords": [
+      "lighting",
+      "golden_hour"
+    ],
+    "require": [],
+    "negate": [
+      "moonlight"
+    ],
+    "exclude": [
+      "moonlight"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "moonlight": {
+    "display_name": "Moonlight / Cool Night",
+    "description": "Ethereal silver, blue, or indigo moonlight illumination.",
+    "prompt": "moonlight, night lighting, cool light, blue lighting",
+    "keywords": [
+      "lighting",
+      "moonlight"
+    ],
+    "require": [],
+    "negate": [
+      "golden_hour"
+    ],
+    "exclude": [
+      "sunlight",
+      "golden hour"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "neon_glow": {
+    "display_name": "Neon Cyberpunk Lighting",
+    "description": "Electric cyan, magenta, and purple colored neon glow.",
+    "prompt": "neon lights, neon glow, colored lighting, cyan and magenta",
+    "keywords": [
+      "lighting",
+      "neon_glow"
+    ],
+    "require": [],
+    "negate": [],
+    "exclude": [],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  }
+}

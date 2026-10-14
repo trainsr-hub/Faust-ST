@@ -1,0 +1,170 @@
+{
+  "M-00010001A1088D80": {
+    "id": "M-00010001A1088D80",
+    "idx": 1,
+    "index": 1,
+    "main_content": "Static, hum, tum, needle drops,\nSpinning, echo, time just stops.",
+    "context": "",
+    "date": "",
+    "effective_date": "2025-07",
+    "specific": {
+      "id": "000301A111611DBD",
+      "name": "Vinyl Angel",
+      "category": "music",
+      "date": "2025-07",
+      "default_usage_ids": [
+        "000501A1119EA382"
+      ],
+      "notes": "Vinyl Angel acoustic fiction",
+      "container": {
+        "id": "M-00020001A1088D80",
+        "name": "Koi no Koe",
+        "type": "persona",
+        "notes": ""
+      }
+    },
+    "themes": [],
+    "usages": [],
+    "preference": [],
+    "backlinks": [],
+    "scores": [],
+    "average_score": null,
+    "avg_score": null
+  },
+  "000101A1114D3D09": {
+    "id": "000101A1114D3D09",
+    "idx": 2,
+    "index": 2,
+    "main_content": "Familiar chords fill up the room,\nWrapped inside this faded tomb.",
+    "context": "",
+    "date": "",
+    "effective_date": "2025-07",
+    "specific": {
+      "id": "000301A111611DBD",
+      "name": "Vinyl Angel",
+      "category": "music",
+      "date": "2025-07",
+      "default_usage_ids": [
+        "000501A1119EA382"
+      ],
+      "notes": "Vinyl Angel acoustic fiction",
+      "container": {
+        "id": "M-00020001A1088D80",
+        "name": "Koi no Koe",
+        "type": "persona",
+        "notes": ""
+      }
+    },
+    "themes": [],
+    "usages": [],
+    "preference": [],
+    "backlinks": [],
+    "scores": [],
+    "average_score": null,
+    "avg_score": null
+  },
+  "000101A1002AF5E9": {
+    "id": "000101A1002AF5E9",
+    "idx": 6,
+    "index": 6,
+    "main_content": "Nỗi sợ lớn nhất của một người đàn ông chính là nước mắt đàn bà. Bản năng của phái mạnh là bao bọc, che chở chứ không phải giẫm đạp, hủy hoại. Bởi thế, đàn ông luôn tránh nói lời chia tay vì không dám đối diện với nước mắt, sợ làm tổn thương người phụ nữ của anh ta. Cũng vì lẽ đó mà trong Series Friends, anh chàng Chandler đã phải năm lần bảy lượt tìm không gian, thời điểm thích hợp nhưng vẫn không thể nói lời tạm biệt với người tình Janice. Vậy tại sao người phụ nữ - vốn được coi là phái yếu lại có thể mạnh mẽ cắt đứt một cuộc tình vốn đã chết trong trái tim đối phương? Vì họ sợ cảm giác bị thương hại. Vì trong tình thế này, nếu cứ cố chấp tiếp tục, tất cả những thương yêu mà đàn bà trao đi chỉ có thể đổi lấy lòng thương hại của người bạn tình hảo tâm, nhân đạo, ưa làm việc thiện nguyện. Nhưng đằng sau quyết định chia ly tưởng chừng dứt khoát luôn là lời cầu khẩn thầm thì ‘Anh ơi anh ở lại’.",
+    "context": "",
+    "date": "",
+    "effective_date": "2021~2023",
+    "specific": {
+      "id": "000301A10025228C",
+      "name": "Đàn ông thích mèo, đàn bà yêu chó",
+      "category": "writing",
+      "date": "2021~2023",
+      "default_usage_ids": [
+        "000501A1003A7B8A"
+      ],
+      "notes": "",
+      "container": {
+        "id": "000201A10023406F",
+        "name": "Spiderum - Linh Vũ",
+        "type": "Writer",
+        "notes": ""
+      }
+    },
+    "themes": [
+      {
+        "id": "000401A1003C1686",
+        "name": "Heartbroken",
+        "child_of": "000401A1003B21A8",
+        "parent_name": "Love",
+        "notes": ""
+      }
+    ],
+    "usages": [],
+    "preference": [],
+    "backlinks": [],
+    "scores": [],
+    "average_score": null,
+    "avg_score": null
+  },
+  "000101A118F67C04": {
+    "id": "000101A118F67C04",
+    "idx": 7,
+    "index": 7,
+    "main_content": "rứgdadđ",
+    "context": "",
+    "date": "",
+    "effective_date": "",
+    "specific": {
+      "id": "M-00030001A1088D82",
+      "name": "Diary",
+      "category": "diary",
+      "date": "",
+      "default_usage_ids": [
+        "M-00050001A1088D82"
+      ],
+      "notes": "Personal daily life reflections",
+      "container": {
+        "id": "M-00020001A1088D82",
+        "name": "The Manager",
+        "type": "personal",
+        "notes": "Visionary & Commander"
+      }
+    },
+    "themes": [],
+    "usages": [],
+    "preference": [],
+    "backlinks": [],
+    "scores": [],
+    "average_score": null,
+    "avg_score": null
+  },
+  "000101A118F72F27": {
+    "id": "000101A118F72F27",
+    "idx": 8,
+    "index": 8,
+    "main_content": "úiafugdf\naopsufiusf\nàouailkesf",
+    "context": "",
+    "date": "",
+    "effective_date": "",
+    "specific": {
+      "id": "M-00030001A1088D82",
+      "name": "Diary",
+      "category": "diary",
+      "date": "",
+      "default_usage_ids": [
+        "M-00050001A1088D82"
+      ],
+      "notes": "Personal daily life reflections",
+      "container": {
+        "id": "M-00020001A1088D82",
+        "name": "The Manager",
+        "type": "personal",
+        "notes": "Visionary & Commander"
+      }
+    },
+    "themes": [],
+    "usages": [],
+    "preference": [],
+    "backlinks": [],
+    "scores": [],
+    "average_score": null,
+    "avg_score": null
+  }
+}

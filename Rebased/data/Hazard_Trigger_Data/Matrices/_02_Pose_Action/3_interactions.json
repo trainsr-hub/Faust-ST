@@ -1,0 +1,57 @@
+{
+  "holding_hands": {
+    "display_name": "Holding Hands",
+    "description": "Interlocked fingers or gentle palm grasp between characters. Requires 2+ visible characters.",
+    "prompt": "holding hands, interlocked fingers",
+    "postures": ["standing", "sitting", "chair", "kneeling"],
+    "keywords": ["interaction", "holding_hands"],
+    "require": ["duo_visible"],
+    "negate": ["solo", "single_visible"],
+    "exclude": ["solo"],
+    "subjects": [0, 0]
+  },
+  "hugging": {
+    "display_name": "Embrace / Hugging",
+    "description": "Close warm embrace with arms wrapped around another character. Requires 2+ visible characters.",
+    "prompt": "hugging, embrace, arm around",
+    "postures": ["standing", "sitting", "kneeling", "lying"],
+    "keywords": ["interaction", "hugging"],
+    "require": ["duo_visible"],
+    "negate": ["solo", "single_visible"],
+    "exclude": ["solo"],
+    "subjects": [0, 0]
+  },
+  "lap_pillow": {
+    "display_name": "Lap Pillow",
+    "description": "One character resting head gently on another's lap. Requires 2+ visible characters.",
+    "prompt": "lap pillow, resting head on lap",
+    "postures": ["sitting", "kneeling", "lying"],
+    "keywords": ["interaction", "lap_pillow"],
+    "require": ["duo_visible"],
+    "negate": ["solo", "single_visible"],
+    "exclude": ["solo"],
+    "subjects": [0, 0]
+  },
+  "princess_carry": {
+    "display_name": "Princess Carry (Bridal Carry)",
+    "description": "Lifted up in arms in traditional bridal / princess carry. Requires 2+ visible characters.",
+    "prompt": "princess carry, bridal carry, carrying",
+    "postures": ["standing"],
+    "keywords": ["interaction", "princess_carry"],
+    "require": ["duo_visible"],
+    "negate": ["solo", "single_visible"],
+    "exclude": ["solo"],
+    "subjects": [0, 0]
+  },
+  "headpat": {
+    "display_name": "Headpat / Hand on Head",
+    "description": "Affectionate hand stroking or patting the crown of the head. Requires 2+ visible characters.",
+    "prompt": "headpat, hand on head, patting head",
+    "postures": ["standing", "sitting", "chair", "kneeling"],
+    "keywords": ["interaction", "headpat"],
+    "require": ["duo_visible"],
+    "negate": ["solo", "single_visible"],
+    "exclude": ["solo"],
+    "subjects": [0, 0]
+  }
+}

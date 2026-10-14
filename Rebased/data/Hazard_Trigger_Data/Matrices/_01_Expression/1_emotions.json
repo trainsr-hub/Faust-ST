@@ -1,0 +1,193 @@
+{
+  "neutral_expression": {
+    "display_name": "Neutral / Calm",
+    "description": "Composed, calm facial expression with steady gaze.",
+    "prompt": "neutral expression, calm",
+    "emotions": ["deadpan", "serious"],
+    "keywords": ["expression", "emotion", "neutral"],
+    "require": [],
+    "negate": ["angry", "crying", "ecstatic"],
+    "exclude": ["angry", "crying", "screaming"],
+    "subjects": [0, 0]
+  },
+  "smile": {
+    "display_name": "Warm Smile",
+    "description": "Pleasant, gentle, cheerful smile.",
+    "prompt": "smile, happy, gentle smile",
+    "emotions": ["happy"],
+    "keywords": ["expression", "emotion", "positive", "smile"],
+    "require": [],
+    "negate": ["angry", "sad", "crying"],
+    "exclude": ["angry", "frown", "crying", "sad"],
+    "subjects": [0, 0]
+  },
+  "grin": {
+    "display_name": "Confident Grin",
+    "description": "Broad, lively, or toothy cheerful grin.",
+    "prompt": "grin, happy, cheerful, toothy smile",
+    "emotions": ["happy", "smug"],
+    "keywords": ["expression", "emotion", "positive", "grin"],
+    "require": [],
+    "negate": ["angry", "sad", "crying"],
+    "exclude": ["angry", "frown", "crying", "sad"],
+    "subjects": [0, 0]
+  },
+  "laughing": {
+    "display_name": "Laughing / Joyful",
+    "description": "Hearty open-mouthed laughter with closed smiling eyes.",
+    "prompt": "laughing, happy, open mouth, closed eyes laughing, joyful",
+    "emotions": ["happy"],
+    "keywords": ["expression", "emotion", "laughing", "happy"],
+    "require": [],
+    "negate": ["sad", "crying", "serious"],
+    "exclude": ["sad", "crying", "serious"],
+    "subjects": [0, 0]
+  },
+  "shy_blush": {
+    "display_name": "Shy / Embarrassed",
+    "description": "Bashful expression with noticeable blush on cheeks and bashful gaze.",
+    "prompt": "shy, blush, embarrassed, bashful, averted gaze",
+    "emotions": ["embarrassed"],
+    "keywords": ["expression", "emotion", "shy", "blush"],
+    "require": [],
+    "negate": ["smug", "angry"],
+    "exclude": ["angry", "smug"],
+    "subjects": [0, 0]
+  },
+  "flustered": {
+    "display_name": "Flustered / Nervous Blush",
+    "description": "Overwhelmed with heavy blush, trembling lips, and nervous tension.",
+    "prompt": "flustered, heavy blush, embarrassed, nervous smile, sweatdrop",
+    "emotions": ["embarrassed", "nervous"],
+    "keywords": ["expression", "emotion", "flustered", "blush", "nervous"],
+    "require": [],
+    "negate": ["calm", "smug"],
+    "exclude": ["calm", "smug"],
+    "subjects": [0, 0]
+  },
+  "nervous_smile": {
+    "display_name": "Awkward Nervous Smile",
+    "description": "Strained, sheepish smile with anxious sweat drop.",
+    "prompt": "nervous smile, awkward smile, sweatdrop, anxious",
+    "emotions": ["nervous", "happy"],
+    "keywords": ["expression", "emotion", "nervous"],
+    "require": [],
+    "negate": ["calm", "serious"],
+    "exclude": ["calm"],
+    "subjects": [0, 0]
+  },
+  "smug": {
+    "display_name": "Smug / Teasing Smirk",
+    "description": "Self-satisfied, playful or teasing smug smirk with half-closed eyes.",
+    "prompt": "smug, smirk, teasing, cocky smile, half-closed eyes",
+    "emotions": ["smug"],
+    "keywords": ["expression", "emotion", "smug", "smirk"],
+    "require": [],
+    "negate": ["crying", "shy"],
+    "exclude": ["crying", "sad", "shy"],
+    "subjects": [0, 0]
+  },
+  "seductive_smile": {
+    "display_name": "Seductive / Alluring",
+    "description": "Intense alluring gaze with bedroom eyes and gentle seductive lips.",
+    "prompt": "seductive smile, parted lips",
+    "emotions": ["seductive"],
+    "keywords": ["expression", "emotion", "seductive", "bedroom_eyes"],
+    "require": [],
+    "negate": ["angry", "crying", "panicked"],
+    "exclude": ["angry", "crying", "panicked", "screaming"],
+    "subjects": [0, 0]
+  },
+  "serious": {
+    "display_name": "Serious / Focused",
+    "description": "Stern, determined expression with sharp piercing focus.",
+    "prompt": "serious, sharp eyes, focused, intense gaze",
+    "emotions": ["serious"],
+    "keywords": ["expression", "emotion", "serious"],
+    "require": [],
+    "negate": ["smile", "happy", "crying"],
+    "exclude": ["smile", "laughing", "crying"],
+    "subjects": [0, 0]
+  },
+  "angry": {
+    "display_name": "Angry / Furious Glare",
+    "description": "Heated angry glare with furrowed brows and fierce teeth.",
+    "prompt": "angry, furrowed brows, glare, irritated expression",
+    "emotions": ["angry"],
+    "keywords": ["expression", "emotion", "angry"],
+    "require": [],
+    "negate": ["smile", "happy"],
+    "exclude": ["smile", "happy", "cheerful"],
+    "subjects": [0, 0]
+  },
+  "crying": {
+    "display_name": "Crying / Sad Tears",
+    "description": "Heartbroken tearful expression with tears streaming from eyes.",
+    "prompt": "crying, tears, sad, tearful eyes, sobbing",
+    "emotions": ["sad"],
+    "keywords": ["expression", "emotion", "crying", "tears", "sad"],
+    "require": [],
+    "negate": ["smile", "smug", "happy"],
+    "exclude": ["smile", "happy", "smug"],
+    "subjects": [0, 0]
+  },
+  "sad_smile": {
+    "display_name": "Bittersweet / Melancholy Smile",
+    "description": "Faint, melancholy smile with sorrowful glistening eyes.",
+    "prompt": "sad smile, bittersweet, melancholy, watery eyes",
+    "emotions": ["sad", "happy"],
+    "keywords": ["expression", "emotion", "sad_smile"],
+    "require": [],
+    "negate": ["angry", "smug"],
+    "exclude": ["angry", "smug"],
+    "subjects": [0, 0]
+  },
+  "afterglow_ecstasy": {
+    "display_name": "Afterglow / Blissful Ecstasy",
+    "description": "Blissful post-climax afterglow with heavy blush, half-closed eyes, and breathless parted lips.",
+    "prompt": "afterglow, heavy blush, half-closed eyes, parted lips, breathless, flushed face, blissful",
+    "emotions": ["ecstasy", "embarrassed"],
+    "locked": true,
+    "lockKey": "extreme",
+    "keywords": ["expression", "emotion", "afterglow", "ecstasy", "blush"],
+    "require": [],
+    "negate": ["angry", "serious"],
+    "exclude": ["angry", "serious"],
+    "subjects": [0, 0]
+  },
+  "ahegao": {
+    "display_name": "Ahegao / Mindbreak",
+    "description": "Extreme pleasure trance with rolled-back eyes, tongue out, and heavy flushed blush.",
+    "prompt": "ahegao, rolled eyes, tongue out, heavy blush, drooling, cross-eyed",
+    "emotions": ["ahegao", "ecstasy"],
+    "locked": true,
+    "lockKey": "extreme",
+    "keywords": ["expression", "emotion", "ahegao", "pleasure"],
+    "require": [],
+    "negate": ["serious", "calm"],
+    "exclude": ["serious", "calm"],
+    "subjects": [0, 0]
+  },
+  "deadpan": {
+    "display_name": "Deadpan / Kuudere",
+    "description": "Completely emotionless, cool, deadpan expression with blank eyes.",
+    "prompt": "expressionless, deadpan, empty eyes, kuudere",
+    "emotions": ["deadpan"],
+    "keywords": ["expression", "emotion", "deadpan", "kuudere"],
+    "require": [],
+    "negate": ["smile", "angry", "crying"],
+    "exclude": ["smile", "angry", "crying", "laughing"],
+    "subjects": [0, 0]
+  },
+  "shocked": {
+    "display_name": "Shocked / Surprised Gasp",
+    "description": "Wide, startled eyes and parted lips in sudden astonishment.",
+    "prompt": "shocked, surprised, wide eyes, gasping, open mouth",
+    "emotions": ["shocked", "nervous"],
+    "keywords": ["expression", "emotion", "shocked", "surprised"],
+    "require": [],
+    "negate": ["calm", "deadpan"],
+    "exclude": ["calm"],
+    "subjects": [0, 0]
+  }
+}

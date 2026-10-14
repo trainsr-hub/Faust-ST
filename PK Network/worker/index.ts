@@ -1,0 +1,449 @@
+import { Hono } from 'hono';
+import { cors } from 'hono/cors';
+import { TursoClient } from './turso';
+
+export interface Env {
+  TURSO_DATABASE_URL: string;
+  TURSO_AUTH_TOKEN: string;
+  APP_AUTH_KEY?: string;
+  ASSETS?: any;
+}
+
+const app = new Hono<{ Bindings: Env }>();
+
+// Enable CORS for development
+app.use('*', cors({
+  origin: '*',
+  allowHeaders: ['Content-Type', 'Authorization', 'X-App-Key'],
+  allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+}));
+
+// Helper to obtain Turso client from context
+function getTurso(c: any): TursoClient {
+  const envObj = c.env || {};
+  const globalProc = typeof process !== 'undefined' ? process : null;
+  const url = envObj.TURSO_DATABASE_URL || (globalProc?.env?.TURSO_DATABASE_URL ?? '');
+  const token = envObj.TURSO_AUTH_TOKEN || (globalProc?.env?.TURSO_AUTH_TOKEN ?? '');
+
+  if (!url || !token) {
+    throw new Error('TURSO_DATABASE_URL and TURSO_AUTH_TOKEN are required');
+  }
+  return new TursoClient(url, token);
+}
+
+// Initial schemas to seed if database is clean
+const DEFAULT_SCHEMAS: Record<string, any> = {
+  tables: {
+    table_name: 'tables',
+    columns: [
+      { name: 'Table ID (Slug)', slug: 'id', type: 'hex_id', metadata: { prefix: '' } },
+      { name: 'Natural Language Name', slug: 'name', type: 'text_single', metadata: {} },
+      { name: 'Parent Table', slug: 'parent_id', type: 'relation_single', metadata: { target: 'tables' } },
+      { name: 'Order', slug: 'order_index', type: 'int_scalar', metadata: { default_option: '=MAX(order_index) + 1' } },
+      { name: 'Icon Slug', slug: 'icon', type: 'text_single', metadata: {} },
+      { name: 'Description', slug: 'description', type: 'text_multi', metadata: {} }
+    ]
+  },
+  containers: {
+    table_name: 'containers',
+    columns: [
+      { name: 'Container ID', slug: 'id', type: 'hex_id', metadata: { prefix: 'CONT' } },
+      { name: 'Name', slug: 'name', type: 'text_single', metadata: {} },
+      { name: 'Type', slug: 'type', type: 'enum_single', metadata: { options: ['intellect', 'personal', 'author', 'anime', 'Writer', 'persona'] } },
+      { name: 'Notes', slug: 'notes', type: 'text_multi', metadata: {} },
+      { name: 'Default Tags', slug: 'default_tags', type: 'enum_multi', metadata: { options: ['core', 'daily', 'quote', 'system'] } }
+    ]
+  },
+  specifics: {
+    table_name: 'specifics',
+    columns: [
+      { name: 'Specific ID', slug: 'id', type: 'hex_id', metadata: { prefix: 'SPEC' } },
+      { name: 'Collection Name', slug: 'name', type: 'text_single', metadata: {} },
+      { name: 'Container', slug: 'container_id', type: 'relation_single', metadata: { target: 'containers' } },
+      { name: 'Category', slug: 'category', type: 'enum_single', metadata: { options: ['insight', 'diary', 'thought', 'book', 'poem', 'writing', 'music'] } },
+      { name: 'Notes', slug: 'notes', type: 'text_multi', metadata: {} },
+      { name: 'Default Tags', slug: 'default_tags', type: 'enum_multi', metadata: { options: ['fav', 'core', 'archive'] } },
+      { name: 'Default Usages', slug: 'default_usage_ids', type: 'relation_multi', metadata: { target: 'usages' } },
+      { name: 'Date / Era', slug: 'date', type: 'text_single', metadata: {} }
+    ]
+  },
+  themes: {
+    table_name: 'themes',
+    columns: [
+      { name: 'Theme ID', slug: 'id', type: 'hex_id', metadata: { prefix: 'THME' } },
+      { name: 'Theme Name', slug: 'name', type: 'text_single', metadata: {} },
+      { name: 'Parent Theme', slug: 'child_of', type: 'relation_single', metadata: { target: 'themes' } },
+      { name: 'Notes', slug: 'notes', type: 'text_multi', metadata: {} }
+    ]
+  },
+  usages: {
+    table_name: 'usages',
+    columns: [
+      { name: 'Usage ID', slug: 'id', type: 'hex_id', metadata: { prefix: 'USAG' } },
+      { name: 'Usage Name', slug: 'name', type: 'text_single', metadata: {} },
+      { name: 'Description', slug: 'description', type: 'text_multi', metadata: {} },
+      { name: 'Icon', slug: 'icon', type: 'text_single', metadata: {} },
+      { name: 'Conflicting Usages', slug: 'conflicts_with', type: 'relation_multi', metadata: { target: 'usages' } }
+    ]
+  },
+  quotes: {
+    table_name: 'quotes',
+    columns: [
+      { name: 'Quote ID', slug: 'id', type: 'hex_id', metadata: { prefix: 'QUOT' } },
+      { name: 'Index Number', slug: 'idx', type: 'int_scalar', metadata: { default_option: '=MAX(idx) + 1' } },
+      { name: 'Quote Content', slug: 'main_content', type: 'text_multi', metadata: {} },
+      { name: 'Context & Attribution', slug: 'context', type: 'text_multi', metadata: {} },
+      { name: 'Date Added', slug: 'date', type: 'text_single', metadata: { default_option: '=TODAY()' } },
+      { name: 'Specific Source', slug: 'specific_id', type: 'relation_single', metadata: { target: 'specifics' } },
+      { name: 'Themes', slug: 'theme_ids', type: 'relation_multi', metadata: { target: 'themes' } },
+      { name: 'Usages', slug: 'usage_ids', type: 'relation_multi', metadata: { target: 'usages' } },
+      { name: 'Preference Tags', slug: 'preference', type: 'enum_multi', metadata: { options: ['starred', 'favorite', 'essential'] } },
+      { name: 'Average Score', slug: 'average_score', type: 'float_scalar', metadata: {} }
+    ]
+  }
+};
+
+// Ensure system schema table exists in Turso
+async function ensureSchemaTable(turso: TursoClient) {
+  await turso.execute(`
+    CREATE TABLE IF NOT EXISTS _schema_definitions (
+      table_name TEXT PRIMARY KEY,
+      schema_json TEXT NOT NULL,
+      updated_at TEXT
+    );
+  `);
+}
+
+// Ensure system tables registry exists and is seeded with core tables
+async function ensureTablesTable(turso: TursoClient) {
+  await turso.execute(`
+    CREATE TABLE IF NOT EXISTS tables (
+      id TEXT PRIMARY KEY,
+      name TEXT NOT NULL,
+      parent_id TEXT,
+      order_index INTEGER DEFAULT 0,
+      icon TEXT,
+      description TEXT,
+      created_at TEXT DEFAULT (datetime('now'))
+    );
+  `);
+
+  try {
+    const countRes = await turso.execute('SELECT COUNT(*) as cnt FROM tables;');
+    const count = Number(countRes.rows[0]?.cnt || 0);
+    if (count === 0) {
+      const defaultTables = [
+        { id: 'tables', name: 'System Tables', parent_id: null, order_index: 0, icon: 'database', description: 'Master registry of data tables' },
+        { id: 'containers', name: 'Containers', parent_id: null, order_index: 1, icon: 'box', description: 'High-level knowledge boundaries and intellect sources' },
+        { id: 'specifics', name: 'Specific Collections', parent_id: 'containers', order_index: 2, icon: 'layers', description: 'Books, essays, dialogues, and collections' },
+        { id: 'quotes', name: 'Quotes & Excerpts', parent_id: 'specifics', order_index: 3, icon: 'quote', description: 'Curated atomic excerpts, aphorisms, and insights' },
+        { id: 'themes', name: 'Themes & Taxonomies', parent_id: null, order_index: 4, icon: 'tag', description: 'Core semantic themes and philosophical threads' },
+        { id: 'usages', name: 'Contextual Usages', parent_id: null, order_index: 5, icon: 'compass', description: 'Practical situational contexts and utility vectors' },
+        { id: 'projects', name: 'Projects & Initiatives', parent_id: null, order_index: 6, icon: 'folder', description: 'Active engineering and philosophical projects' },
+        { id: 'users', name: 'System Operators', parent_id: null, order_index: 7, icon: 'users', description: 'Authorized operators and autonomous personas' },
+      ];
+
+      for (const dt of defaultTables) {
+        await turso.execute(
+          'INSERT OR REPLACE INTO tables (id, name, parent_id, order_index, icon, description) VALUES (?, ?, ?, ?, ?, ?);',
+          [dt.id, dt.name, dt.parent_id, dt.order_index, dt.icon, dt.description]
+        );
+      }
+    }
+  } catch (e) {
+    console.warn('ensureTablesTable seed error:', e);
+  }
+}
+
+// Map column atomic type to SQLite column DDL
+function getSqlType(type: string): string {
+  switch (type) {
+    case 'hex_id': return 'TEXT PRIMARY KEY';
+    case 'int_scalar': return 'INTEGER';
+    case 'float_scalar': return 'REAL';
+    case 'boolean': return 'INTEGER DEFAULT 0';
+    default: return 'TEXT';
+  }
+}
+
+// Auth Middleware
+app.use('/api/*', async (c, next) => {
+  const expectedKey = c.env?.APP_AUTH_KEY;
+  if (!expectedKey) {
+    return next();
+  }
+  // Public verification and health check bypass
+  if ((c.req.path === '/api/health' || c.req.path === '/api/auth/verify') && c.req.method === 'GET') {
+    return next();
+  }
+  const authHeader = 
+    c.req.header('X-App-Key') || 
+    c.req.header('Authorization')?.replace(/^Bearer\s+/i, '') || 
+    c.req.query('key');
+
+  if (!authHeader || authHeader !== expectedKey) {
+    return c.json({ success: false, error: 'Unauthorized: Invalid or missing X-App-Key' }, 401);
+  }
+  return next();
+});
+
+// API: Auth verify endpoint (0ms Edge memory validation, zero DB hit)
+app.get('/api/auth/verify', (c) => {
+  const expectedKey = c.env?.APP_AUTH_KEY;
+  if (!expectedKey) {
+    return c.json({ success: true, required: false, message: 'Auth not required' });
+  }
+  const key = 
+    c.req.header('X-App-Key') || 
+    c.req.header('Authorization')?.replace(/^Bearer\s+/i, '') || 
+    c.req.query('key');
+
+  if (key && key === expectedKey) {
+    return c.json({ success: true, required: true, authorized: true });
+  }
+  return c.json({ success: false, required: true, authorized: false, error: 'Invalid passcode' }, 401);
+});
+
+// API: Health check
+app.get('/api/health', async (c) => {
+  try {
+    const turso = getTurso(c);
+    const result = await turso.execute('SELECT 1 as alive;');
+    return c.json({
+      success: true,
+      status: 'connected',
+      engine: 'Turso Cloud SQLite Edge',
+      timestamp: new Date().toISOString(),
+      alive: result.rows[0]?.alive === 1
+    });
+  } catch (err: any) {
+    return c.json({ success: false, status: 'error', error: err.message }, 500);
+  }
+});
+
+// API: Get all schemas
+app.get('/api/tables', async (c) => {
+  try {
+    const turso = getTurso(c);
+    await ensureSchemaTable(turso);
+    await ensureTablesTable(turso);
+
+    const res = await turso.execute('SELECT table_name, schema_json FROM _schema_definitions;');
+    const tables: Record<string, any> = {};
+
+    for (const r of res.rows) {
+      try {
+        tables[r.table_name] = JSON.parse(r.schema_json);
+      } catch {
+        tables[r.table_name] = DEFAULT_SCHEMAS[r.table_name] || null;
+      }
+    }
+
+    // Ensure all DEFAULT_SCHEMAS (including tables) exist in _schema_definitions
+    for (const [tname, schema] of Object.entries(DEFAULT_SCHEMAS)) {
+      if (!tables[tname]) {
+        try {
+          await turso.execute(
+            'INSERT OR REPLACE INTO _schema_definitions (table_name, schema_json, updated_at) VALUES (?, ?, ?);',
+            [tname, JSON.stringify(schema), new Date().toISOString()]
+          );
+          tables[tname] = schema;
+        } catch {}
+      }
+    }
+
+    return c.json({ success: true, tables });
+  } catch (err: any) {
+    return c.json({ success: false, error: err.message }, 500);
+  }
+});
+
+// API: Save or Update table schema and auto-sync DDL to Turso
+app.post('/api/table/:name', async (c) => {
+  try {
+    const name = c.req.param('name');
+    const body = await c.req.json();
+    const schema = body.table || body;
+    const turso = getTurso(c);
+
+    await ensureSchemaTable(turso);
+
+    // Save schema definition
+    await turso.execute(
+      'INSERT OR REPLACE INTO _schema_definitions (table_name, schema_json, updated_at) VALUES (?, ?, ?);',
+      [name, JSON.stringify(schema), new Date().toISOString()]
+    );
+
+    // Create table if not exists
+    if (schema.columns && schema.columns.length > 0) {
+      const colDefs = schema.columns.map((col: any) => `${col.slug} ${getSqlType(col.type)}`);
+      await turso.execute(`CREATE TABLE IF NOT EXISTS "${name}" (${colDefs.join(', ')});`);
+
+      // Attempt to add missing columns if table already exists
+      const info = await turso.execute(`PRAGMA table_info("${name}");`);
+      const existingCols = new Set(info.rows.map((r: any) => r.name));
+      for (const col of schema.columns) {
+        if (!existingCols.has(col.slug) && col.type !== 'hex_id') {
+          try {
+            await turso.execute(`ALTER TABLE "${name}" ADD COLUMN ${col.slug} ${getSqlType(col.type)};`);
+          } catch (e) {
+            // Ignore if column already exists
+          }
+        }
+      }
+    }
+
+    return c.json({ success: true, message: `Table ${name} synchronized successfully` });
+  } catch (err: any) {
+    return c.json({ success: false, error: err.message }, 500);
+  }
+});
+
+// API: Get records for a table
+app.get('/api/records/:name', async (c) => {
+  try {
+    const name = c.req.param('name');
+    const turso = getTurso(c);
+
+    // Make sure table exists
+    try {
+      const res = await turso.execute(`SELECT * FROM "${name}";`);
+      return c.json({ success: true, records: res.rows, count: res.rows.length });
+    } catch (e: any) {
+      // Table doesn't exist yet, return empty list
+      return c.json({ success: true, records: [], count: 0 });
+    }
+  } catch (err: any) {
+    return c.json({ success: false, error: err.message }, 500);
+  }
+});
+
+// API: Insert record into a table
+app.post('/api/records/:name', async (c) => {
+  try {
+    const name = c.req.param('name');
+    const payload = await c.req.json();
+    const record = payload.record || payload;
+    const turso = getTurso(c);
+
+    // Lifecycle hook for registering a new data table via the 'tables' table
+    if (name === 'tables') {
+      const rawId = String(record.id || record.name || '').toLowerCase();
+      const cleanId = rawId.replace(/[^a-z0-9_]/g, '_').replace(/^_+|_+$/g, '');
+      if (!cleanId) {
+        return c.json({ success: false, error: 'Table ID must contain alphanumeric characters' }, 400);
+      }
+      record.id = cleanId;
+      if (!record.name) {
+        record.name = cleanId.charAt(0).toUpperCase() + cleanId.slice(1).replace(/_/g, ' ');
+      }
+
+      // Automatically initialize physical SQLite table on Turso Cloud
+      await turso.execute(`CREATE TABLE IF NOT EXISTS "${cleanId}" (id TEXT PRIMARY KEY);`);
+
+      // Automatically register default initial schema definition if not already present
+      const schemaCheck = await turso.execute('SELECT table_name FROM _schema_definitions WHERE table_name = ?;', [cleanId]);
+      if (schemaCheck.rows.length === 0) {
+        const prefix = cleanId.slice(0, 4).toUpperCase();
+        const initialSchema = {
+          table_name: cleanId,
+          columns: [
+            { name: `${record.name} ID`, slug: 'id', type: 'hex_id', metadata: { prefix } },
+            { name: 'Name', slug: 'name', type: 'text_single', metadata: {} },
+            { name: 'Notes', slug: 'notes', type: 'text_multi', metadata: {} },
+          ]
+        };
+        await turso.execute(
+          'INSERT OR REPLACE INTO _schema_definitions (table_name, schema_json, updated_at) VALUES (?, ?, ?);',
+          [cleanId, JSON.stringify(initialSchema), new Date().toISOString()]
+        );
+      }
+    }
+
+    // Handle auto formula default if missing (e.g., =MAX(idx) + 1 or =TODAY())
+    if (record.idx === undefined || record.idx === null || record.idx === '') {
+      try {
+        const maxRes = await turso.execute(`SELECT MAX(idx) as m FROM "${name}";`);
+        const maxVal = maxRes.rows[0]?.m;
+        record.idx = (maxVal !== null && maxVal !== undefined) ? Number(maxVal) + 1 : 1;
+      } catch {}
+    }
+
+    if (!record.date && name !== 'tables') {
+      record.date = new Date().toISOString().split('T')[0];
+    }
+
+    // Auto ID generator if not provided (for non-tables)
+    if (!record.id) {
+      const prefix = name.slice(0, 4).toUpperCase();
+      const randHex = Math.random().toString(16).substring(2, 6).toUpperCase();
+      record.id = `${prefix}-${randHex}`;
+    }
+
+    const keys = Object.keys(record);
+    const placeholders = keys.map(() => '?').join(', ');
+    const values = keys.map((k) => record[k]);
+
+    const sql = `INSERT OR REPLACE INTO "${name}" (${keys.map(k => `"${k}"`).join(', ')}) VALUES (${placeholders});`;
+    await turso.execute(sql, values);
+
+    return c.json({ success: true, record });
+  } catch (err: any) {
+    return c.json({ success: false, error: err.message }, 500);
+  }
+});
+
+// API: Update record in a table
+app.put('/api/records/:name/:id', async (c) => {
+  try {
+    const name = c.req.param('name');
+    const id = c.req.param('id');
+    const payload = await c.req.json();
+    const updates = payload.record || payload;
+    const turso = getTurso(c);
+
+    delete updates.id; // Do not overwrite ID in SET
+    const keys = Object.keys(updates);
+    if (keys.length === 0) {
+      return c.json({ success: true, message: 'No fields to update' });
+    }
+
+    const setClause = keys.map((k) => `"${k}" = ?`).join(', ');
+    const values = [...keys.map((k) => updates[k]), id];
+
+    const sql = `UPDATE "${name}" SET ${setClause} WHERE id = ?;`;
+    await turso.execute(sql, values);
+
+    return c.json({ success: true, message: 'Record updated', id });
+  } catch (err: any) {
+    return c.json({ success: false, error: err.message }, 500);
+  }
+});
+
+// API: Delete record
+app.delete('/api/records/:name/:id', async (c) => {
+  try {
+    const name = c.req.param('name');
+    const id = c.req.param('id');
+    const turso = getTurso(c);
+
+    if (name === 'tables') {
+      if (id === 'tables') {
+        return c.json({ success: false, error: 'Cannot delete the master System Tables registry' }, 400);
+      }
+      try {
+        await turso.execute(`DROP TABLE IF EXISTS "${id}";`);
+        await turso.execute(`DELETE FROM _schema_definitions WHERE table_name = ?;`, [id]);
+      } catch (e) {
+        console.warn(`Clean up for dropped table ${id} encountered error:`, e);
+      }
+    }
+
+    await turso.execute(`DELETE FROM "${name}" WHERE id = ?;`, [id]);
+    return c.json({ success: true, message: 'Record deleted', id });
+  } catch (err: any) {
+    return c.json({ success: false, error: err.message }, 500);
+  }
+});
+
+export default app;

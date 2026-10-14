@@ -1,0 +1,312 @@
+{
+  "arms_at_sides": {
+    "display_name": "Arms at Sides",
+    "description": "Natural relaxed resting position with arms hanging loosely.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "arms at sides",
+    "keywords": [
+      "gesture",
+      "hands",
+      "arms_at_sides"
+    ],
+    "require": [],
+    "negate": [
+      "arms_crossed",
+      "hands_on_hips"
+    ],
+    "exclude": [
+      "arms crossed",
+      "hands on hips"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "hands_on_hips": {
+    "display_name": "Hands on Hips",
+    "description": "Confident or assertive posture with both hands resting on waist.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "hands on hips",
+    "keywords": [
+      "gesture",
+      "hands",
+      "hands_on_hips"
+    ],
+    "require": [],
+    "negate": [
+      "arms_crossed",
+      "arms_at_sides"
+    ],
+    "exclude": [
+      "arms crossed",
+      "arms at sides"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "arms_crossed": {
+    "display_name": "Arms Crossed",
+    "description": "Defensive, confident, or aloof stance with crossed forearms over chest.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "arms crossed",
+    "keywords": [
+      "gesture",
+      "hands",
+      "arms_crossed"
+    ],
+    "require": [],
+    "negate": [
+      "hands_on_hips",
+      "arms_at_sides"
+    ],
+    "exclude": [
+      "hands on hips",
+      "arms at sides"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "hand_on_chest": {
+    "display_name": "Hand on Chest",
+    "description": "Emotional, startled, or devoted gesture resting a hand over the heart.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "hand on chest",
+    "keywords": [
+      "gesture",
+      "hands",
+      "hand_on_chest"
+    ],
+    "require": [],
+    "negate": [],
+    "exclude": [],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "hands_behind_back": {
+    "display_name": "Hands Behind Back",
+    "description": "Demure, obedient, or coquettish posture clasping hands behind waist.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "hands behind back",
+    "keywords": [
+      "gesture",
+      "hands",
+      "hands_behind_back"
+    ],
+    "require": [],
+    "negate": [
+      "reaching_towards_viewer",
+      "peace_sign"
+    ],
+    "exclude": [
+      "reaching towards viewer",
+      "peace sign"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "hands_behind_head": {
+    "display_name": "Hands Behind Head",
+    "description": "Relaxed or stretching posture with fingers interlocked behind neck.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "hands behind head",
+    "keywords": [
+      "gesture",
+      "hands",
+      "hands_behind_head"
+    ],
+    "require": [],
+    "negate": [],
+    "exclude": [],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "waving": {
+    "display_name": "Waving Hand",
+    "description": "Friendly greeting gesture waving toward the viewer.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "waving",
+    "keywords": [
+      "gesture",
+      "hands",
+      "waving"
+    ],
+    "require": [],
+    "negate": [],
+    "exclude": [],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "reaching_towards_viewer": {
+    "display_name": "Reaching Towards Viewer",
+    "description": "Arm extended forward toward the camera lens in perspective.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "reaching towards viewer, outstretched arm",
+    "keywords": [
+      "gesture",
+      "hands",
+      "reaching"
+    ],
+    "require": [],
+    "negate": [
+      "hands_behind_back"
+    ],
+    "exclude": [
+      "hands behind back"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "peace_sign": {
+    "display_name": "Peace Sign (V-Sign)",
+    "description": "Classic cute Japanese V-sign pose with two fingers raised.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "peace sign, v sign",
+    "keywords": [
+      "gesture",
+      "hands",
+      "peace_sign"
+    ],
+    "require": [],
+    "negate": [],
+    "exclude": [],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "double_peace": {
+    "display_name": "Double Peace Sign",
+    "description": "High-energy or cheeky double peace signs raised on both hands.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "double peace, v signs",
+    "keywords": [
+      "gesture",
+      "hands",
+      "double_peace"
+    ],
+    "require": [],
+    "negate": [],
+    "exclude": [],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "shushing": {
+    "display_name": "Shushing (Finger to Lips)",
+    "description": "Index finger raised gently against lips asking for secrecy.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "shushing, finger to mouth, index finger raised",
+    "keywords": [
+      "gesture",
+      "hands",
+      "shushing"
+    ],
+    "require": [],
+    "negate": [],
+    "exclude": [],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "touching_face": {
+    "display_name": "Touching Face / Cheek",
+    "description": "Gentle hand touching cheek or chin softly.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "hand on cheek, touching face",
+    "keywords": [
+      "gesture",
+      "hands",
+      "touching_face"
+    ],
+    "require": [],
+    "negate": [],
+    "exclude": [],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "holding_hair": {
+    "display_name": "Holding / Tucking Hair",
+    "description": "Fingers brushing or holding locks of hair behind ear.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "holding hair, hair tuck",
+    "keywords": [
+      "gesture",
+      "hands",
+      "holding_hair"
+    ],
+    "require": [],
+    "negate": [],
+    "exclude": [],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "adjusting_glasses": {
+    "display_name": "Adjusting Glasses",
+    "description": "Index finger pushing up the bridge or temple of glasses.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "adjusting eyewear, finger on glasses",
+    "keywords": [
+      "gesture",
+      "hands",
+      "adjusting_glasses"
+    ],
+    "require": [
+      "glasses"
+    ],
+    "negate": [],
+    "exclude": [],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  }
+}

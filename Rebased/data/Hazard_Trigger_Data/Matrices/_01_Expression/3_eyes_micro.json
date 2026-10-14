@@ -1,0 +1,138 @@
+{
+  "half_closed_eyes": {
+    "display_name": "Half-Closed Lids",
+    "description": "Languid, teasing, or sleepy half-closed eyes.",
+    "prompt": "half-closed eyes, languid gaze",
+    "emotions": ["smug", "seductive", "ecstasy", "deadpan"],
+    "keywords": ["eyes", "half_closed_eyes"],
+    "require": ["face_visible"],
+    "negate": ["wide_eyes", "closed_eyes"],
+    "exclude": ["wide eyes", "closed eyes"],
+    "subjects": [0, 0]
+  },
+  "closed_eyes_happy": {
+    "display_name": "Closed Smiling Eyes",
+    "description": "Joyful curved closed-eye smile.",
+    "prompt": "closed eyes, happy, smiling eyes",
+    "emotions": ["happy"],
+    "keywords": ["eyes", "closed_eyes"],
+    "require": ["face_visible"],
+    "negate": ["wide_eyes", "half_closed_eyes"],
+    "exclude": ["wide eyes", "open eyes"],
+    "subjects": [0, 0]
+  },
+  "averted_eyes": {
+    "display_name": "Averted / Bashful Gaze",
+    "description": "Shyly looking sideways away from camera.",
+    "prompt": "averted eyes, looking away, bashful gaze",
+    "emotions": ["embarrassed", "tsundere", "shy"],
+    "keywords": ["eyes", "averted_eyes"],
+    "require": ["face_visible"],
+    "negate": ["viewer_contact"],
+    "exclude": ["looking at viewer"],
+    "subjects": [0, 0]
+  },
+  "winking": {
+    "display_name": "Playful Wink",
+    "description": "Cheeky single eye wink.",
+    "prompt": "winking, one eye closed, playful",
+    "emotions": ["happy", "smug"],
+    "keywords": ["eyes", "winking"],
+    "require": ["face_visible"],
+    "negate": ["closed_eyes"],
+    "exclude": ["closed eyes"],
+    "subjects": [0, 0]
+  },
+  "sparkling_eyes": {
+    "display_name": "Sparkling Shiny Eyes",
+    "description": "Bright anime eyes with glowing light reflections.",
+    "prompt": "sparkling eyes, shiny pupils, light reflections",
+    "emotions": ["happy"],
+    "keywords": ["eyes", "sparkling_eyes"],
+    "require": ["face_visible"],
+    "negate": ["empty_eyes"],
+    "exclude": ["empty eyes"],
+    "subjects": [0, 0]
+  },
+  "bedroom_eyes": {
+    "display_name": "Bedroom Eyes (Sultry)",
+    "description": "Heavy eyelashes with an intense sultry, seductive gaze.",
+    "prompt": "bedroom eyes, heavy eyelashes, sultry gaze",
+    "emotions": ["seductive"],
+    "keywords": ["eyes", "bedroom_eyes"],
+    "require": ["face_visible"],
+    "negate": ["wide_eyes"],
+    "exclude": ["wide eyes"],
+    "subjects": [0, 0]
+  },
+  "teary_eyes": {
+    "display_name": "Teary / Watery Eyes",
+    "description": "Glistening sorrowful or touched watery eyes.",
+    "prompt": "watery eyes, glistening eyes, tearful",
+    "emotions": ["sad", "embarrassed"],
+    "keywords": ["eyes", "teary_eyes"],
+    "require": ["face_visible"],
+    "negate": ["smug"],
+    "exclude": ["smug"],
+    "subjects": [0, 0]
+  },
+  "glaring_eyes": {
+    "display_name": "Sharp Glaring Eyes",
+    "description": "Intense focused glare with furrowed brows.",
+    "prompt": "sharp eyes, glare, intense gaze",
+    "emotions": ["angry", "serious", "tsundere"],
+    "keywords": ["eyes", "glare"],
+    "require": ["face_visible"],
+    "negate": ["sparkling_eyes"],
+    "exclude": ["sparkling eyes"],
+    "subjects": [0, 0]
+  },
+  "wide_eyes": {
+    "display_name": "Wide Shocked Eyes",
+    "description": "Startled wide eyes with dilated pupils.",
+    "prompt": "wide eyes, startled, dilated pupils",
+    "emotions": ["shocked", "nervous"],
+    "keywords": ["eyes", "wide_eyes"],
+    "require": ["face_visible"],
+    "negate": ["half_closed_eyes", "closed_eyes"],
+    "exclude": ["half-closed eyes", "closed eyes"],
+    "subjects": [0, 0]
+  },
+  "empty_eyes": {
+    "display_name": "Empty / Emotionless Eyes",
+    "description": "Blank stare with hollow, kuudere eye shading.",
+    "prompt": "empty eyes, blank stare, emotionless pupils",
+    "emotions": ["deadpan"],
+    "keywords": ["eyes", "empty_eyes"],
+    "require": ["face_visible"],
+    "negate": ["sparkling_eyes"],
+    "exclude": ["sparkling eyes"],
+    "subjects": [0, 0]
+  },
+  "heart_pupils": {
+    "display_name": "Heart-Shaped Pupils",
+    "description": "Pink glowing heart-shaped pupils in ecstasy.",
+    "prompt": "heart-shaped pupils, pink heart eyes",
+    "emotions": ["ecstasy", "ahegao"],
+    "locked": true,
+    "lockKey": "extreme",
+    "keywords": ["eyes", "heart_pupils"],
+    "require": ["face_visible"],
+    "negate": ["empty_eyes"],
+    "exclude": ["empty eyes"],
+    "subjects": [0, 0]
+  },
+  "rolled_eyes": {
+    "display_name": "Rolled-Back Eyes",
+    "description": "Eyes rolled upward into trance or extreme pleasure.",
+    "prompt": "rolled eyes, looking up, pleasure trance",
+    "emotions": ["ahegao", "ecstasy"],
+    "locked": true,
+    "lockKey": "extreme",
+    "keywords": ["eyes", "rolled_eyes"],
+    "require": ["face_visible"],
+    "negate": ["looking_at_viewer"],
+    "exclude": ["looking at viewer"],
+    "subjects": [0, 0]
+  }
+}

@@ -1,0 +1,201 @@
+{
+  "closed_mouth": {
+    "display_name": "Closed Mouth",
+    "description": "Lips gently pressed shut.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "closed mouth",
+    "keywords": [
+      "mouth",
+      "closed_mouth"
+    ],
+    "require": [],
+    "negate": [
+      "open_mouth",
+      "tongue_out"
+    ],
+    "exclude": [
+      "open mouth",
+      "tongue out",
+      "parted lips"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "parted_lips": {
+    "display_name": "Parted Lips",
+    "description": "Slightly open lips showing gentle breath.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "parted lips",
+    "keywords": [
+      "mouth",
+      "parted_lips"
+    ],
+    "require": [],
+    "negate": [
+      "closed_mouth"
+    ],
+    "exclude": [
+      "closed mouth"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "open_mouth": {
+    "display_name": "Open Mouth",
+    "description": "Distinctly open mouth.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "open mouth",
+    "keywords": [
+      "mouth",
+      "open_mouth"
+    ],
+    "require": [],
+    "negate": [
+      "closed_mouth"
+    ],
+    "exclude": [
+      "closed mouth"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "pout": {
+    "display_name": "Pouty Lips",
+    "description": "Puffed cheeks or sulky pouted mouth.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "pout, puffed cheeks",
+    "keywords": [
+      "mouth",
+      "pout"
+    ],
+    "require": [],
+    "negate": [],
+    "exclude": [],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "single_fang": {
+    "display_name": "Single Cute Fang",
+    "description": "Playful single anime canine tooth peeking from lips.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "fang, single fang, open mouth",
+    "keywords": [
+      "mouth",
+      "fang"
+    ],
+    "require": [],
+    "negate": [
+      "closed_mouth"
+    ],
+    "exclude": [
+      "closed mouth"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "tongue_out": {
+    "display_name": "Tongue Out",
+    "description": "Playfully or seductively sticking tongue out.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "tongue out, open mouth",
+    "keywords": [
+      "mouth",
+      "tongue_out"
+    ],
+    "require": [],
+    "negate": [
+      "closed_mouth"
+    ],
+    "exclude": [
+      "closed mouth"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "biting_lip": {
+    "display_name": "Biting Lip",
+    "description": "Teeth biting down softly on the lower lip.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "biting lip, biting lower lip",
+    "keywords": [
+      "mouth",
+      "biting_lip"
+    ],
+    "require": [],
+    "negate": [],
+    "exclude": [],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "drooling_saliva": {
+    "display_name": "Drooling / Saliva",
+    "description": "Strand of saliva or drool dripping from mouth.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "drooling, saliva trail, open mouth",
+    "keywords": [
+      "mouth",
+      "drool",
+      "saliva"
+    ],
+    "require": [],
+    "negate": [
+      "closed_mouth"
+    ],
+    "exclude": [
+      "closed mouth"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "clenched_teeth": {
+    "display_name": "Clenched Teeth",
+    "description": "Teeth firmly gritted in tension, effort, or frustration.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "clenched teeth, gritted teeth",
+    "keywords": [
+      "mouth",
+      "clenched_teeth"
+    ],
+    "require": [],
+    "negate": [],
+    "exclude": [],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  }
+}

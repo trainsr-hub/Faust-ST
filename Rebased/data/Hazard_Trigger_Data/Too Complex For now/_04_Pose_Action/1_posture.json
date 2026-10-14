@@ -1,0 +1,382 @@
+{
+  "standing": {
+    "display_name": "Standing",
+    "description": "Standard upright standing stance.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "standing",
+    "keywords": [
+      "pose",
+      "posture",
+      "standing"
+    ],
+    "require": [],
+    "negate": [
+      "sitting",
+      "lying",
+      "kneeling",
+      "all_fours"
+    ],
+    "exclude": [
+      "sitting",
+      "lying",
+      "kneeling",
+      "all fours"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "sitting_chair": {
+    "display_name": "Sitting on Chair",
+    "description": "Seated posture on a chair, stool, or bench.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "sitting, chair",
+    "keywords": [
+      "pose",
+      "posture",
+      "sitting"
+    ],
+    "require": [],
+    "negate": [
+      "standing",
+      "lying",
+      "all_fours"
+    ],
+    "exclude": [
+      "standing",
+      "lying",
+      "all fours"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "sitting_ground": {
+    "display_name": "Sitting on Ground",
+    "description": "Relaxed seated posture on floor or grass.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "sitting, on ground",
+    "keywords": [
+      "pose",
+      "posture",
+      "sitting"
+    ],
+    "require": [],
+    "negate": [
+      "standing",
+      "lying",
+      "all_fours"
+    ],
+    "exclude": [
+      "standing",
+      "lying",
+      "all fours"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "kneeling": {
+    "display_name": "Kneeling",
+    "description": "Resting on one or both knees.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "kneeling",
+    "keywords": [
+      "pose",
+      "posture",
+      "kneeling"
+    ],
+    "require": [],
+    "negate": [
+      "standing",
+      "lying"
+    ],
+    "exclude": [
+      "standing",
+      "lying"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "seiza": {
+    "display_name": "Seiza (Formal Kneeling)",
+    "description": "Traditional formal Japanese kneeling posture sitting on heels.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "seiza, kneeling, japanese posture",
+    "keywords": [
+      "pose",
+      "posture",
+      "kneeling",
+      "seiza"
+    ],
+    "require": [],
+    "negate": [
+      "standing",
+      "lying"
+    ],
+    "exclude": [
+      "standing",
+      "lying"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "w_sitting": {
+    "display_name": "W-Sitting (Floor)",
+    "description": "Cute floor seated posture with knees bent and feet splayed out.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "w-sitting, on floor",
+    "keywords": [
+      "pose",
+      "posture",
+      "sitting",
+      "w_sitting"
+    ],
+    "require": [],
+    "negate": [
+      "standing",
+      "all_fours"
+    ],
+    "exclude": [
+      "standing",
+      "all fours"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "lying_on_back": {
+    "display_name": "Lying on Back (Supine)",
+    "description": "Recumbent posture lying flat on back facing upward.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "lying, on back",
+    "keywords": [
+      "pose",
+      "posture",
+      "lying",
+      "supine"
+    ],
+    "require": [],
+    "negate": [
+      "standing",
+      "sitting",
+      "all_fours",
+      "kneeling"
+    ],
+    "exclude": [
+      "standing",
+      "sitting",
+      "all fours",
+      "kneeling"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "lying_on_stomach": {
+    "display_name": "Lying on Stomach (Prone)",
+    "description": "Lying face down or propped up on elbows on stomach.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "lying, on stomach, on stomach looking at viewer",
+    "keywords": [
+      "pose",
+      "posture",
+      "lying",
+      "prone"
+    ],
+    "require": [],
+    "negate": [
+      "standing",
+      "sitting",
+      "all_fours"
+    ],
+    "exclude": [
+      "standing",
+      "sitting",
+      "all fours"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "lying_on_side": {
+    "display_name": "Lying on Side",
+    "description": "Resting sideways with legs curved.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "lying, on side",
+    "keywords": [
+      "pose",
+      "posture",
+      "lying"
+    ],
+    "require": [],
+    "negate": [
+      "standing",
+      "sitting",
+      "all_fours"
+    ],
+    "exclude": [
+      "standing",
+      "sitting",
+      "all fours"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "all_fours": {
+    "display_name": "All Fours",
+    "description": "Positioned on hands and knees with arched back.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "all fours, on hands and knees",
+    "keywords": [
+      "pose",
+      "posture",
+      "all_fours"
+    ],
+    "require": [],
+    "negate": [
+      "standing",
+      "sitting",
+      "lying"
+    ],
+    "exclude": [
+      "standing",
+      "sitting",
+      "lying"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "squatting": {
+    "display_name": "Squatting",
+    "description": "Crouched squatting posture on heels.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "squatting",
+    "keywords": [
+      "pose",
+      "posture",
+      "squatting"
+    ],
+    "require": [],
+    "negate": [
+      "lying",
+      "all_fours"
+    ],
+    "exclude": [
+      "lying",
+      "all fours"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "leaning_against_wall": {
+    "display_name": "Leaning Against Wall",
+    "description": "Casual stance propped back or sideways against a wall.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "leaning against wall, standing",
+    "keywords": [
+      "pose",
+      "posture",
+      "leaning"
+    ],
+    "require": [],
+    "negate": [
+      "lying",
+      "all_fours"
+    ],
+    "exclude": [
+      "lying",
+      "all fours"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "arched_back": {
+    "display_name": "Arched Back",
+    "description": "Dramatic curvature of the spine accentuating the silhouette.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "arched back",
+    "keywords": [
+      "pose",
+      "posture",
+      "arched_back"
+    ],
+    "require": [],
+    "negate": [],
+    "exclude": [],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "floating": {
+    "display_name": "Floating / Weightless",
+    "description": "Suspended mid-air in zero-gravity or magical levitation.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "floating, levitation, mid-air",
+    "keywords": [
+      "pose",
+      "posture",
+      "floating"
+    ],
+    "require": [],
+    "negate": [
+      "sitting",
+      "all_fours"
+    ],
+    "exclude": [
+      "sitting",
+      "all fours"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  }
+}

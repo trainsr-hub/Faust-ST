@@ -1,0 +1,63 @@
+{
+  "viewer_contact": {
+    "display_name": "Direct Eye Contact",
+    "prompt": "looking at viewer",
+    "impact": [
+      "looking_at_viewer",
+      "eye_contact"
+    ],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "looking_away": {
+    "display_name": "Looking Away",
+    "prompt": "looking away",
+    "anti-prompt": "looking at viewer",
+    "impact": [
+      "looking_away"
+    ],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "solo_focus": {
+    "display_name": "Solo Focus",
+    "prompt": "solo focus",
+    "impact": [
+      "solo_focus"
+    ],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "face_close_up": {
+    "display_name": "Face Close-Up",
+    "prompt": "close-up, face focus",
+    "anti-prompt": "full body, wide shot",
+    "impact": [
+      "close_up",
+      "face_focus"
+    ],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "upper_body": {
+    "display_name": "Upper Body Portrait",
+    "prompt": "upper body, portrait",
+    "anti-prompt": "full body",
+    "impact": [
+      "upper_body",
+      "portrait"
+    ],
+    "subjects": [
+      0,
+      0
+    ]
+  }
+}

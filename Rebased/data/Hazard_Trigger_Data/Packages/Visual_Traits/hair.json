@@ -1,0 +1,428 @@
+{
+  "short hair": {
+    "label": "Short Hair",
+    "svg": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><path d=\"M6 14 C 4 10, 6 4, 12 4 C 18 4, 20 10, 18 14\"/><path d=\"M 8 11 L 12 14 L 16 11\"/></svg>",
+    "image": "",
+    "color": "#fbbf24"
+  },
+  "medium hair": {
+    "label": "Medium Hair",
+    "svg": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><path d=\"M5 18 C 3 10, 6 4, 12 4 C 18 4, 21 10, 19 18\"/><path d=\"M 7 12 L 12 15 L 17 12\"/></svg>",
+    "image": "",
+    "color": "#fbbf24"
+  },
+  "long hair": {
+    "label": "Long Hair",
+    "svg": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><path d=\"M4 22 C 2 10, 5 3, 12 3 C 19 3, 22 10, 20 22\"/><path d=\"M 7 11 L 12 14 L 17 11\"/></svg>",
+    "image": "",
+    "color": "#fbbf24"
+  },
+  "very long hair": {
+    "label": "Very Long Hair",
+    "svg": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><path d=\"M4 23 C 2 9, 5 2, 12 2 C 19 2, 22 9, 20 23\"/><path d=\"M 6 16 L 12 18 L 18 16\"/></svg>",
+    "image": "",
+    "color": "#fbbf24"
+  },
+  "shoulder-length hair": {
+    "label": "Shoulder-length Hair",
+    "svg": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><path d=\"M5 16 C 3 10, 6 4, 12 4 C 18 4, 21 10, 19 16\"/><path d=\"M 7 12 L 12 14 L 17 12\"/></svg>",
+    "image": "",
+    "color": "#fbbf24"
+  },
+  "pixie cut": {
+    "label": "Pixie Cut",
+    "svg": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><path d=\"M7 12 C 5 9, 7 4, 12 4 C 17 4, 19 9, 17 12\"/><path d=\"M 9 10 L 12 12 L 15 10\"/></svg>",
+    "image": "",
+    "color": "#fbbf24"
+  },
+  "bald": {
+    "label": "Bald",
+    "svg": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><circle cx=\"12\" cy=\"12\" r=\"7\"/></svg>",
+    "image": "",
+    "color": "#9ca3af"
+  },
+  "colored inner hair": {
+    "label": "Colored Inner Hair",
+    "gradient": "linear-gradient(135deg, #111827 0%, #111827 45%, #ec4899 46%, #06b6d4 100%)",
+    "borderColor": "#ec4899",
+    "image": ""
+  },
+  "gradient hair": {
+    "label": "Gradient Hair",
+    "gradient": "linear-gradient(180deg, #c084fc 0%, #38bdf8 100%)",
+    "borderColor": "#a855f7",
+    "image": ""
+  },
+  "two-tone hair": {
+    "label": "Two-Tone Hair",
+    "gradient": "linear-gradient(90deg, #111827 50%, #f472b6 50%)",
+    "borderColor": "#f472b6",
+    "image": ""
+  },
+  "split-color hair": {
+    "label": "Split-Color Hair",
+    "gradient": "linear-gradient(90deg, #ffffff 50%, #111827 50%)",
+    "borderColor": "#cbd5e1",
+    "image": ""
+  },
+  "streaked hair": {
+    "label": "Streaked Hair",
+    "gradient": "repeating-linear-gradient(45deg, #1f2937, #1f2937 5px, #fbbf24 5px, #fbbf24 10px)",
+    "borderColor": "#f59e0b",
+    "image": ""
+  },
+  "colored tips": {
+    "label": "Colored Tips",
+    "gradient": "linear-gradient(180deg, #18181b 0%, #18181b 60%, #f43f5e 61%, #fb923c 100%)",
+    "borderColor": "#f43f5e",
+    "image": ""
+  },
+  "multicolored hair": {
+    "label": "Multicolored Hair",
+    "gradient": "linear-gradient(90deg, #f43f5e, #fbbf24, #10b981, #06b6d4, #8b5cf6)",
+    "borderColor": "#ec4899",
+    "image": ""
+  },
+  "blonde hair": {
+    "label": "Blonde Hair",
+    "gradient": "linear-gradient(135deg, #fef08a 0%, #eab308 100%)",
+    "borderColor": "#fde047",
+    "image": ""
+  },
+  "golden blonde hair": {
+    "label": "Golden Blonde Hair",
+    "gradient": "linear-gradient(135deg, #fef9c3 0%, #ca8a04 100%)",
+    "borderColor": "#eab308",
+    "image": ""
+  },
+  "ash blonde hair": {
+    "label": "Ash Blonde Hair",
+    "gradient": "linear-gradient(135deg, #f8fafc 0%, #d4d4d8 50%, #ca8a04 100%)",
+    "borderColor": "#e4e4e7",
+    "image": ""
+  },
+  "brown hair": {
+    "label": "Brown Hair",
+    "gradient": "linear-gradient(135deg, #92400e 0%, #451a03 100%)",
+    "borderColor": "#78350f",
+    "image": ""
+  },
+  "black hair": {
+    "label": "Black Hair",
+    "gradient": "linear-gradient(135deg, #374151 0%, #030712 100%)",
+    "borderColor": "#1f2937",
+    "image": ""
+  },
+  "silver hair": {
+    "label": "Silver Hair",
+    "gradient": "linear-gradient(135deg, #f8fafc 0%, #94a3b8 100%)",
+    "borderColor": "#e2e8f0",
+    "image": ""
+  },
+  "white hair": {
+    "label": "White Hair",
+    "gradient": "linear-gradient(135deg, #ffffff 0%, #e2e8f0 100%)",
+    "borderColor": "#ffffff",
+    "image": ""
+  },
+  "pink hair": {
+    "label": "Pink Hair",
+    "gradient": "linear-gradient(135deg, #f472b6 0%, #db2777 100%)",
+    "borderColor": "#ec4899",
+    "image": ""
+  },
+  "blue hair": {
+    "label": "Blue Hair",
+    "gradient": "linear-gradient(135deg, #60a5fa 0%, #1d4ed8 100%)",
+    "borderColor": "#3b82f6",
+    "image": ""
+  },
+  "light blue hair": {
+    "label": "Light Blue Hair",
+    "gradient": "linear-gradient(135deg, #bae6fd 0%, #38bdf8 100%)",
+    "borderColor": "#7dd3fc",
+    "image": ""
+  },
+  "dark blue hair": {
+    "label": "Dark Blue Hair",
+    "gradient": "linear-gradient(135deg, #1e3a8a 0%, #030712 100%)",
+    "borderColor": "#1e40af",
+    "image": ""
+  },
+  "red hair": {
+    "label": "Red Hair",
+    "gradient": "linear-gradient(135deg, #f87171 0%, #991b1b 100%)",
+    "borderColor": "#ef4444",
+    "image": ""
+  },
+  "purple hair": {
+    "label": "Purple Hair",
+    "gradient": "linear-gradient(135deg, #c084fc 0%, #6b21a8 100%)",
+    "borderColor": "#a855f7",
+    "image": ""
+  },
+  "green hair": {
+    "label": "Green Hair",
+    "gradient": "linear-gradient(135deg, #4ade80 0%, #15803d 100%)",
+    "borderColor": "#22c55e",
+    "image": ""
+  },
+  "orange hair": {
+    "label": "Orange Hair",
+    "gradient": "linear-gradient(135deg, #fb923c 0%, #c2410c 100%)",
+    "borderColor": "#f97316",
+    "image": ""
+  },
+  "grey hair": {
+    "label": "Grey Hair",
+    "gradient": "linear-gradient(135deg, #9ca3af 0%, #374151 100%)",
+    "borderColor": "#6b7280",
+    "image": ""
+  },
+  "bangs": {
+    "label": "Bangs",
+    "svg": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><path d=\"M 5 8 C 8 4, 16 4, 19 8\"/><path d=\"M 5 8 L 8 13 L 12 12 L 16 13 L 19 8\"/></svg>",
+    "image": "",
+    "color": "#fbbf24"
+  },
+  "blunt bangs": {
+    "label": "Blunt Bangs",
+    "svg": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><path d=\"M 5 8 C 8 4, 16 4, 19 8\"/><line x1=\"6\" y1=\"12\" x2=\"18\" y2=\"12\" stroke-width=\"2.5\"/></svg>",
+    "image": "",
+    "color": "#fbbf24"
+  },
+  "swept bangs": {
+    "label": "Swept Bangs",
+    "svg": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><path d=\"M 5 8 C 8 4, 16 4, 19 8\"/><path d=\"M 6 9 Q 14 9 18 14\" stroke-width=\"2\"/></svg>",
+    "image": "",
+    "color": "#fbbf24"
+  },
+  "parted bangs": {
+    "label": "Parted Bangs",
+    "svg": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><path d=\"M 5 8 L 10 13 L 12 9 L 14 13 L 19 8\"/></svg>",
+    "image": "",
+    "color": "#fbbf24"
+  },
+  "asymmetrical bangs": {
+    "label": "Asymmetrical Bangs",
+    "svg": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><path d=\"M 5 7 L 19 14\" stroke-width=\"2.5\"/></svg>",
+    "image": "",
+    "color": "#fbbf24"
+  },
+  "crossed bangs": {
+    "label": "Crossed Bangs",
+    "svg": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><path d=\"M 6 8 L 16 14\"/><path d=\"M 18 8 L 8 14\"/></svg>",
+    "image": "",
+    "color": "#fbbf24"
+  },
+  "hair over one eye": {
+    "label": "Hair Over One Eye",
+    "svg": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><circle cx=\"12\" cy=\"12\" r=\"7\"/><path d=\"M 8 5 Q 16 9 16 17\" fill=\"currentColor\" fill-opacity=\"0.3\"/></svg>",
+    "image": "",
+    "color": "#fbbf24"
+  },
+  "forehead": {
+    "label": "Forehead",
+    "svg": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><circle cx=\"12\" cy=\"12\" r=\"7\"/><path d=\"M 6 7 C 9 4, 15 4, 18 7\"/></svg>",
+    "image": "",
+    "color": "#fbbf24"
+  },
+  "twintails": {
+    "label": "Twintails",
+    "svg": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><circle cx=\"12\" cy=\"9\" r=\"4\"/><path d=\"M 8 9 C 4 11, 2 16, 3 21\"/><path d=\"M 16 9 C 20 11, 22 16, 21 21\"/></svg>",
+    "image": "",
+    "color": "#fbbf24"
+  },
+  "low twintails": {
+    "label": "Low Twintails",
+    "svg": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><circle cx=\"12\" cy=\"9\" r=\"4\"/><path d=\"M 8 12 C 4 14, 3 18, 4 22\"/><path d=\"M 16 12 C 20 14, 21 18, 20 22\"/></svg>",
+    "image": "",
+    "color": "#fbbf24"
+  },
+  "sidelocks": {
+    "label": "Sidelocks",
+    "svg": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><circle cx=\"12\" cy=\"10\" r=\"5\"/><path d=\"M 7 10 L 7 19\" stroke-width=\"2.5\"/><path d=\"M 17 10 L 17 19\" stroke-width=\"2.5\"/></svg>",
+    "image": "",
+    "color": "#fbbf24"
+  },
+  "side ponytail": {
+    "label": "Side Ponytail",
+    "svg": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><circle cx=\"10\" cy=\"11\" r=\"5\"/><path d=\"M 15 9 C 19 8, 22 12, 21 19\" stroke-width=\"2.5\"/></svg>",
+    "image": "",
+    "color": "#fbbf24"
+  },
+  "twin braids": {
+    "label": "Twin Braids",
+    "svg": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><circle cx=\"12\" cy=\"8\" r=\"4\"/><path d=\"M 7 12 L 9 15 L 7 18 L 9 21\"/><path d=\"M 17 12 L 15 15 L 17 18 L 15 21\"/></svg>",
+    "image": "",
+    "color": "#fbbf24"
+  },
+  "single side braid": {
+    "label": "Single Side Braid",
+    "svg": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><circle cx=\"11\" cy=\"9\" r=\"4\"/><path d=\"M 15 11 L 18 14 L 15 17 L 18 20\" stroke-width=\"2\"/></svg>",
+    "image": "",
+    "color": "#fbbf24"
+  },
+  "twin low buns": {
+    "label": "Twin Low Buns",
+    "svg": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><circle cx=\"12\" cy=\"11\" r=\"4\"/><circle cx=\"6\" cy=\"15\" r=\"2.5\" fill=\"currentColor\" fill-opacity=\"0.3\"/><circle cx=\"18\" cy=\"15\" r=\"2.5\" fill=\"currentColor\" fill-opacity=\"0.3\"/></svg>",
+    "image": "",
+    "color": "#fbbf24"
+  },
+  "short twin braids": {
+    "label": "Short Twin Braids",
+    "svg": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><circle cx=\"12\" cy=\"9\" r=\"4\"/><path d=\"M 7 12 L 8 15 L 7 17\"/><path d=\"M 17 12 L 16 15 L 17 17\"/></svg>",
+    "image": "",
+    "color": "#fbbf24"
+  },
+  "drill hair": {
+    "label": "Drill Hair",
+    "svg": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><path d=\"M 6 7 Q 11 10 6 13 Q 11 16 6 19\"/><path d=\"M 18 7 Q 13 10 18 13 Q 13 16 18 19\"/></svg>",
+    "image": "",
+    "color": "#fbbf24"
+  },
+  "ponytail": {
+    "label": "Ponytail",
+    "svg": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><circle cx=\"10\" cy=\"11\" r=\"5\"/><path d=\"M 14 8 C 18 6, 21 9, 20 18\" stroke-width=\"2.5\"/></svg>",
+    "image": "",
+    "color": "#fbbf24"
+  },
+  "high ponytail": {
+    "label": "High Ponytail",
+    "svg": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><circle cx=\"10\" cy=\"12\" r=\"5\"/><path d=\"M 12 7 C 16 2, 22 5, 20 16\" stroke-width=\"2.5\"/></svg>",
+    "image": "",
+    "color": "#fbbf24"
+  },
+  "low ponytail": {
+    "label": "Low Ponytail",
+    "svg": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><circle cx=\"11\" cy=\"10\" r=\"5\"/><path d=\"M 13 14 C 16 16, 17 19, 16 22\" stroke-width=\"2.5\"/></svg>",
+    "image": "",
+    "color": "#fbbf24"
+  },
+  "braid": {
+    "label": "Braid",
+    "svg": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><circle cx=\"12\" cy=\"7\" r=\"4\"/><path d=\"M 10 11 L 14 14 L 10 17 L 14 20\" stroke-width=\"2\"/></svg>",
+    "image": "",
+    "color": "#fbbf24"
+  },
+  "french braid": {
+    "label": "French Braid",
+    "svg": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><path d=\"M 9 5 L 15 9 L 9 13 L 15 17 L 9 21\" stroke-width=\"2\"/></svg>",
+    "image": "",
+    "color": "#fbbf24"
+  },
+  "bun": {
+    "label": "Bun",
+    "svg": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><circle cx=\"12\" cy=\"13\" r=\"5\"/><circle cx=\"12\" cy=\"6\" r=\"3.5\" fill=\"currentColor\" fill-opacity=\"0.3\"/></svg>",
+    "image": "",
+    "color": "#fbbf24"
+  },
+  "hair down": {
+    "label": "Hair Down",
+    "svg": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><circle cx=\"12\" cy=\"9\" r=\"4\"/><path d=\"M 7 10 L 6 21\"/><path d=\"M 17 10 L 18 21\"/></svg>",
+    "image": "",
+    "color": "#fbbf24"
+  },
+  "half updo": {
+    "label": "Half Updo",
+    "svg": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><circle cx=\"12\" cy=\"11\" r=\"4\"/><circle cx=\"12\" cy=\"5\" r=\"2\" fill=\"currentColor\"/><path d=\"M 8 13 L 7 21\"/><path d=\"M 16 13 L 17 21\"/></svg>",
+    "image": "",
+    "color": "#fbbf24"
+  },
+  "ahoge": {
+    "label": "Ahoge",
+    "svg": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><circle cx=\"12\" cy=\"14\" r=\"5\"/><path d=\"M 12 9 C 12 4, 18 3, 17 7\" stroke-width=\"2.5\"/></svg>",
+    "image": "",
+    "color": "#fbbf24"
+  },
+  "antenna hair": {
+    "label": "Antenna Hair",
+    "svg": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><circle cx=\"12\" cy=\"14\" r=\"5\"/><path d=\"M 10 9 C 8 4, 5 3, 7 6\" stroke-width=\"2\"/><path d=\"M 14 9 C 16 4, 19 3, 17 6\" stroke-width=\"2\"/></svg>",
+    "image": "",
+    "color": "#fbbf24"
+  },
+  "messy hair": {
+    "label": "Messy Hair",
+    "svg": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><path d=\"M 5 12 L 3 8 L 7 9 L 6 4 L 11 7 L 13 3 L 15 7 L 19 5 L 18 10 L 21 12\"/></svg>",
+    "image": "",
+    "color": "#fbbf24"
+  },
+  "wavy hair": {
+    "label": "Wavy Hair",
+    "svg": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><path d=\"M 6 4 Q 10 9 6 14 Q 10 19 6 22\"/><path d=\"M 18 4 Q 14 9 18 14 Q 14 19 18 22\"/></svg>",
+    "image": "",
+    "color": "#fbbf24"
+  },
+  "straight hair": {
+    "label": "Straight Hair",
+    "svg": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><line x1=\"6\" y1=\"4\" x2=\"6\" y2=\"22\"/><line x1=\"18\" y1=\"4\" x2=\"18\" y2=\"22\"/></svg>",
+    "image": "",
+    "color": "#fbbf24"
+  },
+  "curly hair": {
+    "label": "Curly Hair",
+    "svg": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><path d=\"M 6 4 C 10 6, 10 10, 6 12 C 10 14, 10 18, 6 20\"/><path d=\"M 18 4 C 14 6, 14 10, 18 12 C 14 14, 14 18, 18 20\"/></svg>",
+    "image": "",
+    "color": "#fbbf24"
+  },
+  "spiky hair": {
+    "label": "Spiky Hair",
+    "svg": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><polygon points=\"4,14 7,6 10,12 14,4 17,11 20,8 18,16\"/></svg>",
+    "image": "",
+    "color": "#fbbf24"
+  },
+  "pointy hair": {
+    "label": "Pointy Hair",
+    "svg": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><path d=\"M 6 16 L 12 4 L 18 16\"/></svg>",
+    "image": "",
+    "color": "#fbbf24"
+  },
+  "hair ornament": {
+    "label": "Hair Ornament",
+    "svg": "<svg viewBox=\"0 0 24 24\" fill=\"currentColor\" fill-opacity=\"0.3\" stroke=\"currentColor\" stroke-width=\"1.5\"><polygon points=\"12,4 15,10 21,11 16,16 18,22 12,18 6,22 8,16 3,11 9,10\"/></svg>",
+    "image": "",
+    "color": "#facc15"
+  },
+  "hair ribbon": {
+    "label": "Hair Ribbon",
+    "svg": "<svg viewBox=\"0 0 24 24\" fill=\"currentColor\" fill-opacity=\"0.3\" stroke=\"currentColor\" stroke-width=\"1.5\"><path d=\"M 12 12 L 5 7 L 5 17 Z\"/><path d=\"M 12 12 L 19 7 L 19 17 Z\"/><circle cx=\"12\" cy=\"12\" r=\"2.5\" fill=\"currentColor\"/></svg>",
+    "image": "",
+    "color": "#f43f5e"
+  },
+  "hair bow": {
+    "label": "Hair Bow",
+    "svg": "<svg viewBox=\"0 0 24 24\" fill=\"currentColor\" fill-opacity=\"0.3\" stroke=\"currentColor\" stroke-width=\"1.5\"><path d=\"M 12 12 L 4 6 L 4 18 Z\"/><path d=\"M 12 12 L 20 6 L 20 18 Z\"/><circle cx=\"12\" cy=\"12\" r=\"2.5\" fill=\"currentColor\"/></svg>",
+    "image": "",
+    "color": "#f43f5e"
+  },
+  "hairclip": {
+    "label": "Hairclip",
+    "svg": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><path d=\"M 6 18 L 18 6\" stroke-width=\"3\"/><path d=\"M 10 18 L 18 10\" stroke-width=\"2\"/></svg>",
+    "image": "",
+    "color": "#38bdf8"
+  },
+  "bobby pins": {
+    "label": "Bobby Pins",
+    "svg": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><line x1=\"6\" y1=\"8\" x2=\"18\" y2=\"16\" stroke-width=\"2\"/><line x1=\"6\" y1=\"12\" x2=\"18\" y2=\"20\" stroke-width=\"2\"/></svg>",
+    "image": "",
+    "color": "#cbd5e1"
+  },
+  "hair flower": {
+    "label": "Hair Flower",
+    "svg": "<svg viewBox=\"0 0 24 24\" fill=\"currentColor\" fill-opacity=\"0.3\" stroke=\"currentColor\" stroke-width=\"1.5\"><circle cx=\"12\" cy=\"12\" r=\"3\" fill=\"#facc15\"/><circle cx=\"12\" cy=\"6\" r=\"3\"/><circle cx=\"12\" cy=\"18\" r=\"3\"/><circle cx=\"6\" cy=\"12\" r=\"3\"/><circle cx=\"18\" cy=\"12\" r=\"3\"/></svg>",
+    "image": "",
+    "color": "#f472b6"
+  },
+  "scrunchie": {
+    "label": "Scrunchie",
+    "svg": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><ellipse cx=\"12\" cy=\"12\" rx=\"7\" ry=\"7\" stroke-dasharray=\"3 2\"/><circle cx=\"12\" cy=\"12\" r=\"3\"/></svg>",
+    "image": "",
+    "color": "#c084fc"
+  },
+  "hairband": {
+    "label": "Hairband",
+    "svg": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.5\"><path d=\"M 4 16 A 9 9 0 0 1 20 16\"/></svg>",
+    "image": "",
+    "color": "#ec4899"
+  }
+}

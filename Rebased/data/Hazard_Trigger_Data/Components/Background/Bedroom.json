@@ -1,0 +1,21 @@
+{
+  "1a0c4bd5cd4": {
+    "display_name": "On Bed",
+    "prompt": "on bed, bed sheet, white bedsheet, white pillow",
+    "tag_team": [
+      "bedroom"
+    ],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "1a0c4be07d0": {
+    "display_name": "Bedroom",
+    "prompt": "bedroom",
+    "subjects": [
+      0,
+      0
+    ]
+  }
+}

@@ -1,0 +1,59 @@
+{
+  "standard_anime_negative": {
+    "display_name": "Standard Anime Negative Defense",
+    "description": "Universal protection against malformed anatomy, low resolution, and visual artifacts.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "worst quality, low quality, bad anatomy, bad hands, missing fingers, extra fingers, extra limbs, mutated hands, blurry, watermark, signature",
+    "keywords": [
+      "negative",
+      "standard_negative"
+    ],
+    "require": [],
+    "negate": [],
+    "exclude": [],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "pony_xl_negative": {
+    "display_name": "Pony XL Low Score Negative",
+    "description": "Pony-specific low score and 3D artifact rejection tokens.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "score_4, score_5, score_6, rating_curated, source_furry, source_pony, 3d, realistic, photorealistic, bad anatomy, worst quality, low quality",
+    "keywords": [
+      "negative",
+      "pony_negative"
+    ],
+    "require": [],
+    "negate": [],
+    "exclude": [],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "heavy_anatomy_defense": {
+    "display_name": "Heavy Anatomical Integrity Shield",
+    "description": "Aggressive negative filtering targeting hands, arms, legs, fingers, and facial distortions.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "bad anatomy, bad hands, missing fingers, extra fingers, mutated hands, extra limbs, malformed limbs, missing arms, missing legs, fused fingers, too many fingers, deformed, bad proportions, gross proportions, cloned face, disfigured",
+    "keywords": [
+      "negative",
+      "anatomy_defense"
+    ],
+    "require": [],
+    "negate": [],
+    "exclude": [],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  }
+}

@@ -1,0 +1,73 @@
+{
+  "_description": {
+    "value": "Master reference schema for Hazard Trigger components. Columns defined here appear across all sibling component tables without forcing empty keys into records."
+  },
+  "version": {
+    "value": "1.0"
+  },
+  "columns": {
+    "value": [
+      {
+        "key": "__key",
+        "name": "Key",
+        "type": "string",
+        "isPrimaryKey": true
+      },
+      {
+        "key": "display_name",
+        "name": "Display Name",
+        "type": "string"
+      },
+      {
+        "key": "description",
+        "name": "Description",
+        "type": "string"
+      },
+      {
+        "key": "image",
+        "name": "Image",
+        "type": "string"
+      },
+      {
+        "key": "thumbnail",
+        "name": "Thumbnail",
+        "type": "string"
+      },
+      {
+        "key": "prompt",
+        "name": "Prompt",
+        "type": "string"
+      },
+      {
+        "key": "keywords",
+        "name": "Keywords",
+        "type": "list"
+      },
+      {
+        "key": "require",
+        "name": "Require",
+        "type": "list"
+      },
+      {
+        "key": "negate",
+        "name": "Negate",
+        "type": "list"
+      },
+      {
+        "key": "exclude",
+        "name": "Exclude",
+        "type": "list"
+      },
+      {
+        "key": "inherit",
+        "name": "Inherit",
+        "type": "list"
+      },
+      {
+        "key": "subjects",
+        "name": "Subjects",
+        "type": "tuple"
+      }
+    ]
+  }
+}

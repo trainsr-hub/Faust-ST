@@ -1,0 +1,257 @@
+{
+  "black_hair": {
+    "display_name": "Black Hair",
+    "description": "Deep raven or obsidian black hair.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "black hair",
+    "keywords": [
+      "hair_color",
+      "black_hair"
+    ],
+    "require": [],
+    "negate": [
+      "blonde_hair",
+      "silver_hair"
+    ],
+    "exclude": [
+      "blonde hair",
+      "silver hair",
+      "white hair"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "blonde_hair": {
+    "display_name": "Blonde Hair",
+    "description": "Golden or flaxen blonde hair.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "blonde hair",
+    "keywords": [
+      "hair_color",
+      "blonde_hair"
+    ],
+    "require": [],
+    "negate": [
+      "black_hair",
+      "silver_hair"
+    ],
+    "exclude": [
+      "black hair",
+      "silver hair",
+      "white hair"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "brown_hair": {
+    "display_name": "Brown Hair",
+    "description": "Warm chestnut, chocolate, or hazel brown hair.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "brown hair",
+    "keywords": [
+      "hair_color",
+      "brown_hair"
+    ],
+    "require": [],
+    "negate": [
+      "silver_hair"
+    ],
+    "exclude": [
+      "silver hair",
+      "white hair"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "silver_hair": {
+    "display_name": "Silver / White Hair",
+    "description": "Luminous silver or pure white hair.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "silver hair, white hair",
+    "keywords": [
+      "hair_color",
+      "silver_hair",
+      "white_hair"
+    ],
+    "require": [],
+    "negate": [
+      "black_hair",
+      "blonde_hair"
+    ],
+    "exclude": [
+      "black hair",
+      "blonde hair",
+      "brown hair"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "pink_hair": {
+    "display_name": "Pink Hair",
+    "description": "Vibrant rose, pastel, or magenta pink hair.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "pink hair",
+    "keywords": [
+      "hair_color",
+      "pink_hair"
+    ],
+    "require": [],
+    "negate": [],
+    "exclude": [],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "blue_hair": {
+    "display_name": "Blue Hair",
+    "description": "Azure, sapphire, or deep ocean blue hair.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "blue hair",
+    "keywords": [
+      "hair_color",
+      "blue_hair"
+    ],
+    "require": [],
+    "negate": [],
+    "exclude": [],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "light_blue_hair": {
+    "display_name": "Light Blue / Cyan Hair",
+    "description": "Soft sky blue, pastel ice, or cyan hair.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "light blue hair, cyan hair",
+    "keywords": [
+      "hair_color",
+      "light_blue_hair"
+    ],
+    "require": [],
+    "negate": [],
+    "exclude": [],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "red_hair": {
+    "display_name": "Red / Crimson Hair",
+    "description": "Fiery crimson, scarlet, or ruby red hair.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "red hair",
+    "keywords": [
+      "hair_color",
+      "red_hair"
+    ],
+    "require": [],
+    "negate": [],
+    "exclude": [],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "purple_hair": {
+    "display_name": "Purple / Violet Hair",
+    "description": "Deep violet, lavender, or royal purple hair.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "purple hair",
+    "keywords": [
+      "hair_color",
+      "purple_hair"
+    ],
+    "require": [],
+    "negate": [],
+    "exclude": [],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "green_hair": {
+    "display_name": "Green / Emerald Hair",
+    "description": "Vivid emerald, mint, or forest green hair.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "green hair",
+    "keywords": [
+      "hair_color",
+      "green_hair"
+    ],
+    "require": [],
+    "negate": [],
+    "exclude": [],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "gradient_hair": {
+    "display_name": "Gradient Hair",
+    "description": "Smooth color transition flowing from roots to tips.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "gradient hair, multicolored hair",
+    "keywords": [
+      "hair_color",
+      "gradient_hair"
+    ],
+    "require": [],
+    "negate": [],
+    "exclude": [],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "two_tone_hair": {
+    "display_name": "Two-Tone Hair",
+    "description": "Distinct dual-color split or inner-outer layer contrast.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "two-tone hair, multicolored hair",
+    "keywords": [
+      "hair_color",
+      "two_tone_hair"
+    ],
+    "require": [],
+    "negate": [],
+    "exclude": [],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  }
+}

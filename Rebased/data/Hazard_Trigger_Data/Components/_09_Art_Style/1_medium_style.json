@@ -1,0 +1,98 @@
+{
+  "anime_illustration": {
+    "display_name": "Modern Anime Illustration",
+    "description": "Polished high-fidelity Japanese commercial anime illustration style.",
+    "prompt": "anime coloring, digital illustration",
+    "keywords": [
+      "art_style",
+      "medium",
+      "anime"
+    ],
+    "require": [],
+    "negate": [
+      "realistic",
+      "3d"
+    ],
+    "exclude": [
+      "realistic",
+      "photorealistic"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "cel_shaded": {
+    "display_name": "Crisp Cel Shaded",
+    "description": "Clean distinct hard-edge shadows and sharp ink lineart.",
+    "prompt": "cel shading, clean lineart",
+    "keywords": [
+      "art_style",
+      "medium",
+      "cel_shading"
+    ],
+    "require": [],
+    "negate": [],
+    "exclude": [],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "soft_shading": {
+    "display_name": "Soft / Painterly Shading",
+    "description": "Gradual smooth tonal transitions and delicate ambient gradients.",
+    "prompt": "soft shading, painterly",
+    "keywords": [
+      "art_style",
+      "medium",
+      "soft_shading"
+    ],
+    "require": [],
+    "negate": [],
+    "exclude": [],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "watercolor": {
+    "display_name": "Watercolor Medium",
+    "description": "Organic pigment blooms, paper texture, and translucent washes.",
+    "prompt": "watercolor medium, watercolor painting, paper texture",
+    "keywords": [
+      "art_style",
+      "medium",
+      "watercolor"
+    ],
+    "require": [],
+    "negate": [],
+    "exclude": [],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "oil_painting": {
+    "display_name": "Oil Painting / Impasto",
+    "description": "Rich textural brushstrokes and heavy layered impasto pigments.",
+    "prompt": "oil painting, textured canvas, impasto",
+    "keywords": [
+      "art_style",
+      "medium",
+      "oil_painting"
+    ],
+    "require": [],
+    "negate": [],
+    "exclude": [],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  }
+}

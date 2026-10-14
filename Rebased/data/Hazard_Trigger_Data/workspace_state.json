@@ -1,0 +1,23 @@
+{
+  "version": 1,
+  "activeTab": "components",
+  "reverse": {
+    "inputPrompt": "",
+    "componentSearch": ""
+  },
+  "components": {
+    "selectedFolderId": "",
+    "selectedFileRelPath": "",
+    "searchQuery": "",
+    "filterMode": "all",
+    "sortMode": "default"
+  },
+  "conditions": {
+    "selectedFolderId": "",
+    "selectedFileRelPath": "",
+    "selectedCategory": "All",
+    "searchQuery": "",
+    "filterMode": "all"
+  },
+  "updatedAt": 1791592125964
+}

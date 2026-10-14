@@ -1,0 +1,193 @@
+{
+  "extreme_close_up": {
+    "display_name": "Extreme Close-Up",
+    "description": "Macro framing tightly focused on eyes or lips.",
+    "prompt": "extreme close-up, macro shot",
+    "keywords": [
+      "framing",
+      "shot_distance",
+      "extreme_close_up",
+      "face_visible",
+      "macro_framing"
+    ],
+    "require": [],
+    "negate": [
+      "full_body",
+      "cowboy_shot",
+      "wide_shot",
+      "feet_visible",
+      "legs_visible"
+    ],
+    "exclude": [
+      "full body",
+      "wide shot",
+      "cowboy shot",
+      "feet",
+      "shoes",
+      "barefoot"
+    ],
+    "subjects": [0, 0]
+  },
+  "close_up": {
+    "display_name": "Face Close-Up",
+    "description": "Standard close-up framing highlighting facial features.",
+    "prompt": "close-up, face focus",
+    "keywords": [
+      "framing",
+      "shot_distance",
+      "close_up",
+      "face_visible",
+      "head_visible"
+    ],
+    "require": [],
+    "negate": [
+      "full_body",
+      "wide_shot",
+      "feet_visible",
+      "legs_visible"
+    ],
+    "exclude": [
+      "full body",
+      "wide shot",
+      "feet",
+      "shoes",
+      "barefoot"
+    ],
+    "subjects": [0, 0]
+  },
+  "portrait": {
+    "display_name": "Portrait Framing",
+    "description": "Head and shoulders portrait framing.",
+    "prompt": "portrait, head and shoulders",
+    "keywords": [
+      "framing",
+      "shot_distance",
+      "portrait",
+      "face_visible",
+      "head_visible",
+      "shoulders_visible"
+    ],
+    "require": [],
+    "negate": [
+      "full_body",
+      "wide_shot",
+      "feet_visible",
+      "legs_visible"
+    ],
+    "exclude": [
+      "full body",
+      "wide shot",
+      "feet",
+      "shoes",
+      "barefoot"
+    ],
+    "subjects": [0, 0]
+  },
+  "upper_body": {
+    "display_name": "Upper Body (Waist Up)",
+    "description": "Framing from the waist or hips upward.",
+    "prompt": "upper body",
+    "keywords": [
+      "framing",
+      "shot_distance",
+      "upper_body",
+      "face_visible",
+      "head_visible",
+      "chest_visible",
+      "arms_visible"
+    ],
+    "require": [],
+    "negate": [
+      "full_body",
+      "wide_shot",
+      "feet_visible"
+    ],
+    "exclude": [
+      "full body",
+      "wide shot",
+      "feet",
+      "barefoot"
+    ],
+    "subjects": [0, 0]
+  },
+  "cowboy_shot": {
+    "display_name": "Cowboy Shot (Thighs Up)",
+    "description": "Mid-shot framing cut off around the mid-thighs.",
+    "prompt": "cowboy shot, medium shot",
+    "keywords": [
+      "framing",
+      "shot_distance",
+      "cowboy_shot",
+      "face_visible",
+      "arms_visible",
+      "thighs_visible",
+      "legs_visible"
+    ],
+    "require": [],
+    "negate": [
+      "extreme_close_up",
+      "feet_visible"
+    ],
+    "exclude": [
+      "extreme close-up",
+      "feet"
+    ],
+    "subjects": [0, 0]
+  },
+  "full_body": {
+    "display_name": "Full Body",
+    "description": "Entire character visible from head to feet.",
+    "prompt": "full body",
+    "keywords": [
+      "framing",
+      "shot_distance",
+      "full_body",
+      "full_body_visible",
+      "feet_visible",
+      "legs_visible",
+      "arms_visible",
+      "face_visible"
+    ],
+    "require": [],
+    "negate": [
+      "close_up",
+      "portrait",
+      "upper_body",
+      "extreme_close_up"
+    ],
+    "exclude": [
+      "close-up",
+      "portrait",
+      "upper body",
+      "extreme close-up"
+    ],
+    "subjects": [0, 0]
+  },
+  "wide_shot": {
+    "display_name": "Wide / Environmental Shot",
+    "description": "Distant environmental framing showing character in full scenery context.",
+    "prompt": "wide shot, scenic view",
+    "keywords": [
+      "framing",
+      "shot_distance",
+      "wide_shot",
+      "full_body_visible",
+      "feet_visible",
+      "legs_visible",
+      "arms_visible",
+      "face_visible"
+    ],
+    "require": [],
+    "negate": [
+      "close_up",
+      "portrait",
+      "extreme_close_up"
+    ],
+    "exclude": [
+      "close-up",
+      "portrait",
+      "extreme close-up"
+    ],
+    "subjects": [0, 0]
+  }
+}

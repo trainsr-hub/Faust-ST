@@ -1,0 +1,192 @@
+{
+  "tareme": {
+    "label": "Tareme",
+    "svg": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\"><path d=\"M 3 10 C 8 7, 16 9, 21 15\"/><circle cx=\"12\" cy=\"13\" r=\"3\" fill=\"currentColor\" fill-opacity=\"0.3\"/></svg>",
+    "image": "",
+    "color": "#38bdf8"
+  },
+  "tsurime": {
+    "label": "Tsurime",
+    "svg": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\"><path d=\"M 3 14 C 8 8, 16 6, 21 8\"/><circle cx=\"12\" cy=\"11\" r=\"3\" fill=\"currentColor\" fill-opacity=\"0.3\"/></svg>",
+    "image": "",
+    "color": "#38bdf8"
+  },
+  "slit pupils": {
+    "label": "Slit Pupils",
+    "svg": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><ellipse cx=\"12\" cy=\"12\" rx=\"8\" ry=\"5\"/><line x1=\"12\" y1=\"8\" x2=\"12\" y2=\"16\" stroke-width=\"2.5\"/></svg>",
+    "image": "",
+    "color": "#38bdf8"
+  },
+  "symbol-shaped pupils": {
+    "label": "Symbol-Shaped Pupils",
+    "svg": "<svg viewBox=\"0 0 24 24\" fill=\"currentColor\" fill-opacity=\"0.3\" stroke=\"currentColor\" stroke-width=\"1.5\"><polygon points=\"12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2\"/></svg>",
+    "image": "",
+    "color": "#fbbf24"
+  },
+  "heart-shaped pupils": {
+    "label": "Heart-Shaped Pupils",
+    "svg": "<svg viewBox=\"0 0 24 24\" fill=\"currentColor\" fill-opacity=\"0.3\" stroke=\"currentColor\" stroke-width=\"1.5\"><path d=\"M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z\"/></svg>",
+    "image": "",
+    "color": "#f43f5e"
+  },
+  "bright eyes": {
+    "label": "Bright Eyes",
+    "svg": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><circle cx=\"12\" cy=\"12\" r=\"7\"/><circle cx=\"10\" cy=\"10\" r=\"2\" fill=\"currentColor\"/><line x1=\"12\" y1=\"1\" x2=\"12\" y2=\"3\"/><line x1=\"12\" y1=\"21\" x2=\"12\" y2=\"23\"/><line x1=\"1\" y1=\"12\" x2=\"3\" y2=\"12\"/><line x1=\"21\" y1=\"12\" x2=\"23\" y2=\"12\"/></svg>",
+    "image": "",
+    "color": "#fbbf24"
+  },
+  "jitome": {
+    "label": "Jitome",
+    "svg": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><line x1=\"4\" y1=\"10\" x2=\"20\" y2=\"10\" stroke-width=\"2.5\"/><path d=\"M 5 10 A 7 7 0 0 0 19 10\"/><circle cx=\"12\" cy=\"11\" r=\"2.5\" fill=\"currentColor\"/></svg>",
+    "image": "",
+    "color": "#38bdf8"
+  },
+  "sanpaku": {
+    "label": "Sanpaku",
+    "svg": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><ellipse cx=\"12\" cy=\"12\" rx=\"8\" ry=\"5\"/><circle cx=\"12\" cy=\"10\" r=\"2.5\" fill=\"currentColor\"/></svg>",
+    "image": "",
+    "color": "#38bdf8"
+  },
+  "heterochromia": {
+    "label": "Heterochromia",
+    "gradient": "linear-gradient(90deg, #38bdf8 50%, #fbbf24 50%)",
+    "borderColor": "#e2e8f0",
+    "image": ""
+  },
+  "gradient eyes": {
+    "label": "Gradient Eyes",
+    "gradient": "linear-gradient(180deg, #c084fc 0%, #38bdf8 50%, #f472b6 100%)",
+    "borderColor": "#c084fc",
+    "image": ""
+  },
+  "glowing eyes": {
+    "label": "Glowing Eyes",
+    "gradient": "radial-gradient(circle, #fef08a 0%, #eab308 60%, #000000 100%)",
+    "borderColor": "#facc15",
+    "image": ""
+  },
+  "two-tone eyes": {
+    "label": "Two-Tone Eyes",
+    "gradient": "radial-gradient(circle, #f472b6 35%, #818cf8 36%, #4338ca 100%)",
+    "borderColor": "#c084fc",
+    "image": ""
+  },
+  "empty eyes": {
+    "label": "Empty Eyes",
+    "gradient": "radial-gradient(circle, #030712 60%, #475569 100%)",
+    "borderColor": "#334155",
+    "image": ""
+  },
+  "blue eyes": {
+    "label": "Blue Eyes",
+    "gradient": "linear-gradient(135deg, #60a5fa 0%, #1d4ed8 100%)",
+    "borderColor": "#3b82f6",
+    "isIris": true,
+    "image": ""
+  },
+  "light blue eyes": {
+    "label": "Light Blue Eyes",
+    "gradient": "linear-gradient(135deg, #bae6fd 0%, #38bdf8 100%)",
+    "borderColor": "#7dd3fc",
+    "isIris": true,
+    "image": ""
+  },
+  "sky blue eyes": {
+    "label": "Sky Blue Eyes",
+    "gradient": "linear-gradient(135deg, #7dd3fc 0%, #0284c7 100%)",
+    "borderColor": "#38bdf8",
+    "isIris": true,
+    "image": ""
+  },
+  "red eyes": {
+    "label": "Red Eyes",
+    "gradient": "linear-gradient(135deg, #f87171 0%, #b91c1c 100%)",
+    "borderColor": "#ef4444",
+    "isIris": true,
+    "image": ""
+  },
+  "green eyes": {
+    "label": "Green Eyes",
+    "gradient": "linear-gradient(135deg, #4ade80 0%, #15803d 100%)",
+    "borderColor": "#22c55e",
+    "isIris": true,
+    "image": ""
+  },
+  "brown eyes": {
+    "label": "Brown Eyes",
+    "gradient": "linear-gradient(135deg, #a16207 0%, #451a03 100%)",
+    "borderColor": "#78350f",
+    "isIris": true,
+    "image": ""
+  },
+  "purple eyes": {
+    "label": "Purple Eyes",
+    "gradient": "linear-gradient(135deg, #c084fc 0%, #7e22ce 100%)",
+    "borderColor": "#a855f7",
+    "isIris": true,
+    "image": ""
+  },
+  "amber eyes": {
+    "label": "Amber Eyes",
+    "gradient": "linear-gradient(135deg, #fbbf24 0%, #d97706 100%)",
+    "borderColor": "#f59e0b",
+    "isIris": true,
+    "image": ""
+  },
+  "yellow eyes": {
+    "label": "Yellow Eyes",
+    "gradient": "linear-gradient(135deg, #fef08a 0%, #ca8a04 100%)",
+    "borderColor": "#eab308",
+    "isIris": true,
+    "image": ""
+  },
+  "golden eyes": {
+    "label": "Golden Eyes",
+    "gradient": "linear-gradient(135deg, #facc15 0%, #b45309 100%)",
+    "borderColor": "#eab308",
+    "isIris": true,
+    "image": ""
+  },
+  "black eyes": {
+    "label": "Black Eyes",
+    "gradient": "linear-gradient(135deg, #4b5563 0%, #111827 100%)",
+    "borderColor": "#374151",
+    "isIris": true,
+    "image": ""
+  },
+  "pink eyes": {
+    "label": "Pink Eyes",
+    "gradient": "linear-gradient(135deg, #f472b6 0%, #be185d 100%)",
+    "borderColor": "#ec4899",
+    "isIris": true,
+    "image": ""
+  },
+  "silver eyes": {
+    "label": "Silver Eyes",
+    "gradient": "linear-gradient(135deg, #f1f5f9 0%, #94a3b8 100%)",
+    "borderColor": "#cbd5e1",
+    "isIris": true,
+    "image": ""
+  },
+  "white eyes": {
+    "label": "White Eyes",
+    "gradient": "linear-gradient(135deg, #ffffff 0%, #cbd5e1 100%)",
+    "borderColor": "#ffffff",
+    "isIris": true,
+    "image": ""
+  },
+  "orange eyes": {
+    "label": "Orange Eyes",
+    "gradient": "linear-gradient(135deg, #fb923c 0%, #c2410c 100%)",
+    "borderColor": "#f97316",
+    "isIris": true,
+    "image": ""
+  },
+  "grey eyes": {
+    "label": "Grey Eyes",
+    "gradient": "linear-gradient(135deg, #9ca3af 0%, #4b5563 100%)",
+    "borderColor": "#6b7280",
+    "isIris": true,
+    "image": ""
+  }
+}

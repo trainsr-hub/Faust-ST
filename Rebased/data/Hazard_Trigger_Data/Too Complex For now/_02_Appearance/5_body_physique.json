@@ -1,0 +1,232 @@
+{
+  "slender": {
+    "display_name": "Slender / Slim",
+    "description": "Graceful, lean, and slender bodily silhouette.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "slender, slim body",
+    "keywords": [
+      "physique",
+      "slender"
+    ],
+    "require": [],
+    "negate": [],
+    "exclude": [],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "petite": {
+    "display_name": "Petite / Short Stature",
+    "description": "Compact, delicate, petite height and build.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "petite, short stature",
+    "keywords": [
+      "physique",
+      "petite"
+    ],
+    "require": [],
+    "negate": [
+      "tall"
+    ],
+    "exclude": [
+      "tall"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "tall": {
+    "display_name": "Tall / Long Legs",
+    "description": "Statuesque tall height with elongated leg proportions.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "tall, long legs",
+    "keywords": [
+      "physique",
+      "tall"
+    ],
+    "require": [],
+    "negate": [
+      "petite"
+    ],
+    "exclude": [
+      "petite"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "curvy": {
+    "display_name": "Curvy / Hourglass",
+    "description": "Pronounced hip and waist curves forming an hourglass silhouette.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "curvy, wide hips, narrow waist",
+    "keywords": [
+      "physique",
+      "curvy"
+    ],
+    "require": [],
+    "negate": [],
+    "exclude": [],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "athletic": {
+    "display_name": "Athletic / Toned",
+    "description": "Firm athletic musculature with defined abs and toned limbs.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "athletic body, toned abs",
+    "keywords": [
+      "physique",
+      "athletic"
+    ],
+    "require": [],
+    "negate": [],
+    "exclude": [],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "flat_chest": {
+    "display_name": "Flat Chest",
+    "description": "Completely flat chest silhouette.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "flat chest",
+    "keywords": [
+      "bust",
+      "flat_chest"
+    ],
+    "require": [],
+    "negate": [
+      "large_breasts",
+      "huge_breasts"
+    ],
+    "exclude": [
+      "large breasts",
+      "huge breasts",
+      "cleavage"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "small_breasts": {
+    "display_name": "Small Breasts",
+    "description": "Modest, subtle bustline.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "small breasts",
+    "keywords": [
+      "bust",
+      "small_breasts"
+    ],
+    "require": [],
+    "negate": [
+      "large_breasts",
+      "huge_breasts"
+    ],
+    "exclude": [
+      "large breasts",
+      "huge breasts"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "medium_breasts": {
+    "display_name": "Medium Breasts",
+    "description": "Balanced, proportional bust size.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "medium breasts",
+    "keywords": [
+      "bust",
+      "medium_breasts"
+    ],
+    "require": [],
+    "negate": [
+      "flat_chest",
+      "huge_breasts"
+    ],
+    "exclude": [
+      "flat chest",
+      "huge breasts"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "large_breasts": {
+    "display_name": "Large Breasts",
+    "description": "Full, prominent bustline.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "large breasts, cleavage",
+    "keywords": [
+      "bust",
+      "large_breasts"
+    ],
+    "require": [],
+    "negate": [
+      "flat_chest",
+      "small_breasts"
+    ],
+    "exclude": [
+      "flat chest",
+      "small breasts"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "huge_breasts": {
+    "display_name": "Huge Breasts",
+    "description": "Very large, dramatic bustline.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "huge breasts, deep cleavage",
+    "keywords": [
+      "bust",
+      "huge_breasts"
+    ],
+    "require": [],
+    "negate": [
+      "flat_chest",
+      "small_breasts",
+      "medium_breasts"
+    ],
+    "exclude": [
+      "flat chest",
+      "small breasts"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  }
+}

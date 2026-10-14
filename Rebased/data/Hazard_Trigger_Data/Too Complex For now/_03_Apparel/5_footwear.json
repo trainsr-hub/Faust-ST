@@ -1,0 +1,174 @@
+{
+  "barefoot": {
+    "display_name": "Barefoot",
+    "description": "Exposed natural bare feet and toes.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "barefoot, bare toes",
+    "keywords": [
+      "footwear",
+      "barefoot"
+    ],
+    "require": [],
+    "negate": [
+      "boots",
+      "high_heels",
+      "sneakers"
+    ],
+    "exclude": [
+      "boots",
+      "shoes",
+      "high heels",
+      "sneakers"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "sneakers": {
+    "display_name": "Sneakers / Trainers",
+    "description": "Casual athletic laced sneakers.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "sneakers, athletic shoes",
+    "keywords": [
+      "footwear",
+      "sneakers"
+    ],
+    "require": [],
+    "negate": [
+      "barefoot",
+      "high_heels"
+    ],
+    "exclude": [
+      "barefoot",
+      "high heels"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "loafers": {
+    "display_name": "School Loafers (Penny Loafers)",
+    "description": "Polished brown or black leather school loafers.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "loafers, penny loafers",
+    "keywords": [
+      "footwear",
+      "loafers"
+    ],
+    "require": [],
+    "negate": [
+      "barefoot"
+    ],
+    "exclude": [
+      "barefoot"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "ankle_boots": {
+    "display_name": "Ankle Boots",
+    "description": "Short stylish leather boots cut at ankle level.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "boots, ankle boots",
+    "keywords": [
+      "footwear",
+      "boots",
+      "ankle_boots"
+    ],
+    "require": [],
+    "negate": [
+      "barefoot"
+    ],
+    "exclude": [
+      "barefoot"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "knee_boots": {
+    "display_name": "Knee-High Boots",
+    "description": "Tall leather or armored boots rising to knees.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "knee boots, tall boots",
+    "keywords": [
+      "footwear",
+      "boots",
+      "knee_boots"
+    ],
+    "require": [],
+    "negate": [
+      "barefoot"
+    ],
+    "exclude": [
+      "barefoot"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "high_heels": {
+    "display_name": "High Heels / Pumps",
+    "description": "Stiletto or formal high-heeled court shoes.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "high heels, pumps, stiletto",
+    "keywords": [
+      "footwear",
+      "high_heels"
+    ],
+    "require": [],
+    "negate": [
+      "barefoot",
+      "sneakers"
+    ],
+    "exclude": [
+      "barefoot",
+      "sneakers"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "sandals": {
+    "display_name": "Sandals / Strappy Heels",
+    "description": "Open-toe summer sandals or strappy footwear.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "sandals, strappy sandals",
+    "keywords": [
+      "footwear",
+      "sandals"
+    ],
+    "require": [],
+    "negate": [
+      "boots"
+    ],
+    "exclude": [
+      "boots"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  }
+}

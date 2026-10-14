@@ -1,0 +1,53 @@
+{
+  "full_body_exposed": {
+    "composed_of": [
+      "torso_exposed",
+      "legs_exposed",
+      "hip_exposed"
+    ]
+  },
+  "torso_exposed": {
+    "composed_of": [
+      "chest_exposed",
+      "belly_exposed"
+    ]
+  },
+  "chest_exposed": {
+    "composed_of": [
+      "cleavage_visible",
+      "collarbone_visible"
+    ]
+  },
+  "belly_exposed": {
+    "composed_of": [
+      "navel_visible",
+      "midriff_visible"
+    ]
+  },
+  "head_visible": {
+    "composed_of": [
+      "face_visible",
+      "hair_visible"
+    ]
+  },
+  "face_visible": {
+    "composed_of": [
+      "eyes_visible",
+      "mouth_visible",
+      "nose_visible"
+    ]
+  },
+  "passionate_expression": {
+    "composed_of": [
+      "eyes_visible",
+      "open_mouth",
+      "blushing"
+    ]
+  },
+  "face_closeup_portrait": {
+    "composed_of": [
+      "head_visible",
+      "face_visible"
+    ]
+  }
+}

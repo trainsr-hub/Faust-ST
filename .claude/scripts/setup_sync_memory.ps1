@@ -120,5 +120,30 @@ if (Test-Path $sharedSettings) {
     Write-Host "[+] Synced global settings.json to $userClaudeSettings" -ForegroundColor Green
 }
 
+# 5. Link Claude Code Plugins to Google Drive
+$sharedPluginsDir = Join-Path $projectRoot ".claude\plugins"
+$userClaudePlugins = Join-Path $userProfile ".claude\plugins"
+
+if (-not (Test-Path $sharedPluginsDir)) {
+    New-Item -ItemType Directory -Path $sharedPluginsDir -Force | Out-Null
+    Write-Host "[+] Created shared plugins directory in Google Drive: $sharedPluginsDir" -ForegroundColor Green
+}
+
+if (Test-Path $userClaudePlugins) {
+    $pluginItem = Get-Item $userClaudePlugins -Force
+    if ($pluginItem.Attributes -band [System.IO.FileAttributes]::ReparsePoint) {
+        Write-Host "[^] Plugins junction already active: $userClaudePlugins -> $($pluginItem.Target)" -ForegroundColor Green
+    } else {
+        Write-Host "[!] Backing up local plugins folder before junction..." -ForegroundColor Yellow
+        $pluginBackup = "$userClaudePlugins`_backup_$((Get-Date).ToString('yyyyMMdd_HHmmss'))"
+        Move-Item -Path $userClaudePlugins -Destination $pluginBackup -Force
+        cmd /c mklink /J "$userClaudePlugins" "$sharedPluginsDir"
+        Write-Host "[^] Established plugins NTFS junction to Google Drive!" -ForegroundColor Green
+    }
+} else {
+    cmd /c mklink /J "$userClaudePlugins" "$sharedPluginsDir"
+    Write-Host "[^] Established plugins NTFS junction to Google Drive!" -ForegroundColor Green
+}
+
 Write-Host ""
 Write-Host "=== Setup Complete ===" -ForegroundColor Cyan

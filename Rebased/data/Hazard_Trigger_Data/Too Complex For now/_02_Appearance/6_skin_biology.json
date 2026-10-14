@@ -1,0 +1,188 @@
+{
+  "pale_skin": {
+    "display_name": "Pale / Porcelain Skin",
+    "description": "Luminous fair porcelain skin tone.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "pale skin",
+    "keywords": [
+      "skin",
+      "pale_skin"
+    ],
+    "require": [],
+    "negate": [
+      "tan",
+      "dark_skin"
+    ],
+    "exclude": [
+      "dark skin",
+      "tan"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "tan_skin": {
+    "display_name": "Tanned / Sun-Kissed Skin",
+    "description": "Warm golden bronzed or sun-kissed skin tone.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "tan, tanned skin",
+    "keywords": [
+      "skin",
+      "tan"
+    ],
+    "require": [],
+    "negate": [
+      "pale_skin"
+    ],
+    "exclude": [
+      "pale skin"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "dark_skin": {
+    "display_name": "Dark / Chocolate Skin",
+    "description": "Rich dark chocolate or ebony skin tone.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "dark skin, dark-skinned female",
+    "keywords": [
+      "skin",
+      "dark_skin"
+    ],
+    "require": [],
+    "negate": [
+      "pale_skin"
+    ],
+    "exclude": [
+      "pale skin"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "blush": {
+    "display_name": "Gentle Blush",
+    "description": "Soft rosy flush spreading across the cheeks.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "blush",
+    "keywords": [
+      "biology",
+      "blush"
+    ],
+    "require": [],
+    "negate": [],
+    "exclude": [],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "heavy_blush": {
+    "display_name": "Heavy Blush / Flushed Face",
+    "description": "Intense crimson flush covering cheeks, nose, and ears.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "heavy blush, flushed face, blush stickers",
+    "keywords": [
+      "biology",
+      "heavy_blush"
+    ],
+    "require": [],
+    "negate": [],
+    "exclude": [],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "sweat_drops": {
+    "display_name": "Sweat / Perspiration",
+    "description": "Beads of sweat trickling down skin from exertion or heat.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "sweat, sweat drops",
+    "keywords": [
+      "biology",
+      "sweat"
+    ],
+    "require": [],
+    "negate": [],
+    "exclude": [],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "glistening_skin": {
+    "display_name": "Glistening / Oiled / Wet Skin",
+    "description": "Lustrous reflective sheen on skin highlighting contours.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "glistening skin, wet skin, skin sheen",
+    "keywords": [
+      "biology",
+      "wet_skin",
+      "glistening_skin"
+    ],
+    "require": [],
+    "negate": [],
+    "exclude": [],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "heavy_breathing": {
+    "display_name": "Heavy Breathing / Panting",
+    "description": "Breathless chest heaving with visible steam or panting.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "heavy breathing, panting, parted lips, breath",
+    "keywords": [
+      "biology",
+      "breathing"
+    ],
+    "require": [],
+    "negate": [],
+    "exclude": [],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "trembling": {
+    "display_name": "Trembling / Shivering",
+    "description": "Physical somatic shivering or trembling from emotion, cold, or pleasure.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "trembling, shivering",
+    "keywords": [
+      "biology",
+      "trembling"
+    ],
+    "require": [],
+    "negate": [],
+    "exclude": [],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  }
+}

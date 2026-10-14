@@ -1,0 +1,242 @@
+{
+  "clothed": {
+    "display_name": "Fully Clothed (Proper)",
+    "description": "Garments worn completely fastened, neat, and in place.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "clothed, fully clothed",
+    "keywords": [
+      "clothing_state",
+      "clothed"
+    ],
+    "require": [],
+    "negate": [
+      "nude",
+      "partially_undressed"
+    ],
+    "exclude": [
+      "nude",
+      "completely nude",
+      "exposed breasts",
+      "nipples",
+      "pussy",
+      "topless",
+      "bottomless"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "partially_undressed": {
+    "display_name": "Partially Undressed",
+    "description": "Garments partially removed, slipped off shoulders, or loosened.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "partially undressed, clothes pulled down",
+    "keywords": [
+      "clothing_state",
+      "partially_undressed"
+    ],
+    "require": [],
+    "negate": [
+      "clothed"
+    ],
+    "exclude": [],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "skirt_lift": {
+    "display_name": "Skirt Lift (Panty Flash)",
+    "description": "Lifting up skirt hem to reveal underwear or thighs.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "skirt lift, lifting skirt, panties",
+    "keywords": [
+      "clothing_state",
+      "skirt_lift"
+    ],
+    "require": [],
+    "negate": [
+      "pants"
+    ],
+    "exclude": [
+      "pants"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "shirt_lift": {
+    "display_name": "Shirt Lift (Midriff/Bra Flash)",
+    "description": "Lifting shirt up to expose stomach, navel, or bra.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "shirt lift, lifting shirt, stomach, navel",
+    "keywords": [
+      "clothing_state",
+      "shirt_lift"
+    ],
+    "require": [],
+    "negate": [],
+    "exclude": [],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "strap_slip": {
+    "display_name": "Strap Slip / Off Shoulder",
+    "description": "Bra or dress shoulder strap sliding down upper arm.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "strap slip, off shoulder, bra strap",
+    "keywords": [
+      "clothing_state",
+      "strap_slip"
+    ],
+    "require": [],
+    "negate": [
+      "nude"
+    ],
+    "exclude": [
+      "nude"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "unbuttoned": {
+    "display_name": "Unbuttoned Shirt / Open Front",
+    "description": "Shirt or jacket unfastened revealing inner layers or cleavage.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "unbuttoned shirt, open clothes, cleavage",
+    "keywords": [
+      "clothing_state",
+      "unbuttoned"
+    ],
+    "require": [],
+    "negate": [
+      "nude"
+    ],
+    "exclude": [
+      "nude"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "see_through": {
+    "display_name": "See-Through / Translucent Fabric",
+    "description": "Semi-transparent or sheer fabric teasing underlying anatomy.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "see-through, translucent fabric, sheer clothing",
+    "keywords": [
+      "clothing_state",
+      "see_through"
+    ],
+    "require": [],
+    "negate": [
+      "nude"
+    ],
+    "exclude": [
+      "nude"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "wet_clothes": {
+    "display_name": "Wet Clothes / Clinging Fabric",
+    "description": "Drenched clothing sticking tightly to the body contours.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "wet clothes, wet fabric, clinging fabric",
+    "keywords": [
+      "clothing_state",
+      "wet_clothes"
+    ],
+    "require": [],
+    "negate": [
+      "nude"
+    ],
+    "exclude": [
+      "nude"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "torn_clothes": {
+    "display_name": "Torn Clothes / Battle Damage",
+    "description": "Ripped or frayed garments showing battle wear and skin glimpses.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "torn clothes, ripped clothes, battle damage",
+    "keywords": [
+      "clothing_state",
+      "torn_clothes"
+    ],
+    "require": [],
+    "negate": [
+      "nude"
+    ],
+    "exclude": [
+      "nude"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  },
+  "nude": {
+    "display_name": "Completely Nude",
+    "description": "Completely naked without any clothing.",
+    "image": "",
+    "thumbnail": "",
+    "prompt": "completely nude, fully naked, uncensored",
+    "keywords": [
+      "clothing_state",
+      "nude"
+    ],
+    "require": [],
+    "negate": [
+      "clothed",
+      "school_uniform",
+      "maid",
+      "bunny_suit"
+    ],
+    "exclude": [
+      "clothed",
+      "shirt",
+      "skirt",
+      "dress",
+      "jacket",
+      "pants",
+      "shoes"
+    ],
+    "inherit": [],
+    "subjects": [
+      0,
+      0
+    ]
+  }
+}
