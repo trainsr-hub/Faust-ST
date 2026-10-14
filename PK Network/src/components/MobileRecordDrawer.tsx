@@ -12,6 +12,7 @@ interface MobileRecordDrawerProps {
   onDelete?: (id: string) => Promise<void>;
   isSaving: boolean;
   relationOptions?: Record<string, { id: string; label: string }[]>;
+  allRecords?: TableRecord[];
 }
 
 export const MobileRecordDrawer: React.FC<MobileRecordDrawerProps> = ({
@@ -23,6 +24,7 @@ export const MobileRecordDrawer: React.FC<MobileRecordDrawerProps> = ({
   onDelete,
   isSaving,
   relationOptions = {},
+  allRecords = [],
 }) => {
   const [formData, setFormData] = useState<Record<string, any>>({});
   const [newTagInput, setNewTagInput] = useState<Record<string, string>>({});
@@ -227,40 +229,51 @@ export const MobileRecordDrawer: React.FC<MobileRecordDrawerProps> = ({
                       )}
                     </div>
 
-                    {/* Predefined Options Toggles */}
-                    {(col.metadata?.options || []).length > 0 && (
-                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.35rem', paddingTop: '0.4rem', borderTop: '1px solid var(--border-table)' }}>
-                        {(col.metadata?.options || []).map((opt: string) => {
-                          const isSelected = parseMultiValue(val).includes(opt);
-                          const color = getTagColor(opt);
-                          return (
-                            <button
-                              key={opt}
-                              type="button"
-                              onClick={() => toggleMultiItem(col.slug, opt)}
-                              style={{
-                                minHeight: '34px',
-                                padding: '0.25rem 0.65rem',
-                                borderRadius: 'var(--radius-sm)',
-                                border: isSelected ? `1px solid ${color.border}` : '1px solid var(--border-light)',
-                                background: isSelected ? color.bg : 'var(--bg-canvas)',
-                                color: isSelected ? color.text : 'var(--text-tertiary)',
-                                fontSize: '11.5px',
-                                fontWeight: isSelected ? 600 : 400,
-                                cursor: 'pointer',
-                                display: 'inline-flex',
-                                alignItems: 'center',
-                                gap: '0.35rem',
-                                transition: 'all 0.15s ease',
-                              }}
-                            >
-                              {isSelected && <Check size={12} />}
-                              <span>{opt}</span>
-                            </button>
-                          );
-                        })}
-                      </div>
-                    )}
+                    {/* Predefined & Dynamically Discovered Options Toggles */}
+                    {(() => {
+                      const optSet = new Set<string>(col.metadata?.options || []);
+                      for (const r of allRecords) {
+                        const raw = r[col.slug];
+                        if (Array.isArray(raw)) raw.forEach((item) => item && optSet.add(String(item).trim()));
+                        else if (typeof raw === 'string') parseMultiValue(raw).forEach((item) => item && optSet.add(item.trim()));
+                      }
+                      const allColOptions = Array.from(optSet).filter(Boolean);
+                      if (allColOptions.length === 0) return null;
+
+                      return (
+                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.35rem', paddingTop: '0.4rem', borderTop: '1px solid var(--border-table)' }}>
+                          {allColOptions.map((opt: string) => {
+                            const isSelected = parseMultiValue(val).includes(opt);
+                            const color = getTagColor(opt);
+                            return (
+                              <button
+                                key={opt}
+                                type="button"
+                                onClick={() => toggleMultiItem(col.slug, opt)}
+                                style={{
+                                  minHeight: '34px',
+                                  padding: '0.25rem 0.65rem',
+                                  borderRadius: 'var(--radius-sm)',
+                                  border: isSelected ? `1px solid ${color.border}` : '1px solid var(--border-light)',
+                                  background: isSelected ? color.bg : 'var(--bg-canvas)',
+                                  color: isSelected ? color.text : 'var(--text-tertiary)',
+                                  fontSize: '11.5px',
+                                  fontWeight: isSelected ? 600 : 400,
+                                  cursor: 'pointer',
+                                  display: 'inline-flex',
+                                  alignItems: 'center',
+                                  gap: '0.35rem',
+                                  transition: 'all 0.15s ease',
+                                }}
+                              >
+                                {isSelected && <Check size={12} />}
+                                <span>{opt}</span>
+                              </button>
+                            );
+                          })}
+                        </div>
+                      );
+                    })()}
 
                     {/* Inline Add Custom Tag Input */}
                     <div style={{ display: 'flex', gap: '0.4rem', marginTop: '0.2rem' }}>

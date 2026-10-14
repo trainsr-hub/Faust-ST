@@ -499,6 +499,7 @@ export const App: React.FC = () => {
               isLoading={isSyncing}
               relationOptions={relationOptions}
               onEnsureRelation={ensureRelationLoaded}
+              onSaveSchema={handleSaveSchema}
             />
           )}
         </main>
@@ -513,6 +514,7 @@ export const App: React.FC = () => {
         onDelete={handleDeleteRecord}
         isSaving={isSaving}
         relationOptions={relationOptions}
+        allRecords={records}
       />
 
       <TableSettingsModal

@@ -58,6 +58,7 @@ interface NotionMultiSelectPopoverProps {
   onClose: () => void;
   anchorRect: DOMRect | null;
   onCreateOption?: (newOption: string) => void;
+  isSingle?: boolean;
 }
 
 export const NotionMultiSelectPopover: React.FC<NotionMultiSelectPopoverProps> = ({
@@ -67,13 +68,14 @@ export const NotionMultiSelectPopover: React.FC<NotionMultiSelectPopoverProps> =
   onClose,
   anchorRect,
   onCreateOption,
+  isSingle = false,
 }) => {
   const [query, setQuery] = useState('');
   const popoverRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
   // Combine schema options with any custom selected items
-  const allOptions = Array.from(new Set([...options, ...selected]));
+  const allOptions = Array.from(new Set([...options, ...selected])).filter(Boolean);
 
   const filteredOptions = allOptions.filter((opt) =>
     opt.toLowerCase().includes(query.toLowerCase())
@@ -99,6 +101,11 @@ export const NotionMultiSelectPopover: React.FC<NotionMultiSelectPopoverProps> =
   }, [onClose]);
 
   const handleToggle = (opt: string) => {
+    if (isSingle) {
+      onChange([opt]);
+      onClose();
+      return;
+    }
     if (selected.includes(opt)) {
       onChange(selected.filter((s) => s !== opt));
     } else {
@@ -109,10 +116,15 @@ export const NotionMultiSelectPopover: React.FC<NotionMultiSelectPopoverProps> =
   const handleCreateNew = () => {
     const clean = query.trim();
     if (!clean) return;
+    onCreateOption?.(clean);
+    if (isSingle) {
+      onChange([clean]);
+      onClose();
+      return;
+    }
     if (!selected.includes(clean)) {
       onChange([...selected, clean]);
     }
-    onCreateOption?.(clean);
     setQuery('');
   };
 
@@ -299,22 +311,45 @@ export const NotionMultiSelectPopover: React.FC<NotionMultiSelectPopoverProps> =
           background: 'var(--bg-card)',
         }}
       >
-        <span>{selected.length} selected</span>
-        <button
-          onClick={onClose}
-          style={{
-            background: 'var(--accent-bg)',
-            border: '1px solid var(--accent)',
-            color: 'var(--accent)',
-            borderRadius: 'var(--radius-sm)',
-            padding: '0.15rem 0.5rem',
-            fontSize: '11px',
-            fontWeight: 600,
-            cursor: 'pointer',
-          }}
-        >
-          Done
-        </button>
+        <span>{isSingle ? (selected.length > 0 ? `Selected: ${selected[0]}` : 'No option selected') : `${selected.length} selected`}</span>
+        <div style={{ display: 'flex', gap: '0.4rem' }}>
+          {isSingle && selected.length > 0 && (
+            <button
+              type="button"
+              onClick={() => {
+                onChange([]);
+                onClose();
+              }}
+              style={{
+                background: 'transparent',
+                border: '1px solid var(--border-light)',
+                color: 'var(--text-tertiary)',
+                borderRadius: 'var(--radius-sm)',
+                padding: '0.15rem 0.5rem',
+                fontSize: '11px',
+                cursor: 'pointer',
+              }}
+            >
+              Clear
+            </button>
+          )}
+          <button
+            type="button"
+            onClick={onClose}
+            style={{
+              background: 'var(--accent-bg)',
+              border: '1px solid var(--accent)',
+              color: 'var(--accent)',
+              borderRadius: 'var(--radius-sm)',
+              padding: '0.15rem 0.5rem',
+              fontSize: '11px',
+              fontWeight: 600,
+              cursor: 'pointer',
+            }}
+          >
+            Done
+          </button>
+        </div>
       </div>
     </div>
   );

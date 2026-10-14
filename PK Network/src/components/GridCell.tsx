@@ -12,6 +12,8 @@ interface GridCellProps {
   onCommitEdit: (value: any) => Promise<void>;
   relationOptions?: Record<string, { id: string; label: string }[]>;
   onEnsureRelation?: (targetTable?: string) => Promise<void>;
+  suggestedOptions?: string[];
+  onAddOption?: (newOption: string) => void;
 }
 
 export const GridCell: React.FC<GridCellProps> = ({
@@ -23,6 +25,8 @@ export const GridCell: React.FC<GridCellProps> = ({
   onCommitEdit,
   relationOptions = {},
   onEnsureRelation,
+  suggestedOptions = [],
+  onAddOption,
 }) => {
   const val = record[column.slug];
   const [draftVal, setDraftVal] = useState<any>(val ?? '');
@@ -110,7 +114,7 @@ export const GridCell: React.FC<GridCellProps> = ({
   // Notion-Style Multi-Select: Enum Multi
   if (column.type === 'enum_multi') {
     const selectedList = parseMultiValue(val);
-    const availableOptions = column.metadata?.options || [];
+    const availableOptions = Array.from(new Set([...(column.metadata?.options || []), ...suggestedOptions]));
 
     const handleRemoveTag = (tagToRemove: string) => {
       const next = selectedList.filter((t) => t !== tagToRemove);
@@ -160,7 +164,7 @@ export const GridCell: React.FC<GridCellProps> = ({
           ))
         )}
 
-        {/* Floating Notion Multi-Select Popover Menu */}
+        {/* Floating Notion Multi-Select Popover Menu with Live Auto-Suggestions */}
         {isEditing && (
           <NotionMultiSelectPopover
             selected={selectedList}
@@ -168,6 +172,53 @@ export const GridCell: React.FC<GridCellProps> = ({
             anchorRect={cellRef.current?.getBoundingClientRect() || null}
             onChange={(newSelected) => {
               onCommitEdit(newSelected);
+            }}
+            onCreateOption={(newOpt) => {
+              onAddOption?.(newOpt);
+            }}
+            onClose={onCancelEdit}
+          />
+        )}
+      </div>
+    );
+  }
+
+  // Notion-Style Single-Select: Enum Single
+  if (column.type === 'enum_single') {
+    const currentVal = val ? String(val) : '';
+    const selectedList = currentVal ? [currentVal] : [];
+    const availableOptions = Array.from(new Set([...(column.metadata?.options || []), ...suggestedOptions]));
+
+    return (
+      <div
+        ref={cellRef}
+        onClick={onStartEdit}
+        style={{
+          width: '100%',
+          minHeight: '28px',
+          display: 'flex',
+          alignItems: 'center',
+          cursor: 'pointer',
+        }}
+      >
+        {!currentVal ? (
+          <span style={{ color: 'var(--text-dim)', fontSize: '12px' }}>—</span>
+        ) : (
+          <NotionTagPill tag={currentVal} />
+        )}
+
+        {/* Floating Notion Single-Select Popover Menu with Live Auto-Suggestions */}
+        {isEditing && (
+          <NotionMultiSelectPopover
+            selected={selectedList}
+            options={availableOptions}
+            isSingle={true}
+            anchorRect={cellRef.current?.getBoundingClientRect() || null}
+            onChange={(newSelected) => {
+              onCommitEdit(newSelected[0] || '');
+            }}
+            onCreateOption={(newOpt) => {
+              onAddOption?.(newOpt);
             }}
             onClose={onCancelEdit}
           />
@@ -178,27 +229,6 @@ export const GridCell: React.FC<GridCellProps> = ({
 
   // Active Inline Edit Mode for Other Types
   if (isEditing) {
-    if (column.type === 'enum_single') {
-      return (
-        <select
-          className="input-base"
-          style={{ width: '100%', minHeight: '34px', padding: '0.2rem 0.4rem' }}
-          value={draftVal}
-          onChange={(e) => {
-            setDraftVal(e.target.value);
-            onCommitEdit(e.target.value);
-          }}
-          onBlur={onCancelEdit}
-          autoFocus
-        >
-          <option value="">-- None --</option>
-          {(column.metadata?.options || []).map((opt: string) => (
-            <option key={opt} value={opt}>{opt}</option>
-          ))}
-        </select>
-      );
-    }
-
     if (column.type === 'relation_single') {
       const rels = relationOptions[column.metadata?.target || ''] || [];
       return (
@@ -237,14 +267,6 @@ export const GridCell: React.FC<GridCellProps> = ({
   }
 
   // Static Presentation Renderers
-  if (column.type === 'enum_single' && val) {
-    return (
-      <div onClick={onStartEdit} style={{ cursor: 'pointer', display: 'inline-flex' }}>
-        <NotionTagPill tag={String(val)} />
-      </div>
-    );
-  }
-
   if (column.type === 'relation_single' && val) {
     return (
       <span className="badge badge-rel" style={{ cursor: 'pointer' }} onClick={onStartEdit}>

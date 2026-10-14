@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Edit2, Trash2, Plus } from 'lucide-react';
 import { TableSchema, TableRecord } from '../types';
 import { GridToolbar } from './GridToolbar';
 import { GridHeader } from './GridHeader';
 import { GridCell } from './GridCell';
+import { parseMultiValue } from './NotionMultiSelect';
 
 interface DataGridProps {
   schema: TableSchema;
@@ -16,6 +17,7 @@ interface DataGridProps {
   isLoading: boolean;
   relationOptions?: Record<string, { id: string; label: string }[]>;
   onEnsureRelation?: (targetTable?: string) => Promise<void>;
+  onSaveSchema?: (updated: TableSchema) => Promise<void>;
 }
 
 export const DataGrid: React.FC<DataGridProps> = ({
@@ -29,11 +31,56 @@ export const DataGrid: React.FC<DataGridProps> = ({
   isLoading,
   relationOptions,
   onEnsureRelation,
+  onSaveSchema,
 }) => {
   const [search, setSearch] = useState('');
   const [sortCol, setSortCol] = useState<string | null>(null);
   const [sortAsc, setSortAsc] = useState<boolean>(true);
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+
+  // Dynamically aggregate all auto-suggest options for each column:
+  // Combines predefined schema options + all distinct values already present in the table records
+  const columnSuggestions = useMemo(() => {
+    const map: Record<string, string[]> = {};
+    for (const col of schema.columns) {
+      if (col.type === 'enum_single' || col.type === 'enum_multi') {
+        const set = new Set<string>(col.metadata?.options || []);
+        for (const r of records) {
+          const raw = r[col.slug];
+          if (Array.isArray(raw)) {
+            raw.forEach((v) => v && set.add(String(v).trim()));
+          } else if (typeof raw === 'string') {
+            parseMultiValue(raw).forEach((v) => v && set.add(v.trim()));
+          }
+        }
+        map[col.slug] = Array.from(set).filter(Boolean);
+      }
+    }
+    return map;
+  }, [schema.columns, records]);
+
+  const handleAddOptionToColumn = async (colSlug: string, newOption: string) => {
+    const col = schema.columns.find((c) => c.slug === colSlug);
+    if (!col) return;
+    const existingOpts = col.metadata?.options || [];
+    if (!existingOpts.includes(newOption)) {
+      const nextCols = schema.columns.map((c) => {
+        if (c.slug === colSlug) {
+          return {
+            ...c,
+            metadata: {
+              ...c.metadata,
+              options: [...existingOpts, newOption],
+            },
+          };
+        }
+        return c;
+      });
+      if (onSaveSchema) {
+        await onSaveSchema({ ...schema, columns: nextCols });
+      }
+    }
+  };
 
   // Drag & drop states
   const [draggedIdx, setDraggedIdx] = useState<number | null>(null);
@@ -222,6 +269,8 @@ export const DataGrid: React.FC<DataGridProps> = ({
                           }}
                           relationOptions={relationOptions}
                           onEnsureRelation={onEnsureRelation}
+                          suggestedOptions={columnSuggestions[col.slug] || []}
+                          onAddOption={(newOpt) => handleAddOptionToColumn(col.slug, newOpt)}
                         />
                       </td>
                     ))}
