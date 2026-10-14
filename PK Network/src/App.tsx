@@ -7,6 +7,8 @@ import { MobileCardView } from './components/MobileCardView';
 import { MobileRecordDrawer } from './components/MobileRecordDrawer';
 import { AuthModal } from './components/AuthModal';
 import { VaultGate } from './components/VaultGate';
+import { TableSettingsModal } from './components/TableSettingsModal';
+import { NewTableModal } from './components/NewTableModal';
 import { TableSchema, TableRecord } from './types';
 import { api, getAuthKey, checkUrlKey } from './services/api';
 
@@ -33,6 +35,8 @@ export const App: React.FC = () => {
   const [drawerOpen, setDrawerOpen] = useState<boolean>(false);
   const [selectedRecord, setSelectedRecord] = useState<TableRecord | null>(null);
   const [authModalOpen, setAuthModalOpen] = useState<boolean>(false);
+  const [tableSettingsOpen, setTableSettingsOpen] = useState<boolean>(false);
+  const [newTableModalOpen, setNewTableModalOpen] = useState<boolean>(false);
 
   // Responsive Hook
   const [isMobile, setIsMobile] = useState<boolean>(window.innerWidth < 768);
@@ -93,14 +97,15 @@ export const App: React.FC = () => {
       if (tablesRes.tables && Object.keys(tablesRes.tables).length > 0) {
         setTables(tablesRes.tables);
 
-        // Fetch metadata records from master 'tables' registry
-        try {
-          const metaRes = await api.getRecords('tables');
-          if (metaRes.records) {
-            setTableMetadata(metaRes.records);
-            setRecordCounts((prev) => ({ ...prev, tables: metaRes.count || metaRes.records.length }));
-          }
-        } catch {}
+        // Populate sovereign metadata registry
+        if (tablesRes.metadata && tablesRes.metadata.length > 0) {
+          setTableMetadata(tablesRes.metadata);
+        } else {
+          try {
+            const metaRes = await api.getRecords('tables');
+            if (metaRes.records) setTableMetadata(metaRes.records);
+          } catch {}
+        }
 
         const tableKeys = Object.keys(tablesRes.tables);
         const dataKeys = tableKeys.filter((k) => k !== 'tables');
@@ -154,35 +159,56 @@ export const App: React.FC = () => {
     await loadRecords(name);
   };
 
-  const handleAddTable = async () => {
-    const name = prompt('Enter new table name (lowercase, alphanumeric, e.g. projects):');
-    if (!name) return;
-    const cleanName = name.toLowerCase().replace(/[^a-z0-9_]/g, '');
-    if (!cleanName) return;
-
-    const newSchema: TableSchema = {
-      table_name: cleanName,
-      columns: [
-        { name: 'ID', slug: 'id', type: 'hex_id', metadata: { prefix: cleanName.slice(0, 4).toUpperCase() } },
-        { name: 'Name', slug: 'name', type: 'text_single', metadata: {} },
-      ],
-    };
-
+  // Project Logic: Create table
+  const handleCreateNewTable = async (newTable: { id: string; name: string; parent_id: string | null }) => {
     try {
-      await api.saveTableSchema(cleanName, newSchema);
-      const newMeta: TableRecord = {
-        id: cleanName,
-        name: cleanName.charAt(0).toUpperCase() + cleanName.slice(1).replace(/_/g, ' '),
-        order_index: (tableMetadata.length || 0) + 1,
-      };
-      await api.createRecord('tables', newMeta).catch(() => null);
-      setTableMetadata((prev) => [...prev, newMeta]);
-      setTables((prev) => ({ ...prev, [cleanName]: newSchema }));
-      setActiveTableName(cleanName);
-      await loadRecords(cleanName);
-      showToast(`Created table "${cleanName}" on Turso Cloud`);
+      const res = await api.createNewTable(newTable);
+      if (res.table) {
+        setTables((prev) => ({ ...prev, [newTable.id]: res.table.schema }));
+        setTableMetadata((prev) => [...prev, { id: newTable.id, name: newTable.name, parent_id: newTable.parent_id }]);
+        setActiveTableName(newTable.id);
+        await loadRecords(newTable.id);
+        showToast(`Created table "${newTable.name}"`);
+      }
     } catch (e: any) {
-      showToast(`Failed to create table: ${e.message}`);
+      showToast(`Creation failed: ${e.message}`);
+      throw e;
+    }
+  };
+
+  // Project Logic: Update table metadata (natural name, parent selector)
+  const handleUpdateTableSettings = async (updates: { name: string; parent_id: string | null }) => {
+    try {
+      await api.updateTableMeta(activeTableName, updates);
+      setTableMetadata((prev) =>
+        prev.map((m) => (m.id === activeTableName ? { ...m, ...updates } : m))
+      );
+      showToast(`Saved settings for "${updates.name}"`);
+    } catch (e: any) {
+      showToast(`Update failed: ${e.message}`);
+      throw e;
+    }
+  };
+
+  // Project Logic: Delete table
+  const handleDeleteTable = async (tableName: string) => {
+    try {
+      await api.deleteTable(tableName);
+      setTables((prev) => {
+        const next = { ...prev };
+        delete next[tableName];
+        return next;
+      });
+      setTableMetadata((prev) => prev.filter((m) => m.id !== tableName));
+      showToast(`Deleted table "${tableName}"`);
+      const remaining = Object.keys(tables).filter((k) => k !== tableName && k !== 'tables');
+      if (remaining.length > 0) {
+        setActiveTableName(remaining[0]);
+        await loadRecords(remaining[0]);
+      }
+    } catch (e: any) {
+      showToast(`Delete failed: ${e.message}`);
+      throw e;
     }
   };
 
@@ -311,7 +337,8 @@ export const App: React.FC = () => {
         tables={tables}
         activeTable={activeTableName}
         onSelectTable={handleSelectTable}
-        onAddTable={handleAddTable}
+        onAddTable={() => setNewTableModalOpen(true)}
+        onOpenTableSettings={() => setTableSettingsOpen(true)}
         recordCounts={recordCounts}
         tableMetadata={tableMetadata}
       />
@@ -359,6 +386,23 @@ export const App: React.FC = () => {
         onDelete={handleDeleteRecord}
         isSaving={isSaving}
         relationOptions={relationOptions}
+      />
+
+      <TableSettingsModal
+        isOpen={tableSettingsOpen}
+        onClose={() => setTableSettingsOpen(false)}
+        tableId={activeTableName}
+        tableMeta={tableMetadata.find((m) => m.id === activeTableName)}
+        availableTables={tableMetadata}
+        onSave={handleUpdateTableSettings}
+        onDelete={handleDeleteTable}
+      />
+
+      <NewTableModal
+        isOpen={newTableModalOpen}
+        onClose={() => setNewTableModalOpen(false)}
+        availableTables={tableMetadata}
+        onCreate={handleCreateNewTable}
       />
 
       <AuthModal

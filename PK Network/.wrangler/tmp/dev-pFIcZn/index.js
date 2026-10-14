@@ -3247,7 +3247,89 @@ app.get("/api/tables", async (c) => {
         }
       }
     }
-    return c.json({ success: true, tables });
+    const metaRes = await turso.execute("SELECT * FROM tables ORDER BY order_index ASC;");
+    const metadata = metaRes.rows;
+    return c.json({ success: true, tables, metadata });
+  } catch (err) {
+    return c.json({ success: false, error: err.message }, 500);
+  }
+});
+app.patch("/api/table/:name/meta", async (c) => {
+  try {
+    const name = c.req.param("name");
+    const body = await c.req.json();
+    const turso = getTurso(c);
+    const updates = body.updates || body;
+    const allowed = ["name", "parent_id", "order_index", "icon", "description"];
+    const keys = Object.keys(updates).filter((k) => allowed.includes(k));
+    if (keys.length === 0) {
+      return c.json({ success: true, message: "No valid metadata fields to update" });
+    }
+    const setClause = keys.map((k) => `"${k}" = ?`).join(", ");
+    const values = [...keys.map((k) => updates[k]), name];
+    await turso.execute(`UPDATE tables SET ${setClause} WHERE id = ?;`, values);
+    return c.json({ success: true, message: `Table metadata for ${name} updated` });
+  } catch (err) {
+    return c.json({ success: false, error: err.message }, 500);
+  }
+});
+app.post("/api/tables/new", async (c) => {
+  try {
+    const body = await c.req.json();
+    const turso = getTurso(c);
+    const rawId = String(body.id || body.name || "").toLowerCase();
+    const cleanId = rawId.replace(/[^a-z0-9_]/g, "_").replace(/^_+|_+$/g, "");
+    if (!cleanId) {
+      return c.json({ success: false, error: "Table ID must contain alphanumeric characters" }, 400);
+    }
+    const displayName = body.name || cleanId.charAt(0).toUpperCase() + cleanId.slice(1).replace(/_/g, " ");
+    const parentId = body.parent_id || null;
+    await turso.execute(`CREATE TABLE IF NOT EXISTS "${cleanId}" (id TEXT PRIMARY KEY);`);
+    const prefix = cleanId.slice(0, 4).toUpperCase();
+    const initialSchema = {
+      table_name: cleanId,
+      columns: [
+        { name: `${displayName} ID`, slug: "id", type: "hex_id", metadata: { prefix } },
+        { name: "Name", slug: "name", type: "text_single", metadata: {} },
+        { name: "Notes", slug: "notes", type: "text_multi", metadata: {} }
+      ]
+    };
+    await turso.execute(
+      "INSERT OR REPLACE INTO _schema_definitions (table_name, schema_json, updated_at) VALUES (?, ?, ?);",
+      [cleanId, JSON.stringify(initialSchema), (/* @__PURE__ */ new Date()).toISOString()]
+    );
+    const maxOrderRes = await turso.execute("SELECT MAX(order_index) as m FROM tables;");
+    const nextOrder = Number(maxOrderRes.rows[0]?.m || 0) + 1;
+    await turso.execute(
+      "INSERT OR REPLACE INTO tables (id, name, parent_id, order_index, icon) VALUES (?, ?, ?, ?, ?);",
+      [cleanId, displayName, parentId, nextOrder, body.icon || "box"]
+    );
+    return c.json({
+      success: true,
+      table: {
+        id: cleanId,
+        name: displayName,
+        parent_id: parentId,
+        order_index: nextOrder,
+        schema: initialSchema
+      }
+    });
+  } catch (err) {
+    return c.json({ success: false, error: err.message }, 500);
+  }
+});
+app.delete("/api/table/:name", async (c) => {
+  try {
+    const name = c.req.param("name");
+    if (name === "tables") {
+      return c.json({ success: false, error: "Cannot delete the master System Tables registry" }, 400);
+    }
+    const turso = getTurso(c);
+    await turso.execute(`DROP TABLE IF EXISTS "${name}";`);
+    await turso.execute("DELETE FROM _schema_definitions WHERE table_name = ?;", [name]);
+    await turso.execute("DELETE FROM tables WHERE id = ?;", [name]);
+    await turso.execute("UPDATE tables SET parent_id = NULL WHERE parent_id = ?;", [name]);
+    return c.json({ success: true, message: `Table ${name} dropped and unlinked` });
   } catch (err) {
     return c.json({ success: false, error: err.message }, 500);
   }

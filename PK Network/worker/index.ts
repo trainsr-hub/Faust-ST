@@ -221,7 +221,7 @@ app.get('/api/health', async (c) => {
   }
 });
 
-// API: Get all schemas
+// API: Get all schemas and table metadata
 app.get('/api/tables', async (c) => {
   try {
     const turso = getTurso(c);
@@ -239,7 +239,7 @@ app.get('/api/tables', async (c) => {
       }
     }
 
-    // Ensure all DEFAULT_SCHEMAS (including tables) exist in _schema_definitions
+    // Ensure all DEFAULT_SCHEMAS exist in _schema_definitions
     for (const [tname, schema] of Object.entries(DEFAULT_SCHEMAS)) {
       if (!tables[tname]) {
         try {
@@ -252,7 +252,116 @@ app.get('/api/tables', async (c) => {
       }
     }
 
-    return c.json({ success: true, tables });
+    // Load sovereign metadata registry
+    const metaRes = await turso.execute('SELECT * FROM tables ORDER BY order_index ASC;');
+    const metadata = metaRes.rows;
+
+    return c.json({ success: true, tables, metadata });
+  } catch (err: any) {
+    return c.json({ success: false, error: err.message }, 500);
+  }
+});
+
+// API: Update table metadata via Project Logic (Rename natural name, change parent selector)
+app.patch('/api/table/:name/meta', async (c) => {
+  try {
+    const name = c.req.param('name');
+    const body = await c.req.json();
+    const turso = getTurso(c);
+
+    const updates = body.updates || body;
+    const allowed = ['name', 'parent_id', 'order_index', 'icon', 'description'];
+    const keys = Object.keys(updates).filter(k => allowed.includes(k));
+    if (keys.length === 0) {
+      return c.json({ success: true, message: 'No valid metadata fields to update' });
+    }
+
+    const setClause = keys.map(k => `"${k}" = ?`).join(', ');
+    const values = [...keys.map(k => updates[k]), name];
+
+    await turso.execute(`UPDATE tables SET ${setClause} WHERE id = ?;`, values);
+    return c.json({ success: true, message: `Table metadata for ${name} updated` });
+  } catch (err: any) {
+    return c.json({ success: false, error: err.message }, 500);
+  }
+});
+
+// API: Create new table via Project Logic (Atomic Provisioning)
+app.post('/api/tables/new', async (c) => {
+  try {
+    const body = await c.req.json();
+    const turso = getTurso(c);
+    const rawId = String(body.id || body.name || '').toLowerCase();
+    const cleanId = rawId.replace(/[^a-z0-9_]/g, '_').replace(/^_+|_+$/g, '');
+    if (!cleanId) {
+      return c.json({ success: false, error: 'Table ID must contain alphanumeric characters' }, 400);
+    }
+    const displayName = body.name || (cleanId.charAt(0).toUpperCase() + cleanId.slice(1).replace(/_/g, ' '));
+    const parentId = body.parent_id || null;
+
+    // 1. Create physical SQLite table
+    await turso.execute(`CREATE TABLE IF NOT EXISTS "${cleanId}" (id TEXT PRIMARY KEY);`);
+
+    // 2. Register initial schema
+    const prefix = cleanId.slice(0, 4).toUpperCase();
+    const initialSchema = {
+      table_name: cleanId,
+      columns: [
+        { name: `${displayName} ID`, slug: 'id', type: 'hex_id', metadata: { prefix } },
+        { name: 'Name', slug: 'name', type: 'text_single', metadata: {} },
+        { name: 'Notes', slug: 'notes', type: 'text_multi', metadata: {} },
+      ]
+    };
+    await turso.execute(
+      'INSERT OR REPLACE INTO _schema_definitions (table_name, schema_json, updated_at) VALUES (?, ?, ?);',
+      [cleanId, JSON.stringify(initialSchema), new Date().toISOString()]
+    );
+
+    // 3. Register in tables metadata registry
+    const maxOrderRes = await turso.execute('SELECT MAX(order_index) as m FROM tables;');
+    const nextOrder = Number(maxOrderRes.rows[0]?.m || 0) + 1;
+    await turso.execute(
+      'INSERT OR REPLACE INTO tables (id, name, parent_id, order_index, icon) VALUES (?, ?, ?, ?, ?);',
+      [cleanId, displayName, parentId, nextOrder, body.icon || 'box']
+    );
+
+    return c.json({
+      success: true,
+      table: {
+        id: cleanId,
+        name: displayName,
+        parent_id: parentId,
+        order_index: nextOrder,
+        schema: initialSchema
+      }
+    });
+  } catch (err: any) {
+    return c.json({ success: false, error: err.message }, 500);
+  }
+});
+
+// API: Delete table via Project Logic
+app.delete('/api/table/:name', async (c) => {
+  try {
+    const name = c.req.param('name');
+    if (name === 'tables') {
+      return c.json({ success: false, error: 'Cannot delete the master System Tables registry' }, 400);
+    }
+    const turso = getTurso(c);
+
+    // 1. Drop physical table
+    await turso.execute(`DROP TABLE IF EXISTS "${name}";`);
+
+    // 2. Delete schema definition
+    await turso.execute('DELETE FROM _schema_definitions WHERE table_name = ?;', [name]);
+
+    // 3. Unregister from tables registry
+    await turso.execute('DELETE FROM tables WHERE id = ?;', [name]);
+
+    // 4. Reparent any orphan child tables to NULL
+    await turso.execute('UPDATE tables SET parent_id = NULL WHERE parent_id = ?;', [name]);
+
+    return c.json({ success: true, message: `Table ${name} dropped and unlinked` });
   } catch (err: any) {
     return c.json({ success: false, error: err.message }, 500);
   }

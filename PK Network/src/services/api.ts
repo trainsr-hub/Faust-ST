@@ -89,8 +89,28 @@ export const api = {
     return request('/api/health');
   },
 
-  getTables: async (): Promise<{ tables: Record<string, TableSchema> }> => {
+  getTables: async (): Promise<{ tables: Record<string, TableSchema>; metadata?: TableRecord[] }> => {
     return request('/api/tables');
+  },
+
+  updateTableMeta: async (tableName: string, updates: Partial<TableRecord>): Promise<{ success: boolean; message: string }> => {
+    return request(`/api/table/${encodeURIComponent(tableName)}/meta`, {
+      method: 'PATCH',
+      body: JSON.stringify({ updates }),
+    });
+  },
+
+  createNewTable: async (payload: { id?: string; name: string; parent_id?: string | null; icon?: string }): Promise<{ success: boolean; table: any }> => {
+    return request('/api/tables/new', {
+      method: 'POST',
+      body: JSON.stringify(payload),
+    });
+  },
+
+  deleteTable: async (tableName: string): Promise<{ success: boolean; message: string }> => {
+    return request(`/api/table/${encodeURIComponent(tableName)}`, {
+      method: 'DELETE',
+    });
   },
 
   saveTableSchema: async (tableName: string, schema: TableSchema): Promise<{ success: boolean; message: string }> => {

@@ -173,6 +173,13 @@ CREATE TABLE IF NOT EXISTS _system_tables (
    - Foreign key pointing to the `id` of another table in `_system_tables`.
    - If `parent_id IS NULL`, the table is designated as a **Root Level Entity** (Domain Container).
    - If populated, the table is designated as a **Child Sub-Table** belonging to the parent entity.
+4. **The Project Logic Gate Invariant (Manager's Law)**:
+   - The System Table is **not** edited as a raw spreadsheet/grid like user data tables.
+   - All mutations to `_system_tables` occur strictly through the **inner logic of the project at the table level**:
+     - *Renaming*: Changing a table's display title in the UI triggers project logic to atomically update `name` in `_system_tables`.
+     - *Reparenting*: Selecting a parent table from a selector dropdown updates `parent_id` in `_system_tables`.
+     - *Creation*: The `+ New Table` action prompts for Natural Name and Parent Selector, generating the alphanumeric ID and atomically registering the physical table, schema, and `_system_tables` record.
+     - *Deletion*: Table Settings deletion safely unlinks relations and unregisters the entry.
 
 ---
 

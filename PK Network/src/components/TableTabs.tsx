@@ -7,6 +7,7 @@ interface TableTabsProps {
   activeTable: string;
   onSelectTable: (name: string) => void;
   onAddTable: () => void;
+  onOpenTableSettings: (name: string) => void;
   recordCounts: Record<string, number>;
   tableMetadata?: TableRecord[];
 }
@@ -16,6 +17,7 @@ export const TableTabs: React.FC<TableTabsProps> = ({
   activeTable,
   onSelectTable,
   onAddTable,
+  onOpenTableSettings,
   recordCounts,
   tableMetadata = [],
 }) => {
@@ -135,41 +137,29 @@ export const TableTabs: React.FC<TableTabsProps> = ({
           </button>
         </div>
 
-        {/* Right Side: Pinned Master System Table */}
+        {/* Right Side: Table Settings & Management */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', flexShrink: 0 }}>
           <button
-            onClick={() => onSelectTable('tables')}
+            onClick={() => onOpenTableSettings(activeTable)}
             style={{
               display: 'flex',
               alignItems: 'center',
               gap: '0.4rem',
               padding: '0.4rem 0.75rem',
               borderRadius: 'var(--radius-sm)',
-              border: activeTable === 'tables' ? '1px solid var(--accent)' : '1px solid var(--border-mid)',
-              background: activeTable === 'tables' ? 'var(--accent-bg)' : 'rgba(255, 255, 255, 0.03)',
-              color: activeTable === 'tables' ? 'var(--accent)' : 'var(--text-secondary)',
+              border: '1px solid var(--border-mid)',
+              background: 'rgba(255, 255, 255, 0.03)',
+              color: 'var(--text-secondary)',
               fontWeight: 600,
               cursor: 'pointer',
               fontSize: '12px',
               whiteSpace: 'nowrap',
               transition: 'all 0.15s ease',
             }}
-            title="Master System Tables Registry (Editable Table)"
+            title={`Configure settings and parent hierarchy for ${getDisplayName(activeTable)}`}
           >
             <Settings size={13} />
-            <span>System Tables</span>
-            {recordCounts['tables'] !== undefined && (
-              <span style={{
-                fontSize: '10px',
-                fontFamily: 'var(--font-mono)',
-                padding: '0.05rem 0.35rem',
-                borderRadius: 'var(--radius-full)',
-                background: activeTable === 'tables' ? 'var(--accent)' : 'var(--bg-card)',
-                color: activeTable === 'tables' ? '#fff' : 'var(--text-dim)',
-              }}>
-                {recordCounts['tables']}
-              </span>
-            )}
+            <span>Table Settings</span>
           </button>
         </div>
       </nav>
