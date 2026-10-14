@@ -297,7 +297,19 @@ ALTER TABLE tables ADD COLUMN group_id TEXT REFERENCES table_groups(id) ON DELET
   - Highlighting active table, jumping with 0ms RAM switch, auto-unfolding ancestor folders.
 * **Inner Logic Governance**:
   - Group creation, renaming, re-parenting, and deletion handled via table/group modal operations.
-  - Tables assigned or moved between groups via the **Group Selector** dropdown in `TableSettingsModal.tsx`.
+  - Tables assigned or moved between groups via the **Group Selector** dropdown in `TableSettingsModal.tsx` or fluid Drag & Drop.
+
+### 6. Workspace Outliner Drag & Drop Mechanics (VS Code & Obsidian Parity)
+- **Tables ("Files")**:
+  - `draggable`: True. Dragging payload: `{ type: 'table', id: tableId }`.
+  - Drop on Folder $\rightarrow$ Sets `table.group_id = targetGroup.id`.
+  - Drop on Root / Outliner canvas $\rightarrow$ Sets `table.group_id = null` (Ungrouped).
+- **Groups ("Folders")**:
+  - `draggable`: True. Dragging payload: `{ type: 'group', id: groupId }`.
+  - Drop on Folder $\rightarrow$ Sets `group.sub_group_of = targetGroup.id` (Nested sub-folder).
+  - Drop on Root $\rightarrow$ Sets `group.sub_group_of = null` (Top-level folder).
+  - **Circularity Invariant**: Guard prevents dropping a folder into itself or any of its own descendant folders.
+- **Optimistic RAM Feedback**: 0ms local UI re-render, followed by asynchronous Edge API persistence (`PATCH /api/table/:name/meta` and `PATCH /api/groups/:id`).
 
 ---
 

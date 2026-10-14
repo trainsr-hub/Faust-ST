@@ -230,6 +230,38 @@ export const App: React.FC = () => {
     }
   };
 
+  // Drag & Drop: Move Table into a group or to root
+  const handleMoveTable = async (tableId: string, targetGroupId: string | null) => {
+    // 0ms Optimistic RAM update
+    setTableMetadata((prev) =>
+      prev.map((m) => (m.id === tableId ? { ...m, group_id: targetGroupId } : m))
+    );
+    try {
+      await api.updateTableMeta(tableId, { group_id: targetGroupId });
+      const targetGroup = groups.find((g) => g.id === targetGroupId);
+      showToast(targetGroup ? `Moved table into "${targetGroup.natural_name}"` : 'Moved table to Root');
+    } catch (e: any) {
+      showToast(`Move failed: ${e.message}`);
+      await refreshAll();
+    }
+  };
+
+  // Drag & Drop: Move Group into a parent group or to root
+  const handleMoveGroup = async (groupId: string, targetParentGroupId: string | null) => {
+    // 0ms Optimistic RAM update
+    setGroups((prev) =>
+      prev.map((g) => (g.id === groupId ? { ...g, sub_group_of: targetParentGroupId } : g))
+    );
+    try {
+      await api.updateGroup(groupId, { sub_group_of: targetParentGroupId });
+      const parent = groups.find((g) => g.id === targetParentGroupId);
+      showToast(parent ? `Nested group under "${parent.natural_name}"` : 'Moved group to Root');
+    } catch (e: any) {
+      showToast(`Group move failed: ${e.message}`);
+      await refreshAll();
+    }
+  };
+
   // Project Logic: Delete table
   const handleDeleteTable = async (tableName: string) => {
     try {
@@ -399,6 +431,8 @@ export const App: React.FC = () => {
           }}
           onAddTable={(groupId) => handleOpenAddTableWithGroup(groupId)}
           onAddGroup={handleAddGroup}
+          onMoveTable={handleMoveTable}
+          onMoveGroup={handleMoveGroup}
           recordCounts={recordCounts}
           isMobile={isMobile}
         />
