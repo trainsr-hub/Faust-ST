@@ -1,0 +1,190 @@
+/* ===== Bracket container ===== */
+.bracket {
+    position: relative;
+    height: 100vh;
+    width: calc(100vh * 1.31);
+    background-color: #1e293b;
+    background-image: url('https://htmlcolors.com/color-image/000000.png');
+    background-size: cover;
+    background-position: center;
+}
+
+/* ===== Avatar base ===== */
+.avatar {
+    position: absolute;
+    width: 6%;
+    aspect-ratio: 1/1;
+    object-fit: cover;
+    z-index: 2;
+    border-radius: 8%;
+    transition: 0.2s;
+}
+
+.avatar:hover {
+    transform: scale(1.12) rotate(1deg);
+    z-index: 10;
+    filter: brightness(1.1) contrast(1.05);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.45);
+}
+
+/* ===== LEFT SIDE ===== */
+/* ===== ROUND 1 (base) ===== */
+.l1 {
+    left: 2%;
+    top: 5%;
+}
+
+.l2 {
+    left: 2%;
+    top: 16%;
+}
+
+.l3 {
+    left: 2%;
+    top: 27%;
+}
+
+.l4 {
+    left: 2%;
+    top: 38%;
+}
+
+.l5 {
+    left: 2%;
+    top: 55%;
+}
+
+.l6 {
+    left: 2%;
+    top: 66%;
+}
+
+.l7 {
+    left: 2%;
+    top: 77%;
+}
+
+.l8 {
+    left: 2%;
+    top: 88%;
+}
+
+/* ===== ROUND 2 (avg of round 1 pairs) ===== */
+.l9 {
+    left: 14%;
+    top: 10.5%;
+}
+
+.l10 {
+    left: 14%;
+    top: 32.5%;
+}
+
+.l11 {
+    left: 14%;
+    top: 60.5%;
+}
+
+.l12 {
+    left: 14%;
+    top: 82.5%;
+}
+
+/* ===== ROUND 3 (avg of round 2 pairs) ===== */
+.l13 {
+    left: 26%;
+    top: 21.5%;
+}
+
+.l14 {
+    left: 26%;
+    top: 71.5%;
+}
+
+/* ===== FINAL (avg of round 3) ===== */
+.l15 {
+    left: 40%;
+    top: 46.5%;
+}
+
+/* ===== RIGHT SIDE (mirror logic) ===== */
+.r1 {
+    right: 2%;
+    top: 5%;
+}
+
+.r2 {
+    right: 2%;
+    top: 16%;
+}
+
+.r3 {
+    right: 2%;
+    top: 27%;
+}
+
+.r4 {
+    right: 2%;
+    top: 38%;
+}
+
+.r5 {
+    right: 2%;
+    top: 55%;
+}
+
+.r6 {
+    right: 2%;
+    top: 66%;
+}
+
+.r7 {
+    right: 2%;
+    top: 77%;
+}
+
+.r8 {
+    right: 2%;
+    top: 88%;
+}
+
+.r9 {
+    right: 14%;
+    top: 10.5%;
+}
+
+.r10 {
+    right: 14%;
+    top: 32.5%;
+}
+
+.r11 {
+    right: 14%;
+    top: 60.5%;
+}
+
+.r12 {
+    right: 14%;
+    top: 82.5%;
+}
+
+.r13 {
+    right: 26%;
+    top: 21.5%;
+}
+
+.r14 {
+    right: 26%;
+    top: 71.5%;
+}
+
+.r15 {
+    right: 40%;
+    top: 46.5%;
+}
+
+
+.bracket {
+    position: relative;
+    isolation: isolate;
+}

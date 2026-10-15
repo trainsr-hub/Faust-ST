@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tournament Championship Arena</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700&family=Outfit:wght@600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-container">
+    
+    <!-- Top Command Bar -->
+    <header class="top-bar">
+      <div class="title-stack">
+        <div class="brand-badge">SQLITE C2</div>
+        <div>
+          <h1>FAUST TOURNAMENT ARENA</h1>
+          <p>16-Fighter Single Elimination Mirrored Bracket</p>
+        </div>
+      </div>
+
+      <!-- Global Actions -->
+      <div class="header-actions">
+        <button id="btn-simulate-next" class="btn btn-secondary" title="Simulate the next playable match">
+          ⚡ Next Match
+        </button>
+        <button id="btn-simulate-all" class="btn btn-primary" title="Simulate entire tournament to champion">
+          ▶ Auto-Simulate
+        </button>
+        <button id="btn-reset" class="btn btn-secondary" title="Reset tournament bracket in SQLite">
+          ↺ Reset Bracket
+        </button>
+      </div>
+    </header>
+
+    <!-- Sub-Bar: Round Scrubber Timeline -->
+    <div class="scrubber-bar">
+      <div class="timeline-group">
+        <span class="timeline-title">ROUND:</span>
+        <button class="round-step-btn active" data-round="all">All Stages</button>
+        <button class="round-step-btn" data-round="1">Round of 16</button>
+        <button class="round-step-btn" data-round="2">Quarterfinals</button>
+        <button class="round-step-btn" data-round="3">Semifinals</button>
+        <button class="round-step-btn" data-round="4">Grand Finals</button>
+      </div>
+
+      <div class="telemetry-bar">
+        <span class="telemetry-dot"></span>
+        <span id="telemetry-status" class="telemetry-item">SQLite ACID Active • 16 Seeds</span>
+      </div>
+    </div>
+
+    <!-- Center Stage: The Split Mirrored Bracket (Legacy Arena) -->
+    <main class="arena-stage">
+      <div id="bracket-container" class="bracket">
+        <!-- SVG lines prepended & avatar slots appended by app.js -->
+      </div>
+    </main>
+
+  </div>
+
+  <!-- Participant Album & Dossier Modal -->
+  <div id="participant-modal" class="modal-backdrop hidden" aria-modal="true" role="dialog">
+    <div class="modal-card">
+      <button id="btn-close-modal" class="modal-close" aria-label="Close modal">&times;</button>
+      
+      <div class="modal-header">
+        <div class="modal-avatar-box">
+          <img id="modal-avatar" src="" alt="Contender" class="modal-avatar">
+        </div>
+        <div class="modal-identity">
+          <div class="modal-badge-row">
+            <span id="modal-seed" class="seed-badge">SEED #1</span>
+            <span id="modal-origin" class="origin-badge">Neo-Zurich</span>
+          </div>
+          <h2 id="modal-name" class="modal-name">Participant Name</h2>
+          <p id="modal-title" class="modal-title">Combatant Title</p>
+        </div>
+      </div>
+
+      <div class="modal-body">
+        <div class="modal-section">
+          <h4 class="section-title">Contender Dossier</h4>
+          <p id="modal-bio" class="modal-bio-text">Biographical description</p>
+        </div>
+
+        <div class="modal-section">
+          <div class="album-heading-row">
+            <h4 class="section-title">Verified Album Vault</h4>
+            <span class="table-ref">Query key: <code>participant_albums.participant_id</code></span>
+          </div>
+          <div id="modal-gallery" class="album-grid"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Match Scoring Modal -->
+  <div id="score-modal" class="modal-backdrop hidden" aria-modal="true" role="dialog">
+    <div class="modal-card score-modal-card">
+      <button id="btn-close-score-modal" class="modal-close" aria-label="Close modal">&times;</button>
+      <h3 class="modal-title-center">Record Match Result</h3>
+      <p id="score-match-desc" class="modal-sub-center">Match #1</p>
+
+      <form id="score-form" class="score-form">
+        <div class="score-inputs-row">
+          <div class="fighter-score-col">
+            <div id="score-p1-avatar" class="fighter-mini-avatar"></div>
+            <span id="score-p1-name" class="fighter-score-name">Player 1</span>
+            <input type="number" id="input-score1" min="0" max="99" value="2" required class="score-input">
+          </div>
+          <span class="score-divider">VS</span>
+          <div class="fighter-score-col">
+            <div id="score-p2-avatar" class="fighter-mini-avatar"></div>
+            <span id="score-p2-name" class="fighter-score-name">Player 2</span>
+            <input type="number" id="input-score2" min="0" max="99" value="0" required class="score-input">
+          </div>
+        </div>
+
+        <div id="score-error-msg" class="score-error hidden"></div>
+
+        <div class="modal-btn-row">
+          <button type="submit" class="btn btn-primary btn-block">Confirm Result & Advance Victor</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
