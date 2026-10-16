@@ -357,14 +357,39 @@ app.get('/api/health', async (c) => {
 app.get('/api/tables', async (c) => {
   try {
     const turso = getTurso(c);
-    await ensureSchemaTable(turso);
-    await ensureTablesTable(turso);
-    await ensureGroupsTable(turso);
 
-    const res = await turso.execute('SELECT table_name, schema_json FROM _schema_definitions;');
+    // Fetch schemas, metadata, groups, and states in a SINGLE batched subrequest (1 HTTP subrequest)
+    let results: any[];
+    try {
+      results = await turso.batch([
+        { sql: 'SELECT table_name, schema_json FROM _schema_definitions;' },
+        { sql: 'SELECT * FROM tables ORDER BY order_index ASC;' },
+        { sql: 'SELECT * FROM table_groups ORDER BY order_index ASC;' },
+        { sql: 'SELECT * FROM table_states;' },
+      ]);
+    } catch {
+      // Auto-bootstrap system tables if missing on fresh database
+      await ensureSchemaTable(turso);
+      await ensureTablesTable(turso);
+      await ensureGroupsTable(turso);
+      await ensureTableStatesTable(turso);
+      results = await turso.batch([
+        { sql: 'SELECT table_name, schema_json FROM _schema_definitions;' },
+        { sql: 'SELECT * FROM tables ORDER BY order_index ASC;' },
+        { sql: 'SELECT * FROM table_groups ORDER BY order_index ASC;' },
+        { sql: 'SELECT * FROM table_states;' },
+      ]);
+    }
+
+    const schemaRows = results[0]?.rows || [];
+    const metaRows = results[1]?.rows || [];
+    const groupRows = results[2]?.rows || [];
+    const stateRows = results[3]?.rows || [];
+
     const tables: Record<string, any> = {};
 
-    for (const r of res.rows) {
+    for (const r of schemaRows) {
+      if (!r.table_name) continue;
       if (!r.schema_json) {
         tables[r.table_name] = DEFAULT_SCHEMAS[r.table_name] || null;
         continue;
@@ -386,29 +411,15 @@ app.get('/api/tables', async (c) => {
       tables[r.table_name] = parsed;
     }
 
-    // Ensure all DEFAULT_SCHEMAS exist in _schema_definitions
+    // Overlay DEFAULT_SCHEMAS for any core tables not present in DB
     for (const [tname, schema] of Object.entries(DEFAULT_SCHEMAS)) {
       if (!tables[tname]) {
-        try {
-          await turso.execute(
-            'INSERT OR REPLACE INTO _schema_definitions (table_name, schema_json, updated_at) VALUES (?, ?, ?);',
-            [tname, JSON.stringify(schema), new Date().toISOString()]
-          );
-          tables[tname] = schema;
-        } catch {}
+        tables[tname] = schema;
       }
     }
 
-    // Load sovereign metadata registry
-    const metaRes = await turso.execute('SELECT * FROM tables ORDER BY order_index ASC;');
-    const metadata = metaRes.rows;
-
-    // Load table groups
-    const groupsRes = await turso.execute('SELECT * FROM table_groups ORDER BY order_index ASC;');
-    const groups = groupsRes.rows;
-
     // Ensure every table in metadata has at least a valid basic schema
-    for (const m of metadata) {
+    for (const m of metaRows) {
       if (!tables[m.id] || !tables[m.id].columns || tables[m.id].columns.length === 0) {
         const prefix = m.id.slice(0, 4).toUpperCase();
         tables[m.id] = {
@@ -422,20 +433,8 @@ app.get('/api/tables', async (c) => {
       }
     }
 
-    // Auto-heal physical tables concurrently to guarantee columns exist with sub-second latency
-    await Promise.all(
-      Object.entries(tables).map(async ([tname, schema]) => {
-        if (!schema || !schema.columns || tname.startsWith('_')) return;
-        const slugs = schema.columns.map((c: any) => c.slug).filter((s: string) => s && s !== 'id');
-        await ensureColumnsExist(turso, tname, slugs);
-      })
-    );
-
-    // Load persistent table view states (sorting, heading sort, configs)
-    await ensureTableStatesTable(turso);
-    const statesRes = await turso.execute('SELECT * FROM table_states;');
     const states: Record<string, any> = {};
-    for (const s of statesRes.rows) {
+    for (const s of stateRows) {
       states[s.table_name] = {
         table_name: s.table_name,
         sort_col: s.sort_col,
@@ -447,7 +446,7 @@ app.get('/api/tables', async (c) => {
       };
     }
 
-    return c.json({ success: true, tables, metadata, groups, states });
+    return c.json({ success: true, tables, metadata: metaRows, groups: groupRows, states });
   } catch (err: any) {
     return c.json({ success: false, error: err.message }, 500);
   }
@@ -458,7 +457,6 @@ app.get('/api/states/:table', async (c) => {
   try {
     const turso = getTurso(c);
     const tableName = c.req.param('table');
-    await ensureTableStatesTable(turso);
     const res = await turso.execute('SELECT * FROM table_states WHERE table_name = ?;', [tableName]);
     if (res.rows.length === 0) return c.json({ success: true, state: null });
     const s = res.rows[0];
@@ -525,7 +523,6 @@ app.post('/api/states/:table', async (c) => {
 app.get('/api/groups', async (c) => {
   try {
     const turso = getTurso(c);
-    await ensureGroupsTable(turso);
     const res = await turso.execute('SELECT * FROM table_groups ORDER BY order_index ASC;');
     return c.json({ success: true, groups: res.rows });
   } catch (err: any) {
