@@ -1,7 +1,8 @@
 import React from 'react';
 import { X, Settings2 } from 'lucide-react';
-import { ColumnDefinition, AtomicFieldType, FIELD_TYPES } from '../types';
+import { ColumnDefinition, AtomicFieldType, FIELD_TYPES, TableRecord } from '../types';
 import { evaluateFormula, extractDependencies } from '../services/formula';
+import { RelationColumnConfig } from './RelationColumnConfig';
 
 interface ColumnEditorDrawerProps {
   isOpen: boolean;
@@ -19,6 +20,20 @@ interface ColumnEditorDrawerProps {
   setDraftOptions: (val: string) => void;
   draftTarget: string;
   setDraftTarget: (val: string) => void;
+  draftTargetField: string;
+  setDraftTargetField: (val: string) => void;
+  draftFilterRule?: string;
+  setDraftFilterRule?: (val: string) => void;
+  targetRecords?: TableRecord[];
+  targetColumns?: ColumnDefinition[];
+  draftSecondaryTarget?: string;
+  setDraftSecondaryTarget?: (val: string) => void;
+  draftSecondaryTargetField?: string;
+  setDraftSecondaryTargetField?: (val: string) => void;
+  draftSecondaryFilterRule?: string;
+  setDraftSecondaryFilterRule?: (val: string) => void;
+  secondaryTargetRecords?: TableRecord[];
+  secondaryTargetColumns?: ColumnDefinition[];
   draftFormula: string;
   setDraftFormula: (val: string) => void;
   onSave: () => void;
@@ -40,13 +55,13 @@ export const ColumnEditorDrawer: React.FC<ColumnEditorDrawerProps> = ({
   setDraftPrefix,
   draftOptions,
   setDraftOptions,
-  draftTarget,
-  setDraftTarget,
-  draftFormula,
-  setDraftFormula,
-  onSave,
-  availableTables,
-  isMobile,
+  draftTarget, setDraftTarget, draftTargetField, setDraftTargetField,
+  draftFilterRule = '', setDraftFilterRule, targetRecords = [], targetColumns = [],
+  draftSecondaryTarget = '', setDraftSecondaryTarget,
+  draftSecondaryTargetField = '', setDraftSecondaryTargetField,
+  draftSecondaryFilterRule = '', setDraftSecondaryFilterRule,
+  secondaryTargetRecords = [], secondaryTargetColumns = [],
+  draftFormula, setDraftFormula, onSave, availableTables, isMobile,
 }) => {
   if (!isOpen) return null;
 
@@ -163,23 +178,25 @@ export const ColumnEditorDrawer: React.FC<ColumnEditorDrawerProps> = ({
         )}
 
         {(draftType === 'relation_single' || draftType === 'relation_multi') && (
-          <div>
-            <label style={{ display: 'block', fontSize: '12px', color: 'var(--text-tertiary)', marginBottom: '0.3rem' }}>
-              Foreign Target Table
-            </label>
-            <select
-              className="input-base"
-              style={{ width: '100%', minHeight: '44px' }}
-              value={draftTarget}
-              onChange={(e) => setDraftTarget(e.target.value)}
-            >
-              {availableTables.map((t) => (
-                <option key={t} value={t}>
-                  {t}
-                </option>
-              ))}
-            </select>
-          </div>
+          <RelationColumnConfig
+            draftTarget={draftTarget}
+            setDraftTarget={setDraftTarget}
+            draftTargetField={draftTargetField}
+            setDraftTargetField={setDraftTargetField}
+            draftFilterRule={draftFilterRule}
+            setDraftFilterRule={setDraftFilterRule}
+            targetRecords={targetRecords}
+            targetColumns={targetColumns}
+            draftSecondaryTarget={draftSecondaryTarget}
+            setDraftSecondaryTarget={setDraftSecondaryTarget}
+            draftSecondaryTargetField={draftSecondaryTargetField}
+            setDraftSecondaryTargetField={setDraftSecondaryTargetField}
+            draftSecondaryFilterRule={draftSecondaryFilterRule}
+            setDraftSecondaryFilterRule={setDraftSecondaryFilterRule}
+            secondaryTargetRecords={secondaryTargetRecords}
+            secondaryTargetColumns={secondaryTargetColumns}
+            availableTables={availableTables}
+          />
         )}
 
         <div>

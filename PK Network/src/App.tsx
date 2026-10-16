@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import { Header } from './components/Header';
 import { TableTabs } from './components/TableTabs';
 import { SchemaView } from './components/SchemaView';
@@ -10,25 +10,108 @@ import { VaultGate } from './components/VaultGate';
 import { TableSettingsModal } from './components/TableSettingsModal';
 import { NewTableModal } from './components/NewTableModal';
 import { WorkspaceOutliner } from './components/WorkspaceOutliner';
-import { TableSchema, TableRecord, TableGroup, TableMetaRecord } from './types';
+import { TableSchema, TableRecord, TableGroup, TableMetaRecord, TableState } from './types';
 import { api, getAuthKey, checkUrlKey } from './services/api';
 import { generateHexId } from './utils/id';
+import { SaveStatusNotification } from './components/SaveStatusNotification';
+import { ActionToast } from './components/ActionToast';
+import {
+  ActionNotification,
+  NotificationActionType,
+  createNotification,
+  formatRecordSummary,
+  formatValueForDisplay,
+} from './services/notificationManager';
+import { useSaveTracker } from './hooks/useSaveTracker';
+import { resolveActiveSubdomain, navigateToSubdomain, AppSubdomain } from './utils/subdomain';
+import { HazardTriggerApp } from './components/hazard/HazardTriggerApp';
+import { PromptStudioApp } from './components/prompt/PromptStudioApp';
+import { HairCodexApp } from './components/hair/HairCodexApp';
+import { FacetCodexApp } from './components/facet/FacetCodexApp';
 
 export const App: React.FC = () => {
+  const [activeApp, setActiveApp] = useState<AppSubdomain>(() => resolveActiveSubdomain());
   const [mode, setMode] = useState<'schema' | 'data'>('data');
   const [theme, setTheme] = useState<'dark' | 'light'>('dark');
   const [tables, setTables] = useState<Record<string, TableSchema>>({});
   const [activeTableName, setActiveTableName] = useState<string>('quotes');
-  const [records, setRecords] = useState<TableRecord[]>([]);
+  // Sovereign multi-table RAM cache: table records are kept in memory once loaded (0ms switch, zero re-curling)
+  const [tableRecords, setTableRecords] = useState<Record<string, TableRecord[]>>({});
+  const records = useMemo(() => tableRecords[activeTableName] || [], [tableRecords, activeTableName]);
   const [recordCounts, setRecordCounts] = useState<Record<string, number>>({});
   const [tableMetadata, setTableMetadata] = useState<TableMetaRecord[]>([]);
   const [groups, setGroups] = useState<TableGroup[]>([]);
+  const [tableStates, setTableStates] = useState<Record<string, TableState>>({});
   const [relationOptions, setRelationOptions] = useState<Record<string, { id: string; label: string }[]>>({});
+  const [relationStore, setRelationStore] = useState<Record<string, Record<string, TableRecord>>>({});
+
+  const currentSchema = useMemo(
+    () => tables[activeTableName] || { table_name: activeTableName, columns: [] },
+    [tables, activeTableName]
+  );
 
   const [isConnected, setIsConnected] = useState<boolean>(false);
   const [isSyncing, setIsSyncing] = useState<boolean>(false);
-  const [isSaving, setIsSaving] = useState<boolean>(false);
-  const [toast, setToast] = useState<string | null>(null);
+  const [notifications, setNotifications] = useState<ActionNotification[]>([]);
+  const [recentActivity, setRecentActivity] = useState<ActionNotification[]>([]);
+  const [lastAction, setLastAction] = useState<ActionNotification | null>(null);
+
+  const dismissNotification = useCallback((id: string) => {
+    setNotifications((prev) => prev.filter((n) => n.id !== id));
+  }, []);
+
+  const notify = useCallback(
+    (type: NotificationActionType, title: string, details?: string) => {
+      const notif = createNotification(type, title, details);
+      setLastAction(notif);
+      setRecentActivity((prev) => [notif, ...prev.slice(0, 19)]);
+      setNotifications((prev) => [notif, ...prev.slice(0, 3)]);
+      setTimeout(() => {
+        setNotifications((prev) => prev.filter((n) => n.id !== notif.id));
+      }, 4000);
+    },
+    []
+  );
+
+  const showToast = useCallback(
+    (msg: string, type: NotificationActionType = 'info', details?: string) => {
+      let resolvedType = type;
+      if (type === 'info') {
+        const lower = msg.toLowerCase();
+        if (lower.startsWith('deleted') || lower.includes('delete failed')) {
+          resolvedType = lower.includes('failed') ? 'error' : 'deleted';
+        } else if (lower.startsWith('saved') || lower.startsWith('created') || lower.includes('synchronized')) {
+          resolvedType = 'saved';
+        } else if (lower.includes('failed') || lower.includes('error')) {
+          resolvedType = 'error';
+        } else if (lower.startsWith('updated') || lower.startsWith('nested') || lower.startsWith('moved')) {
+          resolvedType = 'changed';
+        }
+      }
+      notify(resolvedType, msg, details);
+    },
+    [notify]
+  );
+
+  const {
+    isSaving,
+    setIsSaving,
+    lastSavedTime,
+    setLastSavedTime,
+    draftSchemas,
+    unsavedChanges,
+    handleColumnsChange,
+    handleReorderRecords,
+    saveTable,
+    saveAll,
+    discardAll,
+    autoSaveBeforeTabSwitch,
+  } = useSaveTracker({
+    tables,
+    setTables,
+    tableMetadata,
+    showToast,
+  });
 
   // Auth & Lock State
   const [isLocked, setIsLocked] = useState<boolean>(false);
@@ -52,11 +135,6 @@ export const App: React.FC = () => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  const showToast = (msg: string) => {
-    setToast(msg);
-    setTimeout(() => setToast(null), 3000);
-  };
-
   const toggleTheme = () => {
     const next = theme === 'dark' ? 'light' : 'dark';
     setTheme(next);
@@ -64,30 +142,67 @@ export const App: React.FC = () => {
   };
 
   // Pure RAM lazy-loader for foreign relation options (0ms initial startup, zero waterfall)
-  const ensureRelationLoaded = async (targetTable?: string) => {
-    if (!targetTable || relationOptions[targetTable]) return;
+  const syncTableToRelationStore = (tableName: string, tableRecordsList: TableRecord[]) => {
+    const byId: Record<string, TableRecord> = {};
+    tableRecordsList.forEach((r: TableRecord) => {
+      if (r && r.id) byId[r.id] = r;
+    });
+    setRelationStore((prev) => ({ ...prev, [tableName]: byId }));
+
+    const opts = tableRecordsList.slice(0, 150).map((r: TableRecord) => {
+      const label = r.name || r.main_content || r.title || r.headline || r.id;
+      return { id: r.id, label: String(label).slice(0, 50) };
+    });
+    setRelationOptions((prev) => ({ ...prev, [tableName]: opts }));
+  };
+
+  const inFlightRelationsRef = useRef<Set<string>>(new Set());
+  const tableRecordsRef = useRef(tableRecords);
+  tableRecordsRef.current = tableRecords;
+
+  const ensureRelationLoaded = useCallback(async (targetTable?: string) => {
+    if (!targetTable) return;
+    const currentRecs = tableRecordsRef.current[targetTable];
+    if (currentRecs && currentRecs.length > 0) return;
+    if (inFlightRelationsRef.current.has(targetTable)) return;
+
+    inFlightRelationsRef.current.add(targetTable);
     try {
       const res = await api.getRecords(targetTable);
       if (res.records) {
-        const opts = res.records.slice(0, 100).map((r) => {
-          const label = r.name || r.main_content || r.title || r.id;
-          return { id: r.id, label: String(label).slice(0, 36) };
-        });
-        setRelationOptions((prev) => ({ ...prev, [targetTable]: opts }));
+        setTableRecords((prev) => ({ ...prev, [targetTable]: res.records }));
+        syncTableToRelationStore(targetTable, res.records);
       }
     } catch {
       // Soft-fail for missing table
+    } finally {
+      inFlightRelationsRef.current.delete(targetTable);
     }
-  };
+  }, []);
 
-  const loadRecords = async (tableName: string) => {
+  // Preload foreign relation records for current table's relation columns
+  useEffect(() => {
+    if (!currentSchema || !currentSchema.columns) return;
+    (currentSchema.columns || [])
+      .filter((c) => c.type === 'relation_single' || c.type === 'relation_multi')
+      .forEach((c) => {
+        if (c.metadata?.target) ensureRelationLoaded(c.metadata.target);
+        if (c.metadata?.secondary_target) ensureRelationLoaded(c.metadata.secondary_target);
+      });
+  }, [activeTableName, currentSchema]);
+
+  const loadRecords = async (tableName: string, force = false) => {
+    // If table already resides in RAM and force reload is not requested, return instantly (0ms)
+    if (!force && tableRecords[tableName] !== undefined) return;
     try {
       const res = await api.getRecords(tableName);
-      setRecords(res.records || []);
-      setRecordCounts((prev) => ({ ...prev, [tableName]: res.count || res.records?.length || 0 }));
+      const recs = res.records || [];
+      setTableRecords((prev) => ({ ...prev, [tableName]: recs }));
+      setRecordCounts((prev) => ({ ...prev, [tableName]: res.count || recs.length || 0 }));
+      syncTableToRelationStore(tableName, recs);
     } catch (e: any) {
       console.warn('Error loading records for table:', tableName, e);
-      setRecords([]);
+      setTableRecords((prev) => ({ ...prev, [tableName]: [] }));
     }
   };
 
@@ -122,14 +237,31 @@ export const App: React.FC = () => {
           } catch {}
         }
 
+        // Populate sovereign persistent table states
+        if (tablesRes.states) {
+          setTableStates(tablesRes.states);
+        }
+
         const tableKeys = Object.keys(tablesRes.tables);
         const dataKeys = tableKeys.filter((k) => k !== 'tables');
         const targetTable = tableKeys.includes(activeTableName)
           ? activeTableName
           : dataKeys[0] || tableKeys[0];
         setActiveTableName(targetTable);
-        // Only load records for the active table
-        await loadRecords(targetTable);
+        // Only load records for the active table initially
+        await loadRecords(targetTable, true);
+
+        // Preload remaining tables asynchronously in background (0ms tab transitions across all tables)
+        const otherTables = dataKeys.filter((k) => k !== targetTable);
+        otherTables.forEach((tbl) => {
+          api.getRecords(tbl).then((res) => {
+            if (res.records) {
+              setTableRecords((prev) => ({ ...prev, [tbl]: res.records }));
+              setRecordCounts((prev) => ({ ...prev, [tbl]: res.count || res.records.length || 0 }));
+              syncTableToRelationStore(tbl, res.records);
+            }
+          }).catch(() => {});
+        });
       }
       showToast('Turso database synchronized');
     } catch (err: any) {
@@ -170,8 +302,20 @@ export const App: React.FC = () => {
   }, []);
 
   const handleSelectTable = async (name: string) => {
+    if (name === activeTableName) return;
+    await autoSaveBeforeTabSwitch(activeTableName);
     setActiveTableName(name);
-    await loadRecords(name);
+    // Instantaneous 0ms switch if already loaded into RAM; only curl if brand new
+    if (tableRecords[name] === undefined) {
+      await loadRecords(name);
+    }
+  };
+
+  const handleSetMode = async (nextMode: 'schema' | 'data') => {
+    if (mode === 'schema' && nextMode === 'data') {
+      await autoSaveBeforeTabSwitch(activeTableName);
+    }
+    setMode(nextMode);
   };
 
   const handleOpenAddTableWithGroup = (groupId?: string) => {
@@ -208,7 +352,7 @@ export const App: React.FC = () => {
           { id: newTable.id, name: newTable.name, parent_id: null, group_id: newTable.group_id }
         ]);
         setActiveTableName(newTable.id);
-        await loadRecords(newTable.id);
+        await loadRecords(newTable.id, true);
         showToast(`Created table "${newTable.name}"`);
       }
     } catch (e: any) {
@@ -272,12 +416,19 @@ export const App: React.FC = () => {
         delete next[tableName];
         return next;
       });
+      setTableRecords((prev) => {
+        const next = { ...prev };
+        delete next[tableName];
+        return next;
+      });
       setTableMetadata((prev) => prev.filter((m) => m.id !== tableName));
       showToast(`Deleted table "${tableName}"`);
       const remaining = Object.keys(tables).filter((k) => k !== tableName && k !== 'tables');
       if (remaining.length > 0) {
         setActiveTableName(remaining[0]);
-        await loadRecords(remaining[0]);
+        if (tableRecords[remaining[0]] === undefined) {
+          await loadRecords(remaining[0]);
+        }
       }
     } catch (e: any) {
       showToast(`Delete failed: ${e.message}`);
@@ -286,18 +437,22 @@ export const App: React.FC = () => {
   };
 
   const handleSaveSchema = async (updated: TableSchema) => {
-    setIsSaving(true);
+    await saveTable(updated.table_name, updated.columns);
+  };
+
+  const handleSaveTableState = async (tableName: string, stateUpdate: Partial<TableState>) => {
+    setTableStates((prev) => {
+      const existing = prev[tableName] || { table_name: tableName };
+      return { ...prev, [tableName]: { ...existing, ...stateUpdate } };
+    });
     try {
-      await api.saveTableSchema(updated.table_name, updated);
-      setTables((prev) => ({ ...prev, [updated.table_name]: updated }));
-      showToast(`Saved schema for "${updated.table_name}" to Turso Cloud`);
+      await api.saveTableState(tableName, stateUpdate);
     } catch (e: any) {
-      showToast(`Failed to save schema: ${e.message}`);
-    } finally {
-      setIsSaving(false);
+      console.warn(`Failed to persist table state for ${tableName}:`, e);
     }
   };
 
+  // RAM-First Optimistic Save with Field-Level Dirty Diff
   // RAM-First Optimistic Save with Field-Level Dirty Diff
   const handleSaveRecord = async (formData: Partial<TableRecord>) => {
     setIsSaving(true);
@@ -312,7 +467,15 @@ export const App: React.FC = () => {
           }
         }
         // Update in RAM immediately (0ms)
-        setRecords((prev) => prev.map((r) => (r.id === formData.id ? { ...r, ...formData } : r)));
+        setTableRecords((prev) => ({
+          ...prev,
+          [activeTableName]: (prev[activeTableName] || []).map((r) => (r.id === formData.id ? { ...r, ...formData } : r)),
+        }));
+        setRelationStore((prev) => {
+          const currentTable = prev[activeTableName] || {};
+          const updatedRec = { ...(currentTable[formData.id as string] || {}), ...formData };
+          return { ...prev, [activeTableName]: { ...currentTable, [formData.id as string]: updatedRec as TableRecord } };
+        });
         if (activeTableName === 'tables') {
           setTableMetadata((prev) => prev.map((m) => (m.id === formData.id ? { ...m, ...formData } : m)));
         }
@@ -321,21 +484,35 @@ export const App: React.FC = () => {
         if (Object.keys(dirtyDiff).length > 0) {
           await api.updateRecord(activeTableName, formData.id, dirtyDiff);
         }
-        showToast(`Updated record #${formData.id}`);
+        setLastSavedTime(new Date());
+        const changedCols = Object.keys(dirtyDiff)
+          .map((k) => currentSchema.columns.find((c) => c.slug === k)?.name || k)
+          .join(', ');
+        const recSummary = formatRecordSummary(existing, formData.id);
+        notify('saved', `Saved changes: ${changedCols || 'all fields'}`, `${activeTableName} • ${recSummary}`);
       } else {
         const res = await api.createRecord(activeTableName, formData);
-        setRecords((prev) => [res.record, ...prev]);
+        setTableRecords((prev) => ({
+          ...prev,
+          [activeTableName]: [res.record, ...(prev[activeTableName] || [])],
+        }));
         setRecordCounts((prev) => ({ ...prev, [activeTableName]: (prev[activeTableName] || 0) + 1 }));
+        setRelationStore((prev) => {
+          const currentTable = prev[activeTableName] || {};
+          return { ...prev, [activeTableName]: { ...currentTable, [res.record.id]: res.record } };
+        });
         if (activeTableName === 'tables') {
           setTableMetadata((prev) => [...prev, res.record as unknown as TableMetaRecord]);
           // Pull new schema definition created on backend
           const fresh = await api.getTables();
           if (fresh.tables) setTables(fresh.tables);
         }
-        showToast('Created new record on Turso Cloud');
+        setLastSavedTime(new Date());
+        const recSummary = formatRecordSummary(res.record, res.record?.id);
+        notify('saved', `Created record "${recSummary}"`, `${activeTableName} • #${res.record?.id || 'new'}`);
       }
     } catch (e: any) {
-      showToast(`Save failed: ${e.message}`);
+      notify('error', `Save failed: ${e.message}`, activeTableName);
       throw e;
     } finally {
       setIsSaving(false);
@@ -343,9 +520,25 @@ export const App: React.FC = () => {
   };
 
   const handleDeleteRecord = async (id: string) => {
+    const targetRec = records.find((r) => r.id === id);
+    const recSummary = formatRecordSummary(targetRec, id);
+
     // Optimistic deletion in RAM
-    setRecords((prev) => prev.filter((r) => r.id !== id));
+    setTableRecords((prev) => ({
+      ...prev,
+      [activeTableName]: (prev[activeTableName] || []).filter((r) => r.id !== id),
+    }));
     setRecordCounts((prev) => ({ ...prev, [activeTableName]: Math.max(0, (prev[activeTableName] || 1) - 1) }));
+    setRelationStore((prev) => {
+      if (!prev[activeTableName]) return prev;
+      const nextTable = { ...prev[activeTableName] };
+      delete nextTable[id];
+      return { ...prev, [activeTableName]: nextTable };
+    });
+    setRelationOptions((prev) => {
+      if (!prev[activeTableName]) return prev;
+      return { ...prev, [activeTableName]: prev[activeTableName].filter((o) => o.id !== id) };
+    });
     if (activeTableName === 'tables') {
       setTableMetadata((prev) => prev.filter((m) => m.id !== id));
       setTables((prev) => {
@@ -353,33 +546,69 @@ export const App: React.FC = () => {
         delete next[id];
         return next;
       });
+      setTableRecords((prev) => {
+        const next = { ...prev };
+        delete next[id];
+        return next;
+      });
     }
     try {
       await api.deleteRecord(activeTableName, id);
-      showToast(`Deleted record #${id}`);
+      notify('deleted', `Deleted "${recSummary}"`, `${activeTableName} • #${id}`);
     } catch (e: any) {
-      showToast(`Delete failed: ${e.message}`);
-      await loadRecords(activeTableName);
+      notify('error', `Delete failed: ${e.message}`, `${activeTableName} • #${id}`);
+      await loadRecords(activeTableName, true);
     }
   };
 
   // Discrete Field-Level Inline Update
   const handleInlineUpdate = async (id: string, field: string, value: any) => {
+    const col = currentSchema.columns.find((c) => c.slug === field);
+    const colName = col?.name || field;
+    const displayVal = formatValueForDisplay(value);
+    const targetRec = records.find((r) => r.id === id);
+    const recSummary = formatRecordSummary(targetRec, id);
+
     // 0ms RAM update
-    setRecords((prev) => prev.map((r) => (r.id === id ? { ...r, [field]: value } : r)));
+    setTableRecords((prev) => ({
+      ...prev,
+      [activeTableName]: (prev[activeTableName] || []).map((r) => (r.id === id ? { ...r, [field]: value } : r)),
+    }));
+    setRelationStore((prev) => {
+      const currentTable = prev[activeTableName] || {};
+      const updatedRec = { ...(currentTable[id] || {}), [field]: value };
+      return { ...prev, [activeTableName]: { ...currentTable, [id]: updatedRec as TableRecord } };
+    });
     if (activeTableName === 'tables') {
       setTableMetadata((prev) => prev.map((m) => (m.id === id ? { ...m, [field]: value } : m)));
     }
     try {
       // Send discrete field diff to Turso
       await api.updateRecord(activeTableName, id, { [field]: value });
+      setLastSavedTime(new Date());
+      notify('saved', `Saved "${colName}" → "${displayVal}"`, `${activeTableName} • ${recSummary}`);
     } catch (e: any) {
-      showToast(`Update failed: ${e.message}`);
-      await loadRecords(activeTableName);
+      notify('error', `Update failed: ${e.message}`, `${activeTableName} • #${id}`);
+      await loadRecords(activeTableName, true);
     }
   };
 
-  const currentSchema = tables[activeTableName] || { table_name: activeTableName, columns: [] };
+  // Auto-save flat row reorders to Turso immediately without unsaved changes banner
+  const handleAutoReorderRecords = async (tableName: string, newRecs: TableRecord[]) => {
+    setTableRecords((prev) => ({ ...prev, [tableName]: newRecs }));
+    const schemaCols = tables[tableName]?.columns || [];
+    if (schemaCols.some((c) => c.slug === 'idx')) {
+      for (let i = 0; i < newRecs.length; i++) {
+        const r = newRecs[i];
+        const newIdx = i + 1;
+        if (r.idx !== newIdx) {
+          api.updateRecord(tableName, r.id, { idx: newIdx }).catch(() => {});
+        }
+      }
+      setLastSavedTime(new Date());
+      notify('changed', `Saved row order`, `${tableName} (${newRecs.length} rows)`);
+    }
+  };
 
   // Notion-Style: Pure Inline Row Creation (Zero Popups)
   const handleAddNewRow = async (): Promise<TableRecord | null> => {
@@ -388,25 +617,45 @@ export const App: React.FC = () => {
     const newId = generateHexId(prefix, activeTableName);
     const newRecord: TableRecord = { id: newId };
 
-    if (currentSchema.columns.some((c) => c.slug === 'date')) {
-      newRecord.date = new Date().toISOString().split('T')[0];
-    }
+    (currentSchema.columns || []).forEach((col) => {
+      if (col.slug === 'id') return;
+      if (col.slug === 'date') {
+        newRecord.date = new Date().toISOString().split('T')[0];
+      } else if (col.slug === 'tag') {
+        newRecord.tag = newId;
+      } else if (col.slug === 'name') {
+        newRecord.name = newId;
+      } else if (col.slug === 'group_id') {
+        newRecord.group_id = 'forehead_accents';
+      } else if (col.type === 'relation_multi' || col.type === 'enum_multi') {
+        newRecord[col.slug] = [];
+      }
+    });
+
     if (currentSchema.columns.some((c) => c.slug === 'idx')) {
       const maxIdx = records.reduce((max, r) => Math.max(max, Number(r.idx) || 0), 0);
       newRecord.idx = maxIdx + 1;
     }
 
     // 0ms Optimistic RAM update
-    setRecords((prev) => [...prev, newRecord]);
+    setTableRecords((prev) => ({
+      ...prev,
+      [activeTableName]: [...(prev[activeTableName] || []), newRecord],
+    }));
     setRecordCounts((prev) => ({ ...prev, [activeTableName]: (prev[activeTableName] || 0) + 1 }));
+    setRelationStore((prev) => {
+      const currentTable = prev[activeTableName] || {};
+      return { ...prev, [activeTableName]: { ...currentTable, [newId]: newRecord } };
+    });
 
     try {
       await api.createRecord(activeTableName, newRecord);
-      showToast(`Created row ${newId}`);
+      setLastSavedTime(new Date());
+      notify('saved', `Created row #${newId}`, activeTableName);
       return newRecord;
     } catch (e: any) {
-      showToast(`Row creation error: ${e.message}`);
-      await loadRecords(activeTableName);
+      notify('error', `Row creation error: ${e.message}`, activeTableName);
+      await loadRecords(activeTableName, true);
       return null;
     }
   };
@@ -414,17 +663,103 @@ export const App: React.FC = () => {
   const openDrawerForRecord = (record: TableRecord | null) => {
     setSelectedRecord(record);
     // Lazily load relations required by this table's schema only when drawer opens
-    currentSchema.columns
-      .filter((c) => (c.type === 'relation_single' || c.type === 'relation_multi') && c.metadata?.target)
-      .forEach((c) => ensureRelationLoaded(c.metadata?.target));
+    (currentSchema.columns || [])
+      .filter((c) => c.type === 'relation_single' || c.type === 'relation_multi')
+      .forEach((c) => {
+        if (c.metadata?.target) ensureRelationLoaded(c.metadata.target);
+        if (c.metadata?.secondary_target) ensureRelationLoaded(c.metadata.secondary_target);
+      });
     setDrawerOpen(true);
   };
+
+  useEffect(() => {
+    const handlePopState = () => {
+      setActiveApp(resolveActiveSubdomain());
+    };
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
+
+  const handleSwitchToHazard = useCallback(() => {
+    setActiveApp('hazard');
+    navigateToSubdomain('hazard');
+  }, []);
+
+  const handleSwitchToPrompt = useCallback(() => {
+    setActiveApp('prompt');
+    navigateToSubdomain('prompt');
+  }, []);
+
+  const handleSwitchToPk = useCallback(() => {
+    setActiveApp('pk');
+    navigateToSubdomain('pk');
+  }, []);
+
+  const handleSwitchToHair = useCallback(() => {
+    setActiveApp('hair');
+    navigateToSubdomain('hair');
+  }, []);
+
+  const handleSwitchToFacet = useCallback(() => {
+    setActiveApp('facet');
+    navigateToSubdomain('facet');
+  }, []);
+
+  if (activeApp === 'facet') {
+    return (
+      <FacetCodexApp
+        onSwitchToPk={handleSwitchToPk}
+        onSwitchToHazard={handleSwitchToHazard}
+        onSwitchToPrompt={handleSwitchToPrompt}
+        onSwitchToHair={handleSwitchToHair}
+        theme={theme}
+        onToggleTheme={toggleTheme}
+      />
+    );
+  }
+
+  if (activeApp === 'hair') {
+    return (
+      <HairCodexApp
+        onSwitchToPk={handleSwitchToPk}
+        onSwitchToHazard={handleSwitchToHazard}
+        onSwitchToPrompt={handleSwitchToPrompt}
+        onSwitchToFacet={handleSwitchToFacet}
+        theme={theme}
+        onToggleTheme={toggleTheme}
+      />
+    );
+  }
+
+  if (activeApp === 'hazard') {
+    return (
+      <HazardTriggerApp
+        onSwitchToPk={handleSwitchToPk}
+        onSwitchToPrompt={handleSwitchToPrompt}
+        onSwitchToHair={handleSwitchToHair}
+        theme={theme}
+        onToggleTheme={toggleTheme}
+      />
+    );
+  }
+
+  if (activeApp === 'prompt') {
+    return (
+      <PromptStudioApp
+        onSwitchToPk={handleSwitchToPk}
+        onSwitchToHazard={handleSwitchToHazard}
+        onSwitchToHair={handleSwitchToHair}
+        theme={theme}
+        onToggleTheme={toggleTheme}
+      />
+    );
+  }
 
   return (
     <div className="app-container">
       <Header
         mode={mode}
-        setMode={setMode}
+        setMode={handleSetMode}
         isConnected={isConnected}
         isSyncing={isSyncing}
         onSync={refreshAll}
@@ -436,6 +771,9 @@ export const App: React.FC = () => {
         isMobile={isMobile}
         onToggleOutliner={() => setOutlinerOpen((prev) => !prev)}
         isOutlinerOpen={outlinerOpen}
+        onSwitchToHazard={handleSwitchToHazard}
+        onSwitchToPrompt={handleSwitchToPrompt}
+        onSwitchToHair={handleSwitchToHair}
       />
 
       <TableTabs
@@ -474,6 +812,10 @@ export const App: React.FC = () => {
             <SchemaView
               schema={currentSchema}
               availableTables={Object.keys(tables)}
+              tables={tables}
+              relationStore={relationStore}
+              draftColumns={draftSchemas[activeTableName]}
+              onColumnsChange={(cols) => handleColumnsChange(activeTableName, cols)}
               onSaveSchema={handleSaveSchema}
               isSaving={isSaving}
               isMobile={isMobile}
@@ -486,6 +828,7 @@ export const App: React.FC = () => {
               onNewRecord={handleAddNewRow}
               onDeleteRecord={handleDeleteRecord}
               isLoading={isSyncing}
+              relationStore={relationStore}
             />
           ) : (
             <DataGrid
@@ -495,11 +838,15 @@ export const App: React.FC = () => {
               onNewRecord={handleAddNewRow}
               onDeleteRecord={handleDeleteRecord}
               onInlineUpdate={handleInlineUpdate}
-              onReorderRecords={(newRecs) => setRecords(newRecs)}
+              onReorderRecords={(newRecs) => handleAutoReorderRecords(activeTableName, newRecs)}
               isLoading={isSyncing}
               relationOptions={relationOptions}
+              relationStore={relationStore}
+              tables={tables}
               onEnsureRelation={ensureRelationLoaded}
               onSaveSchema={handleSaveSchema}
+              tableState={tableStates[activeTableName]}
+              onSaveTableState={(st) => handleSaveTableState(activeTableName, st)}
             />
           )}
         </main>
@@ -514,6 +861,7 @@ export const App: React.FC = () => {
         onDelete={handleDeleteRecord}
         isSaving={isSaving}
         relationOptions={relationOptions}
+        relationStore={relationStore}
         allRecords={records}
       />
 
@@ -552,11 +900,21 @@ export const App: React.FC = () => {
         />
       )}
 
-      {toast && (
-        <div className="toast-container">
-          <div className="toast">{toast}</div>
-        </div>
-      )}
+      <SaveStatusNotification
+        isSaving={isSaving}
+        isSyncing={isSyncing}
+        lastSavedTime={lastSavedTime}
+        unsavedChanges={unsavedChanges}
+        recentActivity={recentActivity}
+        lastAction={lastAction}
+        onSaveAll={saveAll}
+        onDiscardAll={() => {
+          discardAll();
+          loadRecords(activeTableName, true);
+        }}
+      />
+
+      <ActionToast notifications={notifications} onDismiss={dismissNotification} />
     </div>
   );
 };

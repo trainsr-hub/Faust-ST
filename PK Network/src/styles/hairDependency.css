@@ -1,0 +1,230 @@
+/* Faust Structured Hair Dependency Grid & Arrow Overlay */
+.dep-view-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background: var(--bg-canvas, #090d16);
+  padding: 1.25rem;
+  box-sizing: border-box;
+  user-select: none;
+}
+
+.dep-view-container.dragging-arrow {
+  cursor: crosshair;
+}
+
+/* Category Sections */
+.dep-category-section {
+  margin-bottom: 2rem;
+  background: rgba(15, 23, 42, 0.4);
+  border: 1px solid var(--border-light, rgba(255, 255, 255, 0.08));
+  border-radius: 12px;
+  padding: 1rem 1.25rem 1.25rem 1.25rem;
+}
+
+.dep-category-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.dep-category-title {
+  font-size: 13.5px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: #f1f5f9;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dep-card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 16px;
+  position: relative;
+}
+
+/* Structured Non-Overlapping Card */
+.dep-hair-card {
+  position: relative;
+  height: 245px;
+  background: rgba(15, 23, 42, 0.85);
+  border: 1px solid var(--border-light, rgba(255, 255, 255, 0.1));
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(12px);
+  transition: all 0.15s ease;
+  cursor: default;
+}
+
+.dep-hair-card:hover {
+  border-color: rgba(244, 63, 94, 0.5);
+  box-shadow: 0 8px 24px rgba(244, 63, 94, 0.2);
+  transform: translateY(-2px);
+}
+
+.dep-hair-card.drag-source {
+  border-color: #38bdf8;
+  box-shadow: 0 0 0 2px #38bdf8, 0 8px 24px rgba(56, 189, 248, 0.4);
+}
+
+.dep-hair-card.drop-target {
+  border-color: #f43f5e;
+  box-shadow: 0 0 0 3px #f43f5e, 0 0 24px rgba(244, 63, 94, 0.6);
+  transform: scale(1.03);
+  animation: targetPulse 0.8s infinite alternate;
+}
+
+@keyframes targetPulse {
+  from { border-color: #f43f5e; }
+  to { border-color: #fb7185; }
+}
+
+.dep-card-header {
+  padding: 6px 8px;
+  background: rgba(30, 41, 59, 0.6);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.dep-card-tag {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: #f8fafc;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 130px;
+}
+
+/* Image Thumb Box with Arrow Drag Handle */
+.dep-card-img-box {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  background: #020617;
+  cursor: grab;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dep-card-img-box:active {
+  cursor: grabbing;
+}
+
+.dep-card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+  transition: transform 0.2s ease;
+}
+
+.dep-card-drag-hint {
+  position: absolute;
+  bottom: 6px;
+  right: 6px;
+  background: rgba(15, 23, 42, 0.85);
+  border: 1px solid rgba(56, 189, 248, 0.4);
+  color: #38bdf8;
+  font-size: 9.5px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+  pointer-events: none;
+}
+
+.dep-hair-card:hover .dep-card-drag-hint {
+  opacity: 1;
+}
+
+/* Footer & Dependency Badges */
+.dep-card-footer {
+  padding: 6px 8px;
+  background: rgba(15, 23, 42, 0.95);
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.dep-badge-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  min-height: 20px;
+}
+
+.dep-parent-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 2px 6px;
+  background: rgba(56, 189, 248, 0.15);
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  color: #38bdf8;
+  font-size: 9.5px;
+  font-weight: 600;
+  border-radius: 4px;
+  max-width: 100%;
+}
+
+.dep-badge-close {
+  cursor: pointer;
+  color: #94a3b8;
+  padding: 0 2px;
+  font-weight: 700;
+}
+
+.dep-badge-close:hover {
+  color: #f43f5e;
+}
+
+/* Global SVG Arrow Overlay */
+.dep-svg-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 25;
+}
+
+.dep-arrow-path {
+  fill: none;
+  stroke: rgba(244, 63, 94, 0.65);
+  stroke-width: 2.5px;
+  pointer-events: stroke;
+  cursor: pointer;
+  transition: stroke 0.15s ease, stroke-width 0.15s ease;
+}
+
+.dep-arrow-path:hover {
+  stroke: #fb7185;
+  stroke-width: 4.5px;
+  filter: drop-shadow(0 0 8px rgba(244, 63, 94, 0.8));
+}
+
+.dep-arrow-dragging {
+  fill: none;
+  stroke: #38bdf8;
+  stroke-width: 2.5px;
+  stroke-dasharray: 6 4;
+}

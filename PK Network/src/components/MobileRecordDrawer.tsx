@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { X, Save, Trash2, Check, Plus } from 'lucide-react';
+import { X, Save, Trash2, Check, Plus, Link2 } from 'lucide-react';
 import { TableSchema, TableRecord, ColumnDefinition } from '../types';
-import { NotionTagPill, parseMultiValue, getTagColor } from './NotionMultiSelect';
+import { NotionTagPill, parseMultiValue, getTagColor, RelationTagPill } from './NotionMultiSelect';
+import { buildDualTableRelationOptions, resolveRelationLabel } from '../services/relationFilter';
 
 interface MobileRecordDrawerProps {
   isOpen: boolean;
@@ -12,6 +13,7 @@ interface MobileRecordDrawerProps {
   onDelete?: (id: string) => Promise<void>;
   isSaving: boolean;
   relationOptions?: Record<string, { id: string; label: string }[]>;
+  relationStore?: Record<string, Record<string, TableRecord>>;
   allRecords?: TableRecord[];
 }
 
@@ -24,10 +26,38 @@ export const MobileRecordDrawer: React.FC<MobileRecordDrawerProps> = ({
   onDelete,
   isSaving,
   relationOptions = {},
+  relationStore = {},
   allRecords = [],
 }) => {
   const [formData, setFormData] = useState<Record<string, any>>({});
   const [newTagInput, setNewTagInput] = useState<Record<string, string>>({});
+
+  // Resolve human-readable relation label across single or dual target tables
+  const getResolvedRelationLabel = (col: ColumnDefinition, relId: string): string => {
+    return resolveRelationLabel(
+      relId,
+      col.metadata?.target,
+      col.metadata?.target_field,
+      relationStore,
+      relationOptions?.[col.metadata?.target || ''],
+      col.metadata?.secondary_target,
+      col.metadata?.secondary_target_field
+    );
+  };
+
+  // Get available options formatted across primary and secondary target tables
+  const getColRelationOptions = (col: ColumnDefinition) => {
+    const t1 = col.metadata?.target;
+    const t2 = col.metadata?.secondary_target;
+    if (!t1 && !t2) return [];
+    const r1 = t1 && relationStore?.[t1] ? Object.values(relationStore[t1]) : [];
+    const r2 = t2 && relationStore?.[t2] ? Object.values(relationStore[t2]) : [];
+    return buildDualTableRelationOptions(
+      r1, t1, col.metadata?.target_field, col.metadata?.filter_rule,
+      r2, t2, col.metadata?.secondary_target_field, col.metadata?.secondary_filter_rule,
+      schema.table_name
+    );
+  };
 
   useEffect(() => {
     if (record) {
@@ -50,7 +80,15 @@ export const MobileRecordDrawer: React.FC<MobileRecordDrawerProps> = ({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    await onSave(formData);
+    const payload = { ...formData };
+    for (const [k, v] of Object.entries(payload)) {
+      if (typeof v === 'string' && (v.trim().startsWith('{') || v.trim().startsWith('['))) {
+        try {
+          payload[k] = JSON.parse(v);
+        } catch {}
+      }
+    }
+    await onSave(payload);
     onClose();
   };
 
@@ -164,9 +202,9 @@ export const MobileRecordDrawer: React.FC<MobileRecordDrawerProps> = ({
                   {col.type === 'text_multi' ? (
                     <textarea
                       className="input-base"
-                      rows={3}
-                      style={{ width: '100%', minHeight: '64px', resize: 'vertical' }}
-                      value={val}
+                      rows={4}
+                      style={{ width: '100%', minHeight: '80px', resize: 'vertical', fontFamily: typeof val === 'object' && val !== null ? 'var(--font-mono)' : 'inherit', fontSize: typeof val === 'object' && val !== null ? '12px' : 'inherit' }}
+                      value={typeof val === 'object' && val !== null ? JSON.stringify(val, null, 2) : val}
                       onChange={(e) => handleFieldChange(col.slug, e.target.value)}
                     />
                   ) : col.type === 'boolean' ? (
@@ -303,17 +341,81 @@ export const MobileRecordDrawer: React.FC<MobileRecordDrawerProps> = ({
                     onChange={(e) => handleFieldChange(col.slug, e.target.value)}
                   >
                     <option value="">-- Select relation --</option>
-                    {(relationOptions[col.metadata?.target || ''] || []).map((rel) => (
+                    {getColRelationOptions(col).map((rel) => (
                       <option key={rel.id} value={rel.id}>
-                        {rel.id} — {rel.label}
+                        {rel.label}
                       </option>
                     ))}
                   </select>
+                ) : col.type === 'relation_multi' ? (
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem', marginTop: '0.2rem' }}>
+                    {/* Selected Relations Display */}
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem', minHeight: '32px', alignItems: 'center' }}>
+                      {parseMultiValue(val).length === 0 ? (
+                        <span style={{ color: 'var(--text-dim)', fontSize: '12px' }}>No relations linked</span>
+                      ) : (
+                        parseMultiValue(val).map((relId: string) => (
+                          <RelationTagPill
+                            key={relId}
+                            id={relId}
+                            label={getResolvedRelationLabel(col, relId)}
+                            onRemove={() => toggleMultiItem(col.slug, relId)}
+                            style={{ fontSize: '12.5px', padding: '0.25rem 0.6rem' }}
+                          />
+                        ))
+                      )}
+                    </div>
+
+                    {/* Predefined Relation Options from Target Table */}
+                    {(() => {
+                      const colOpts = getColRelationOptions(col);
+                      if (colOpts.length === 0) {
+                        return (
+                          <div style={{ fontSize: '11px', color: 'var(--text-dim)', fontStyle: 'italic' }}>
+                            Loading target records...
+                          </div>
+                        );
+                      }
+                      return (
+                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.35rem', paddingTop: '0.4rem', borderTop: '1px solid var(--border-table)' }}>
+                          {colOpts.map((rel) => {
+                            const isSelected = parseMultiValue(val).includes(rel.id);
+                            return (
+                              <button
+                                key={rel.id}
+                                type="button"
+                                onClick={() => toggleMultiItem(col.slug, rel.id)}
+                                title={`ID: ${rel.id}`}
+                                style={{
+                                  minHeight: '34px',
+                                  padding: '0.25rem 0.65rem',
+                                  borderRadius: 'var(--radius-sm)',
+                                  border: isSelected ? '1px solid var(--accent)' : '1px solid var(--border-light)',
+                                  background: isSelected ? 'rgba(56, 189, 248, 0.14)' : 'var(--bg-canvas)',
+                                  color: isSelected ? 'var(--accent)' : 'var(--text-tertiary)',
+                                  fontSize: '11.5px',
+                                  fontWeight: isSelected ? 600 : 400,
+                                  cursor: 'pointer',
+                                  display: 'inline-flex',
+                                  alignItems: 'center',
+                                  gap: '0.35rem',
+                                  transition: 'all 0.15s ease',
+                                }}
+                              >
+                                {isSelected ? <Check size={12} /> : <Link2 size={11} style={{ opacity: 0.7 }} />}
+                                <span>{rel.label}</span>
+                              </button>
+                            );
+                          })}
+                        </div>
+                      );
+                    })()}
+                  </div>
                 ) : (
                   <input
                     className="input-base"
                     style={{ width: '100%', minHeight: '48px' }}
-                    value={val}
+                    value={typeof val === 'object' && val !== null ? JSON.stringify(val) : val}
                     onChange={(e) => handleFieldChange(col.slug, e.target.value)}
                   />
                 )}

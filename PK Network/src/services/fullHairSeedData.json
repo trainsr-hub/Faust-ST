@@ -1,0 +1,2324 @@
+{
+  "conditions": [
+    {
+      "id": "has_hair",
+      "naturalQuestion": "Character has hair? (Not bald)",
+      "description": "Head has hair growth present",
+      "category": "Foundation",
+      "defaultState": true
+    },
+    {
+      "id": "is_multicolored",
+      "naturalQuestion": "Has multiple hair colors / accents?",
+      "description": "Hair features more than one distinct color or gradient tone",
+      "category": "Chromatics",
+      "defaultState": false
+    },
+    {
+      "id": "has_gradient",
+      "naturalQuestion": "Has smooth color gradient / fade?",
+      "description": "Smooth vertical or multi-spectral chromatic fade",
+      "category": "Chromatics",
+      "defaultState": false
+    },
+    {
+      "id": "has_two_tone",
+      "naturalQuestion": "Has discrete two-tone contrast blocks?",
+      "description": "Non-merging distinct color boundaries (two-tone, inner, streaks)",
+      "category": "Chromatics",
+      "defaultState": false
+    },
+    {
+      "id": "has_colored_tips",
+      "naturalQuestion": "Has dip-dyed colored tips?",
+      "description": "Zonal color placement at the strand ends",
+      "category": "Chromatics",
+      "defaultState": false
+    },
+    {
+      "id": "has_inner_hair",
+      "naturalQuestion": "Has contrasting inner hair layer?",
+      "description": "Underlayer peekaboo contrasting tone",
+      "category": "Chromatics",
+      "defaultState": false
+    },
+    {
+      "id": "short_hair",
+      "naturalQuestion": "Hair is short (chin / jaw or above)?",
+      "description": "Cropped pixie cut or bob above collarbone",
+      "category": "Length",
+      "defaultState": false
+    },
+    {
+      "id": "medium_hair",
+      "naturalQuestion": "Hair is medium (shoulder to chest)?",
+      "description": "Shoulder-grazing baseline or lob cut",
+      "category": "Length",
+      "defaultState": false
+    },
+    {
+      "id": "long_hair",
+      "naturalQuestion": "Hair is long (chest to waist+)?",
+      "description": "Flowing length extending past shoulder blades",
+      "category": "Length",
+      "defaultState": false
+    },
+    {
+      "id": "has_bangs",
+      "naturalQuestion": "Have bangs / forehead fringe?",
+      "description": "Front hair covering or framing browline",
+      "category": "Front",
+      "defaultState": false
+    },
+    {
+      "id": "forehead_exposed",
+      "naturalQuestion": "Forehead exposed / bare?",
+      "description": "Browline and forehead completely visible with no fringe",
+      "category": "Front",
+      "defaultState": true
+    },
+    {
+      "id": "has_parting",
+      "naturalQuestion": "Fringe is parted?",
+      "description": "Bangs or front hairline split into sections",
+      "category": "Front",
+      "defaultState": false
+    },
+    {
+      "id": "has_double_parting",
+      "naturalQuestion": "Fringe parted at both temples?",
+      "description": "Dual partings at both sides of brow",
+      "category": "Front",
+      "defaultState": false
+    },
+    {
+      "id": "has_center_strands",
+      "naturalQuestion": "Facial strands between eyes?",
+      "description": "Slender center drop strand or center accent",
+      "category": "Front",
+      "defaultState": false
+    },
+    {
+      "id": "has_sidelocks",
+      "naturalQuestion": "Have temple sidelocks?",
+      "description": "Side strands framing cheekbones and ears",
+      "category": "Framing",
+      "defaultState": false
+    },
+    {
+      "id": "hair_tied_up",
+      "naturalQuestion": "Hair gathered / tied up?",
+      "description": "Hair pulled up into ponytail, bun, braids, or updo",
+      "category": "Coiffure",
+      "defaultState": false
+    },
+    {
+      "id": "has_ponytail",
+      "naturalQuestion": "Have ponytail / gathered bunch?",
+      "description": "Single or gathered ponytail coiffure",
+      "category": "Coiffure",
+      "defaultState": false
+    },
+    {
+      "id": "has_twintails",
+      "naturalQuestion": "Have bilateral twintails?",
+      "description": "Dual hair bunches tied on left and right sides",
+      "category": "Coiffure",
+      "defaultState": false
+    },
+    {
+      "id": "has_braids",
+      "naturalQuestion": "Have plaited braids?",
+      "description": "Intertwined plaited hair strands or weaves",
+      "category": "Coiffure",
+      "defaultState": false
+    },
+    {
+      "id": "has_buns",
+      "naturalQuestion": "Have hair bun(s) / odango?",
+      "description": "Coiled hair chignons or buns",
+      "category": "Coiffure",
+      "defaultState": false
+    },
+    {
+      "id": "has_ahoge",
+      "naturalQuestion": "Has cowlick / ahoge on crown?",
+      "description": "Single or twin hair strands sticking up from crown",
+      "category": "Crown",
+      "defaultState": false
+    },
+    {
+      "id": "has_accoutrements",
+      "naturalQuestion": "Has hair ornaments / clips?",
+      "description": "Attached accessories, clips, pins, or ribbons",
+      "category": "Accoutrements",
+      "defaultState": false
+    }
+  ],
+  "groups": [
+    {
+      "id": "hair_colors",
+      "name": "1. Base Hair Color Palette",
+      "category": "Tier 1 Chromatics",
+      "description": "Core anime hair pigment (Black, Blonde, Brown, Blue, Aqua, Green, Red, Pink, Purple, Orange, White, Grey)",
+      "selectionMode": "single",
+      "dependsOnConditions": [
+        {
+          "conditionId": "has_hair",
+          "expectedValue": true
+        }
+      ],
+      "bringsAboutConditions": []
+    },
+    {
+      "id": "chromatic_modes",
+      "name": "1. Multi-Color Distribution Modes",
+      "category": "Tier 1 Chromatics",
+      "description": "Two-tone, gradient, colored inner hair, colored tips, roots, streaks, striped, rainbow",
+      "selectionMode": "single",
+      "dependsOnConditions": [
+        {
+          "conditionId": "has_hair",
+          "expectedValue": true
+        }
+      ],
+      "bringsAboutConditions": [
+        {
+          "conditionId": "is_multicolored",
+          "setValue": true
+        }
+      ]
+    },
+    {
+      "id": "length_tier",
+      "name": "2. Hair Length Scale",
+      "category": "Tier 2 Foundation",
+      "description": "Very short, short, medium, long, very long, absurdly long, buzz cut, pixie cut, bald",
+      "selectionMode": "single",
+      "dependsOnConditions": [
+        {
+          "conditionId": "has_hair",
+          "expectedValue": true
+        }
+      ],
+      "bringsAboutConditions": []
+    },
+    {
+      "id": "texture_flow",
+      "name": "2. Texture & Strand Flow",
+      "category": "Tier 2 Foundation",
+      "description": "Straight, wavy, curly, fluffy, messy, spiky, drill, ringlets, flipped",
+      "selectionMode": "single",
+      "dependsOnConditions": [
+        {
+          "conditionId": "has_hair",
+          "expectedValue": true
+        }
+      ],
+      "bringsAboutConditions": []
+    },
+    {
+      "id": "fringe_cut",
+      "name": "3. Bangs Fringe Profile",
+      "category": "Tier 3 Front Facial",
+      "description": "Blunt, swept, wispy, crossed, fanged, choppy, asymmetrical, center flap, short, long, pinned-back",
+      "selectionMode": "single",
+      "dependsOnConditions": [
+        {
+          "conditionId": "has_hair",
+          "expectedValue": true
+        }
+      ],
+      "bringsAboutConditions": [
+        {
+          "conditionId": "has_bangs",
+          "setValue": true
+        },
+        {
+          "conditionId": "forehead_exposed",
+          "setValue": false
+        }
+      ]
+    },
+    {
+      "id": "bangs_parting",
+      "name": "3. Bangs Parting Topology",
+      "category": "Tier 3 Front Facial",
+      "description": "Center part, side part, middle part, double-parted fringe",
+      "selectionMode": "single",
+      "dependsOnConditions": [
+        {
+          "conditionId": "has_bangs",
+          "expectedValue": true
+        }
+      ],
+      "bringsAboutConditions": [
+        {
+          "conditionId": "has_parting",
+          "setValue": true
+        }
+      ]
+    },
+    {
+      "id": "forehead_accents",
+      "name": "3. Facial Framing Strands",
+      "category": "Tier 3 Front Facial",
+      "description": "Hair between eyes, hair over one eye, hair over eyes",
+      "selectionMode": "single",
+      "dependsOnConditions": [
+        {
+          "conditionId": "has_bangs",
+          "expectedValue": true
+        }
+      ],
+      "bringsAboutConditions": [
+        {
+          "conditionId": "has_center_strands",
+          "setValue": true
+        }
+      ]
+    },
+    {
+      "id": "side_framing",
+      "name": "3. Temple Sidelocks & Cheeks",
+      "category": "Tier 3 Front Facial",
+      "description": "Sidelocks, single sidelock, hair behind ear, drill sidelocks",
+      "selectionMode": "single",
+      "dependsOnConditions": [
+        {
+          "conditionId": "has_hair",
+          "expectedValue": true
+        }
+      ],
+      "bringsAboutConditions": [
+        {
+          "conditionId": "has_sidelocks",
+          "setValue": true
+        }
+      ]
+    },
+    {
+      "id": "crown_accents",
+      "name": "4. Crown Cowlicks & Ahoge",
+      "category": "Tier 4 Crown Architecture",
+      "description": "Ahoge, huge ahoge, heart ahoge, antenna hair, heart antenna, hair intakes",
+      "selectionMode": "single",
+      "dependsOnConditions": [
+        {
+          "conditionId": "has_hair",
+          "expectedValue": true
+        }
+      ],
+      "bringsAboutConditions": [
+        {
+          "conditionId": "has_ahoge",
+          "setValue": true
+        }
+      ]
+    },
+    {
+      "id": "ponytail_styles",
+      "name": "4. Ponytail Updos",
+      "category": "Tier 4 Coiffure",
+      "description": "Ponytail, high ponytail, low ponytail, side ponytail, folded ponytail, split ponytail, short ponytail",
+      "selectionMode": "single",
+      "dependsOnConditions": [
+        {
+          "conditionId": "has_hair",
+          "expectedValue": true
+        }
+      ],
+      "bringsAboutConditions": [
+        {
+          "conditionId": "hair_tied_up",
+          "setValue": true
+        },
+        {
+          "conditionId": "has_ponytail",
+          "setValue": true
+        }
+      ]
+    },
+    {
+      "id": "twintail_styles",
+      "name": "4. Twintail Dual Bunches",
+      "category": "Tier 4 Coiffure",
+      "description": "Twintails, high twintails, low twintails, short twintails, uneven twintails",
+      "selectionMode": "single",
+      "dependsOnConditions": [
+        {
+          "conditionId": "has_hair",
+          "expectedValue": true
+        }
+      ],
+      "bringsAboutConditions": [
+        {
+          "conditionId": "hair_tied_up",
+          "setValue": true
+        },
+        {
+          "conditionId": "has_twintails",
+          "setValue": true
+        }
+      ]
+    },
+    {
+      "id": "braid_variations",
+      "name": "4. Braid Weaves & Plaiting",
+      "category": "Tier 4 Coiffure",
+      "description": "Single braid, twin braids, side braid, french braid, crown braid, low twin braids, dreadlocks",
+      "selectionMode": "single",
+      "dependsOnConditions": [
+        {
+          "conditionId": "has_hair",
+          "expectedValue": true
+        }
+      ],
+      "bringsAboutConditions": [
+        {
+          "conditionId": "hair_tied_up",
+          "setValue": true
+        },
+        {
+          "conditionId": "has_braids",
+          "setValue": true
+        }
+      ]
+    },
+    {
+      "id": "bun_variations",
+      "name": "4. Hair Buns & Odango",
+      "category": "Tier 4 Coiffure",
+      "description": "Hair bun, single bun, double buns, cone buns, chignon, braided bun",
+      "selectionMode": "single",
+      "dependsOnConditions": [
+        {
+          "conditionId": "has_hair",
+          "expectedValue": true
+        }
+      ],
+      "bringsAboutConditions": [
+        {
+          "conditionId": "hair_tied_up",
+          "setValue": true
+        },
+        {
+          "conditionId": "has_buns",
+          "setValue": true
+        }
+      ]
+    },
+    {
+      "id": "sculpted_updos",
+      "name": "4. Sculpted & Traditional Updos",
+      "category": "Tier 4 Coiffure",
+      "description": "Half updo, hime cut, bob cut, inverted bob, wolf cut, jellyfish cut, undercut, flattop, nihongami",
+      "selectionMode": "single",
+      "dependsOnConditions": [
+        {
+          "conditionId": "has_hair",
+          "expectedValue": true
+        }
+      ],
+      "bringsAboutConditions": [
+        {
+          "conditionId": "hair_tied_up",
+          "setValue": true
+        }
+      ]
+    },
+    {
+      "id": "hair_accoutrements",
+      "name": "5. Attached Ornaments & Accessories",
+      "category": "Tier 5 Accoutrements",
+      "description": "Hair ornament, hairclip, hairpin, hair ribbon, hair bow, headband, scrunchie, hair flower",
+      "selectionMode": "multiple",
+      "dependsOnConditions": [
+        {
+          "conditionId": "has_hair",
+          "expectedValue": true
+        }
+      ],
+      "bringsAboutConditions": [
+        {
+          "conditionId": "has_accoutrements",
+          "setValue": true
+        }
+      ]
+    }
+  ],
+  "prompts": [
+    {
+      "id": "black_hair",
+      "tag": "black hair",
+      "name": "Black Hair",
+      "groupId": "hair_colors",
+      "imageUrl": "https://cdn.donmai.us/sample/0b/8b/sample-0b8b32cdb0647e00af29ee8b06d84e7e.jpg",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/black_hair",
+      "description": "Deep midnight black anime hair"
+    },
+    {
+      "id": "blonde_hair",
+      "tag": "blonde hair",
+      "name": "Blonde Hair",
+      "groupId": "hair_colors",
+      "imageUrl": "https://cdn.donmai.us/sample/af/f2/sample-aff21bcf7afd42d82cb3b46d6d6a239f.jpg",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/blonde_hair",
+      "description": "Lustrous golden yellow blonde hair"
+    },
+    {
+      "id": "brown_hair",
+      "tag": "brown hair",
+      "name": "Brown Hair",
+      "groupId": "hair_colors",
+      "imageUrl": "https://cdn.donmai.us/sample/00/46/sample-0046121420c126a8d5cd19a6041164fb.jpg",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/brown_hair",
+      "description": "Warm chestnut or chocolate brown hair"
+    },
+    {
+      "id": "blue_hair",
+      "tag": "blue hair",
+      "name": "Blue Hair",
+      "groupId": "hair_colors",
+      "imageUrl": "https://cdn.donmai.us/sample/af/f2/sample-aff21bcf7afd42d82cb3b46d6d6a239f.jpg",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/blue_hair",
+      "description": "Vibrant cobalt or sapphire blue hair"
+    },
+    {
+      "id": "aqua_hair",
+      "tag": "aqua hair",
+      "name": "Aqua / Cyan Hair",
+      "groupId": "hair_colors",
+      "imageUrl": "https://cdn.donmai.us/sample/c9/e3/sample-c9e380fa51cc4239489ddac32bcdaa27.jpg",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/aqua_hair",
+      "description": "Bright turquoise, cyan, or mint aqua hair"
+    },
+    {
+      "id": "green_hair",
+      "tag": "green hair",
+      "name": "Green Hair",
+      "groupId": "hair_colors",
+      "imageUrl": "https://cdn.donmai.us/sample/3d/a5/sample-3da5d0e9d54c9118df93cd54b22a75d6.jpg",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/green_hair",
+      "description": "Emerald or forest green hair"
+    },
+    {
+      "id": "red_hair",
+      "tag": "red hair",
+      "name": "Red Hair",
+      "groupId": "hair_colors",
+      "imageUrl": "https://cdn.donmai.us/sample/4d/19/sample-4d19f3677cdc06483c55efbefa667842.webm",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/red_hair",
+      "description": "Fiery crimson or scarlet red hair"
+    },
+    {
+      "id": "pink_hair",
+      "tag": "pink hair",
+      "name": "Pink Hair",
+      "groupId": "hair_colors",
+      "imageUrl": "https://cdn.donmai.us/sample/50/28/sample-50289cebe3fc01b2c81b9de80a89b6e8.jpg",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/pink_hair",
+      "description": "Pastel or hot magenta pink hair"
+    },
+    {
+      "id": "purple_hair",
+      "tag": "purple hair",
+      "name": "Purple Hair",
+      "groupId": "hair_colors",
+      "imageUrl": "https://cdn.donmai.us/sample/7b/6d/sample-7b6dcc7c2279f8f960fe7cf37d0ceec8.jpg",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/purple_hair",
+      "description": "Rich violet, lavender, or plum purple hair"
+    },
+    {
+      "id": "orange_hair",
+      "tag": "orange hair",
+      "name": "Orange Hair",
+      "groupId": "hair_colors",
+      "imageUrl": "https://cdn.donmai.us/sample/c7/a8/sample-c7a8e772b5518f08d9396c3dd82a33ee.jpg",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/orange_hair",
+      "description": "Vivid ginger or sunset orange hair"
+    },
+    {
+      "id": "white_hair",
+      "tag": "white hair",
+      "name": "White Hair",
+      "groupId": "hair_colors",
+      "imageUrl": "https://cdn.donmai.us/sample/b7/20/sample-b72099c52ee91b578a2f7c1d0b31f63b.jpg",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/white_hair",
+      "description": "Pure snow white or platinum hair"
+    },
+    {
+      "id": "grey_hair",
+      "tag": "grey hair",
+      "name": "Grey / Silver Hair",
+      "groupId": "hair_colors",
+      "imageUrl": "https://cdn.donmai.us/sample/52/02/sample-520244a20bd87922c825f9b5a488ceb9.jpg",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/grey_hair",
+      "description": "Sleek silver or ash grey hair"
+    },
+    {
+      "id": "two_tone_hair",
+      "tag": "two-tone hair",
+      "name": "Two-Tone Hair",
+      "groupId": "chromatic_modes",
+      "imageUrl": "https://cdn.donmai.us/sample/a1/a7/sample-a1a7345e76e0896e7257ba8167d1efcf.jpg",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/two-tone_hair",
+      "description": "Dual distinct color blocks with discrete borders"
+    },
+    {
+      "id": "gradient_hair",
+      "tag": "gradient hair",
+      "name": "Gradient Hair",
+      "groupId": "chromatic_modes",
+      "imageUrl": "https://cdn.donmai.us/sample/ad/ac/sample-adac7421b3f6b55415d12b394af5a525.jpg",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/gradient_hair",
+      "description": "Smooth continuous vertical color blend"
+    },
+    {
+      "id": "colored_inner_hair",
+      "tag": "colored inner hair",
+      "name": "Colored Inner Hair",
+      "groupId": "chromatic_modes",
+      "imageUrl": "https://cdn.donmai.us/sample/c1/c9/sample-c1c9f67081ff6a422c60c522b121ce09.jpg",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/colored_inner_hair",
+      "description": "Contrasting peekaboo inner underlayer color"
+    },
+    {
+      "id": "colored_tips",
+      "tag": "colored tips",
+      "name": "Colored Tips",
+      "groupId": "chromatic_modes",
+      "imageUrl": "https://cdn.donmai.us/sample/d1/aa/sample-d1aa8c723207be7ba5861455b8132dd6.jpg",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/colored_tips",
+      "description": "Dip-dyed ends of hair strands"
+    },
+    {
+      "id": "roots",
+      "tag": "roots",
+      "name": "Roots",
+      "groupId": "chromatic_modes",
+      "imageUrl": "https://cdn.donmai.us/sample/db/f5/sample-dbf555b089aaaef020c7cb9afb0471ad.jpg",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/roots",
+      "description": "Contrasting growth color at the top scalp/roots"
+    },
+    {
+      "id": "split_color_hair",
+      "tag": "split-color hair",
+      "name": "Split-Color Hair",
+      "groupId": "chromatic_modes",
+      "imageUrl": "https://cdn.donmai.us/sample/83/52/sample-8352f39967f21671892acf5d26f2b4ed.jpg",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/split-color_hair",
+      "description": "Half-and-half bilateral vertical color split"
+    },
+    {
+      "id": "streaked_hair",
+      "tag": "streaked hair",
+      "name": "Streaked Hair",
+      "groupId": "chromatic_modes",
+      "imageUrl": "https://cdn.donmai.us/sample/a1/a7/sample-a1a7345e76e0896e7257ba8167d1efcf.jpg",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/streaked_hair",
+      "description": "Distinct contrast highlight strands"
+    },
+    {
+      "id": "striped_hair",
+      "tag": "striped hair",
+      "name": "Striped Hair (Raccoon)",
+      "groupId": "chromatic_modes",
+      "imageUrl": "https://cdn.donmai.us/sample/33/27/sample-3327c00239bfc70980e9d93b3aa973eb.jpg",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/striped_hair",
+      "description": "Horizontal ringed raccoon-tail color stripes"
+    },
+    {
+      "id": "rainbow_hair",
+      "tag": "rainbow hair",
+      "name": "Rainbow Hair",
+      "groupId": "chromatic_modes",
+      "imageUrl": "https://cdn.donmai.us/original/da/fd/dafda2babf93344c3e8c16f4032a3222.mp4",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/rainbow_hair",
+      "description": "Multi-spectral prismatic full blend"
+    },
+    {
+      "id": "multicolored_hair",
+      "tag": "multicolored hair",
+      "name": "Multicolored Hair",
+      "groupId": "chromatic_modes",
+      "imageUrl": "https://cdn.donmai.us/sample/18/ed/sample-18edd3ad628892a2539c84c6184c92ae.jpg",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/multicolored_hair",
+      "description": "Multi-hued chromatic hair distribution"
+    },
+    {
+      "id": "very_short_hair",
+      "tag": "very short hair",
+      "name": "Very Short Hair",
+      "groupId": "length_tier",
+      "imageUrl": "https://cdn.donmai.us/720x720/8d/ae/8dae4fe02341f0b337bfc1b5b3191668.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/very_short_hair",
+      "description": "hair that does not go past the jaw"
+    },
+    {
+      "id": "pixie_cut",
+      "tag": "pixie cut",
+      "name": "Pixie Cut",
+      "groupId": "length_tier",
+      "imageUrl": "https://cdn.donmai.us/720x720/48/25/4825f81b63a79fb3018e7600a6689144.webp",
+      "wikiUrl": "https://danbooru.donmai.us/posts?tags=pixie_cut",
+      "description": "pixie cut"
+    },
+    {
+      "id": "short_hair",
+      "tag": "short hair",
+      "name": "Short Hair",
+      "groupId": "length_tier",
+      "imageUrl": "https://cdn.donmai.us/720x720/67/f3/67f36a68b0e5e27f1bff6bd718f972eb.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/short_hair",
+      "description": "hair that does not go past the shoulders"
+    },
+    {
+      "id": "bob_cut",
+      "tag": "bob cut",
+      "name": "Bob Cut",
+      "groupId": "length_tier",
+      "imageUrl": "https://cdn.donmai.us/720x720/bb/f4/bbf445a606753bbb959d7ddd26c109dc.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/bob_cut",
+      "description": "bob cut"
+    },
+    {
+      "id": "inverted_bob",
+      "tag": "inverted bob",
+      "name": "Inverted Bob",
+      "groupId": "length_tier",
+      "imageUrl": "https://cdn.donmai.us/720x720/fb/80/fb806e7acc770e1fc97f439bcb7e10ea.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/inverted_bob",
+      "description": "inverted bob (bob cut)"
+    },
+    {
+      "id": "short_hair_with_long_locks",
+      "tag": "short hair with long locks",
+      "name": "Short Hair With Long Locks",
+      "groupId": "length_tier",
+      "imageUrl": "https://cdn.donmai.us/720x720/cb/c6/cbc67bc1769bc76b157d45c7410e5869.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/short_hair_with_long_locks",
+      "description": "short hair with long locks"
+    },
+    {
+      "id": "medium_hair",
+      "tag": "medium hair",
+      "name": "Medium Hair",
+      "groupId": "length_tier",
+      "imageUrl": "https://cdn.donmai.us/720x720/6e/76/6e76becef02f0b59aaa6aa1027e7dc2a.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/medium_hair",
+      "description": "hair that is (around) shoulder length"
+    },
+    {
+      "id": "wolf_cut",
+      "tag": "wolf cut",
+      "name": "Wolf Cut",
+      "groupId": "length_tier",
+      "imageUrl": "https://cdn.donmai.us/720x720/40/ab/40ab99c111a36946fe266989cf81587e.webp",
+      "wikiUrl": "https://danbooru.donmai.us/posts?tags=wolf_cut",
+      "description": "wolf cut"
+    },
+    {
+      "id": "long_hair",
+      "tag": "long hair",
+      "name": "Long Hair",
+      "groupId": "length_tier",
+      "imageUrl": "https://cdn.donmai.us/720x720/4e/b9/4eb9f9f14df29f6dbd2cc09d7de6d1d2.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/long_hair",
+      "description": "hair that goes from the shoulders to the waist"
+    },
+    {
+      "id": "hime_cut",
+      "tag": "hime cut",
+      "name": "Hime Cut",
+      "groupId": "sculpted_updos",
+      "imageUrl": "https://cdn.donmai.us/720x720/1a/85/1a85759a2af41fb9f030bbb80495cc43.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/hime_cut",
+      "description": "hime cut"
+    },
+    {
+      "id": "jellyfish_cut",
+      "tag": "jellyfish cut",
+      "name": "Jellyfish Cut",
+      "groupId": "length_tier",
+      "imageUrl": "https://cdn.donmai.us/720x720/48/ba/48baeb5b147cb4a8116d3be0b3003ea1.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/jellyfish_cut",
+      "description": "jellyfish cut"
+    },
+    {
+      "id": "very_long_hair",
+      "tag": "very long hair",
+      "name": "Very Long Hair",
+      "groupId": "length_tier",
+      "imageUrl": "https://cdn.donmai.us/720x720/f2/c5/f2c5eed5a5c4442de9c51fed76dbdf6b.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/very_long_hair",
+      "description": "hair that goes from the waist to the feet"
+    },
+    {
+      "id": "absurdly_long_hair",
+      "tag": "absurdly long hair",
+      "name": "Absurdly Long Hair",
+      "groupId": "length_tier",
+      "imageUrl": "https://cdn.donmai.us/720x720/55/79/55799fb01fa5496ed839b377596d411f.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/absurdly_long_hair",
+      "description": "hair that goes past the feet"
+    },
+    {
+      "id": "undercut",
+      "tag": "undercut",
+      "name": "Undercut",
+      "groupId": "sculpted_updos",
+      "imageUrl": "https://cdn.donmai.us/720x720/9e/6d/9e6d4139db8d2b9a0cc560a94bf07bcc.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/undercut",
+      "description": "undercut"
+    },
+    {
+      "id": "braided_bangs",
+      "tag": "braided bangs",
+      "name": "Braided Bangs",
+      "groupId": "braid_variations",
+      "imageUrl": "https://cdn.donmai.us/720x720/1f/2b/1f2be05374cd7cf31fc6896d6f5dbd00.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/braided_bangs",
+      "description": "braided bangs"
+    },
+    {
+      "id": "front_braid",
+      "tag": "front braid",
+      "name": "Front Braid",
+      "groupId": "braid_variations",
+      "imageUrl": "https://cdn.donmai.us/720x720/43/02/4302a9d3dcbea6b45654749933d7bf33.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/front_braid",
+      "description": "front braid"
+    },
+    {
+      "id": "side_braid",
+      "tag": "side braid",
+      "name": "Side Braid",
+      "groupId": "braid_variations",
+      "imageUrl": "https://cdn.donmai.us/720x720/cd/c0/cdc08ed7fba287131e3595488baf003d.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/side_braid",
+      "description": "side braid"
+    },
+    {
+      "id": "crown_braid",
+      "tag": "crown braid",
+      "name": "Crown Braid",
+      "groupId": "braid_variations",
+      "imageUrl": "https://cdn.donmai.us/720x720/d7/53/d753dbf6ce6d22dff06c25e10f195f7b.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/crown_braid",
+      "description": "crown braid"
+    },
+    {
+      "id": "half_crown_braid",
+      "tag": "half crown braid",
+      "name": "Half Crown Braid",
+      "groupId": "braid_variations",
+      "imageUrl": "https://cdn.donmai.us/720x720/43/75/4375ac58fb1fa0173fe82f30d6cde94f.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/half_crown_braid",
+      "description": "half crown braid"
+    },
+    {
+      "id": "braided_hair_rings",
+      "tag": "braided hair rings",
+      "name": "Braided Hair Rings",
+      "groupId": "braid_variations",
+      "imageUrl": "https://cdn.donmai.us/720x720/e0/2a/e02ac1342c9065fe6f76a40652b36da5.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/braided_hair_rings",
+      "description": "braided hair rings"
+    },
+    {
+      "id": "single_braid",
+      "tag": "single braid",
+      "name": "Single Braid",
+      "groupId": "braid_variations",
+      "imageUrl": "https://cdn.donmai.us/720x720/ea/a5/eaa5210054b92d525838dad356799ca7.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/single_braid",
+      "description": "single braid"
+    },
+    {
+      "id": "multiple_braids",
+      "tag": "multiple braids",
+      "name": "Multiple Braids",
+      "groupId": "braid_variations",
+      "imageUrl": "https://cdn.donmai.us/720x720/8c/8c/8c8c5bc3432e8665b989a7dc0c321fbb.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/multiple_braids",
+      "description": "multiple braids"
+    },
+    {
+      "id": "twin_braids",
+      "tag": "twin braids",
+      "name": "Twin Braids",
+      "groupId": "braid_variations",
+      "imageUrl": "https://cdn.donmai.us/720x720/ad/7e/ad7e88312fc480ff6dad121672342f8f.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/twin_braids",
+      "description": "twin braids"
+    },
+    {
+      "id": "low_twin_braids",
+      "tag": "low twin braids",
+      "name": "Low Twin Braids",
+      "groupId": "braid_variations",
+      "imageUrl": "https://cdn.donmai.us/720x720/20/5c/205c9a522abfa8323ff79e9bc958368c.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/low_twin_braids",
+      "description": "low twin braids"
+    },
+    {
+      "id": "tri_braids",
+      "tag": "tri braids",
+      "name": "Tri Braids",
+      "groupId": "braid_variations",
+      "imageUrl": "https://cdn.donmai.us/720x720/bc/b5/bcb5d1232d5879785513db4fd9a9cabb.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/tri_braids",
+      "description": "tri braids"
+    },
+    {
+      "id": "quad_braids",
+      "tag": "quad braids",
+      "name": "Quad Braids",
+      "groupId": "braid_variations",
+      "imageUrl": "https://cdn.donmai.us/720x720/fa/27/fa277037933827a7517227988bacb5b9.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/quad_braids",
+      "description": "quad braids"
+    },
+    {
+      "id": "rope_braid",
+      "tag": "rope braid",
+      "name": "Rope Braid",
+      "groupId": "braid_variations",
+      "imageUrl": "https://cdn.donmai.us/720x720/15/d1/15d1432d2cfecce6f1a58fc6c23557cc.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/rope_braid",
+      "description": "rope braid"
+    },
+    {
+      "id": "cornrows",
+      "tag": "cornrows",
+      "name": "Cornrows",
+      "groupId": "sculpted_updos",
+      "imageUrl": "https://cdn.donmai.us/720x720/a4/8a/a48a23b5dab430da910673c6e075f811.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/cornrows",
+      "description": "cornrows"
+    },
+    {
+      "id": "dreadlocks",
+      "tag": "dreadlocks",
+      "name": "Dreadlocks",
+      "groupId": "braid_variations",
+      "imageUrl": "https://cdn.donmai.us/720x720/59/20/5920f4ebcc3e86374fc71cc5dc8c840a.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/dreadlocks",
+      "description": "dreadlocks"
+    },
+    {
+      "id": "braided_dreadlocks",
+      "tag": "braided dreadlocks",
+      "name": "Braided Dreadlocks",
+      "groupId": "braid_variations",
+      "imageUrl": "https://cdn.donmai.us/720x720/cd/b1/cdb1e37471b97a8c28b54e57310386c1.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/braided_dreadlocks",
+      "description": "braided dreadlocks"
+    },
+    {
+      "id": "box_braids",
+      "tag": "box braids",
+      "name": "Box Braids",
+      "groupId": "braid_variations",
+      "imageUrl": "https://cdn.donmai.us/720x720/eb/ab/ebab3a2c0459238181f6b45c41ba52be.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/box_braids",
+      "description": "box braids"
+    },
+    {
+      "id": "lowbraided_long_hair",
+      "tag": "low-braided long hair",
+      "name": "Low-Braided Long Hair",
+      "groupId": "braid_variations",
+      "imageUrl": "https://cdn.donmai.us/720x720/8f/ee/8feeb1680d023015f9440c9f36e363bf.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/low-braided_long_hair",
+      "description": "braided long hair"
+    },
+    {
+      "id": "half_up_braid",
+      "tag": "half up braid",
+      "name": "Half Up Braid",
+      "groupId": "braid_variations",
+      "imageUrl": "https://cdn.donmai.us/720x720/04/5a/045a66b3ed98d54896f7ac6743645ce8.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/half_up_braid",
+      "description": "half up braid"
+    },
+    {
+      "id": "half_up_half_down_braid",
+      "tag": "half up half down braid",
+      "name": "Half Up Half Down Braid",
+      "groupId": "braid_variations",
+      "imageUrl": "https://cdn.donmai.us/720x720/75/1a/751ab2d685cde9078ca93a79bbac186f.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/half_up_half_down_braid",
+      "description": "half up half down braid"
+    },
+    {
+      "id": "braided_ponytail",
+      "tag": "braided ponytail",
+      "name": "Braided Ponytail",
+      "groupId": "ponytail_styles",
+      "imageUrl": "https://cdn.donmai.us/720x720/59/e0/59e02c6ba3df31d5da243696c88c589b.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/braided_ponytail",
+      "description": "braided ponytail"
+    },
+    {
+      "id": "braided_bun",
+      "tag": "braided bun",
+      "name": "Braided Bun",
+      "groupId": "braid_variations",
+      "imageUrl": "https://cdn.donmai.us/720x720/1d/68/1d68ded81d2844ed3f7f830f7f5de5b8.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/braided_bun",
+      "description": "braided bun"
+    },
+    {
+      "id": "bun_with_braided_base",
+      "tag": "bun with braided base",
+      "name": "Bun With Braided Base",
+      "groupId": "braid_variations",
+      "imageUrl": "https://cdn.donmai.us/720x720/3d/aa/3daa0575825af0ad253e753c4a4cf3d9.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/bun_with_braided_base",
+      "description": "bun with braided base"
+    },
+    {
+      "id": "bantu_knots",
+      "tag": "bantu knots",
+      "name": "Bantu Knots",
+      "groupId": "sculpted_updos",
+      "imageUrl": "https://cdn.donmai.us/720x720/2e/14/2e14c3596a0a4adffc2af9e0e9559ced.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/bantu_knots",
+      "description": "bantu knots"
+    },
+    {
+      "id": "single_hair_bun",
+      "tag": "single hair bun",
+      "name": "Single Hair Bun",
+      "groupId": "bun_variations",
+      "imageUrl": "https://cdn.donmai.us/720x720/bb/21/bb21cc0202de9ef183feea8f0dfd11ad.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/single_hair_bun",
+      "description": "single hair bun"
+    },
+    {
+      "id": "double_bun",
+      "tag": "double bun",
+      "name": "Double Bun",
+      "groupId": "bun_variations",
+      "imageUrl": "https://cdn.donmai.us/720x720/12/87/1287f50c496da3a94d5ce502718e2e66.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/double_bun",
+      "description": "double bun"
+    },
+    {
+      "id": "very_low_bun",
+      "tag": "very low bun",
+      "name": "Very Low Bun",
+      "groupId": "bun_variations",
+      "imageUrl": "https://cdn.donmai.us/720x720/01/04/010401ff13dffce0c65eecbb83e9c0e3.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/very_low_bun",
+      "description": "very low bun"
+    },
+    {
+      "id": "cone_hair_bun",
+      "tag": "cone hair bun",
+      "name": "Cone Hair Bun",
+      "groupId": "bun_variations",
+      "imageUrl": "https://cdn.donmai.us/720x720/ae/1a/ae1a5bcb52381cd8212107543bba123e.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/cone_hair_bun",
+      "description": "cone hair bun"
+    },
+    {
+      "id": "donut_hair_bun",
+      "tag": "donut hair bun",
+      "name": "Donut Hair Bun",
+      "groupId": "bun_variations",
+      "imageUrl": "https://cdn.donmai.us/720x720/57/2c/572c78f32613c9376e6412d336809e02.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/donut_hair_bun",
+      "description": "donut hair bun"
+    },
+    {
+      "id": "heart_hair_bun",
+      "tag": "heart hair bun",
+      "name": "Heart Hair Bun",
+      "groupId": "bun_variations",
+      "imageUrl": "https://cdn.donmai.us/720x720/02/31/0231c68fb04d9778d54bf201c7b7fca5.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/heart_hair_bun",
+      "description": "heart hair bun"
+    },
+    {
+      "id": "triple_bun",
+      "tag": "triple bun",
+      "name": "Triple Bun",
+      "groupId": "bun_variations",
+      "imageUrl": "https://cdn.donmai.us/720x720/98/73/98730cbb4079495328fc65c85846760b.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/triple_bun",
+      "description": "triple bun"
+    },
+    {
+      "id": "hair_rings",
+      "tag": "hair rings",
+      "name": "Hair Rings",
+      "groupId": "sculpted_updos",
+      "imageUrl": "https://cdn.donmai.us/720x720/d1/76/d176c43323653e1da910f7a643add50e.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/hair_rings",
+      "description": "hair rings"
+    },
+    {
+      "id": "feixianji",
+      "tag": "feixianji",
+      "name": "Feixianji",
+      "groupId": "sculpted_updos",
+      "imageUrl": "https://cdn.donmai.us/720x720/75/74/7574b31f9556fae7c87ec73400566e93.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/feixianji_%28hairstyle%29",
+      "description": "feixianji"
+    },
+    {
+      "id": "katsuyamamage",
+      "tag": "katsuyamamage",
+      "name": "Katsuyamamage",
+      "groupId": "sculpted_updos",
+      "imageUrl": "https://cdn.donmai.us/720x720/ec/6b/ec6b533565378bb585937748730b7e14.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/katsuyamamage",
+      "description": "katsuyamamage (nihongami)"
+    },
+    {
+      "id": "single_hair_ring",
+      "tag": "single hair ring",
+      "name": "Single Hair Ring",
+      "groupId": "sculpted_updos",
+      "imageUrl": "https://cdn.donmai.us/720x720/a4/c8/a4c8f6737124fb2e0ab561cbbfc34940.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/single_hair_ring",
+      "description": "single hair ring"
+    },
+    {
+      "id": "tri_hair_rings",
+      "tag": "tri hair rings",
+      "name": "Tri Hair Rings",
+      "groupId": "sculpted_updos",
+      "imageUrl": "https://cdn.donmai.us/720x720/51/f2/51f2b4ff5e7859a6e7d1f3ab072449dd.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/tri_hair_rings",
+      "description": "tri hair rings"
+    },
+    {
+      "id": "quad_hair_rings",
+      "tag": "quad hair rings",
+      "name": "Quad Hair Rings",
+      "groupId": "sculpted_updos",
+      "imageUrl": "https://cdn.donmai.us/720x720/7c/e7/7ce75a7b867718dddd19fcad4babc020.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/quad_hair_rings",
+      "description": "quad hair rings"
+    },
+    {
+      "id": "triangle_hair_bun_with_corners_toward_head",
+      "tag": "triangle hair bun with corners toward head",
+      "name": "Triangle Hair Bun With Corners Toward Head",
+      "groupId": "bun_variations",
+      "imageUrl": "https://cdn.donmai.us/720x720/0e/b1/0eb1ae888424849357b04f7ed88202af.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/triangle_hair_bun_with_corners_toward_head",
+      "description": "triangle hair bun with corners toward head"
+    },
+    {
+      "id": "half_updo",
+      "tag": "half updo",
+      "name": "Half Updo",
+      "groupId": "sculpted_updos",
+      "imageUrl": "https://cdn.donmai.us/720x720/34/09/3409dbcc1fd5813d56d762d6edabe1aa.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/half_updo",
+      "description": "half updo"
+    },
+    {
+      "id": "one_side_up",
+      "tag": "one side up",
+      "name": "One Side Up",
+      "groupId": "sculpted_updos",
+      "imageUrl": "https://cdn.donmai.us/720x720/2c/80/2c80bc77563dcbf4f30dbf86c34d4e09.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/one_side_up",
+      "description": "one side up"
+    },
+    {
+      "id": "two_side_up",
+      "tag": "two side up",
+      "name": "Two Side Up",
+      "groupId": "sculpted_updos",
+      "imageUrl": "https://cdn.donmai.us/720x720/37/e3/37e357375430e831009297b511444e7f.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/two_side_up",
+      "description": "two side up"
+    },
+    {
+      "id": "lowtied_long_hair",
+      "tag": "low-tied long hair",
+      "name": "Low-Tied Long Hair",
+      "groupId": "length_tier",
+      "imageUrl": "https://cdn.donmai.us/720x720/e1/86/e18655215dc0092e21c792b7d199e8d4.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/low-tied_long_hair",
+      "description": "tied long hair"
+    },
+    {
+      "id": "multitied_hair",
+      "tag": "multi-tied hair",
+      "name": "Multi-Tied Hair",
+      "groupId": "sculpted_updos",
+      "imageUrl": "https://cdn.donmai.us/720x720/41/e0/41e0b4a9d75a07e0b5afde62001f439d.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/multi-tied_hair",
+      "description": "tied hair"
+    },
+    {
+      "id": "folded_ponytail",
+      "tag": "folded ponytail",
+      "name": "Folded Ponytail",
+      "groupId": "ponytail_styles",
+      "imageUrl": "https://cdn.donmai.us/720x720/b3/7d/b37dff916ea2efc49601d9112a660964.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/folded_ponytail",
+      "description": "folded ponytail"
+    },
+    {
+      "id": "front_ponytail",
+      "tag": "front ponytail",
+      "name": "Front Ponytail",
+      "groupId": "ponytail_styles",
+      "imageUrl": "https://cdn.donmai.us/720x720/47/db/47db545c93d24c4d9e2be9cc8de2a979.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/front_ponytail",
+      "description": "front ponytail"
+    },
+    {
+      "id": "high_ponytail",
+      "tag": "high ponytail",
+      "name": "High Ponytail",
+      "groupId": "ponytail_styles",
+      "imageUrl": "https://cdn.donmai.us/720x720/67/90/6790036120193ca82936b06b098c1cb4.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/high_ponytail",
+      "description": "high ponytail"
+    },
+    {
+      "id": "low_ponytail",
+      "tag": "low ponytail",
+      "name": "Low Ponytail",
+      "groupId": "ponytail_styles",
+      "imageUrl": "https://cdn.donmai.us/720x720/a9/3f/a93fb84d5d720ab75733e8806c3c4fbb.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/low_ponytail",
+      "description": "low ponytail"
+    },
+    {
+      "id": "short_ponytail",
+      "tag": "short ponytail",
+      "name": "Short Ponytail",
+      "groupId": "ponytail_styles",
+      "imageUrl": "https://cdn.donmai.us/720x720/3f/e7/3fe7a1fab8a0a453ac1bb56bd33e7d43.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/short_ponytail",
+      "description": "short ponytail"
+    },
+    {
+      "id": "ponytail_with_braided_base",
+      "tag": "ponytail with braided base",
+      "name": "Ponytail With Braided Base",
+      "groupId": "ponytail_styles",
+      "imageUrl": "https://cdn.donmai.us/720x720/51/9f/519f8f715b5fe3c4991feac1168b9057.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/ponytail_with_braided_base",
+      "description": "ponytail with braided base"
+    },
+    {
+      "id": "side_ponytail",
+      "tag": "side ponytail",
+      "name": "Side Ponytail",
+      "groupId": "ponytail_styles",
+      "imageUrl": "https://cdn.donmai.us/720x720/c8/43/c843e7a460f517a93ff4426a6a7ec420.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/side_ponytail",
+      "description": "side ponytail"
+    },
+    {
+      "id": "high_side_ponytail",
+      "tag": "high side ponytail",
+      "name": "High Side Ponytail",
+      "groupId": "ponytail_styles",
+      "imageUrl": "https://cdn.donmai.us/720x720/c3/30/c33085688930f6bd53c8a21cd1266b88.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/high_side_ponytail",
+      "description": "high side ponytail"
+    },
+    {
+      "id": "low_side_ponytail",
+      "tag": "low side ponytail",
+      "name": "Low Side Ponytail",
+      "groupId": "ponytail_styles",
+      "imageUrl": "https://cdn.donmai.us/720x720/0d/7d/0d7d2e3cac536f7dc1b36364cf1cfdca.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/low_side_ponytail",
+      "description": "low side ponytail"
+    },
+    {
+      "id": "short_side_ponytail",
+      "tag": "short side ponytail",
+      "name": "Short Side Ponytail",
+      "groupId": "ponytail_styles",
+      "imageUrl": "https://cdn.donmai.us/720x720/29/8f/298fa0c321ca31a10d0c4c61f6c4f6f7.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/short_side_ponytail",
+      "description": "short side ponytail"
+    },
+    {
+      "id": "side_ponytail_with_braided_base",
+      "tag": "side ponytail with braided base",
+      "name": "Side Ponytail With Braided Base",
+      "groupId": "ponytail_styles",
+      "imageUrl": "https://cdn.donmai.us/720x720/0b/f1/0bf1bb2097f4184edbac745675c44b10.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/side_ponytail_with_braided_base",
+      "description": "side ponytail with braided base"
+    },
+    {
+      "id": "split_ponytail",
+      "tag": "split ponytail",
+      "name": "Split Ponytail",
+      "groupId": "ponytail_styles",
+      "imageUrl": "https://cdn.donmai.us/720x720/72/35/72355f40acd391c6444f9b3269d50f01.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/split_ponytail",
+      "description": "split ponytail"
+    },
+    {
+      "id": "topknot",
+      "tag": "topknot",
+      "name": "Topknot",
+      "groupId": "sculpted_updos",
+      "imageUrl": "https://cdn.donmai.us/720x720/eb/da/ebda7b44a5e4f742d2f276eb7485ebfa.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/topknot",
+      "description": "topknot"
+    },
+    {
+      "id": "chonmage",
+      "tag": "chonmage",
+      "name": "Chonmage",
+      "groupId": "sculpted_updos",
+      "imageUrl": "https://cdn.donmai.us/720x720/f6/e2/f6e2525a0aac975290d5cb51e8aa52b7.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/chonmage",
+      "description": "chonmage"
+    },
+    {
+      "id": "sangtu",
+      "tag": "sangtu",
+      "name": "Sangtu",
+      "groupId": "sculpted_updos",
+      "imageUrl": "https://cdn.donmai.us/720x720/38/21/382145713f17277bc823f7152eb5ce55.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/sangtu",
+      "description": "sangtu"
+    },
+    {
+      "id": "chasenmage",
+      "tag": "chasenmage",
+      "name": "Chasenmage",
+      "groupId": "sculpted_updos",
+      "imageUrl": "https://cdn.donmai.us/720x720/91/77/91775c184b0371964d46810776fec197.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/chasenmage",
+      "description": "chasenmage"
+    },
+    {
+      "id": "twintails",
+      "tag": "twintails",
+      "name": "Twintails",
+      "groupId": "twintail_styles",
+      "imageUrl": "https://cdn.donmai.us/720x720/69/fd/69fda6e2661a12643e9578d23c324b56.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/twintails",
+      "description": "twintails"
+    },
+    {
+      "id": "low_twintails",
+      "tag": "low twintails",
+      "name": "Low Twintails",
+      "groupId": "twintail_styles",
+      "imageUrl": "https://cdn.donmai.us/720x720/a5/1d/a51d266d2a50c8356b5a9c8b8c8c464b.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/low_twintails",
+      "description": "low twintails"
+    },
+    {
+      "id": "short_twintails",
+      "tag": "short twintails",
+      "name": "Short Twintails",
+      "groupId": "twintail_styles",
+      "imageUrl": "https://cdn.donmai.us/720x720/b6/8c/b68c08a7c5e8248a3ef3bb734a37f3ca.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/short_twintails",
+      "description": "short twintails"
+    },
+    {
+      "id": "uneven_twintails",
+      "tag": "uneven twintails",
+      "name": "Uneven Twintails",
+      "groupId": "twintail_styles",
+      "imageUrl": "https://cdn.donmai.us/720x720/2a/49/2a49668c1e2cf3163717586fcf1c2a0f.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/uneven_twintails",
+      "description": "uneven twintails"
+    },
+    {
+      "id": "tri_tails",
+      "tag": "tri tails",
+      "name": "Tri Tails",
+      "groupId": "sculpted_updos",
+      "imageUrl": "https://cdn.donmai.us/720x720/49/88/4988e5b897631c37fdd08baf3d7f92d7.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/tri_tails",
+      "description": "tri tails"
+    },
+    {
+      "id": "quad_tails",
+      "tag": "quad tails",
+      "name": "Quad Tails",
+      "groupId": "sculpted_updos",
+      "imageUrl": "https://cdn.donmai.us/720x720/09/70/097078499ec5a569ac10b3258a45b37c.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/quad_tails",
+      "description": "quad tails"
+    },
+    {
+      "id": "quin_tails",
+      "tag": "quin tails",
+      "name": "Quin Tails",
+      "groupId": "sculpted_updos",
+      "imageUrl": "https://cdn.donmai.us/720x720/32/1a/321a36e6e2569ee2fc911d17914a2b33.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/quin_tails",
+      "description": "quin tails"
+    },
+    {
+      "id": "bowshaped_hair",
+      "tag": "bow-shaped hair",
+      "name": "Bow-Shaped Hair",
+      "groupId": "sculpted_updos",
+      "imageUrl": "https://cdn.donmai.us/720x720/f8/30/f83070a714d11f6ea7bb20fb3d61a3ee.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/bow-shaped_hair",
+      "description": "shaped hair"
+    },
+    {
+      "id": "bow_shimada",
+      "tag": "bow_shimada",
+      "name": "Bow_Shimada",
+      "groupId": "sculpted_updos",
+      "imageUrl": "https://cdn.donmai.us/720x720/bf/4a/bf4a4ee5836804dde692888bf6d21c0b.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/bow_shimada",
+      "description": "bow_shimada (nihongami)"
+    },
+    {
+      "id": "shuangyaji",
+      "tag": "shuangyaji",
+      "name": "Shuangyaji",
+      "groupId": "sculpted_updos",
+      "imageUrl": "https://cdn.donmai.us/720x720/dd/55/dd551f2d49301cd6efe7ff7817fcc8d1.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/shuangyaji",
+      "description": "shuangyaji"
+    },
+    {
+      "id": "danyaji",
+      "tag": "danyaji",
+      "name": "Danyaji",
+      "groupId": "sculpted_updos",
+      "imageUrl": "https://cdn.donmai.us/720x720/27/52/27525eff8c1247817d54ca7d3b9922be.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/danyaji",
+      "description": "danyaji"
+    },
+    {
+      "id": "four_leaf_clover_hairstyle",
+      "tag": "four leaf clover hairstyle",
+      "name": "Four Leaf Clover Hairstyle",
+      "groupId": "sculpted_updos",
+      "imageUrl": "https://cdn.donmai.us/720x720/9b/69/9b69acdb5a8d69494280d2d42ea337b4.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/four_leaf_clover_hairstyle",
+      "description": "four leaf clover hairstyle"
+    },
+    {
+      "id": "rabbit_hairstyle",
+      "tag": "rabbit hairstyle",
+      "name": "Rabbit Hairstyle",
+      "groupId": "sculpted_updos",
+      "imageUrl": "https://cdn.donmai.us/720x720/a2/46/a246c34823adeaad0271b05fafb8edd0.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/rabbit_hairstyle",
+      "description": "rabbit hairstyle"
+    },
+    {
+      "id": "flowershaped_hair",
+      "tag": "flower-shaped hair",
+      "name": "Flower-Shaped Hair",
+      "groupId": "sculpted_updos",
+      "imageUrl": "https://cdn.donmai.us/720x720/76/f5/76f51388743ed71c3503c889751a4a89.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/flower-shaped_hair",
+      "description": "shaped hair"
+    },
+    {
+      "id": "fukumage",
+      "tag": "fukumage",
+      "name": "Fukumage",
+      "groupId": "sculpted_updos",
+      "imageUrl": "https://cdn.donmai.us/720x720/3d/d2/3dd2c5187e682558a7ff5ce588f728d3.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/fukumage",
+      "description": "fukumage (nihongami)"
+    },
+    {
+      "id": "karawamage",
+      "tag": "karawamage",
+      "name": "Karawamage",
+      "groupId": "sculpted_updos",
+      "imageUrl": "https://cdn.donmai.us/720x720/bb/01/bb01fee3ba36fcedfd15e0880dfc711a.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/karawamage",
+      "description": "karawamage (nihongami)"
+    },
+    {
+      "id": "marumage",
+      "tag": "marumage",
+      "name": "Marumage",
+      "groupId": "sculpted_updos",
+      "imageUrl": "https://cdn.donmai.us/720x720/88/6a/886a7e6877ea433f70f6dcfc08ff46e1.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/marumage",
+      "description": "marumage (nihongami)"
+    },
+    {
+      "id": "yuiwata",
+      "tag": "yuiwata",
+      "name": "Yuiwata",
+      "groupId": "sculpted_updos",
+      "imageUrl": "https://cdn.donmai.us/720x720/05/9d/059db0f8671bbcfcfa8bd3e41b26c23e.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/yuiwata",
+      "description": "yuiwata (nihongami)"
+    },
+    {
+      "id": "mizura",
+      "tag": "mizura",
+      "name": "Mizura",
+      "groupId": "sculpted_updos",
+      "imageUrl": "https://cdn.donmai.us/720x720/64/f2/64f2793067ab3b7e596270aa6daea974.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/mizura",
+      "description": "mizura (nihongami)"
+    },
+    {
+      "id": "starshaped_hair",
+      "tag": "star-shaped hair",
+      "name": "Star-Shaped Hair",
+      "groupId": "sculpted_updos",
+      "imageUrl": "https://cdn.donmai.us/720x720/32/b1/32b1f0d36220bc34957c8acfbcb301e8.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/star-shaped_hair",
+      "description": "shaped hair"
+    },
+    {
+      "id": "afro",
+      "tag": "afro",
+      "name": "Afro",
+      "groupId": "texture_flow",
+      "imageUrl": "https://cdn.donmai.us/720x720/c8/bd/c8bdd7490fc7ddfd3426fa2da6f0990f.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/afro",
+      "description": "afro"
+    },
+    {
+      "id": "huge_afro",
+      "tag": "huge afro",
+      "name": "Huge Afro",
+      "groupId": "texture_flow",
+      "imageUrl": "https://cdn.donmai.us/720x720/4c/dc/4cdc06b32b17d77a2b2bb5a35cb92866.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/huge_afro",
+      "description": "huge afro"
+    },
+    {
+      "id": "beehive_hairdo",
+      "tag": "beehive hairdo",
+      "name": "Beehive Hairdo",
+      "groupId": "sculpted_updos",
+      "imageUrl": "https://cdn.donmai.us/720x720/98/ea/98ea0c66e043d4688e51c786aa961373.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/beehive_hairdo",
+      "description": "beehive hairdo"
+    },
+    {
+      "id": "crested_hair",
+      "tag": "crested hair",
+      "name": "Crested Hair",
+      "groupId": "sculpted_updos",
+      "imageUrl": "https://cdn.donmai.us/720x720/0c/8a/0c8a33ee14f801072f9f4a7822b36af2.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/crested_hair",
+      "description": "crested hair"
+    },
+    {
+      "id": "liangbatou",
+      "tag": "liangbatou",
+      "name": "Liangbatou",
+      "groupId": "sculpted_updos",
+      "imageUrl": "https://cdn.donmai.us/720x720/92/c7/92c77d6587c30fabc3a5ec233d111c0a.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/liangbatou",
+      "description": "liangbatou"
+    },
+    {
+      "id": "pompadour",
+      "tag": "pompadour",
+      "name": "Pompadour",
+      "groupId": "sculpted_updos",
+      "imageUrl": "https://cdn.donmai.us/720x720/d6/ae/d6aec94cbec8858dfd8be0436f21448b.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/pompadour",
+      "description": "pompadour"
+    },
+    {
+      "id": "quiff",
+      "tag": "quiff",
+      "name": "Quiff",
+      "groupId": "sculpted_updos",
+      "imageUrl": "https://cdn.donmai.us/720x720/76/dd/76dd6a30e966b1560ee8778a43a6762d.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/quiff",
+      "description": "quiff"
+    },
+    {
+      "id": "shouten_pegasus_mix_mori",
+      "tag": "shouten pegasus mix mori",
+      "name": "Shouten Pegasus Mix Mori",
+      "groupId": "sculpted_updos",
+      "imageUrl": "https://cdn.donmai.us/720x720/9c/db/9cdb44b2fea23b428b26ae429b5d3f4e.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/shouten_pegasus_mix_mori",
+      "description": "shouten pegasus mix mori"
+    },
+    {
+      "id": "curly_hair",
+      "tag": "curly hair",
+      "name": "Curly Hair",
+      "groupId": "texture_flow",
+      "imageUrl": "https://cdn.donmai.us/720x720/35/ff/35ff72da11d45b4d7db087c28d30d513.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/curly_hair",
+      "description": "curly hair"
+    },
+    {
+      "id": "flipped_hair",
+      "tag": "flipped hair",
+      "name": "Flipped Hair",
+      "groupId": "texture_flow",
+      "imageUrl": "https://cdn.donmai.us/720x720/80/e3/80e3f461e014443dd0e76eec2e14919e.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/flipped_hair",
+      "description": "flipped hair"
+    },
+    {
+      "id": "drill_hair",
+      "tag": "drill hair",
+      "name": "Drill Hair",
+      "groupId": "texture_flow",
+      "imageUrl": "https://cdn.donmai.us/720x720/70/58/7058f1a545f286b4235f3b90b4d3bfc4.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/drill_hair",
+      "description": "drill hair"
+    },
+    {
+      "id": "twin_drills",
+      "tag": "twin drills",
+      "name": "Twin Drills",
+      "groupId": "texture_flow",
+      "imageUrl": "https://cdn.donmai.us/720x720/d5/37/d537d9aba9af983f3d2fe5fea705bb97.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/twin_drills",
+      "description": "twin drills"
+    },
+    {
+      "id": "tri_drills",
+      "tag": "tri drills",
+      "name": "Tri Drills",
+      "groupId": "texture_flow",
+      "imageUrl": "https://cdn.donmai.us/720x720/c4/3e/c43e65e9d32f44181e1809449d1616bd.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/tri_drills \"This wiki page does not exist\"",
+      "description": "tri drills"
+    },
+    {
+      "id": "single_drill",
+      "tag": "single drill",
+      "name": "Single Drill",
+      "groupId": "texture_flow",
+      "imageUrl": "https://cdn.donmai.us/720x720/76/ca/76ca7863e5e19107489cb0394434d3e9.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/single_drill",
+      "description": "single drill"
+    },
+    {
+      "id": "quad_drills",
+      "tag": "quad drills",
+      "name": "Quad Drills",
+      "groupId": "texture_flow",
+      "imageUrl": "https://cdn.donmai.us/720x720/33/a9/33a9bccd4894c328bed65264e79ae8fa.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/quad_drills",
+      "description": "quad drills"
+    },
+    {
+      "id": "hair_flaps",
+      "tag": "hair flaps",
+      "name": "Hair Flaps",
+      "groupId": "sculpted_updos",
+      "imageUrl": "https://cdn.donmai.us/720x720/d3/87/d387abb81f7bcdb6d3a3c24c83e5b1fc.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/hair_flaps",
+      "description": "hair flaps"
+    },
+    {
+      "id": "messy_hair",
+      "tag": "messy hair",
+      "name": "Messy Hair",
+      "groupId": "texture_flow",
+      "imageUrl": "https://cdn.donmai.us/720x720/e0/15/e015cfc831e1b7f068523225be07f831.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/messy_hair",
+      "description": "messy hair"
+    },
+    {
+      "id": "pointy_hair",
+      "tag": "pointy hair",
+      "name": "Pointy Hair",
+      "groupId": "sculpted_updos",
+      "imageUrl": "https://cdn.donmai.us/720x720/dc/b0/dcb07b56c33a618aaa2e15b708e16479.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/pointy_hair",
+      "description": "pointy hair"
+    },
+    {
+      "id": "hair_horns",
+      "tag": "hair horns",
+      "name": "Hair Horns",
+      "groupId": "sculpted_updos",
+      "imageUrl": "https://cdn.donmai.us/720x720/df/38/df38accc12fcb14176eaaad58a723047.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/hair_horns",
+      "description": "hair horns"
+    },
+    {
+      "id": "ringlets",
+      "tag": "ringlets",
+      "name": "Ringlets",
+      "groupId": "texture_flow",
+      "imageUrl": "https://cdn.donmai.us/720x720/cd/b6/cdb6f7bc12f696ede2e03e752d48bb25.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/ringlets",
+      "description": "ringlets"
+    },
+    {
+      "id": "spiked_hair",
+      "tag": "spiked hair",
+      "name": "Spiked Hair",
+      "groupId": "sculpted_updos",
+      "imageUrl": "https://cdn.donmai.us/720x720/07/5c/075c350a789c3bee4d2bcc083e192b39.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/spiked_hair",
+      "description": "spiked hair"
+    },
+    {
+      "id": "straight_hair",
+      "tag": "straight hair",
+      "name": "Straight Hair",
+      "groupId": "texture_flow",
+      "imageUrl": "https://cdn.donmai.us/720x720/31/8d/318d5519df58e613834d71fc81e6ed64.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/straight_hair",
+      "description": "straight hair"
+    },
+    {
+      "id": "wavy_hair",
+      "tag": "wavy hair",
+      "name": "Wavy Hair",
+      "groupId": "texture_flow",
+      "imageUrl": "https://cdn.donmai.us/720x720/5a/c8/5ac89b44381e6e659f3a15b009711109.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/wavy_hair",
+      "description": "wavy hair"
+    },
+    {
+      "id": "fluffy_hair",
+      "tag": "fluffy hair",
+      "name": "Fluffy Hair",
+      "groupId": "texture_flow",
+      "imageUrl": "https://cdn.donmai.us/720x720/8d/3b/8d3b9f157cc5d5eb2d575469204a5425.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/fluffy_hair",
+      "description": "fluffy hair"
+    },
+    {
+      "id": "kinky_hair",
+      "tag": "kinky hair",
+      "name": "Kinky Hair",
+      "groupId": "sculpted_updos",
+      "imageUrl": "https://cdn.donmai.us/720x720/f9/32/f9321767d797c6545c913a6ed103ce33.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/kinky_hair",
+      "description": "kinky hair"
+    },
+    {
+      "id": "kishimen_hair",
+      "tag": "kishimen hair",
+      "name": "Kishimen Hair",
+      "groupId": "sculpted_updos",
+      "imageUrl": "https://cdn.donmai.us/720x720/b6/a7/b6a79a09eba6f63fcc5cb35763e4ea84.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/kishimen_hair",
+      "description": "kishimen hair"
+    },
+    {
+      "id": "arched_bangs",
+      "tag": "arched bangs",
+      "name": "Arched Bangs",
+      "groupId": "fringe_cut",
+      "imageUrl": "https://cdn.donmai.us/720x720/39/72/3972fe8fd44e120d60f51fd3daea2968.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/arched_bangs",
+      "description": "arched bangs"
+    },
+    {
+      "id": "asymmetrical_bangs",
+      "tag": "asymmetrical bangs",
+      "name": "Asymmetrical Bangs",
+      "groupId": "fringe_cut",
+      "imageUrl": "https://cdn.donmai.us/720x720/15/f4/15f4d88480afa6673160effeb7421560.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/asymmetrical_bangs",
+      "description": "asymmetrical bangs"
+    },
+    {
+      "id": "bangs_pinned_back",
+      "tag": "bangs pinned back",
+      "name": "Bangs Pinned Back",
+      "groupId": "fringe_cut",
+      "imageUrl": "https://cdn.donmai.us/720x720/75/03/7503230d2660bcf74499b0d72f569a2b.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/bangs_pinned_back",
+      "description": "bangs pinned back"
+    },
+    {
+      "id": "blunt_bangs",
+      "tag": "blunt bangs",
+      "name": "Blunt Bangs",
+      "groupId": "fringe_cut",
+      "imageUrl": "https://cdn.donmai.us/720x720/40/7a/407a8b53ac0a9d693afd922d0d38425d.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/blunt_bangs",
+      "description": "blunt bangs"
+    },
+    {
+      "id": "centerflap_bangs",
+      "tag": "center-flap bangs",
+      "name": "Center-Flap Bangs",
+      "groupId": "bangs_parting",
+      "imageUrl": "https://cdn.donmai.us/720x720/d7/37/d7373a9f5abfa67e6cccf38cf4016958.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/center-flap_bangs",
+      "description": "flap bangs"
+    },
+    {
+      "id": "crossed_bangs",
+      "tag": "crossed bangs",
+      "name": "Crossed Bangs",
+      "groupId": "fringe_cut",
+      "imageUrl": "https://cdn.donmai.us/720x720/5c/0e/5c0e7d09a056ec7c13d617c4785f0fba.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/crossed_bangs",
+      "description": "crossed bangs"
+    },
+    {
+      "id": "wispy_bangs",
+      "tag": "wispy bangs",
+      "name": "Wispy Bangs",
+      "groupId": "fringe_cut",
+      "imageUrl": "https://cdn.donmai.us/720x720/a5/6a/a56ad961ce25bcea6300912762e74cb4.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/wispy_bangs",
+      "description": "wispy bangs"
+    },
+    {
+      "id": "choppy_bangs",
+      "tag": "choppy bangs",
+      "name": "Choppy Bangs",
+      "groupId": "fringe_cut",
+      "imageUrl": "https://cdn.donmai.us/720x720/79/bc/79bc1828aa39634879a890697faff958.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/choppy_bangs",
+      "description": "choppy bangs"
+    },
+    {
+      "id": "diagonal_bangs",
+      "tag": "diagonal bangs",
+      "name": "Diagonal Bangs",
+      "groupId": "fringe_cut",
+      "imageUrl": "https://cdn.donmai.us/720x720/f7/ee/f7ee4ae91ce3c481b52a926dde3b8e6f.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/diagonal_bangs",
+      "description": "diagonal bangs"
+    },
+    {
+      "id": "fanged_bangs",
+      "tag": "fanged bangs",
+      "name": "Fanged Bangs",
+      "groupId": "fringe_cut",
+      "imageUrl": "https://cdn.donmai.us/720x720/b1/eb/b1ebf147bcf0a148af94f251e28d8e1d.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/fanged_bangs",
+      "description": "fanged bangs"
+    },
+    {
+      "id": "short_bangs",
+      "tag": "short bangs",
+      "name": "Short Bangs",
+      "groupId": "fringe_cut",
+      "imageUrl": "https://cdn.donmai.us/720x720/98/2d/982dfd7a7b14be995f0bced8cc6c2454.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/short_bangs",
+      "description": "short bangs"
+    },
+    {
+      "id": "long_bangs",
+      "tag": "long bangs",
+      "name": "Long Bangs",
+      "groupId": "fringe_cut",
+      "imageUrl": "https://cdn.donmai.us/720x720/ed/ec/edec10c5dea798688c3f30024177b654.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/long_bangs",
+      "description": "long bangs"
+    },
+    {
+      "id": "hair_between_eyes",
+      "tag": "hair between eyes",
+      "name": "Hair Between Eyes",
+      "groupId": "forehead_accents",
+      "imageUrl": "https://cdn.donmai.us/720x720/42/a5/42a58b9b55e47c9a2dcb0c2e0c8970fa.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/hair_between_eyes",
+      "description": "hair between eyes"
+    },
+    {
+      "id": "hair_over_one_eye",
+      "tag": "hair over one eye",
+      "name": "Hair Over One Eye",
+      "groupId": "forehead_accents",
+      "imageUrl": "https://cdn.donmai.us/720x720/b4/bd/b4bdb73dad762ecb4558cf34e3201702.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/hair_over_one_eye",
+      "description": "hair over one eye"
+    },
+    {
+      "id": "hair_over_eyes",
+      "tag": "hair over eyes",
+      "name": "Hair Over Eyes",
+      "groupId": "forehead_accents",
+      "imageUrl": "https://cdn.donmai.us/720x720/f1/a5/f1a55e7174ce5db651dcbd33abbc289f.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/hair_over_eyes",
+      "description": "hair over eyes"
+    },
+    {
+      "id": "parted_bangs",
+      "tag": "parted bangs",
+      "name": "Parted Bangs",
+      "groupId": "bangs_parting",
+      "imageUrl": "https://cdn.donmai.us/720x720/9d/d3/9dd38a1c8be4dd1cce1647cf0982f2f4.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/parted_bangs",
+      "description": "parted bangs"
+    },
+    {
+      "id": "middle_part",
+      "tag": "middle part",
+      "name": "Middle Part",
+      "groupId": "bangs_parting",
+      "imageUrl": "https://cdn.donmai.us/720x720/61/24/6124695ca7fe98ec6f6a72daf8c288f7.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/middle_part",
+      "description": "middle part"
+    },
+    {
+      "id": "side_part",
+      "tag": "side part",
+      "name": "Side Part",
+      "groupId": "bangs_parting",
+      "imageUrl": "https://cdn.donmai.us/720x720/ba/b4/bab463fea3d162b708c419d26505986c.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/side_part",
+      "description": "side part"
+    },
+    {
+      "id": "doubleparted_bangs",
+      "tag": "double-parted bangs",
+      "name": "Double-Parted Bangs",
+      "groupId": "bangs_parting",
+      "imageUrl": "https://cdn.donmai.us/720x720/6e/b7/6eb7e93e3bf31f38e6b7988987592b2a.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/double-parted_bangs",
+      "description": "parted bangs"
+    },
+    {
+      "id": "curtained_hair",
+      "tag": "curtained hair",
+      "name": "Curtained Hair",
+      "groupId": "sculpted_updos",
+      "imageUrl": "https://cdn.donmai.us/720x720/49/5e/495eb3183df046dd50d134799c9f46b3.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/curtained_hair",
+      "description": "curtained hair"
+    },
+    {
+      "id": "swept_bangs",
+      "tag": "swept bangs",
+      "name": "Swept Bangs",
+      "groupId": "fringe_cut",
+      "imageUrl": "https://cdn.donmai.us/720x720/60/4b/604b4ac585e60b78702b8195496769cc.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/swept_bangs",
+      "description": "swept bangs"
+    },
+    {
+      "id": "colored_bangs",
+      "tag": "colored bangs",
+      "name": "Colored Bangs",
+      "groupId": "fringe_cut",
+      "imageUrl": "https://cdn.donmai.us/720x720/f6/1c/f61ceb140f4294fb2100cbdca392a535.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/colored_bangs",
+      "description": "colored bangs"
+    },
+    {
+      "id": "hair_intakes",
+      "tag": "hair intakes",
+      "name": "Hair Intakes",
+      "groupId": "crown_accents",
+      "imageUrl": "https://cdn.donmai.us/720x720/cc/d3/ccd3d4a2ac763d3bddc433fdfe90d3a6.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/hair_intakes",
+      "description": "hair intakes"
+    },
+    {
+      "id": "single_hair_intake",
+      "tag": "single hair intake",
+      "name": "Single Hair Intake",
+      "groupId": "crown_accents",
+      "imageUrl": "https://cdn.donmai.us/720x720/1e/96/1e96c8f5425da13508e8334e4e00c0d8.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/single_hair_intake",
+      "description": "single hair intake"
+    },
+    {
+      "id": "sidelocks",
+      "tag": "sidelocks",
+      "name": "Sidelocks",
+      "groupId": "side_framing",
+      "imageUrl": "https://cdn.donmai.us/720x720/ba/cd/bacd3ff32f506a8004f4ee2ed4215aae.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/sidelocks",
+      "description": "sidelocks"
+    },
+    {
+      "id": "asymmetrical_sidelocks",
+      "tag": "asymmetrical sidelocks",
+      "name": "Asymmetrical Sidelocks",
+      "groupId": "sculpted_updos",
+      "imageUrl": "https://cdn.donmai.us/720x720/66/bc/66bcb3bc3cc2dfe0b183c509dcc5b430.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/asymmetrical_sidelocks",
+      "description": "asymmetrical sidelocks"
+    },
+    {
+      "id": "drill_sidelocks",
+      "tag": "drill sidelocks",
+      "name": "Drill Sidelocks",
+      "groupId": "side_framing",
+      "imageUrl": "https://cdn.donmai.us/720x720/28/1c/281caa5b45210c11b529dc8ad6ec9e8b.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/drill_sidelocks",
+      "description": "drill sidelocks"
+    },
+    {
+      "id": "lowtied_sidelocks",
+      "tag": "low-tied sidelocks",
+      "name": "Low-Tied Sidelocks",
+      "groupId": "sculpted_updos",
+      "imageUrl": "https://cdn.donmai.us/720x720/c9/83/c983fbc3686f6bf8f93c5f3a067cfe3d.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/low-tied_sidelocks",
+      "description": "tied sidelocks"
+    },
+    {
+      "id": "sidelocks_tied_back",
+      "tag": "sidelocks tied back",
+      "name": "Sidelocks Tied Back",
+      "groupId": "sculpted_updos",
+      "imageUrl": "https://cdn.donmai.us/720x720/9a/f6/9af665c2d6fd3b87e09327385f396be8.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/sidelocks_tied_back",
+      "description": "sidelocks tied back"
+    },
+    {
+      "id": "single_sidelock",
+      "tag": "single sidelock",
+      "name": "Single Sidelock",
+      "groupId": "side_framing",
+      "imageUrl": "https://cdn.donmai.us/720x720/4a/4c/4a4cfd9ddfd294c23bb14489c04a7168.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/single_sidelock",
+      "description": "single sidelock"
+    },
+    {
+      "id": "widows_peak",
+      "tag": "widow's peak",
+      "name": "Widow'S Peak",
+      "groupId": "sculpted_updos",
+      "imageUrl": "https://cdn.donmai.us/720x720/ba/ed/baed7ae66562cc69e3b2689285d8e502.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/widow%27s_peak",
+      "description": "widow's peak"
+    },
+    {
+      "id": "ahoge",
+      "tag": "ahoge",
+      "name": "Ahoge",
+      "groupId": "crown_accents",
+      "imageUrl": "https://cdn.donmai.us/720x720/eb/45/eb4583ffd7cc19ee0e517453d1887a60.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/ahoge",
+      "description": "ahoge"
+    },
+    {
+      "id": "heart_ahoge",
+      "tag": "heart ahoge",
+      "name": "Heart Ahoge",
+      "groupId": "crown_accents",
+      "imageUrl": "https://cdn.donmai.us/720x720/30/f8/30f855e30ac8f9f3f1ce64b4081d0cb7.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/heart_ahoge",
+      "description": "heart ahoge"
+    },
+    {
+      "id": "huge_ahoge",
+      "tag": "huge ahoge",
+      "name": "Huge Ahoge",
+      "groupId": "crown_accents",
+      "imageUrl": "https://cdn.donmai.us/720x720/44/46/4446b34573349de9c9a2a3a99549d35f.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/huge_ahoge",
+      "description": "huge ahoge"
+    },
+    {
+      "id": "antenna_hair",
+      "tag": "antenna hair",
+      "name": "Antenna Hair",
+      "groupId": "crown_accents",
+      "imageUrl": "https://cdn.donmai.us/720x720/8c/7a/8c7a8fed949da3bc8030b94b42e98f52.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/antenna_hair",
+      "description": "antenna hair"
+    },
+    {
+      "id": "heart_antenna_hair",
+      "tag": "heart antenna hair",
+      "name": "Heart Antenna Hair",
+      "groupId": "crown_accents",
+      "imageUrl": "https://cdn.donmai.us/720x720/52/5f/525f45b9093d5f59347b74e24194cc24.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/heart_antenna_hair",
+      "description": "heart antenna hair"
+    },
+    {
+      "id": "comb_over",
+      "tag": "comb over",
+      "name": "Comb Over",
+      "groupId": "sculpted_updos",
+      "imageUrl": "https://cdn.donmai.us/720x720/ff/b8/ffb81c12771821c47150e1f1bd815b40.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/comb_over",
+      "description": "comb over"
+    },
+    {
+      "id": "hair_pulled_back",
+      "tag": "hair pulled back",
+      "name": "Hair Pulled Back",
+      "groupId": "sculpted_updos",
+      "imageUrl": "https://cdn.donmai.us/720x720/e3/09/e309da7a26b831bfc09107c33d02c58b.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/hair_pulled_back",
+      "description": "hair pulled back"
+    },
+    {
+      "id": "hair_slicked_back",
+      "tag": "hair slicked back",
+      "name": "Hair Slicked Back",
+      "groupId": "sculpted_updos",
+      "imageUrl": "https://cdn.donmai.us/720x720/55/b4/55b4b349245e2fe05f828a991c83d0e5.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/hair_slicked_back",
+      "description": "hair slicked back"
+    },
+    {
+      "id": "parted_hair",
+      "tag": "parted hair",
+      "name": "Parted Hair",
+      "groupId": "sculpted_updos",
+      "imageUrl": "https://cdn.donmai.us/720x720/c0/60/c060f7e21010d348914ca55d2c1952f7.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/parted_hair",
+      "description": "parted hair"
+    },
+    {
+      "id": "mohawk",
+      "tag": "mohawk",
+      "name": "Mohawk",
+      "groupId": "sculpted_updos",
+      "imageUrl": "https://cdn.donmai.us/720x720/6e/ec/6eec90a84b827d0d8af117f60eff481a.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/mohawk",
+      "description": "mohawk"
+    },
+    {
+      "id": "oseledets",
+      "tag": "oseledets",
+      "name": "Oseledets",
+      "groupId": "sculpted_updos",
+      "imageUrl": "https://cdn.donmai.us/720x720/7a/b0/7ab05495624f91048c1956382a099a3d.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/oseledets",
+      "description": "oseledets"
+    },
+    {
+      "id": "lone_nape_hair",
+      "tag": "lone nape hair",
+      "name": "Lone Nape Hair",
+      "groupId": "sculpted_updos",
+      "imageUrl": "https://cdn.donmai.us/720x720/7c/7d/7c7d168b4bd6e041868d708339f0d560.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/lone_nape_hair",
+      "description": "lone nape hair"
+    },
+    {
+      "id": "big_hair",
+      "tag": "big hair",
+      "name": "Big Hair",
+      "groupId": "sculpted_updos",
+      "imageUrl": "https://cdn.donmai.us/720x720/97/5e/975e0a7b831d6f143c356f64a28ea575.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/big_hair",
+      "description": "hair that is notably voluminous or thick"
+    },
+    {
+      "id": "bald",
+      "tag": "bald",
+      "name": "Bald",
+      "groupId": "length_tier",
+      "imageUrl": "https://cdn.donmai.us/720x720/fe/c9/fec925f062a7aaa33de494256d4403ae.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/bald",
+      "description": "no hair at all"
+    },
+    {
+      "id": "balding",
+      "tag": "balding",
+      "name": "Balding",
+      "groupId": "length_tier",
+      "imageUrl": "https://cdn.donmai.us/720x720/a5/15/a5156adc8cb17a396e02dd15c12ca35e.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/balding",
+      "description": "mostly bald, but has sparse amounts of hair"
+    },
+    {
+      "id": "buzz_cut",
+      "tag": "buzz cut",
+      "name": "Buzz Cut",
+      "groupId": "length_tier",
+      "imageUrl": "https://cdn.donmai.us/720x720/29/2d/292dece696f4229f0c960469ae8a3e98.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/buzz_cut",
+      "description": "buzz cut"
+    },
+    {
+      "id": "crew_cut",
+      "tag": "crew cut",
+      "name": "Crew Cut",
+      "groupId": "sculpted_updos",
+      "imageUrl": "https://cdn.donmai.us/720x720/87/5f/875fe275ec99f4fd6b4ee436e66110e1.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/crew_cut",
+      "description": "crew cut"
+    },
+    {
+      "id": "bowl_cut",
+      "tag": "bowl cut",
+      "name": "Bowl Cut",
+      "groupId": "sculpted_updos",
+      "imageUrl": "https://cdn.donmai.us/720x720/9d/c8/9dc85e83b72fec056d1bdd56cb8ddd97.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/bowl_cut",
+      "description": "bowl cut"
+    },
+    {
+      "id": "flattop",
+      "tag": "flattop",
+      "name": "Flattop",
+      "groupId": "sculpted_updos",
+      "imageUrl": "https://cdn.donmai.us/720x720/b6/4a/b64aa6607e07bcaf92510a52e25d462c.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/flattop",
+      "description": "flattop"
+    },
+    {
+      "id": "mullet",
+      "tag": "mullet",
+      "name": "Mullet",
+      "groupId": "sculpted_updos",
+      "imageUrl": "https://cdn.donmai.us/720x720/bf/07/bf07c2e1a4505b301cf37faaf5360c4d.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/mullet",
+      "description": "mullet"
+    },
+    {
+      "id": "feixianji_%28hairstyle%29",
+      "tag": "feixianji",
+      "name": "Feixianji",
+      "groupId": "sculpted_updos",
+      "imageUrl": "https://cdn.donmai.us/720x720/75/74/7574b31f9556fae7c87ec73400566e93.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/feixianji_%28hairstyle%29",
+      "description": "feixianji"
+    },
+    {
+      "id": "widow%27s_peak",
+      "tag": "widow's peak",
+      "name": "Widow'S Peak",
+      "groupId": "sculpted_updos",
+      "imageUrl": "https://cdn.donmai.us/720x720/ba/ed/baed7ae66562cc69e3b2689285d8e502.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/widow%27s_peak",
+      "description": "widow's peak"
+    },
+    {
+      "id": "luo_ji_%28hairstyle%29",
+      "tag": "luo ji",
+      "name": "Luo Ji",
+      "groupId": "sculpted_updos",
+      "imageUrl": "https://cdn.donmai.us/720x720/1b/d8/1bd8ffd14b6ef0a1332f9d5403dac11d.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/luo_ji_%28hairstyle%29",
+      "description": "luo ji"
+    },
+    {
+      "id": "double_luo_ji",
+      "tag": "double luo ji",
+      "name": "Double Luo Ji",
+      "groupId": "sculpted_updos",
+      "imageUrl": "https://cdn.donmai.us/720x720/51/a9/51a91f186858379b9174c86944541107.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/double_luo_ji",
+      "description": "double luo ji"
+    },
+    {
+      "id": "double_luo_ji_corners_toward_head",
+      "tag": "double luo ji corners toward head",
+      "name": "Double Luo Ji Corners Toward Head",
+      "groupId": "sculpted_updos",
+      "imageUrl": "https://cdn.donmai.us/720x720/bf/c1/bfc1864fe5461e3d597bdb59fb2095bc.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/double_luo_ji_corners_toward_head",
+      "description": "double luo ji corners toward head"
+    },
+    {
+      "id": "yuanbao_ji_%28hairstyle%29",
+      "tag": "yuanbao ji",
+      "name": "Yuanbao Ji",
+      "groupId": "sculpted_updos",
+      "imageUrl": "https://cdn.donmai.us/720x720/01/cb/01cb5af1cc991fa5e67b5ae72176c494.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/yuanbao_ji_%28hairstyle%29",
+      "description": "yuanbao ji (three buns that create the shape of a yuanbao)"
+    },
+    {
+      "id": "jinggu_ji_%28hairstyle%29",
+      "tag": "jinggu ji",
+      "name": "Jinggu Ji",
+      "groupId": "sculpted_updos",
+      "imageUrl": "https://cdn.donmai.us/720x720/35/a7/35a751f39c3497697b9a5522aa95fb48.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/jinggu_ji_%28hairstyle%29",
+      "description": "jinggu ji"
+    },
+    {
+      "id": "coin_bangs",
+      "tag": "coin bangs",
+      "name": "Coin Bangs",
+      "groupId": "fringe_cut",
+      "imageUrl": "https://cdn.donmai.us/720x720/10/c4/10c46110f87b87bc38f03bf85a7c2528.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/coin_bangs",
+      "description": "coin bangs"
+    },
+    {
+      "id": "hair_ornament",
+      "tag": "hair ornament",
+      "name": "Hair Ornament",
+      "groupId": "hair_accoutrements",
+      "imageUrl": "https://cdn.donmai.us/720x720/09/a3/09a3dc8f645a278bf5f98cfafab26cf4.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/hair_ornament",
+      "description": "General decorative hair accent piece"
+    },
+    {
+      "id": "hairclip",
+      "tag": "hairclip",
+      "name": "Hairclip / Barrette",
+      "groupId": "hair_accoutrements",
+      "imageUrl": "https://cdn.donmai.us/720x720/79/f8/79f8e434fec303d82a17015cf1caad74.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/hairclip",
+      "description": "Snap barrette or alligator hair clip"
+    },
+    {
+      "id": "hairpin",
+      "tag": "hairpin",
+      "name": "Hairpin / Bobby Pin",
+      "groupId": "hair_accoutrements",
+      "imageUrl": "https://cdn.donmai.us/720x720/15/4a/154a4f89d9703ec5e52cb78c6e2ca067.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/hairpin",
+      "description": "Slender bobby pin or decorative kanzashi pin"
+    },
+    {
+      "id": "hair_ribbon",
+      "tag": "hair ribbon",
+      "name": "Hair Ribbon",
+      "groupId": "hair_accoutrements",
+      "imageUrl": "https://cdn.donmai.us/720x720/cf/3e/cf3efcba4953bf3d0b2f153a797c2522.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/hair_ribbon",
+      "description": "Satin or silk ribbon woven or tied into hair"
+    },
+    {
+      "id": "hair_bow",
+      "tag": "hair bow",
+      "name": "Hair Bow",
+      "groupId": "hair_accoutrements",
+      "imageUrl": "https://cdn.donmai.us/720x720/0f/ce/0fce781b4f4c9c7f66a01dfb393b4a2e.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/hair_bow",
+      "description": "Decorative fabric bow mounted on hair"
+    },
+    {
+      "id": "headband",
+      "tag": "headband",
+      "name": "Headband / Alice Band",
+      "groupId": "hair_accoutrements",
+      "imageUrl": "https://cdn.donmai.us/720x720/5e/52/5e5264b971a815a5160be1c0d575c3f6.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/headband",
+      "description": "Rigid or elastic band worn across crown"
+    },
+    {
+      "id": "scrunchie",
+      "tag": "scrunchie",
+      "name": "Scrunchie",
+      "groupId": "hair_accoutrements",
+      "imageUrl": "https://cdn.donmai.us/720x720/8f/c9/8fc9ea76c0ea3c6c06a34bb22646d6d4.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/scrunchie",
+      "description": "Fabric-covered elastic hair tie"
+    },
+    {
+      "id": "hair_flower",
+      "tag": "hair flower",
+      "name": "Hair Flower",
+      "groupId": "hair_accoutrements",
+      "imageUrl": "https://cdn.donmai.us/720x720/90/e0/90e0b3e6c0b31e138a0c23789d3d4ca6.webp",
+      "wikiUrl": "https://danbooru.donmai.us/wiki_pages/hair_flower",
+      "description": "Natural or silk floral hair accessory"
+    }
+  ]
+}

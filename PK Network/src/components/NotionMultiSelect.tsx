@@ -1,415 +1,297 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { Search, Check, Plus, X } from 'lucide-react';
+import React, { useState, useRef, useEffect, useMemo } from 'react';
+import { Search, Plus, X, Check, Trash2 } from 'lucide-react';
+import { calculatePopoverPosition } from '../services/popoverPosition';
 
-export interface NotionTagColor {
-  bg: string;
-  text: string;
-  border: string;
-}
+import {
+  getTagColor,
+  parseMultiValue,
+  NOTION_COLORS,
+  type NotionTagColor,
+} from '../services/tagColors';
 
-export const NOTION_COLORS: NotionTagColor[] = [
-  { bg: 'rgba(56, 189, 248, 0.14)', text: '#38bdf8', border: 'rgba(56, 189, 248, 0.35)' }, // Blue
-  { bg: 'rgba(16, 185, 129, 0.14)', text: '#10b981', border: 'rgba(16, 185, 129, 0.35)' }, // Green
-  { bg: 'rgba(249, 115, 22, 0.14)', text: '#f97316', border: 'rgba(249, 115, 22, 0.35)' }, // Orange
-  { bg: 'rgba(168, 85, 247, 0.14)', text: '#a855f7', border: 'rgba(168, 85, 247, 0.35)' }, // Purple
-  { bg: 'rgba(244, 63, 94, 0.14)', text: '#f43f5e', border: 'rgba(244, 63, 94, 0.35)' },   // Pink/Rose
-  { bg: 'rgba(245, 158, 11, 0.14)', text: '#f59e0b', border: 'rgba(245, 158, 11, 0.35)' }, // Amber/Yellow
-  { bg: 'rgba(20, 184, 166, 0.14)', text: '#14b8a6', border: 'rgba(20, 184, 166, 0.35)' }, // Teal
-  { bg: 'rgba(99, 102, 241, 0.14)', text: '#818cf8', border: 'rgba(99, 102, 241, 0.35)' }, // Indigo
-  { bg: 'rgba(148, 163, 184, 0.14)', text: '#94a3b8', border: 'rgba(148, 163, 184, 0.35)' }, // Gray/Slate
-];
+export { RelationTagPill, RelationMultiSelectPopover, type RelationOption } from './RelationMultiSelect';
+export { getTagColor, parseMultiValue, NOTION_COLORS, type NotionTagColor };
 
-export function getTagColor(tag: string): NotionTagColor {
-  let hash = 0;
-  for (let i = 0; i < tag.length; i++) {
-    hash = tag.charCodeAt(i) + ((hash << 5) - hash);
-  }
-  const idx = Math.abs(hash) % NOTION_COLORS.length;
-  return NOTION_COLORS[idx];
-}
-
-export function parseMultiValue(val: any): string[] {
-  if (Array.isArray(val)) {
-    return val.map(String).filter((s) => s.trim().length > 0);
-  }
-  if (!val) return [];
-  if (typeof val === 'string') {
-    const trimmed = val.trim();
-    if (trimmed.startsWith('[') && trimmed.endsWith(']')) {
-      try {
-        const parsed = JSON.parse(trimmed);
-        if (Array.isArray(parsed)) {
-          return parsed.map(String).filter((s) => s.trim().length > 0);
+export const NotionTagPill: React.FC<{
+  tag: string; onRemove?: () => void; style?: React.CSSProperties;
+}> = ({ tag, onRemove, style }) => {
+  const color = getTagColor(tag);
+  const urlMatch = tag.match(/https?:\/\/[^\s"'<>()[\]]+/);
+  const url = urlMatch ? urlMatch[0].replace(/[.,;:!?)]+$/, '') : null;
+  return (
+    <span
+      onContextMenu={(e) => {
+        if (url) {
+          e.preventDefault();
+          e.stopPropagation();
+          window.open(url, '_blank', 'noopener,noreferrer');
         }
-      } catch {}
-    }
-    return trimmed
-      .split(',')
-      .map((s) => s.trim())
-      .filter((s) => s.length > 0);
-  }
-  return [String(val)];
-}
+      }}
+      style={{
+        display: 'inline-flex', alignItems: 'center', padding: '0.15rem 0.5rem',
+        borderRadius: 'var(--radius-sm)', fontSize: '11.5px', fontWeight: 500,
+        background: color.bg, color: color.text, border: `1px solid ${color.border}`,
+        maxWidth: '180px', ...style,
+      }}
+      title={url ? `${tag} (Right-click to open link)` : tag}
+    >
+      <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{tag}</span>
+      {onRemove && (
+        <span
+          onClick={(e) => { e.stopPropagation(); onRemove(); }}
+          style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: '13px', height: '13px', borderRadius: '50%', cursor: 'pointer', opacity: 0.7, marginLeft: '4px' }}
+          onMouseEnter={(e) => { e.currentTarget.style.opacity = '1'; e.currentTarget.style.background = 'rgba(255, 255, 255, 0.2)'; }}
+          onMouseLeave={(e) => { e.currentTarget.style.opacity = '0.7'; e.currentTarget.style.background = 'transparent'; }}
+        >
+          ×
+        </span>
+      )}
+    </span>
+  );
+};
 
 interface NotionMultiSelectPopoverProps {
-  selected: string[];
-  options: string[];
-  onChange: (newSelected: string[]) => void;
-  onClose: () => void;
-  anchorRect: DOMRect | null;
+  selected: string[]; options: string[]; onChange: (newSelected: string[]) => void;
+  onClose: () => void; anchorRect: DOMRect | null; isSingle?: boolean;
   onCreateOption?: (newOption: string) => void;
-  isSingle?: boolean;
+  onDeleteOption?: (option: string) => void;
+  pinnedOptions?: string[];
 }
 
 export const NotionMultiSelectPopover: React.FC<NotionMultiSelectPopoverProps> = ({
-  selected,
-  options,
-  onChange,
-  onClose,
-  anchorRect,
-  onCreateOption,
-  isSingle = false,
+  selected, options, onChange, onClose, anchorRect, isSingle = false,
+  onCreateOption, onDeleteOption, pinnedOptions = [],
 }) => {
   const [query, setQuery] = useState('');
+  const [highlightedIndex, setHighlightedIndex] = useState<number>(0);
   const popoverRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
 
-  // Combine schema options with any custom selected items
+  const pinnedSet = useMemo(() => new Set(pinnedOptions), [pinnedOptions]);
   const allOptions = Array.from(new Set([...options, ...selected])).filter(Boolean);
 
-  const filteredOptions = allOptions.filter((opt) =>
-    opt.toLowerCase().includes(query.toLowerCase())
-  );
+  const sortedOptions = useMemo(() => {
+    if (pinnedSet.size === 0) return allOptions;
+    const pinned: string[] = [];
+    const rest: string[] = [];
+    for (const opt of allOptions) {
+      pinnedSet.has(opt) ? pinned.push(opt) : rest.push(opt);
+    }
+    return [...pinned, ...rest];
+  }, [allOptions, pinnedSet]);
 
-  const exactMatch = allOptions.some(
-    (opt) => opt.toLowerCase() === query.trim().toLowerCase()
-  );
+  const filteredOptions = sortedOptions.filter((opt) => opt.toLowerCase().includes(query.toLowerCase()));
+  const exactMatch = allOptions.some((opt) => opt.toLowerCase() === query.trim().toLowerCase());
+  const canCreate = Boolean(query.trim() && !exactMatch);
+  const totalNavigable = canCreate ? filteredOptions.length + 1 : filteredOptions.length;
+
+  useEffect(() => { inputRef.current?.focus(); }, []);
+  useEffect(() => { setHighlightedIndex(totalNavigable > 0 ? 0 : -1); }, [query, totalNavigable]);
 
   useEffect(() => {
-    inputRef.current?.focus();
-  }, []);
+    if (highlightedIndex >= 0) itemRefs.current[highlightedIndex]?.scrollIntoView({ block: 'nearest' });
+  }, [highlightedIndex]);
 
-  // Click outside to close
   useEffect(() => {
     const handleMouseDown = (e: MouseEvent) => {
-      if (popoverRef.current && !popoverRef.current.contains(e.target as Node)) {
-        onClose();
-      }
+      if (popoverRef.current && !popoverRef.current.contains(e.target as Node)) onClose();
     };
     document.addEventListener('mousedown', handleMouseDown);
     return () => document.removeEventListener('mousedown', handleMouseDown);
   }, [onClose]);
 
   const handleToggle = (opt: string) => {
-    if (isSingle) {
-      onChange([opt]);
-      onClose();
-      return;
-    }
-    if (selected.includes(opt)) {
-      onChange(selected.filter((s) => s !== opt));
-    } else {
-      onChange([...selected, opt]);
-    }
+    if (isSingle) { onChange([opt]); onClose(); return; }
+    onChange(selected.includes(opt) ? selected.filter((s) => s !== opt) : [...selected, opt]);
   };
 
   const handleCreateNew = () => {
     const clean = query.trim();
     if (!clean) return;
     onCreateOption?.(clean);
-    if (isSingle) {
-      onChange([clean]);
-      onClose();
-      return;
-    }
-    if (!selected.includes(clean)) {
-      onChange([...selected, clean]);
-    }
+    if (isSingle) { onChange([clean]); onClose(); return; }
+    if (!selected.includes(clean)) onChange([...selected, clean]);
     setQuery('');
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Escape') {
-      onClose();
+      e.preventDefault(); onClose();
+    } else if (e.key === 'ArrowDown') {
+      if (totalNavigable > 0) { e.preventDefault(); setHighlightedIndex((prev) => (prev + 1) % totalNavigable); }
+    } else if (e.key === 'ArrowUp') {
+      if (totalNavigable > 0) { e.preventDefault(); setHighlightedIndex((prev) => (prev - 1 + totalNavigable) % totalNavigable); }
     } else if (e.key === 'Enter') {
       e.preventDefault();
-      if (!exactMatch && query.trim()) {
+      if (totalNavigable === 0) return;
+      if (canCreate && highlightedIndex === 0) {
         handleCreateNew();
-      } else if (filteredOptions.length > 0) {
-        handleToggle(filteredOptions[0]);
+      } else {
+        const opt = canCreate ? filteredOptions[highlightedIndex - 1] : filteredOptions[highlightedIndex];
+        if (opt) handleToggle(opt);
       }
+    } else if (e.key === 'Backspace' && !query && !isSingle && selected.length > 0) {
+      onChange(selected.slice(0, -1));
     }
   };
 
-  // Smart viewport positioning
-  let top = (anchorRect?.bottom || 0) + 4;
-  let left = anchorRect?.left || 0;
-  const popoverWidth = 260;
-  const popoverHeight = 310;
-
-  if (top + popoverHeight > window.innerHeight && (anchorRect?.top || 0) > popoverHeight) {
-    top = (anchorRect?.top || 0) - popoverHeight - 4;
-  }
-  if (left + popoverWidth > window.innerWidth) {
-    left = window.innerWidth - popoverWidth - 12;
-  }
-  if (left < 10) left = 10;
+  const pos = calculatePopoverPosition(anchorRect, 260, 360);
 
   return (
     <div
       ref={popoverRef}
       style={{
-        position: 'fixed',
-        top: `${top}px`,
-        left: `${left}px`,
-        width: `${popoverWidth}px`,
-        maxHeight: `${popoverHeight}px`,
-        background: 'var(--bg-card)',
-        border: '1px solid var(--border-mid)',
-        borderRadius: 'var(--radius-md)',
-        boxShadow: 'var(--shadow-lg)',
-        zIndex: 99999,
-        display: 'flex',
-        flexDirection: 'column',
-        overflow: 'hidden',
-        backdropFilter: 'blur(8px)',
+        ...pos.style, background: 'var(--bg-card)', border: '1px solid var(--border-mid)',
+        borderRadius: 'var(--radius-md)', boxShadow: 'var(--shadow-lg)', zIndex: 99999,
+        display: 'flex', flexDirection: 'column', overflow: 'hidden', backdropFilter: 'blur(8px)',
         animation: 'fadeIn 0.12s ease-out',
       }}
       onClick={(e) => e.stopPropagation()}
     >
       {/* Search Bar */}
-      <div
-        style={{
-          padding: '0.5rem',
-          borderBottom: '1px solid var(--border-table)',
-          display: 'flex',
-          alignItems: 'center',
-          gap: '0.4rem',
-          background: 'var(--bg-input)',
-        }}
-      >
+      <div style={{ padding: '0.45rem 0.65rem', borderBottom: '1px solid var(--border-table)', display: 'flex', alignItems: 'center', gap: '0.4rem', background: 'var(--bg-input)', flexShrink: 0 }}>
         <Search size={13} style={{ color: 'var(--text-tertiary)', flexShrink: 0 }} />
         <input
-          ref={inputRef}
-          type="text"
-          placeholder="Search or create tag..."
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          onKeyDown={handleKeyDown}
-          style={{
-            flex: 1,
-            background: 'transparent',
-            border: 'none',
-            outline: 'none',
-            color: 'var(--text-primary)',
-            fontSize: '12px',
-          }}
+          ref={inputRef} type="text" placeholder="Search tags (↑↓, ↵ to pick)..."
+          value={query} onChange={(e) => setQuery(e.target.value)} onKeyDown={handleKeyDown}
+          style={{ flex: 1, background: 'transparent', border: 'none', outline: 'none', color: 'var(--text-primary)', fontSize: '12px' }}
         />
         {query && (
-          <button
-            onClick={() => setQuery('')}
-            style={{
-              background: 'transparent',
-              border: 'none',
-              cursor: 'pointer',
-              color: 'var(--text-tertiary)',
-              padding: '0 2px',
-            }}
-          >
+          <button onClick={() => setQuery('')} style={{ background: 'transparent', border: 'none', cursor: 'pointer', color: 'var(--text-tertiary)', padding: '0 2px' }}>
             <X size={12} />
           </button>
         )}
       </div>
 
       {/* Options List */}
-      <div style={{ flex: 1, overflowY: 'auto', padding: '0.35rem 0' }}>
-        {/* Create new tag prompt */}
-        {query.trim() && !exactMatch && (
+      <div style={{ flex: 1, overflowY: 'auto', padding: '0.3rem 0' }}>
+        {canCreate && (
           <div
+            ref={(el) => { itemRefs.current[0] = el; }}
             onClick={handleCreateNew}
+            onMouseEnter={() => setHighlightedIndex(0)}
             style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.4rem',
-              padding: '0.45rem 0.65rem',
-              cursor: 'pointer',
-              fontSize: '12px',
-              color: 'var(--accent)',
-              borderBottom: '1px solid var(--border-table)',
-              background: 'var(--accent-bg)',
+              display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0.45rem 0.65rem',
+              cursor: 'pointer', fontSize: '12px', color: 'var(--accent)', borderBottom: '1px solid var(--border-table)',
+              background: highlightedIndex === 0 ? 'var(--accent-hover-bg)' : 'var(--accent-bg)',
+              borderLeft: highlightedIndex === 0 ? '3px solid var(--accent)' : '3px solid transparent',
+              transition: 'all 0.1s ease',
             }}
           >
-            <Plus size={13} />
-            <span>Create <strong>"{query.trim()}"</strong></span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+              <Plus size={13} /><span>Create <strong>"{query.trim()}"</strong></span>
+            </div>
+            {highlightedIndex === 0 && <span style={{ fontSize: '10px', opacity: 0.7, fontFamily: 'var(--font-mono)' }}>↵ Enter</span>}
           </div>
         )}
 
-        {filteredOptions.length === 0 && !query.trim() ? (
+        {filteredOptions.length === 0 && !canCreate ? (
           <div style={{ padding: '1rem', textAlign: 'center', color: 'var(--text-dim)', fontSize: '11px' }}>
             No options defined. Type above to add a tag.
           </div>
         ) : (
-          filteredOptions.map((opt) => {
+          filteredOptions.map((opt, idx) => {
+            const itemIndex = canCreate ? idx + 1 : idx;
             const isSel = selected.includes(opt);
+            const isPinned = pinnedSet.has(opt);
+            const isHighlighted = highlightedIndex === itemIndex;
             const color = getTagColor(opt);
+            const prevWasPinned = idx > 0 && pinnedSet.has(filteredOptions[idx - 1]);
+            const showDivider = !query.trim() && prevWasPinned && !isPinned;
+            const showPinnedHeader = !query.trim() && idx === 0 && isPinned;
+
             return (
-              <div
-                key={opt}
-                onClick={() => handleToggle(opt)}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  padding: '0.35rem 0.65rem',
-                  cursor: 'pointer',
-                  transition: 'background 0.1s ease',
-                  background: isSel ? 'rgba(255, 255, 255, 0.04)' : 'transparent',
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.background = 'var(--bg-row-hover)';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.background = isSel ? 'rgba(255, 255, 255, 0.04)' : 'transparent';
-                }}
-              >
-                <span
+              <React.Fragment key={`${typeof opt === 'object' ? JSON.stringify(opt) : opt}_${idx}`}>
+                {showPinnedHeader && (
+                  <div style={{ padding: '0.25rem 0.65rem 0.15rem', fontSize: '10px', fontWeight: 700, color: 'var(--accent)', letterSpacing: '0.04em', textTransform: 'uppercase' }}>
+                    📌 Branch options
+                  </div>
+                )}
+                {showDivider && (
+                  <div style={{ padding: '0.4rem 0.65rem 0.15rem', fontSize: '10px', fontWeight: 700, color: 'var(--text-dim)', letterSpacing: '0.04em', textTransform: 'uppercase', borderTop: '1px solid var(--border-table)', marginTop: '0.2rem' }}>
+                    Other options
+                  </div>
+                )}
+                <div
+                  ref={(el) => { itemRefs.current[itemIndex] = el; }}
+                  onClick={() => handleToggle(opt)}
+                  onMouseEnter={() => setHighlightedIndex(itemIndex)}
                   style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    padding: '0.15rem 0.5rem',
-                    borderRadius: 'var(--radius-sm)',
-                    fontSize: '11px',
-                    fontWeight: 500,
-                    background: color.bg,
-                    color: color.text,
-                    border: `1px solid ${color.border}`,
-                    maxWidth: '180px',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    whiteSpace: 'nowrap',
+                    display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0.35rem 0.65rem',
+                    cursor: 'pointer', transition: 'all 0.1s ease',
+                    background: isHighlighted ? 'var(--bg-row-hover)' : isSel ? 'rgba(255, 255, 255, 0.04)' : 'transparent',
+                    borderLeft: isHighlighted ? '3px solid var(--accent)' : '3px solid transparent',
                   }}
                 >
-                  {opt}
-                </span>
-                {isSel && <Check size={13} style={{ color: 'var(--accent)', flexShrink: 0 }} />}
-              </div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', minWidth: 0 }}>
+                    <span
+                      style={{
+                        display: 'inline-flex', alignItems: 'center', padding: '0.15rem 0.5rem',
+                        borderRadius: 'var(--radius-sm)', fontSize: '11px', fontWeight: 500,
+                        background: color.bg, color: color.text, border: `1px solid ${color.border}`,
+                        maxWidth: '170px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
+                      }}
+                    >
+                      {opt}
+                    </span>
+                    {isPinned && (
+                      <span title="Used by a sibling in this branch" style={{ fontSize: '9.5px', color: 'var(--accent)', background: 'rgba(99, 102, 241, 0.12)', padding: '1px 5px', borderRadius: '4px', fontWeight: 600, flexShrink: 0 }}>
+                        📌 branch
+                      </span>
+                    )}
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+                    {onDeleteOption && (
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          if (confirm(`Delete option "${opt}" from this column?`)) onDeleteOption(opt);
+                        }}
+                        title={`Delete option "${opt}"`}
+                        style={{
+                          background: 'none', border: 'none', cursor: 'pointer',
+                          color: 'var(--text-tertiary)', padding: '2px', display: 'flex',
+                          opacity: isHighlighted ? 0.9 : 0.25,
+                        }}
+                        onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--danger)'; e.currentTarget.style.opacity = '1'; }}
+                        onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--text-tertiary)'; e.currentTarget.style.opacity = isHighlighted ? '0.9' : '0.25'; }}
+                      >
+                        <Trash2 size={11} />
+                      </button>
+                    )}
+                    {isHighlighted && <span style={{ fontSize: '10px', opacity: 0.5, fontFamily: 'var(--font-mono)' }}>↵</span>}
+                    {isSel && <Check size={13} style={{ color: 'var(--accent)', flexShrink: 0 }} />}
+                  </div>
+                </div>
+              </React.Fragment>
             );
           })
         )}
       </div>
 
       {/* Footer info bar */}
-      <div
-        style={{
-          padding: '0.35rem 0.65rem',
-          borderTop: '1px solid var(--border-table)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          fontSize: '11px',
-          color: 'var(--text-tertiary)',
-          background: 'var(--bg-card)',
-        }}
-      >
-        <span>{isSingle ? (selected.length > 0 ? `Selected: ${selected[0]}` : 'No option selected') : `${selected.length} selected`}</span>
+      <div style={{ padding: '0.35rem 0.65rem', borderTop: '1px solid var(--border-table)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: '11px', color: 'var(--text-tertiary)', background: 'var(--bg-card)', flexShrink: 0 }}>
+        <span>{isSingle ? (selected.length > 0 ? `Selected: ${selected[0]}` : 'None') : `${selected.length} selected`}</span>
         <div style={{ display: 'flex', gap: '0.4rem' }}>
-          {isSingle && selected.length > 0 && (
+          {selected.length > 0 && (
             <button
               type="button"
-              onClick={() => {
-                onChange([]);
-                onClose();
-              }}
-              style={{
-                background: 'transparent',
-                border: '1px solid var(--border-light)',
-                color: 'var(--text-tertiary)',
-                borderRadius: 'var(--radius-sm)',
-                padding: '0.15rem 0.5rem',
-                fontSize: '11px',
-                cursor: 'pointer',
-              }}
+              onClick={() => { onChange([]); if (isSingle) onClose(); }}
+              style={{ background: 'transparent', border: '1px solid var(--border-light)', color: 'var(--text-tertiary)', borderRadius: 'var(--radius-sm)', padding: '0.15rem 0.5rem', fontSize: '11px', cursor: 'pointer' }}
             >
               Clear
             </button>
           )}
           <button
-            type="button"
-            onClick={onClose}
-            style={{
-              background: 'var(--accent-bg)',
-              border: '1px solid var(--accent)',
-              color: 'var(--accent)',
-              borderRadius: 'var(--radius-sm)',
-              padding: '0.15rem 0.5rem',
-              fontSize: '11px',
-              fontWeight: 600,
-              cursor: 'pointer',
-            }}
+            type="button" onClick={onClose}
+            style={{ background: 'var(--accent-bg)', border: '1px solid var(--accent)', color: 'var(--accent)', borderRadius: 'var(--radius-sm)', padding: '0.15rem 0.5rem', fontSize: '11px', fontWeight: 600, cursor: 'pointer' }}
           >
             Done
           </button>
         </div>
       </div>
     </div>
-  );
-};
-
-export const NotionTagPill: React.FC<{
-  tag: string;
-  onRemove?: () => void;
-  style?: React.CSSProperties;
-}> = ({ tag, onRemove, style }) => {
-  const color = getTagColor(tag);
-  return (
-    <span
-      style={{
-        display: 'inline-flex',
-        alignItems: 'center',
-        gap: '0.3rem',
-        padding: '0.12rem 0.45rem',
-        borderRadius: 'var(--radius-sm)',
-        fontSize: '11.5px',
-        fontWeight: 500,
-        background: color.bg,
-        color: color.text,
-        border: `1px solid ${color.border}`,
-        lineHeight: 1.3,
-        transition: 'transform 0.1s ease',
-        ...style,
-      }}
-    >
-      <span>{tag}</span>
-      {onRemove && (
-        <span
-          onClick={(e) => {
-            e.stopPropagation();
-            onRemove();
-          }}
-          title={`Remove tag "${tag}"`}
-          style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            width: '13px',
-            height: '13px',
-            borderRadius: '50%',
-            cursor: 'pointer',
-            opacity: 0.65,
-            transition: 'opacity 0.15s, background 0.15s',
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.opacity = '1';
-            e.currentTarget.style.background = 'rgba(0, 0, 0, 0.2)';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.opacity = '0.65';
-            e.currentTarget.style.background = 'transparent';
-          }}
-        >
-          ×
-        </span>
-      )}
-    </span>
   );
 };

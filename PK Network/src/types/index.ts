@@ -14,6 +14,12 @@ export interface ColumnMetadata {
   prefix?: string;
   options?: string[];
   target?: string;
+  target_field?: string;
+  filter_rule?: string;
+  secondary_target?: string;
+  secondary_target_field?: string;
+  secondary_filter_rule?: string;
+  targets?: string[];
   default_option?: string;
   [key: string]: any;
 }
@@ -53,6 +59,16 @@ export interface TableMetaRecord {
   order_index?: number;
   icon?: string;
   description?: string;
+}
+
+export interface TableState {
+  table_name: string;
+  sort_col?: string | null;
+  sort_asc?: boolean;
+  heading_sort_active?: boolean;
+  active_candidate_slug?: string | null;
+  config_json?: any;
+  updated_at?: string;
 }
 
 export interface FieldTypeMeta {

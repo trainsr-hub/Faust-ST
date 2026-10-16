@@ -36,6 +36,47 @@
   --c-enum:    #f43f5e;
   --c-rel:     #ff9e1b;
 
+  /* Notion Tag Color Tokens (Dark Mode) */
+  --tag-gray-bg:       rgba(148, 163, 184, 0.15);
+  --tag-gray-text:     #cbd5e1;
+  --tag-gray-border:   rgba(148, 163, 184, 0.45);
+
+  --tag-blue-bg:       rgba(56, 189, 248, 0.15);
+  --tag-blue-text:     #38bdf8;
+  --tag-blue-border:   rgba(56, 189, 248, 0.45);
+
+  --tag-green-bg:      rgba(16, 185, 129, 0.15);
+  --tag-green-text:    #10b981;
+  --tag-green-border:  rgba(16, 185, 129, 0.45);
+
+  --tag-yellow-bg:     rgba(245, 158, 11, 0.15);
+  --tag-yellow-text:   #f59e0b;
+  --tag-yellow-border: rgba(245, 158, 11, 0.45);
+
+  --tag-red-bg:        rgba(244, 63, 94, 0.15);
+  --tag-red-text:      #f43f5e;
+  --tag-red-border:    rgba(244, 63, 94, 0.45);
+
+  --tag-purple-bg:     rgba(168, 85, 247, 0.15);
+  --tag-purple-text:   #a855f7;
+  --tag-purple-border: rgba(168, 85, 247, 0.45);
+
+  --tag-pink-bg:       rgba(236, 72, 153, 0.15);
+  --tag-pink-text:     #f472b6;
+  --tag-pink-border:   rgba(236, 72, 153, 0.45);
+
+  --tag-orange-bg:     rgba(249, 115, 22, 0.15);
+  --tag-orange-text:   #f97316;
+  --tag-orange-border: rgba(249, 115, 22, 0.45);
+
+  --tag-teal-bg:       rgba(20, 184, 166, 0.15);
+  --tag-teal-text:     #14b8a6;
+  --tag-teal-border:   rgba(20, 184, 166, 0.45);
+
+  --tag-indigo-bg:     rgba(99, 102, 241, 0.15);
+  --tag-indigo-text:   #818cf8;
+  --tag-indigo-border: rgba(99, 102, 241, 0.45);
+
   --font-display: "IBM Plex Sans", system-ui, -apple-system, sans-serif;
   --font-body:    "IBM Plex Sans", system-ui, -apple-system, sans-serif;
   --font-mono:    "IBM Plex Mono", monospace;
@@ -74,6 +115,47 @@
   --accent-hover:   #b45309;
   --accent-glow:    rgba(217, 119, 6, 0.2);
   --accent-bg:      rgba(217, 119, 6, 0.10);
+
+  /* Notion Tag Color Tokens (Light Mode) */
+  --tag-gray-bg:       rgba(100, 116, 139, 0.12);
+  --tag-gray-text:     #475569;
+  --tag-gray-border:   rgba(100, 116, 139, 0.45);
+
+  --tag-blue-bg:       rgba(2, 132, 199, 0.12);
+  --tag-blue-text:     #0284c7;
+  --tag-blue-border:   rgba(2, 132, 199, 0.45);
+
+  --tag-green-bg:      rgba(5, 150, 105, 0.12);
+  --tag-green-text:    #059669;
+  --tag-green-border:  rgba(5, 150, 105, 0.45);
+
+  --tag-yellow-bg:     rgba(217, 119, 6, 0.12);
+  --tag-yellow-text:   #d97706;
+  --tag-yellow-border: rgba(217, 119, 6, 0.45);
+
+  --tag-red-bg:        rgba(225, 29, 72, 0.12);
+  --tag-red-text:      #e11d48;
+  --tag-red-border:    rgba(225, 29, 72, 0.45);
+
+  --tag-purple-bg:     rgba(147, 51, 234, 0.12);
+  --tag-purple-text:   #9333ea;
+  --tag-purple-border: rgba(147, 51, 234, 0.45);
+
+  --tag-pink-bg:       rgba(219, 39, 119, 0.12);
+  --tag-pink-text:     #db2777;
+  --tag-pink-border:   rgba(219, 39, 119, 0.45);
+
+  --tag-orange-bg:     rgba(234, 88, 12, 0.12);
+  --tag-orange-text:   #ea580c;
+  --tag-orange-border: rgba(234, 88, 12, 0.45);
+
+  --tag-teal-bg:       rgba(13, 148, 136, 0.12);
+  --tag-teal-text:     #0d9488;
+  --tag-teal-border:   rgba(13, 148, 136, 0.45);
+
+  --tag-indigo-bg:     rgba(79, 70, 229, 0.12);
+  --tag-indigo-text:   #4f46e5;
+  --tag-indigo-border: rgba(79, 70, 229, 0.45);
 
   color-scheme: light;
 }

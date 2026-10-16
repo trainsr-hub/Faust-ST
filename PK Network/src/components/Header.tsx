@@ -1,5 +1,5 @@
 import React from 'react';
-import { Database, Key, Moon, Sun, RefreshCw, Plus, Layers, Table as TableIcon, PanelLeft } from 'lucide-react';
+import { Database, Key, Moon, Sun, RefreshCw, Plus, Layers, Table as TableIcon, PanelLeft, Zap, Sparkles, Scissors } from 'lucide-react';
 
 interface HeaderProps {
   mode: 'schema' | 'data';
@@ -15,6 +15,9 @@ interface HeaderProps {
   isMobile: boolean;
   onToggleOutliner?: () => void;
   isOutlinerOpen?: boolean;
+  onSwitchToHazard?: () => void;
+  onSwitchToPrompt?: () => void;
+  onSwitchToHair?: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -31,6 +34,9 @@ export const Header: React.FC<HeaderProps> = ({
   isMobile,
   onToggleOutliner,
   isOutlinerOpen,
+  onSwitchToHazard,
+  onSwitchToPrompt,
+  onSwitchToHair,
 }) => {
   return (
     <header style={{
@@ -157,6 +163,81 @@ export const Header: React.FC<HeaderProps> = ({
           <TableIcon size={14} />
           <span>Data Entry</span>
         </button>
+      </div>
+
+      {/* Subdomain Switchers */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+        {onSwitchToHazard && (
+          <button
+            onClick={onSwitchToHazard}
+            title="Switch to Hazard Trigger Arena Subdomain"
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.35rem',
+              padding: '0.35rem 0.75rem',
+              borderRadius: 'var(--radius-sm)',
+              border: '1px solid rgba(56, 189, 248, 0.4)',
+              background: 'rgba(2, 132, 199, 0.15)',
+              color: '#38bdf8',
+              cursor: 'pointer',
+              fontSize: '12px',
+              fontWeight: 600,
+              transition: 'all 0.15s ease',
+            }}
+          >
+            <Zap size={14} />
+            {!isMobile && <span>Hazard Trigger</span>}
+          </button>
+        )}
+
+        {onSwitchToPrompt && (
+          <button
+            onClick={onSwitchToPrompt}
+            title="Switch to Prompt Studio Subdomain"
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.35rem',
+              padding: '0.35rem 0.75rem',
+              borderRadius: 'var(--radius-sm)',
+              border: '1px solid rgba(168, 85, 247, 0.4)',
+              background: 'rgba(168, 85, 247, 0.15)',
+              color: '#c084fc',
+              cursor: 'pointer',
+              fontSize: '12px',
+              fontWeight: 600,
+              transition: 'all 0.15s ease',
+            }}
+          >
+            <Sparkles size={14} />
+            {!isMobile && <span>Prompt Studio</span>}
+          </button>
+        )}
+
+        {onSwitchToHair && (
+          <button
+            onClick={onSwitchToHair}
+            title="Switch to Hair Visual Codex Subdomain"
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.35rem',
+              padding: '0.35rem 0.75rem',
+              borderRadius: 'var(--radius-sm)',
+              border: '1px solid rgba(244, 63, 94, 0.4)',
+              background: 'rgba(244, 63, 94, 0.15)',
+              color: '#fb7185',
+              cursor: 'pointer',
+              fontSize: '12px',
+              fontWeight: 600,
+              transition: 'all 0.15s ease',
+            }}
+          >
+            <Scissors size={14} />
+            {!isMobile && <span>Hair Codex</span>}
+          </button>
+        )}
       </div>
 
       {/* Action Controls */}

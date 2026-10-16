@@ -1,4 +1,4 @@
-import { TableSchema, TableRecord, TableGroup, TableMetaRecord } from '../types';
+import { TableSchema, TableRecord, TableGroup, TableMetaRecord, TableState } from '../types';
 
 export const API_BASE = ''; // Same origin in Cloudflare Workers or proxied by Vite in dev
 
@@ -65,7 +65,8 @@ async function request<T>(endpoint: string, options: RequestInit = {}): Promise<
     if (res.status === 401) {
       window.dispatchEvent(new CustomEvent('pk_auth_required'));
     }
-    throw new Error(data.error || `HTTP error ${res.status}`);
+    const errMsg = typeof data.error === 'object' ? JSON.stringify(data.error) : (data.error || `HTTP error ${res.status}`);
+    throw new Error(errMsg);
   }
   return data;
 }
@@ -89,8 +90,24 @@ export const api = {
     return request('/api/health');
   },
 
-  getTables: async (): Promise<{ tables: Record<string, TableSchema>; metadata?: TableMetaRecord[]; groups?: TableGroup[] }> => {
+  getTables: async (): Promise<{
+    tables: Record<string, TableSchema>;
+    metadata?: TableMetaRecord[];
+    groups?: TableGroup[];
+    states?: Record<string, TableState>;
+  }> => {
     return request('/api/tables');
+  },
+
+  getTableState: async (tableName: string): Promise<{ success: boolean; state: TableState | null }> => {
+    return request(`/api/states/${encodeURIComponent(tableName)}`);
+  },
+
+  saveTableState: async (tableName: string, state: Partial<TableState>): Promise<{ success: boolean; state: TableState }> => {
+    return request(`/api/states/${encodeURIComponent(tableName)}`, {
+      method: 'POST',
+      body: JSON.stringify(state),
+    });
   },
 
   getGroups: async (): Promise<{ success: boolean; groups: TableGroup[] }> => {

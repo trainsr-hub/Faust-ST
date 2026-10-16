@@ -16,6 +16,8 @@ dist/
 **/dist/
 dist-ssr/
 build/
+.wrangler/
+**/.wrangler/
 
 # Temporary SQLite WAL & SHM files
 *.db-wal

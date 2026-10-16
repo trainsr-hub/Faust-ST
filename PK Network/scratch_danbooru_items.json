@@ -1,0 +1,1822 @@
+[
+  {
+    "tag": "very short hair",
+    "slug": "very_short_hair",
+    "category": "Length and volume",
+    "subcategory": "Length and volume",
+    "imageUrl": "https://cdn.donmai.us/720x720/8d/ae/8dae4fe02341f0b337bfc1b5b3191668.webp",
+    "parentTag": null,
+    "description": "hair that does not go past the jaw",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/very_short_hair"
+  },
+  {
+    "tag": "short hair",
+    "slug": "short_hair",
+    "category": "Length and volume",
+    "subcategory": "Length and volume",
+    "imageUrl": "https://cdn.donmai.us/720x720/67/f3/67f36a68b0e5e27f1bff6bd718f972eb.webp",
+    "parentTag": null,
+    "description": "hair that does not go past the shoulders",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/short_hair"
+  },
+  {
+    "tag": "medium hair",
+    "slug": "medium_hair",
+    "category": "Length and volume",
+    "subcategory": "Length and volume",
+    "imageUrl": "https://cdn.donmai.us/720x720/6e/76/6e76becef02f0b59aaa6aa1027e7dc2a.webp",
+    "parentTag": "around",
+    "description": "hair that is (around) shoulder length",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/medium_hair"
+  },
+  {
+    "tag": "long hair",
+    "slug": "long_hair",
+    "category": "Length and volume",
+    "subcategory": "Length and volume",
+    "imageUrl": "https://cdn.donmai.us/720x720/4e/b9/4eb9f9f14df29f6dbd2cc09d7de6d1d2.webp",
+    "parentTag": null,
+    "description": "hair that goes from the shoulders to the waist",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/long_hair"
+  },
+  {
+    "tag": "very long hair",
+    "slug": "very_long_hair",
+    "category": "Length and volume",
+    "subcategory": "Length and volume",
+    "imageUrl": "https://cdn.donmai.us/720x720/f2/c5/f2c5eed5a5c4442de9c51fed76dbdf6b.webp",
+    "parentTag": null,
+    "description": "hair that goes from the waist to the feet",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/very_long_hair"
+  },
+  {
+    "tag": "absurdly long hair",
+    "slug": "absurdly_long_hair",
+    "category": "Length and volume",
+    "subcategory": "Length and volume",
+    "imageUrl": "https://cdn.donmai.us/720x720/55/79/55799fb01fa5496ed839b377596d411f.webp",
+    "parentTag": null,
+    "description": "hair that goes past the feet",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/absurdly_long_hair"
+  },
+  {
+    "tag": "big hair",
+    "slug": "big_hair",
+    "category": "Length and volume",
+    "subcategory": "Length and volume",
+    "imageUrl": "https://cdn.donmai.us/720x720/97/5e/975e0a7b831d6f143c356f64a28ea575.webp",
+    "parentTag": null,
+    "description": "hair that is notably voluminous or thick",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/big_hair"
+  },
+  {
+    "tag": "bald",
+    "slug": "bald",
+    "category": "Length and volume",
+    "subcategory": "Length and volume",
+    "imageUrl": "https://cdn.donmai.us/720x720/fe/c9/fec925f062a7aaa33de494256d4403ae.webp",
+    "parentTag": "bald female",
+    "description": "no hair at all",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/bald"
+  },
+  {
+    "tag": "balding",
+    "slug": "balding",
+    "category": "Length and volume",
+    "subcategory": "Length and volume",
+    "imageUrl": "https://cdn.donmai.us/720x720/a5/15/a5156adc8cb17a396e02dd15c12ca35e.webp",
+    "parentTag": null,
+    "description": "mostly bald, but has sparse amounts of hair",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/balding"
+  },
+  {
+    "tag": "buzz cut",
+    "slug": "buzz_cut",
+    "category": "Hairstyles",
+    "subcategory": "Very short hair",
+    "imageUrl": "https://cdn.donmai.us/720x720/29/2d/292dece696f4229f0c960469ae8a3e98.webp",
+    "parentTag": null,
+    "description": "buzz cut",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/buzz_cut"
+  },
+  {
+    "tag": "crew cut",
+    "slug": "crew_cut",
+    "category": "Hairstyles",
+    "subcategory": "Very short hair",
+    "imageUrl": "https://cdn.donmai.us/720x720/87/5f/875fe275ec99f4fd6b4ee436e66110e1.webp",
+    "parentTag": null,
+    "description": "crew cut",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/crew_cut"
+  },
+  {
+    "tag": "pixie cut",
+    "slug": "pixie_cut",
+    "category": "Hairstyles",
+    "subcategory": "Very short hair",
+    "imageUrl": "https://cdn.donmai.us/720x720/48/25/4825f81b63a79fb3018e7600a6689144.webp",
+    "parentTag": null,
+    "description": "pixie cut",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/pixie_cut"
+  },
+  {
+    "tag": "bob cut",
+    "slug": "bob_cut",
+    "category": "Hairstyles",
+    "subcategory": "Short hair",
+    "imageUrl": "https://cdn.donmai.us/720x720/bb/f4/bbf445a606753bbb959d7ddd26c109dc.webp",
+    "parentTag": null,
+    "description": "bob cut",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/bob_cut"
+  },
+  {
+    "tag": "inverted bob",
+    "slug": "inverted_bob",
+    "category": "Hairstyles",
+    "subcategory": "Short hair",
+    "imageUrl": "https://cdn.donmai.us/720x720/fb/80/fb806e7acc770e1fc97f439bcb7e10ea.webp",
+    "parentTag": "bob cut",
+    "description": "inverted bob (bob cut)",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/inverted_bob"
+  },
+  {
+    "tag": "bowl cut",
+    "slug": "bowl_cut",
+    "category": "Hairstyles",
+    "subcategory": "Short hair",
+    "imageUrl": "https://cdn.donmai.us/720x720/9d/c8/9dc85e83b72fec056d1bdd56cb8ddd97.webp",
+    "parentTag": null,
+    "description": "bowl cut",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/bowl_cut"
+  },
+  {
+    "tag": "undercut",
+    "slug": "undercut",
+    "category": "Hairstyles",
+    "subcategory": "Short hair",
+    "imageUrl": "https://cdn.donmai.us/720x720/9e/6d/9e6d4139db8d2b9a0cc560a94bf07bcc.webp",
+    "parentTag": null,
+    "description": "undercut",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/undercut"
+  },
+  {
+    "tag": "flattop",
+    "slug": "flattop",
+    "category": "Hairstyles",
+    "subcategory": "Short hair",
+    "imageUrl": "https://cdn.donmai.us/720x720/b6/4a/b64aa6607e07bcaf92510a52e25d462c.webp",
+    "parentTag": null,
+    "description": "flattop",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/flattop"
+  },
+  {
+    "tag": "short hair with long locks",
+    "slug": "short_hair_with_long_locks",
+    "category": "Hairstyles",
+    "subcategory": "Short hair",
+    "imageUrl": "https://cdn.donmai.us/720x720/cb/c6/cbc67bc1769bc76b157d45c7410e5869.webp",
+    "parentTag": null,
+    "description": "short hair with long locks",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/short_hair_with_long_locks"
+  },
+  {
+    "tag": "wolf cut",
+    "slug": "wolf_cut",
+    "category": "Hairstyles",
+    "subcategory": "Medium hair",
+    "imageUrl": "https://cdn.donmai.us/720x720/40/ab/40ab99c111a36946fe266989cf81587e.webp",
+    "parentTag": null,
+    "description": "wolf cut",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/wolf_cut"
+  },
+  {
+    "tag": "hime cut",
+    "slug": "hime_cut",
+    "category": "Hairstyles",
+    "subcategory": "Long hair",
+    "imageUrl": "https://cdn.donmai.us/720x720/53/a3/53a35cdae28471e59251883832aa0060.webp",
+    "parentTag": null,
+    "description": "hime cut",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/hime_cut"
+  },
+  {
+    "tag": "jellyfish cut",
+    "slug": "jellyfish_cut",
+    "category": "Hairstyles",
+    "subcategory": "Long hair",
+    "imageUrl": "https://cdn.donmai.us/720x720/48/ba/48baeb5b147cb4a8116d3be0b3003ea1.webp",
+    "parentTag": null,
+    "description": "jellyfish cut",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/jellyfish_cut"
+  },
+  {
+    "tag": "mullet",
+    "slug": "mullet",
+    "category": "Hairstyles",
+    "subcategory": "Long hair",
+    "imageUrl": "https://cdn.donmai.us/720x720/bf/07/bf07c2e1a4505b301cf37faaf5360c4d.webp",
+    "parentTag": null,
+    "description": "mullet",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/mullet"
+  },
+  {
+    "tag": "braided bangs",
+    "slug": "braided_bangs",
+    "category": "Hairstyles",
+    "subcategory": "Braids",
+    "imageUrl": "https://cdn.donmai.us/720x720/1f/2b/1f2be05374cd7cf31fc6896d6f5dbd00.webp",
+    "parentTag": null,
+    "description": "braided bangs",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/braided_bangs"
+  },
+  {
+    "tag": "front braid",
+    "slug": "front_braid",
+    "category": "Hairstyles",
+    "subcategory": "Braids",
+    "imageUrl": "https://cdn.donmai.us/720x720/43/02/4302a9d3dcbea6b45654749933d7bf33.webp",
+    "parentTag": null,
+    "description": "front braid",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/front_braid"
+  },
+  {
+    "tag": "side braid",
+    "slug": "side_braid",
+    "category": "Hairstyles",
+    "subcategory": "Braids",
+    "imageUrl": "https://cdn.donmai.us/720x720/cd/c0/cdc08ed7fba287131e3595488baf003d.webp",
+    "parentTag": null,
+    "description": "side braid",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/side_braid"
+  },
+  {
+    "tag": "crown braid",
+    "slug": "crown_braid",
+    "category": "Hairstyles",
+    "subcategory": "Braids",
+    "imageUrl": "https://cdn.donmai.us/720x720/d7/53/d753dbf6ce6d22dff06c25e10f195f7b.webp",
+    "parentTag": null,
+    "description": "crown braid",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/crown_braid"
+  },
+  {
+    "tag": "half crown braid",
+    "slug": "half_crown_braid",
+    "category": "Hairstyles",
+    "subcategory": "Braids",
+    "imageUrl": "https://cdn.donmai.us/720x720/43/75/4375ac58fb1fa0173fe82f30d6cde94f.webp",
+    "parentTag": null,
+    "description": "half crown braid",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/half_crown_braid"
+  },
+  {
+    "tag": "braided hair rings",
+    "slug": "braided_hair_rings",
+    "category": "Hairstyles",
+    "subcategory": "Braids",
+    "imageUrl": "https://cdn.donmai.us/720x720/e0/2a/e02ac1342c9065fe6f76a40652b36da5.webp",
+    "parentTag": null,
+    "description": "braided hair rings",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/braided_hair_rings"
+  },
+  {
+    "tag": "single braid",
+    "slug": "single_braid",
+    "category": "Hairstyles",
+    "subcategory": "Braids",
+    "imageUrl": "https://cdn.donmai.us/720x720/ea/a5/eaa5210054b92d525838dad356799ca7.webp",
+    "parentTag": null,
+    "description": "single braid",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/single_braid"
+  },
+  {
+    "tag": "multiple braids",
+    "slug": "multiple_braids",
+    "category": "Hairstyles",
+    "subcategory": "Braids",
+    "imageUrl": "https://cdn.donmai.us/720x720/8c/8c/8c8c5bc3432e8665b989a7dc0c321fbb.webp",
+    "parentTag": null,
+    "description": "multiple braids",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/multiple_braids"
+  },
+  {
+    "tag": "twin braids",
+    "slug": "twin_braids",
+    "category": "Hairstyles",
+    "subcategory": "Braids",
+    "imageUrl": "https://cdn.donmai.us/720x720/ad/7e/ad7e88312fc480ff6dad121672342f8f.webp",
+    "parentTag": null,
+    "description": "twin braids",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/twin_braids"
+  },
+  {
+    "tag": "low twin braids",
+    "slug": "low_twin_braids",
+    "category": "Hairstyles",
+    "subcategory": "Braids",
+    "imageUrl": "https://cdn.donmai.us/720x720/20/5c/205c9a522abfa8323ff79e9bc958368c.webp",
+    "parentTag": null,
+    "description": "low twin braids",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/low_twin_braids"
+  },
+  {
+    "tag": "tri braids",
+    "slug": "tri_braids",
+    "category": "Hairstyles",
+    "subcategory": "Braids",
+    "imageUrl": "https://cdn.donmai.us/720x720/bc/b5/bcb5d1232d5879785513db4fd9a9cabb.webp",
+    "parentTag": null,
+    "description": "tri braids",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/tri_braids"
+  },
+  {
+    "tag": "quad braids",
+    "slug": "quad_braids",
+    "category": "Hairstyles",
+    "subcategory": "Braids",
+    "imageUrl": "https://cdn.donmai.us/720x720/fa/27/fa277037933827a7517227988bacb5b9.webp",
+    "parentTag": null,
+    "description": "quad braids",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/quad_braids"
+  },
+  {
+    "tag": "rope braid",
+    "slug": "rope_braid",
+    "category": "Hairstyles",
+    "subcategory": "Braids",
+    "imageUrl": "https://cdn.donmai.us/720x720/15/d1/15d1432d2cfecce6f1a58fc6c23557cc.webp",
+    "parentTag": null,
+    "description": "rope braid",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/rope_braid"
+  },
+  {
+    "tag": "cornrows",
+    "slug": "cornrows",
+    "category": "Hairstyles",
+    "subcategory": "Braids",
+    "imageUrl": "https://cdn.donmai.us/720x720/a4/8a/a48a23b5dab430da910673c6e075f811.webp",
+    "parentTag": null,
+    "description": "cornrows",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/cornrows"
+  },
+  {
+    "tag": "dreadlocks",
+    "slug": "dreadlocks",
+    "category": "Hairstyles",
+    "subcategory": "Braids",
+    "imageUrl": "https://cdn.donmai.us/720x720/59/20/5920f4ebcc3e86374fc71cc5dc8c840a.webp",
+    "parentTag": null,
+    "description": "dreadlocks",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/dreadlocks"
+  },
+  {
+    "tag": "braided dreadlocks",
+    "slug": "braided_dreadlocks",
+    "category": "Hairstyles",
+    "subcategory": "Braids",
+    "imageUrl": "https://cdn.donmai.us/720x720/cd/b1/cdb1e37471b97a8c28b54e57310386c1.webp",
+    "parentTag": null,
+    "description": "braided dreadlocks",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/braided_dreadlocks"
+  },
+  {
+    "tag": "box braids",
+    "slug": "box_braids",
+    "category": "Hairstyles",
+    "subcategory": "Braids",
+    "imageUrl": "https://cdn.donmai.us/720x720/eb/ab/ebab3a2c0459238181f6b45c41ba52be.webp",
+    "parentTag": null,
+    "description": "box braids",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/box_braids"
+  },
+  {
+    "tag": "low-braided long hair",
+    "slug": "low-braided_long_hair",
+    "category": "Hairstyles",
+    "subcategory": "Braids",
+    "imageUrl": "https://cdn.donmai.us/720x720/8f/ee/8feeb1680d023015f9440c9f36e363bf.webp",
+    "parentTag": null,
+    "description": "braided long hair",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/low-braided_long_hair"
+  },
+  {
+    "tag": "half up braid",
+    "slug": "half_up_braid",
+    "category": "Hairstyles",
+    "subcategory": "Braids",
+    "imageUrl": "https://cdn.donmai.us/720x720/04/5a/045a66b3ed98d54896f7ac6743645ce8.webp",
+    "parentTag": null,
+    "description": "half up braid",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/half_up_braid"
+  },
+  {
+    "tag": "half up half down braid",
+    "slug": "half_up_half_down_braid",
+    "category": "Hairstyles",
+    "subcategory": "Braids",
+    "imageUrl": "https://cdn.donmai.us/720x720/75/1a/751ab2d685cde9078ca93a79bbac186f.webp",
+    "parentTag": null,
+    "description": "half up half down braid",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/half_up_half_down_braid"
+  },
+  {
+    "tag": "braided ponytail",
+    "slug": "braided_ponytail",
+    "category": "Hairstyles",
+    "subcategory": "Braids",
+    "imageUrl": "https://cdn.donmai.us/720x720/59/e0/59e02c6ba3df31d5da243696c88c589b.webp",
+    "parentTag": null,
+    "description": "braided ponytail",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/braided_ponytail"
+  },
+  {
+    "tag": "braided bun",
+    "slug": "braided_bun",
+    "category": "Hairstyles",
+    "subcategory": "Hair buns",
+    "imageUrl": "https://cdn.donmai.us/720x720/1d/68/1d68ded81d2844ed3f7f830f7f5de5b8.webp",
+    "parentTag": null,
+    "description": "braided bun",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/braided_bun"
+  },
+  {
+    "tag": "bun with braided base",
+    "slug": "bun_with_braided_base",
+    "category": "Hairstyles",
+    "subcategory": "Hair buns",
+    "imageUrl": "https://cdn.donmai.us/720x720/3d/aa/3daa0575825af0ad253e753c4a4cf3d9.webp",
+    "parentTag": null,
+    "description": "bun with braided base",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/bun_with_braided_base"
+  },
+  {
+    "tag": "bantu knots",
+    "slug": "bantu_knots",
+    "category": "Hairstyles",
+    "subcategory": "Hair buns",
+    "imageUrl": "https://cdn.donmai.us/720x720/2e/14/2e14c3596a0a4adffc2af9e0e9559ced.webp",
+    "parentTag": null,
+    "description": "bantu knots",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/bantu_knots"
+  },
+  {
+    "tag": "single hair bun",
+    "slug": "single_hair_bun",
+    "category": "Hairstyles",
+    "subcategory": "Hair buns",
+    "imageUrl": "https://cdn.donmai.us/720x720/bb/21/bb21cc0202de9ef183feea8f0dfd11ad.webp",
+    "parentTag": null,
+    "description": "single hair bun",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/single_hair_bun"
+  },
+  {
+    "tag": "double bun",
+    "slug": "double_bun",
+    "category": "Hairstyles",
+    "subcategory": "Hair buns",
+    "imageUrl": "https://cdn.donmai.us/720x720/12/87/1287f50c496da3a94d5ce502718e2e66.webp",
+    "parentTag": null,
+    "description": "double bun",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/double_bun"
+  },
+  {
+    "tag": "very low bun",
+    "slug": "very_low_bun",
+    "category": "Hairstyles",
+    "subcategory": "Hair buns",
+    "imageUrl": "https://cdn.donmai.us/720x720/01/04/010401ff13dffce0c65eecbb83e9c0e3.webp",
+    "parentTag": null,
+    "description": "very low bun",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/very_low_bun"
+  },
+  {
+    "tag": "cone hair bun",
+    "slug": "cone_hair_bun",
+    "category": "Hairstyles",
+    "subcategory": "Hair buns",
+    "imageUrl": "https://cdn.donmai.us/720x720/ae/1a/ae1a5bcb52381cd8212107543bba123e.webp",
+    "parentTag": null,
+    "description": "cone hair bun",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/cone_hair_bun"
+  },
+  {
+    "tag": "donut hair bun",
+    "slug": "donut_hair_bun",
+    "category": "Hairstyles",
+    "subcategory": "Hair buns",
+    "imageUrl": "https://cdn.donmai.us/720x720/57/2c/572c78f32613c9376e6412d336809e02.webp",
+    "parentTag": null,
+    "description": "donut hair bun",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/donut_hair_bun"
+  },
+  {
+    "tag": "heart hair bun",
+    "slug": "heart_hair_bun",
+    "category": "Hairstyles",
+    "subcategory": "Hair buns",
+    "imageUrl": "https://cdn.donmai.us/720x720/02/31/0231c68fb04d9778d54bf201c7b7fca5.webp",
+    "parentTag": null,
+    "description": "heart hair bun",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/heart_hair_bun"
+  },
+  {
+    "tag": "triple bun",
+    "slug": "triple_bun",
+    "category": "Hairstyles",
+    "subcategory": "Hair buns",
+    "imageUrl": "https://cdn.donmai.us/720x720/98/73/98730cbb4079495328fc65c85846760b.webp",
+    "parentTag": null,
+    "description": "triple bun",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/triple_bun"
+  },
+  {
+    "tag": "hair rings",
+    "slug": "hair_rings",
+    "category": "Hairstyles",
+    "subcategory": "Hair buns",
+    "imageUrl": "https://cdn.donmai.us/720x720/d1/76/d176c43323653e1da910f7a643add50e.webp",
+    "parentTag": null,
+    "description": "hair rings",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/hair_rings"
+  },
+  {
+    "tag": "feixianji",
+    "slug": "feixianji_%28hairstyle%29",
+    "category": "Hairstyles",
+    "subcategory": "Hair buns",
+    "imageUrl": "https://cdn.donmai.us/720x720/d5/bd/d5bd6e4fcf492c80bb9b48c16fbf84b0.webp",
+    "parentTag": null,
+    "description": "feixianji",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/feixianji_%28hairstyle%29"
+  },
+  {
+    "tag": "katsuyamamage",
+    "slug": "katsuyamamage",
+    "category": "Hairstyles",
+    "subcategory": "Hair buns",
+    "imageUrl": "https://cdn.donmai.us/720x720/ec/6b/ec6b533565378bb585937748730b7e14.webp",
+    "parentTag": "nihongami",
+    "description": "katsuyamamage (nihongami)",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/katsuyamamage"
+  },
+  {
+    "tag": "single hair ring",
+    "slug": "single_hair_ring",
+    "category": "Hairstyles",
+    "subcategory": "Hair buns",
+    "imageUrl": "https://cdn.donmai.us/720x720/a4/c8/a4c8f6737124fb2e0ab561cbbfc34940.webp",
+    "parentTag": null,
+    "description": "single hair ring",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/single_hair_ring"
+  },
+  {
+    "tag": "tri hair rings",
+    "slug": "tri_hair_rings",
+    "category": "Hairstyles",
+    "subcategory": "Hair buns",
+    "imageUrl": "https://cdn.donmai.us/720x720/51/f2/51f2b4ff5e7859a6e7d1f3ab072449dd.webp",
+    "parentTag": null,
+    "description": "tri hair rings",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/tri_hair_rings"
+  },
+  {
+    "tag": "quad hair rings",
+    "slug": "quad_hair_rings",
+    "category": "Hairstyles",
+    "subcategory": "Hair buns",
+    "imageUrl": "https://cdn.donmai.us/720x720/7c/e7/7ce75a7b867718dddd19fcad4babc020.webp",
+    "parentTag": null,
+    "description": "quad hair rings",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/quad_hair_rings"
+  },
+  {
+    "tag": "triangle hair bun with corners toward head",
+    "slug": "triangle_hair_bun_with_corners_toward_head",
+    "category": "Hairstyles",
+    "subcategory": "Hair buns",
+    "imageUrl": "https://cdn.donmai.us/720x720/0e/b1/0eb1ae888424849357b04f7ed88202af.webp",
+    "parentTag": null,
+    "description": "triangle hair bun with corners toward head",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/triangle_hair_bun_with_corners_toward_head"
+  },
+  {
+    "tag": "half updo",
+    "slug": "half_updo",
+    "category": "Hairstyles",
+    "subcategory": "Ponytails",
+    "imageUrl": "https://cdn.donmai.us/720x720/34/09/3409dbcc1fd5813d56d762d6edabe1aa.webp",
+    "parentTag": null,
+    "description": "half updo",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/half_updo"
+  },
+  {
+    "tag": "one side up",
+    "slug": "one_side_up",
+    "category": "Hairstyles",
+    "subcategory": "Ponytails",
+    "imageUrl": "https://cdn.donmai.us/720x720/2c/80/2c80bc77563dcbf4f30dbf86c34d4e09.webp",
+    "parentTag": null,
+    "description": "one side up",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/one_side_up"
+  },
+  {
+    "tag": "two side up",
+    "slug": "two_side_up",
+    "category": "Hairstyles",
+    "subcategory": "Ponytails",
+    "imageUrl": "https://cdn.donmai.us/720x720/37/e3/37e357375430e831009297b511444e7f.webp",
+    "parentTag": null,
+    "description": "two side up",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/two_side_up"
+  },
+  {
+    "tag": "low-tied long hair",
+    "slug": "low-tied_long_hair",
+    "category": "Hairstyles",
+    "subcategory": "Ponytails",
+    "imageUrl": "https://cdn.donmai.us/720x720/e1/86/e18655215dc0092e21c792b7d199e8d4.webp",
+    "parentTag": null,
+    "description": "tied long hair",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/low-tied_long_hair"
+  },
+  {
+    "tag": "multi-tied hair",
+    "slug": "multi-tied_hair",
+    "category": "Hairstyles",
+    "subcategory": "Ponytails",
+    "imageUrl": "https://cdn.donmai.us/720x720/41/e0/41e0b4a9d75a07e0b5afde62001f439d.webp",
+    "parentTag": null,
+    "description": "tied hair",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/multi-tied_hair"
+  },
+  {
+    "tag": "folded ponytail",
+    "slug": "folded_ponytail",
+    "category": "Hairstyles",
+    "subcategory": "Ponytails",
+    "imageUrl": "https://cdn.donmai.us/720x720/b3/7d/b37dff916ea2efc49601d9112a660964.webp",
+    "parentTag": null,
+    "description": "folded ponytail",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/folded_ponytail"
+  },
+  {
+    "tag": "front ponytail",
+    "slug": "front_ponytail",
+    "category": "Hairstyles",
+    "subcategory": "Ponytails",
+    "imageUrl": "https://cdn.donmai.us/720x720/47/db/47db545c93d24c4d9e2be9cc8de2a979.webp",
+    "parentTag": null,
+    "description": "front ponytail",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/front_ponytail"
+  },
+  {
+    "tag": "high ponytail",
+    "slug": "high_ponytail",
+    "category": "Hairstyles",
+    "subcategory": "Ponytails",
+    "imageUrl": "https://cdn.donmai.us/720x720/67/90/6790036120193ca82936b06b098c1cb4.webp",
+    "parentTag": null,
+    "description": "high ponytail",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/high_ponytail"
+  },
+  {
+    "tag": "low ponytail",
+    "slug": "low_ponytail",
+    "category": "Hairstyles",
+    "subcategory": "Ponytails",
+    "imageUrl": "https://cdn.donmai.us/720x720/a9/3f/a93fb84d5d720ab75733e8806c3c4fbb.webp",
+    "parentTag": null,
+    "description": "low ponytail",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/low_ponytail"
+  },
+  {
+    "tag": "short ponytail",
+    "slug": "short_ponytail",
+    "category": "Hairstyles",
+    "subcategory": "Ponytails",
+    "imageUrl": "https://cdn.donmai.us/720x720/3f/e7/3fe7a1fab8a0a453ac1bb56bd33e7d43.webp",
+    "parentTag": null,
+    "description": "short ponytail",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/short_ponytail"
+  },
+  {
+    "tag": "ponytail with braided base",
+    "slug": "ponytail_with_braided_base",
+    "category": "Hairstyles",
+    "subcategory": "Ponytails",
+    "imageUrl": "https://cdn.donmai.us/720x720/51/9f/519f8f715b5fe3c4991feac1168b9057.webp",
+    "parentTag": null,
+    "description": "ponytail with braided base",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/ponytail_with_braided_base"
+  },
+  {
+    "tag": "side ponytail",
+    "slug": "side_ponytail",
+    "category": "Hairstyles",
+    "subcategory": "Ponytails",
+    "imageUrl": "https://cdn.donmai.us/720x720/c8/43/c843e7a460f517a93ff4426a6a7ec420.webp",
+    "parentTag": null,
+    "description": "side ponytail",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/side_ponytail"
+  },
+  {
+    "tag": "high side ponytail",
+    "slug": "high_side_ponytail",
+    "category": "Hairstyles",
+    "subcategory": "Ponytails",
+    "imageUrl": "https://cdn.donmai.us/720x720/c3/30/c33085688930f6bd53c8a21cd1266b88.webp",
+    "parentTag": null,
+    "description": "high side ponytail",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/high_side_ponytail"
+  },
+  {
+    "tag": "low side ponytail",
+    "slug": "low_side_ponytail",
+    "category": "Hairstyles",
+    "subcategory": "Ponytails",
+    "imageUrl": "https://cdn.donmai.us/720x720/0d/7d/0d7d2e3cac536f7dc1b36364cf1cfdca.webp",
+    "parentTag": null,
+    "description": "low side ponytail",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/low_side_ponytail"
+  },
+  {
+    "tag": "short side ponytail",
+    "slug": "short_side_ponytail",
+    "category": "Hairstyles",
+    "subcategory": "Ponytails",
+    "imageUrl": "https://cdn.donmai.us/720x720/29/8f/298fa0c321ca31a10d0c4c61f6c4f6f7.webp",
+    "parentTag": null,
+    "description": "short side ponytail",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/short_side_ponytail"
+  },
+  {
+    "tag": "side ponytail with braided base",
+    "slug": "side_ponytail_with_braided_base",
+    "category": "Hairstyles",
+    "subcategory": "Ponytails",
+    "imageUrl": "https://cdn.donmai.us/720x720/0b/f1/0bf1bb2097f4184edbac745675c44b10.webp",
+    "parentTag": null,
+    "description": "side ponytail with braided base",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/side_ponytail_with_braided_base"
+  },
+  {
+    "tag": "split ponytail",
+    "slug": "split_ponytail",
+    "category": "Hairstyles",
+    "subcategory": "Ponytails",
+    "imageUrl": "https://cdn.donmai.us/720x720/72/35/72355f40acd391c6444f9b3269d50f01.webp",
+    "parentTag": null,
+    "description": "split ponytail",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/split_ponytail"
+  },
+  {
+    "tag": "topknot",
+    "slug": "topknot",
+    "category": "Hairstyles",
+    "subcategory": "Ponytails",
+    "imageUrl": "https://cdn.donmai.us/720x720/eb/da/ebda7b44a5e4f742d2f276eb7485ebfa.webp",
+    "parentTag": null,
+    "description": "topknot",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/topknot"
+  },
+  {
+    "tag": "chonmage",
+    "slug": "chonmage",
+    "category": "Hairstyles",
+    "subcategory": "Ponytails",
+    "imageUrl": "https://cdn.donmai.us/720x720/f6/e2/f6e2525a0aac975290d5cb51e8aa52b7.webp",
+    "parentTag": null,
+    "description": "chonmage",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/chonmage"
+  },
+  {
+    "tag": "sangtu",
+    "slug": "sangtu",
+    "category": "Hairstyles",
+    "subcategory": "Ponytails",
+    "imageUrl": "https://cdn.donmai.us/720x720/38/21/382145713f17277bc823f7152eb5ce55.webp",
+    "parentTag": null,
+    "description": "sangtu",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/sangtu"
+  },
+  {
+    "tag": "chasenmage",
+    "slug": "chasenmage",
+    "category": "Hairstyles",
+    "subcategory": "Ponytails",
+    "imageUrl": "https://cdn.donmai.us/720x720/91/77/91775c184b0371964d46810776fec197.webp",
+    "parentTag": null,
+    "description": "chasenmage",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/chasenmage"
+  },
+  {
+    "tag": "twintails",
+    "slug": "twintails",
+    "category": "Hairstyles",
+    "subcategory": "Ponytails",
+    "imageUrl": "https://cdn.donmai.us/720x720/69/fd/69fda6e2661a12643e9578d23c324b56.webp",
+    "parentTag": null,
+    "description": "twintails",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/twintails"
+  },
+  {
+    "tag": "low twintails",
+    "slug": "low_twintails",
+    "category": "Hairstyles",
+    "subcategory": "Ponytails",
+    "imageUrl": "https://cdn.donmai.us/720x720/a5/1d/a51d266d2a50c8356b5a9c8b8c8c464b.webp",
+    "parentTag": null,
+    "description": "low twintails",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/low_twintails"
+  },
+  {
+    "tag": "short twintails",
+    "slug": "short_twintails",
+    "category": "Hairstyles",
+    "subcategory": "Ponytails",
+    "imageUrl": "https://cdn.donmai.us/720x720/b6/8c/b68c08a7c5e8248a3ef3bb734a37f3ca.webp",
+    "parentTag": null,
+    "description": "short twintails",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/short_twintails"
+  },
+  {
+    "tag": "uneven twintails",
+    "slug": "uneven_twintails",
+    "category": "Hairstyles",
+    "subcategory": "Ponytails",
+    "imageUrl": "https://cdn.donmai.us/720x720/2a/49/2a49668c1e2cf3163717586fcf1c2a0f.webp",
+    "parentTag": null,
+    "description": "uneven twintails",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/uneven_twintails"
+  },
+  {
+    "tag": "tri tails",
+    "slug": "tri_tails",
+    "category": "Hairstyles",
+    "subcategory": "Ponytails",
+    "imageUrl": "https://cdn.donmai.us/720x720/49/88/4988e5b897631c37fdd08baf3d7f92d7.webp",
+    "parentTag": null,
+    "description": "tri tails",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/tri_tails"
+  },
+  {
+    "tag": "quad tails",
+    "slug": "quad_tails",
+    "category": "Hairstyles",
+    "subcategory": "Ponytails",
+    "imageUrl": "https://cdn.donmai.us/720x720/09/70/097078499ec5a569ac10b3258a45b37c.webp",
+    "parentTag": null,
+    "description": "quad tails",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/quad_tails"
+  },
+  {
+    "tag": "quin tails",
+    "slug": "quin_tails",
+    "category": "Hairstyles",
+    "subcategory": "Ponytails",
+    "imageUrl": "https://cdn.donmai.us/720x720/32/1a/321a36e6e2569ee2fc911d17914a2b33.webp",
+    "parentTag": null,
+    "description": "quin tails",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/quin_tails"
+  },
+  {
+    "tag": "bow-shaped hair",
+    "slug": "bow-shaped_hair",
+    "category": "Hairstyles",
+    "subcategory": "Elaborately-tied hair",
+    "imageUrl": "https://cdn.donmai.us/720x720/f8/30/f83070a714d11f6ea7bb20fb3d61a3ee.webp",
+    "parentTag": null,
+    "description": "shaped hair",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/bow-shaped_hair"
+  },
+  {
+    "tag": "bow_shimada",
+    "slug": "bow_shimada",
+    "category": "Hairstyles",
+    "subcategory": "Elaborately-tied hair",
+    "imageUrl": "https://cdn.donmai.us/720x720/bf/4a/bf4a4ee5836804dde692888bf6d21c0b.webp",
+    "parentTag": "nihongami",
+    "description": "bow_shimada (nihongami)",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/bow_shimada"
+  },
+  {
+    "tag": "shuangyaji",
+    "slug": "shuangyaji",
+    "category": "Hairstyles",
+    "subcategory": "Elaborately-tied hair",
+    "imageUrl": "https://cdn.donmai.us/720x720/7e/fc/7efc44ca3a7f0a957e37cf68dc967828.webp",
+    "parentTag": null,
+    "description": "shuangyaji",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/shuangyaji"
+  },
+  {
+    "tag": "danyaji",
+    "slug": "danyaji",
+    "category": "Hairstyles",
+    "subcategory": "Elaborately-tied hair",
+    "imageUrl": "https://cdn.donmai.us/720x720/85/82/85829b8da535eeee0d1da5fb9e915d9f.webp",
+    "parentTag": null,
+    "description": "danyaji",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/danyaji"
+  },
+  {
+    "tag": "four leaf clover hairstyle",
+    "slug": "four_leaf_clover_hairstyle",
+    "category": "Hairstyles",
+    "subcategory": "Elaborately-tied hair",
+    "imageUrl": "https://cdn.donmai.us/720x720/9b/69/9b69acdb5a8d69494280d2d42ea337b4.webp",
+    "parentTag": null,
+    "description": "four leaf clover hairstyle",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/four_leaf_clover_hairstyle"
+  },
+  {
+    "tag": "rabbit hairstyle",
+    "slug": "rabbit_hairstyle",
+    "category": "Hairstyles",
+    "subcategory": "Elaborately-tied hair",
+    "imageUrl": "https://cdn.donmai.us/720x720/a2/46/a246c34823adeaad0271b05fafb8edd0.webp",
+    "parentTag": null,
+    "description": "rabbit hairstyle",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/rabbit_hairstyle"
+  },
+  {
+    "tag": "flower-shaped hair",
+    "slug": "flower-shaped_hair",
+    "category": "Hairstyles",
+    "subcategory": "Elaborately-tied hair",
+    "imageUrl": "https://cdn.donmai.us/720x720/76/f5/76f51388743ed71c3503c889751a4a89.webp",
+    "parentTag": null,
+    "description": "shaped hair",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/flower-shaped_hair"
+  },
+  {
+    "tag": "fukumage",
+    "slug": "fukumage",
+    "category": "Hairstyles",
+    "subcategory": "Elaborately-tied hair",
+    "imageUrl": "https://cdn.donmai.us/720x720/3d/d2/3dd2c5187e682558a7ff5ce588f728d3.webp",
+    "parentTag": "nihongami",
+    "description": "fukumage (nihongami)",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/fukumage"
+  },
+  {
+    "tag": "karawamage",
+    "slug": "karawamage",
+    "category": "Hairstyles",
+    "subcategory": "Elaborately-tied hair",
+    "imageUrl": "https://cdn.donmai.us/720x720/bb/01/bb01fee3ba36fcedfd15e0880dfc711a.webp",
+    "parentTag": "nihongami",
+    "description": "karawamage (nihongami)",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/karawamage"
+  },
+  {
+    "tag": "marumage",
+    "slug": "marumage",
+    "category": "Hairstyles",
+    "subcategory": "Elaborately-tied hair",
+    "imageUrl": "https://cdn.donmai.us/720x720/88/6a/886a7e6877ea433f70f6dcfc08ff46e1.webp",
+    "parentTag": "nihongami",
+    "description": "marumage (nihongami)",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/marumage"
+  },
+  {
+    "tag": "yuiwata",
+    "slug": "yuiwata",
+    "category": "Hairstyles",
+    "subcategory": "Elaborately-tied hair",
+    "imageUrl": "https://cdn.donmai.us/720x720/05/9d/059db0f8671bbcfcfa8bd3e41b26c23e.webp",
+    "parentTag": "nihongami",
+    "description": "yuiwata (nihongami)",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/yuiwata"
+  },
+  {
+    "tag": "mizura",
+    "slug": "mizura",
+    "category": "Hairstyles",
+    "subcategory": "Elaborately-tied hair",
+    "imageUrl": "https://cdn.donmai.us/720x720/64/f2/64f2793067ab3b7e596270aa6daea974.webp",
+    "parentTag": "nihongami",
+    "description": "mizura (nihongami)",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/mizura"
+  },
+  {
+    "tag": "star-shaped hair",
+    "slug": "star-shaped_hair",
+    "category": "Hairstyles",
+    "subcategory": "Elaborately-tied hair",
+    "imageUrl": "https://cdn.donmai.us/720x720/32/b1/32b1f0d36220bc34957c8acfbcb301e8.webp",
+    "parentTag": null,
+    "description": "shaped hair",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/star-shaped_hair"
+  },
+  {
+    "tag": "afro",
+    "slug": "afro",
+    "category": "Hairstyles",
+    "subcategory": "Big hair",
+    "imageUrl": "https://cdn.donmai.us/720x720/c8/bd/c8bdd7490fc7ddfd3426fa2da6f0990f.webp",
+    "parentTag": null,
+    "description": "afro",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/afro"
+  },
+  {
+    "tag": "huge afro",
+    "slug": "huge_afro",
+    "category": "Hairstyles",
+    "subcategory": "Big hair",
+    "imageUrl": "https://cdn.donmai.us/720x720/4c/dc/4cdc06b32b17d77a2b2bb5a35cb92866.webp",
+    "parentTag": null,
+    "description": "huge afro",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/huge_afro"
+  },
+  {
+    "tag": "beehive hairdo",
+    "slug": "beehive_hairdo",
+    "category": "Hairstyles",
+    "subcategory": "Big hair",
+    "imageUrl": "https://cdn.donmai.us/720x720/98/ea/98ea0c66e043d4688e51c786aa961373.webp",
+    "parentTag": null,
+    "description": "beehive hairdo",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/beehive_hairdo"
+  },
+  {
+    "tag": "crested hair",
+    "slug": "crested_hair",
+    "category": "Hairstyles",
+    "subcategory": "Big hair",
+    "imageUrl": "https://cdn.donmai.us/720x720/0c/8a/0c8a33ee14f801072f9f4a7822b36af2.webp",
+    "parentTag": null,
+    "description": "crested hair",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/crested_hair"
+  },
+  {
+    "tag": "liangbatou",
+    "slug": "liangbatou",
+    "category": "Hairstyles",
+    "subcategory": "Big hair",
+    "imageUrl": "https://cdn.donmai.us/720x720/92/c7/92c77d6587c30fabc3a5ec233d111c0a.webp",
+    "parentTag": null,
+    "description": "liangbatou",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/liangbatou"
+  },
+  {
+    "tag": "pompadour",
+    "slug": "pompadour",
+    "category": "Hairstyles",
+    "subcategory": "Big hair",
+    "imageUrl": "https://cdn.donmai.us/720x720/d6/ae/d6aec94cbec8858dfd8be0436f21448b.webp",
+    "parentTag": null,
+    "description": "pompadour",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/pompadour"
+  },
+  {
+    "tag": "quiff",
+    "slug": "quiff",
+    "category": "Hairstyles",
+    "subcategory": "Big hair",
+    "imageUrl": "https://cdn.donmai.us/720x720/76/dd/76dd6a30e966b1560ee8778a43a6762d.webp",
+    "parentTag": null,
+    "description": "quiff",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/quiff"
+  },
+  {
+    "tag": "shouten pegasus mix mori",
+    "slug": "shouten_pegasus_mix_mori",
+    "category": "Hairstyles",
+    "subcategory": "Big hair",
+    "imageUrl": "https://cdn.donmai.us/720x720/9c/db/9cdb44b2fea23b428b26ae429b5d3f4e.webp",
+    "parentTag": null,
+    "description": "shouten pegasus mix mori",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/shouten_pegasus_mix_mori"
+  },
+  {
+    "tag": "curly hair",
+    "slug": "curly_hair",
+    "category": "Hairstyles",
+    "subcategory": "Hair texture",
+    "imageUrl": "https://cdn.donmai.us/720x720/35/ff/35ff72da11d45b4d7db087c28d30d513.webp",
+    "parentTag": null,
+    "description": "curly hair",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/curly_hair"
+  },
+  {
+    "tag": "flipped hair",
+    "slug": "flipped_hair",
+    "category": "Hairstyles",
+    "subcategory": "Hair texture",
+    "imageUrl": "https://cdn.donmai.us/720x720/80/e3/80e3f461e014443dd0e76eec2e14919e.webp",
+    "parentTag": null,
+    "description": "flipped hair",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/flipped_hair"
+  },
+  {
+    "tag": "drill hair",
+    "slug": "drill_hair",
+    "category": "Hairstyles",
+    "subcategory": "Hair texture",
+    "imageUrl": "https://cdn.donmai.us/720x720/70/58/7058f1a545f286b4235f3b90b4d3bfc4.webp",
+    "parentTag": null,
+    "description": "drill hair",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/drill_hair"
+  },
+  {
+    "tag": "twin drills",
+    "slug": "twin_drills",
+    "category": "Hairstyles",
+    "subcategory": "Hair texture",
+    "imageUrl": "https://cdn.donmai.us/720x720/d5/37/d537d9aba9af983f3d2fe5fea705bb97.webp",
+    "parentTag": null,
+    "description": "twin drills",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/twin_drills"
+  },
+  {
+    "tag": "tri drills",
+    "slug": "tri_drills",
+    "category": "Hairstyles",
+    "subcategory": "Hair texture",
+    "imageUrl": "https://cdn.donmai.us/720x720/c4/3e/c43e65e9d32f44181e1809449d1616bd.webp",
+    "parentTag": null,
+    "description": "tri drills",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/tri_drills"
+  },
+  {
+    "tag": "single drill",
+    "slug": "single_drill",
+    "category": "Hairstyles",
+    "subcategory": "Hair texture",
+    "imageUrl": "https://cdn.donmai.us/720x720/76/ca/76ca7863e5e19107489cb0394434d3e9.webp",
+    "parentTag": null,
+    "description": "single drill",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/single_drill"
+  },
+  {
+    "tag": "quad drills",
+    "slug": "quad_drills",
+    "category": "Hairstyles",
+    "subcategory": "Hair texture",
+    "imageUrl": "https://cdn.donmai.us/720x720/33/a9/33a9bccd4894c328bed65264e79ae8fa.webp",
+    "parentTag": null,
+    "description": "quad drills",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/quad_drills"
+  },
+  {
+    "tag": "hair flaps",
+    "slug": "hair_flaps",
+    "category": "Hairstyles",
+    "subcategory": "Hair texture",
+    "imageUrl": "https://cdn.donmai.us/720x720/d3/87/d387abb81f7bcdb6d3a3c24c83e5b1fc.webp",
+    "parentTag": null,
+    "description": "hair flaps",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/hair_flaps"
+  },
+  {
+    "tag": "messy hair",
+    "slug": "messy_hair",
+    "category": "Hairstyles",
+    "subcategory": "Hair texture",
+    "imageUrl": "https://cdn.donmai.us/720x720/e0/15/e015cfc831e1b7f068523225be07f831.webp",
+    "parentTag": null,
+    "description": "messy hair",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/messy_hair"
+  },
+  {
+    "tag": "pointy hair",
+    "slug": "pointy_hair",
+    "category": "Hairstyles",
+    "subcategory": "Hair texture",
+    "imageUrl": "https://cdn.donmai.us/720x720/dc/b0/dcb07b56c33a618aaa2e15b708e16479.webp",
+    "parentTag": null,
+    "description": "pointy hair",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/pointy_hair"
+  },
+  {
+    "tag": "hair horns",
+    "slug": "hair_horns",
+    "category": "Hairstyles",
+    "subcategory": "Hair texture",
+    "imageUrl": "https://cdn.donmai.us/720x720/df/38/df38accc12fcb14176eaaad58a723047.webp",
+    "parentTag": null,
+    "description": "hair horns",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/hair_horns"
+  },
+  {
+    "tag": "ringlets",
+    "slug": "ringlets",
+    "category": "Hairstyles",
+    "subcategory": "Hair texture",
+    "imageUrl": "https://cdn.donmai.us/720x720/cd/b6/cdb6f7bc12f696ede2e03e752d48bb25.webp",
+    "parentTag": null,
+    "description": "ringlets",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/ringlets"
+  },
+  {
+    "tag": "spiked hair",
+    "slug": "spiked_hair",
+    "category": "Hairstyles",
+    "subcategory": "Hair texture",
+    "imageUrl": "https://cdn.donmai.us/720x720/07/5c/075c350a789c3bee4d2bcc083e192b39.webp",
+    "parentTag": null,
+    "description": "spiked hair",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/spiked_hair"
+  },
+  {
+    "tag": "straight hair",
+    "slug": "straight_hair",
+    "category": "Hairstyles",
+    "subcategory": "Hair texture",
+    "imageUrl": "https://cdn.donmai.us/720x720/31/8d/318d5519df58e613834d71fc81e6ed64.webp",
+    "parentTag": null,
+    "description": "straight hair",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/straight_hair"
+  },
+  {
+    "tag": "wavy hair",
+    "slug": "wavy_hair",
+    "category": "Hairstyles",
+    "subcategory": "Hair texture",
+    "imageUrl": "https://cdn.donmai.us/720x720/5a/c8/5ac89b44381e6e659f3a15b009711109.webp",
+    "parentTag": null,
+    "description": "wavy hair",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/wavy_hair"
+  },
+  {
+    "tag": "fluffy hair",
+    "slug": "fluffy_hair",
+    "category": "Hairstyles",
+    "subcategory": "Hair texture",
+    "imageUrl": "https://cdn.donmai.us/720x720/8d/3b/8d3b9f157cc5d5eb2d575469204a5425.webp",
+    "parentTag": null,
+    "description": "fluffy hair",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/fluffy_hair"
+  },
+  {
+    "tag": "kinky hair",
+    "slug": "kinky_hair",
+    "category": "Hairstyles",
+    "subcategory": "Hair texture",
+    "imageUrl": "https://cdn.donmai.us/720x720/f9/32/f9321767d797c6545c913a6ed103ce33.webp",
+    "parentTag": null,
+    "description": "kinky hair",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/kinky_hair"
+  },
+  {
+    "tag": "kishimen hair",
+    "slug": "kishimen_hair",
+    "category": "Hairstyles",
+    "subcategory": "Hair texture",
+    "imageUrl": "https://cdn.donmai.us/720x720/b6/a7/b6a79a09eba6f63fcc5cb35763e4ea84.webp",
+    "parentTag": null,
+    "description": "kishimen hair",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/kishimen_hair"
+  },
+  {
+    "tag": "arched bangs",
+    "slug": "arched_bangs",
+    "category": "Hairstyles",
+    "subcategory": "Front of the head (incl. bangs)",
+    "imageUrl": "https://cdn.donmai.us/720x720/39/72/3972fe8fd44e120d60f51fd3daea2968.webp",
+    "parentTag": null,
+    "description": "arched bangs",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/arched_bangs"
+  },
+  {
+    "tag": "asymmetrical bangs",
+    "slug": "asymmetrical_bangs",
+    "category": "Hairstyles",
+    "subcategory": "Front of the head (incl. bangs)",
+    "imageUrl": "https://cdn.donmai.us/720x720/15/f4/15f4d88480afa6673160effeb7421560.webp",
+    "parentTag": null,
+    "description": "asymmetrical bangs",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/asymmetrical_bangs"
+  },
+  {
+    "tag": "bangs pinned back",
+    "slug": "bangs_pinned_back",
+    "category": "Hairstyles",
+    "subcategory": "Front of the head (incl. bangs)",
+    "imageUrl": "https://cdn.donmai.us/720x720/75/03/7503230d2660bcf74499b0d72f569a2b.webp",
+    "parentTag": null,
+    "description": "bangs pinned back",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/bangs_pinned_back"
+  },
+  {
+    "tag": "blunt bangs",
+    "slug": "blunt_bangs",
+    "category": "Hairstyles",
+    "subcategory": "Front of the head (incl. bangs)",
+    "imageUrl": "https://cdn.donmai.us/720x720/40/7a/407a8b53ac0a9d693afd922d0d38425d.webp",
+    "parentTag": null,
+    "description": "blunt bangs",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/blunt_bangs"
+  },
+  {
+    "tag": "hime cut",
+    "slug": "hime_cut",
+    "category": "Hairstyles",
+    "subcategory": "Front of the head (incl. bangs)",
+    "imageUrl": "https://cdn.donmai.us/720x720/1a/85/1a85759a2af41fb9f030bbb80495cc43.webp",
+    "parentTag": null,
+    "description": "hime cut",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/hime_cut"
+  },
+  {
+    "tag": "center-flap bangs",
+    "slug": "center-flap_bangs",
+    "category": "Hairstyles",
+    "subcategory": "Front of the head (incl. bangs)",
+    "imageUrl": "https://cdn.donmai.us/720x720/d7/37/d7373a9f5abfa67e6cccf38cf4016958.webp",
+    "parentTag": null,
+    "description": "flap bangs",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/center-flap_bangs"
+  },
+  {
+    "tag": "crossed bangs",
+    "slug": "crossed_bangs",
+    "category": "Hairstyles",
+    "subcategory": "Front of the head (incl. bangs)",
+    "imageUrl": "https://cdn.donmai.us/720x720/5c/0e/5c0e7d09a056ec7c13d617c4785f0fba.webp",
+    "parentTag": null,
+    "description": "crossed bangs",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/crossed_bangs"
+  },
+  {
+    "tag": "wispy bangs",
+    "slug": "wispy_bangs",
+    "category": "Hairstyles",
+    "subcategory": "Front of the head (incl. bangs)",
+    "imageUrl": "https://cdn.donmai.us/720x720/a5/6a/a56ad961ce25bcea6300912762e74cb4.webp",
+    "parentTag": null,
+    "description": "wispy bangs",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/wispy_bangs"
+  },
+  {
+    "tag": "choppy bangs",
+    "slug": "choppy_bangs",
+    "category": "Hairstyles",
+    "subcategory": "Front of the head (incl. bangs)",
+    "imageUrl": "https://cdn.donmai.us/720x720/79/bc/79bc1828aa39634879a890697faff958.webp",
+    "parentTag": null,
+    "description": "choppy bangs",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/choppy_bangs"
+  },
+  {
+    "tag": "diagonal bangs",
+    "slug": "diagonal_bangs",
+    "category": "Hairstyles",
+    "subcategory": "Front of the head (incl. bangs)",
+    "imageUrl": "https://cdn.donmai.us/720x720/f7/ee/f7ee4ae91ce3c481b52a926dde3b8e6f.webp",
+    "parentTag": null,
+    "description": "diagonal bangs",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/diagonal_bangs"
+  },
+  {
+    "tag": "fanged bangs",
+    "slug": "fanged_bangs",
+    "category": "Hairstyles",
+    "subcategory": "Front of the head (incl. bangs)",
+    "imageUrl": "https://cdn.donmai.us/720x720/b1/eb/b1ebf147bcf0a148af94f251e28d8e1d.webp",
+    "parentTag": null,
+    "description": "fanged bangs",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/fanged_bangs"
+  },
+  {
+    "tag": "short bangs",
+    "slug": "short_bangs",
+    "category": "Hairstyles",
+    "subcategory": "Front of the head (incl. bangs)",
+    "imageUrl": "https://cdn.donmai.us/720x720/98/2d/982dfd7a7b14be995f0bced8cc6c2454.webp",
+    "parentTag": null,
+    "description": "short bangs",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/short_bangs"
+  },
+  {
+    "tag": "long bangs",
+    "slug": "long_bangs",
+    "category": "Hairstyles",
+    "subcategory": "Front of the head (incl. bangs)",
+    "imageUrl": "https://cdn.donmai.us/720x720/ed/ec/edec10c5dea798688c3f30024177b654.webp",
+    "parentTag": null,
+    "description": "long bangs",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/long_bangs"
+  },
+  {
+    "tag": "hair between eyes",
+    "slug": "hair_between_eyes",
+    "category": "Hairstyles",
+    "subcategory": "Front of the head (incl. bangs)",
+    "imageUrl": "https://cdn.donmai.us/720x720/42/a5/42a58b9b55e47c9a2dcb0c2e0c8970fa.webp",
+    "parentTag": null,
+    "description": "hair between eyes",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/hair_between_eyes"
+  },
+  {
+    "tag": "hair over one eye",
+    "slug": "hair_over_one_eye",
+    "category": "Hairstyles",
+    "subcategory": "Front of the head (incl. bangs)",
+    "imageUrl": "https://cdn.donmai.us/720x720/b4/bd/b4bdb73dad762ecb4558cf34e3201702.webp",
+    "parentTag": null,
+    "description": "hair over one eye",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/hair_over_one_eye"
+  },
+  {
+    "tag": "hair over eyes",
+    "slug": "hair_over_eyes",
+    "category": "Hairstyles",
+    "subcategory": "Front of the head (incl. bangs)",
+    "imageUrl": "https://cdn.donmai.us/720x720/f1/a5/f1a55e7174ce5db651dcbd33abbc289f.webp",
+    "parentTag": null,
+    "description": "hair over eyes",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/hair_over_eyes"
+  },
+  {
+    "tag": "parted bangs",
+    "slug": "parted_bangs",
+    "category": "Hairstyles",
+    "subcategory": "Front of the head (incl. bangs)",
+    "imageUrl": "https://cdn.donmai.us/720x720/9d/d3/9dd38a1c8be4dd1cce1647cf0982f2f4.webp",
+    "parentTag": null,
+    "description": "parted bangs",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/parted_bangs"
+  },
+  {
+    "tag": "middle part",
+    "slug": "middle_part",
+    "category": "Hairstyles",
+    "subcategory": "Front of the head (incl. bangs)",
+    "imageUrl": "https://cdn.donmai.us/720x720/61/24/6124695ca7fe98ec6f6a72daf8c288f7.webp",
+    "parentTag": null,
+    "description": "middle part",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/middle_part"
+  },
+  {
+    "tag": "side part",
+    "slug": "side_part",
+    "category": "Hairstyles",
+    "subcategory": "Front of the head (incl. bangs)",
+    "imageUrl": "https://cdn.donmai.us/720x720/ba/b4/bab463fea3d162b708c419d26505986c.webp",
+    "parentTag": null,
+    "description": "side part",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/side_part"
+  },
+  {
+    "tag": "double-parted bangs",
+    "slug": "double-parted_bangs",
+    "category": "Hairstyles",
+    "subcategory": "Front of the head (incl. bangs)",
+    "imageUrl": "https://cdn.donmai.us/720x720/6e/b7/6eb7e93e3bf31f38e6b7988987592b2a.webp",
+    "parentTag": null,
+    "description": "parted bangs",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/double-parted_bangs"
+  },
+  {
+    "tag": "curtained hair",
+    "slug": "curtained_hair",
+    "category": "Hairstyles",
+    "subcategory": "Front of the head (incl. bangs)",
+    "imageUrl": "https://cdn.donmai.us/720x720/49/5e/495eb3183df046dd50d134799c9f46b3.webp",
+    "parentTag": null,
+    "description": "curtained hair",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/curtained_hair"
+  },
+  {
+    "tag": "swept bangs",
+    "slug": "swept_bangs",
+    "category": "Hairstyles",
+    "subcategory": "Front of the head (incl. bangs)",
+    "imageUrl": "https://cdn.donmai.us/720x720/60/4b/604b4ac585e60b78702b8195496769cc.webp",
+    "parentTag": null,
+    "description": "swept bangs",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/swept_bangs"
+  },
+  {
+    "tag": "colored bangs",
+    "slug": "colored_bangs",
+    "category": "Hairstyles",
+    "subcategory": "Front of the head (incl. bangs)",
+    "imageUrl": "https://cdn.donmai.us/720x720/f6/1c/f61ceb140f4294fb2100cbdca392a535.webp",
+    "parentTag": null,
+    "description": "colored bangs",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/colored_bangs"
+  },
+  {
+    "tag": "hair intakes",
+    "slug": "hair_intakes",
+    "category": "Hairstyles",
+    "subcategory": "Front of the head (incl. bangs)",
+    "imageUrl": "https://cdn.donmai.us/720x720/cc/d3/ccd3d4a2ac763d3bddc433fdfe90d3a6.webp",
+    "parentTag": null,
+    "description": "hair intakes",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/hair_intakes"
+  },
+  {
+    "tag": "single hair intake",
+    "slug": "single_hair_intake",
+    "category": "Hairstyles",
+    "subcategory": "Front of the head (incl. bangs)",
+    "imageUrl": "https://cdn.donmai.us/720x720/1e/96/1e96c8f5425da13508e8334e4e00c0d8.webp",
+    "parentTag": null,
+    "description": "single hair intake",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/single_hair_intake"
+  },
+  {
+    "tag": "sidelocks",
+    "slug": "sidelocks",
+    "category": "Hairstyles",
+    "subcategory": "Front of the head (incl. bangs)",
+    "imageUrl": "https://cdn.donmai.us/720x720/ba/cd/bacd3ff32f506a8004f4ee2ed4215aae.webp",
+    "parentTag": null,
+    "description": "sidelocks",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/sidelocks"
+  },
+  {
+    "tag": "asymmetrical sidelocks",
+    "slug": "asymmetrical_sidelocks",
+    "category": "Hairstyles",
+    "subcategory": "Front of the head (incl. bangs)",
+    "imageUrl": "https://cdn.donmai.us/720x720/66/bc/66bcb3bc3cc2dfe0b183c509dcc5b430.webp",
+    "parentTag": null,
+    "description": "asymmetrical sidelocks",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/asymmetrical_sidelocks"
+  },
+  {
+    "tag": "drill sidelocks",
+    "slug": "drill_sidelocks",
+    "category": "Hairstyles",
+    "subcategory": "Front of the head (incl. bangs)",
+    "imageUrl": "https://cdn.donmai.us/720x720/28/1c/281caa5b45210c11b529dc8ad6ec9e8b.webp",
+    "parentTag": null,
+    "description": "drill sidelocks",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/drill_sidelocks"
+  },
+  {
+    "tag": "low-tied sidelocks",
+    "slug": "low-tied_sidelocks",
+    "category": "Hairstyles",
+    "subcategory": "Front of the head (incl. bangs)",
+    "imageUrl": "https://cdn.donmai.us/720x720/c9/83/c983fbc3686f6bf8f93c5f3a067cfe3d.webp",
+    "parentTag": null,
+    "description": "tied sidelocks",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/low-tied_sidelocks"
+  },
+  {
+    "tag": "sidelocks tied back",
+    "slug": "sidelocks_tied_back",
+    "category": "Hairstyles",
+    "subcategory": "Front of the head (incl. bangs)",
+    "imageUrl": "https://cdn.donmai.us/720x720/9a/f6/9af665c2d6fd3b87e09327385f396be8.webp",
+    "parentTag": null,
+    "description": "sidelocks tied back",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/sidelocks_tied_back"
+  },
+  {
+    "tag": "single sidelock",
+    "slug": "single_sidelock",
+    "category": "Hairstyles",
+    "subcategory": "Front of the head (incl. bangs)",
+    "imageUrl": "https://cdn.donmai.us/720x720/4a/4c/4a4cfd9ddfd294c23bb14489c04a7168.webp",
+    "parentTag": null,
+    "description": "single sidelock",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/single_sidelock"
+  },
+  {
+    "tag": "widow's peak",
+    "slug": "widow%27s_peak",
+    "category": "Hairstyles",
+    "subcategory": "Front of the head (incl. bangs)",
+    "imageUrl": "https://cdn.donmai.us/720x720/ba/ed/baed7ae66562cc69e3b2689285d8e502.webp",
+    "parentTag": null,
+    "description": "widow's peak",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/widow%27s_peak"
+  },
+  {
+    "tag": "ahoge",
+    "slug": "ahoge",
+    "category": "Hairstyles",
+    "subcategory": "Top of the head",
+    "imageUrl": "https://cdn.donmai.us/720x720/eb/45/eb4583ffd7cc19ee0e517453d1887a60.webp",
+    "parentTag": null,
+    "description": "ahoge",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/ahoge"
+  },
+  {
+    "tag": "heart ahoge",
+    "slug": "heart_ahoge",
+    "category": "Hairstyles",
+    "subcategory": "Top of the head",
+    "imageUrl": "https://cdn.donmai.us/720x720/30/f8/30f855e30ac8f9f3f1ce64b4081d0cb7.webp",
+    "parentTag": null,
+    "description": "heart ahoge",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/heart_ahoge"
+  },
+  {
+    "tag": "huge ahoge",
+    "slug": "huge_ahoge",
+    "category": "Hairstyles",
+    "subcategory": "Top of the head",
+    "imageUrl": "https://cdn.donmai.us/720x720/44/46/4446b34573349de9c9a2a3a99549d35f.webp",
+    "parentTag": null,
+    "description": "huge ahoge",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/huge_ahoge"
+  },
+  {
+    "tag": "antenna hair",
+    "slug": "antenna_hair",
+    "category": "Hairstyles",
+    "subcategory": "Top of the head",
+    "imageUrl": "https://cdn.donmai.us/720x720/8c/7a/8c7a8fed949da3bc8030b94b42e98f52.webp",
+    "parentTag": null,
+    "description": "antenna hair",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/antenna_hair"
+  },
+  {
+    "tag": "heart antenna hair",
+    "slug": "heart_antenna_hair",
+    "category": "Hairstyles",
+    "subcategory": "Top of the head",
+    "imageUrl": "https://cdn.donmai.us/720x720/52/5f/525f45b9093d5f59347b74e24194cc24.webp",
+    "parentTag": null,
+    "description": "heart antenna hair",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/heart_antenna_hair"
+  },
+  {
+    "tag": "comb over",
+    "slug": "comb_over",
+    "category": "Hairstyles",
+    "subcategory": "Top of the head",
+    "imageUrl": "https://cdn.donmai.us/720x720/ff/b8/ffb81c12771821c47150e1f1bd815b40.webp",
+    "parentTag": null,
+    "description": "comb over",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/comb_over"
+  },
+  {
+    "tag": "hair pulled back",
+    "slug": "hair_pulled_back",
+    "category": "Hairstyles",
+    "subcategory": "Top of the head",
+    "imageUrl": "https://cdn.donmai.us/720x720/e3/09/e309da7a26b831bfc09107c33d02c58b.webp",
+    "parentTag": null,
+    "description": "hair pulled back",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/hair_pulled_back"
+  },
+  {
+    "tag": "hair slicked back",
+    "slug": "hair_slicked_back",
+    "category": "Hairstyles",
+    "subcategory": "Top of the head",
+    "imageUrl": "https://cdn.donmai.us/720x720/55/b4/55b4b349245e2fe05f828a991c83d0e5.webp",
+    "parentTag": null,
+    "description": "hair slicked back",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/hair_slicked_back"
+  },
+  {
+    "tag": "parted hair",
+    "slug": "parted_hair",
+    "category": "Hairstyles",
+    "subcategory": "Top of the head",
+    "imageUrl": "https://cdn.donmai.us/720x720/c0/60/c060f7e21010d348914ca55d2c1952f7.webp",
+    "parentTag": null,
+    "description": "parted hair",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/parted_hair"
+  },
+  {
+    "tag": "mohawk",
+    "slug": "mohawk",
+    "category": "Hairstyles",
+    "subcategory": "Top of the head",
+    "imageUrl": "https://cdn.donmai.us/720x720/6e/ec/6eec90a84b827d0d8af117f60eff481a.webp",
+    "parentTag": null,
+    "description": "mohawk",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/mohawk"
+  },
+  {
+    "tag": "oseledets",
+    "slug": "oseledets",
+    "category": "Hairstyles",
+    "subcategory": "Top of the head",
+    "imageUrl": "https://cdn.donmai.us/720x720/7a/b0/7ab05495624f91048c1956382a099a3d.webp",
+    "parentTag": null,
+    "description": "oseledets",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/oseledets"
+  },
+  {
+    "tag": "lone nape hair",
+    "slug": "lone_nape_hair",
+    "category": "Hairstyles",
+    "subcategory": "Back of the head",
+    "imageUrl": "https://cdn.donmai.us/720x720/7c/7d/7c7d168b4bd6e041868d708339f0d560.webp",
+    "parentTag": null,
+    "description": "lone nape hair",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/lone_nape_hair"
+  },
+  {
+    "tag": "feixianji",
+    "slug": "feixianji_%28hairstyle%29",
+    "category": "Hairstyles",
+    "subcategory": "Traditional Chinese",
+    "imageUrl": "https://cdn.donmai.us/720x720/75/74/7574b31f9556fae7c87ec73400566e93.webp",
+    "parentTag": null,
+    "description": "feixianji",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/feixianji_%28hairstyle%29"
+  },
+  {
+    "tag": "shuangyaji",
+    "slug": "shuangyaji",
+    "category": "Hairstyles",
+    "subcategory": "Traditional Chinese",
+    "imageUrl": "https://cdn.donmai.us/720x720/dd/55/dd551f2d49301cd6efe7ff7817fcc8d1.webp",
+    "parentTag": null,
+    "description": "shuangyaji",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/shuangyaji"
+  },
+  {
+    "tag": "danyaji",
+    "slug": "danyaji",
+    "category": "Hairstyles",
+    "subcategory": "Traditional Chinese",
+    "imageUrl": "https://cdn.donmai.us/720x720/27/52/27525eff8c1247817d54ca7d3b9922be.webp",
+    "parentTag": null,
+    "description": "danyaji",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/danyaji"
+  },
+  {
+    "tag": "braided hair rings",
+    "slug": "braided_hair_rings",
+    "category": "Hairstyles",
+    "subcategory": "Traditional Chinese",
+    "imageUrl": "https://cdn.donmai.us/720x720/e0/2a/e02ac1342c9065fe6f76a40652b36da5.webp",
+    "parentTag": null,
+    "description": "braided hair rings",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/braided_hair_rings"
+  },
+  {
+    "tag": "double bun",
+    "slug": "double_bun",
+    "category": "Hairstyles",
+    "subcategory": "Traditional Chinese",
+    "imageUrl": "https://cdn.donmai.us/720x720/12/87/1287f50c496da3a94d5ce502718e2e66.webp",
+    "parentTag": null,
+    "description": "double bun",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/double_bun"
+  },
+  {
+    "tag": "luo ji",
+    "slug": "luo_ji_%28hairstyle%29",
+    "category": "Hairstyles",
+    "subcategory": "Traditional Chinese",
+    "imageUrl": "https://cdn.donmai.us/720x720/1b/d8/1bd8ffd14b6ef0a1332f9d5403dac11d.webp",
+    "parentTag": null,
+    "description": "luo ji",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/luo_ji_%28hairstyle%29"
+  },
+  {
+    "tag": "double luo ji",
+    "slug": "double_luo_ji",
+    "category": "Hairstyles",
+    "subcategory": "Traditional Chinese",
+    "imageUrl": "https://cdn.donmai.us/720x720/51/a9/51a91f186858379b9174c86944541107.webp",
+    "parentTag": null,
+    "description": "double luo ji",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/double_luo_ji"
+  },
+  {
+    "tag": "double luo ji corners toward head",
+    "slug": "double_luo_ji_corners_toward_head",
+    "category": "Hairstyles",
+    "subcategory": "Traditional Chinese",
+    "imageUrl": "https://cdn.donmai.us/720x720/bf/c1/bfc1864fe5461e3d597bdb59fb2095bc.webp",
+    "parentTag": null,
+    "description": "double luo ji corners toward head",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/double_luo_ji_corners_toward_head"
+  },
+  {
+    "tag": "yuanbao ji",
+    "slug": "yuanbao_ji_%28hairstyle%29",
+    "category": "Hairstyles",
+    "subcategory": "Traditional Chinese",
+    "imageUrl": "https://cdn.donmai.us/720x720/01/cb/01cb5af1cc991fa5e67b5ae72176c494.webp",
+    "parentTag": "yuanbao",
+    "description": "yuanbao ji (three buns that create the shape of a yuanbao)",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/yuanbao_ji_%28hairstyle%29"
+  },
+  {
+    "tag": "jinggu ji",
+    "slug": "jinggu_ji_%28hairstyle%29",
+    "category": "Hairstyles",
+    "subcategory": "Traditional Chinese",
+    "imageUrl": "https://cdn.donmai.us/720x720/35/a7/35a751f39c3497697b9a5522aa95fb48.webp",
+    "parentTag": null,
+    "description": "jinggu ji",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/jinggu_ji_%28hairstyle%29"
+  },
+  {
+    "tag": "coin bangs",
+    "slug": "coin_bangs",
+    "category": "Hairstyles",
+    "subcategory": "Traditional Chinese",
+    "imageUrl": "https://cdn.donmai.us/720x720/10/c4/10c46110f87b87bc38f03bf85a7c2528.webp",
+    "parentTag": null,
+    "description": "coin bangs",
+    "wikiUrl": "https://danbooru.donmai.us/wiki_pages/coin_bangs"
+  }
+]

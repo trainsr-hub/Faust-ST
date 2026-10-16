@@ -1,6 +1,9 @@
 import { Hono } from 'hono';
 import { cors } from 'hono/cors';
 import { TursoClient } from './turso';
+import { registerTournamentRoutes, TOURNAMENT_COLUMNS } from './tournament';
+import { registerConditionRoutes } from './conditionRoutes';
+import { registerTemptConditionRoutes } from './temptConditionRoutes';
 
 export interface Env {
   TURSO_DATABASE_URL: string;
@@ -209,6 +212,38 @@ async function ensureGroupsTable(turso: TursoClient) {
   }
 }
 
+// Ensure table_states SQLite table exists for persistent sorting & UI configs
+async function ensureTableStatesTable(turso: TursoClient) {
+  await turso.execute(`
+    CREATE TABLE IF NOT EXISTS table_states (
+      table_name TEXT PRIMARY KEY,
+      sort_col TEXT,
+      sort_asc INTEGER DEFAULT 1,
+      heading_sort_active INTEGER DEFAULT 1,
+      active_candidate_slug TEXT,
+      config_json TEXT,
+      updated_at TEXT DEFAULT (datetime('now'))
+    );
+  `);
+}
+
+function parseJsonSafe(val: any): any {
+  if (!val) return null;
+  if (typeof val === 'object') return val;
+  if (typeof val === 'string') {
+    try {
+      const parsed = JSON.parse(val);
+      if (typeof parsed === 'string') {
+        try { return JSON.parse(parsed); } catch { return parsed; }
+      }
+      return parsed;
+    } catch {
+      return null;
+    }
+  }
+  return null;
+}
+
 // Map column atomic type to SQLite column DDL
 function getSqlType(type: string): string {
   switch (type) {
@@ -219,6 +254,49 @@ function getSqlType(type: string): string {
     default: return 'TEXT';
   }
 }
+
+// Auto-heals SQLite table structure so columns are never missing and data is never dropped
+async function ensureColumnsExist(turso: TursoClient, tableName: string, fieldNames: string[]): Promise<Set<string>> {
+  if (tableName.startsWith('_') || fieldNames.length === 0) return new Set(fieldNames);
+  try {
+    const tableInfo = await turso.execute(`PRAGMA table_info("${tableName}");`);
+    const validCols = new Set(tableInfo.rows.map((r: any) => r.name));
+    
+    // Look up schema definition for specific types if registered
+    let schemaCols: Record<string, string> = {};
+    try {
+      const sRes = await turso.execute('SELECT schema_json FROM _schema_definitions WHERE table_name = ?;', [tableName]);
+      if (sRes.rows.length > 0 && sRes.rows[0]?.schema_json) {
+        let parsed = sRes.rows[0].schema_json;
+        if (typeof parsed === 'string') parsed = JSON.parse(parsed);
+        if (parsed.columns && Array.isArray(parsed.columns)) {
+          parsed.columns.forEach((c: any) => {
+            if (c.slug && c.slug !== 'id') {
+              schemaCols[c.slug] = getSqlType(c.type || 'text_single');
+            }
+          });
+        }
+      }
+    } catch {}
+
+    for (const field of fieldNames) {
+      if (!validCols.has(field) && field !== 'id') {
+        const sqlType = schemaCols[field] || 'TEXT';
+        try {
+          await turso.execute(`ALTER TABLE "${tableName}" ADD COLUMN "${field}" ${sqlType};`);
+          validCols.add(field);
+        } catch (e) {
+          console.warn(`[Auto-heal] Failed to add column ${field} to table ${tableName}:`, e);
+        }
+      }
+    }
+    return validCols;
+  } catch (err) {
+    console.warn(`[Auto-heal] table_info failed for ${tableName}:`, err);
+    return new Set<string>();
+  }
+}
+
 
 // Auth Middleware
 app.use('/api/*', async (c, next) => {
@@ -344,7 +422,100 @@ app.get('/api/tables', async (c) => {
       }
     }
 
-    return c.json({ success: true, tables, metadata, groups });
+    // Auto-heal physical tables concurrently to guarantee columns exist with sub-second latency
+    await Promise.all(
+      Object.entries(tables).map(async ([tname, schema]) => {
+        if (!schema || !schema.columns || tname.startsWith('_')) return;
+        const slugs = schema.columns.map((c: any) => c.slug).filter((s: string) => s && s !== 'id');
+        await ensureColumnsExist(turso, tname, slugs);
+      })
+    );
+
+    // Load persistent table view states (sorting, heading sort, configs)
+    await ensureTableStatesTable(turso);
+    const statesRes = await turso.execute('SELECT * FROM table_states;');
+    const states: Record<string, any> = {};
+    for (const s of statesRes.rows) {
+      states[s.table_name] = {
+        table_name: s.table_name,
+        sort_col: s.sort_col,
+        sort_asc: s.sort_asc === 1 || s.sort_asc === true || s.sort_asc === '1',
+        heading_sort_active: s.heading_sort_active === 1 || s.heading_sort_active === true || s.heading_sort_active === '1',
+        active_candidate_slug: s.active_candidate_slug,
+        config_json: parseJsonSafe(s.config_json),
+        updated_at: s.updated_at,
+      };
+    }
+
+    return c.json({ success: true, tables, metadata, groups, states });
+  } catch (err: any) {
+    return c.json({ success: false, error: err.message }, 500);
+  }
+});
+
+// API: Get single table state
+app.get('/api/states/:table', async (c) => {
+  try {
+    const turso = getTurso(c);
+    const tableName = c.req.param('table');
+    await ensureTableStatesTable(turso);
+    const res = await turso.execute('SELECT * FROM table_states WHERE table_name = ?;', [tableName]);
+    if (res.rows.length === 0) return c.json({ success: true, state: null });
+    const s = res.rows[0];
+    return c.json({
+      success: true,
+      state: {
+        table_name: s.table_name,
+        sort_col: s.sort_col,
+        sort_asc: s.sort_asc === 1 || s.sort_asc === true || s.sort_asc === '1',
+        heading_sort_active: s.heading_sort_active === 1 || s.heading_sort_active === true || s.heading_sort_active === '1',
+        active_candidate_slug: s.active_candidate_slug,
+        config_json: parseJsonSafe(s.config_json),
+        updated_at: s.updated_at,
+      }
+    });
+  } catch (err: any) {
+    return c.json({ success: false, error: err.message }, 500);
+  }
+});
+
+// API: Save or update table state
+app.post('/api/states/:table', async (c) => {
+  try {
+    const turso = getTurso(c);
+    const tableName = c.req.param('table');
+    const body = await c.req.json();
+    await ensureTableStatesTable(turso);
+
+    const existingRes = await turso.execute('SELECT * FROM table_states WHERE table_name = ?;', [tableName]);
+    const existing = existingRes.rows[0] || {};
+
+    const sortCol = body.sort_col !== undefined ? body.sort_col : (existing.sort_col ?? null);
+    const sortAsc = body.sort_asc !== undefined ? (body.sort_asc ? 1 : 0) : (existing.sort_asc ?? 1);
+    const headingSortActive = body.heading_sort_active !== undefined ? (body.heading_sort_active ? 1 : 0) : (existing.heading_sort_active ?? 1);
+    const activeCandidateSlug = body.active_candidate_slug !== undefined ? body.active_candidate_slug : (existing.active_candidate_slug ?? null);
+    const configJson = body.config_json !== undefined ? (body.config_json ? JSON.stringify(body.config_json) : null) : (existing.config_json ?? null);
+    const now = new Date().toISOString();
+
+    await turso.execute(
+      `INSERT OR REPLACE INTO table_states 
+       (table_name, sort_col, sort_asc, heading_sort_active, active_candidate_slug, config_json, updated_at)
+       VALUES (?, ?, ?, ?, ?, ?, ?);`,
+      [tableName, sortCol, sortAsc, headingSortActive, activeCandidateSlug, configJson, now]
+    );
+
+    return c.json({
+      success: true,
+      state: {
+        table_name: tableName,
+        sort_col: sortCol,
+        sort_asc: sortAsc === 1,
+        heading_sort_active: headingSortActive === 1,
+        active_candidate_slug: activeCandidateSlug,
+        config_json: parseJsonSafe(configJson),
+        updated_at: now
+      }
+    });
   } catch (err: any) {
     return c.json({ success: false, error: err.message }, 500);
   }
@@ -470,8 +641,12 @@ app.post('/api/tables/new', async (c) => {
     const displayName = body.name || (cleanId.charAt(0).toUpperCase() + cleanId.slice(1).replace(/_/g, ' '));
     const parentId = body.parent_id || null;
 
-    // 1. Create physical SQLite table
-    await turso.execute(`CREATE TABLE IF NOT EXISTS "${cleanId}" (id TEXT PRIMARY KEY);`);
+    // 1. Create physical SQLite table with canonical base columns
+    await turso.execute(`CREATE TABLE IF NOT EXISTS "${cleanId}" (
+      id TEXT PRIMARY KEY,
+      name TEXT,
+      notes TEXT
+    );`);
 
     // 2. Register initial schema
     const prefix = cleanId.slice(0, 4).toUpperCase();
@@ -620,8 +795,12 @@ app.post('/api/records/:name', async (c) => {
         record.name = cleanId.charAt(0).toUpperCase() + cleanId.slice(1).replace(/_/g, ' ');
       }
 
-      // Automatically initialize physical SQLite table on Turso Cloud
-      await turso.execute(`CREATE TABLE IF NOT EXISTS "${cleanId}" (id TEXT PRIMARY KEY);`);
+      // Automatically initialize physical SQLite table on Turso Cloud with canonical base columns
+      await turso.execute(`CREATE TABLE IF NOT EXISTS "${cleanId}" (
+        id TEXT PRIMARY KEY,
+        name TEXT,
+        notes TEXT
+      );`);
 
       // Automatically register default initial schema definition if not already present
       const schemaCheck = await turso.execute('SELECT table_name FROM _schema_definitions WHERE table_name = ?;', [cleanId]);
@@ -642,9 +821,8 @@ app.post('/api/records/:name', async (c) => {
       }
     }
 
-    // Check existing columns in the physical table
-    const tableInfo = await turso.execute(`PRAGMA table_info("${name}");`);
-    const validCols = new Set(tableInfo.rows.map((r: any) => r.name));
+    // Check and auto-heal existing columns in the physical table
+    const validCols = await ensureColumnsExist(turso, name, Object.keys(record));
 
     // Handle auto formula default if table has 'idx' column
     if (validCols.has('idx')) {
@@ -669,6 +847,27 @@ app.post('/api/records/:name', async (c) => {
       const timeHex = Date.now().toString(16).padStart(12, '0').slice(-12).toUpperCase();
       record.id = `${prefix}${timeHex}`;
     }
+
+    // Auto-fill mandatory NOT NULL columns without default values to satisfy SQLite constraints
+    try {
+      const tableInfo = await turso.execute(`PRAGMA table_info("${name}");`);
+      for (const col of tableInfo.rows) {
+        const cName = col.name;
+        const isNotNull = col.notnull === 1 || col.notnull === '1' || col.notnull === true;
+        const hasDflt = col.dflt_value !== null && col.dflt_value !== undefined;
+        const isPk = col.pk === 1 || col.pk === '1' || col.pk === true;
+
+        if (isNotNull && !hasDflt && !isPk && (record[cName] === undefined || record[cName] === null)) {
+          if (cName === 'tag') record[cName] = record.id;
+          else if (cName === 'name') record[cName] = record.tag || record.id;
+          else if (cName === 'group_id') record[cName] = 'forehead_accents';
+          else if (cName === 'category') record[cName] = 'General';
+          else if (cName === 'natural_question') record[cName] = 'Untitled condition?';
+          else if (col.type?.toUpperCase().includes('INT') || col.type?.toUpperCase().includes('REAL')) record[cName] = 0;
+          else record[cName] = '';
+        }
+      }
+    } catch {}
 
     // Filter record keys to ONLY those columns that actually exist physically in the table
     const keys = Object.keys(record).filter((k) => validCols.has(k));
@@ -696,11 +895,11 @@ app.put('/api/records/:name/:id', async (c) => {
     const updates = payload.record || payload;
     const turso = getTurso(c);
 
-    // Check existing columns in the physical table
-    const tableInfo = await turso.execute(`PRAGMA table_info("${name}");`);
-    const validCols = new Set(tableInfo.rows.map((r: any) => r.name));
-
     delete updates.id; // Do not overwrite ID in SET
+
+    // Check and auto-heal existing columns in the physical table
+    const validCols = await ensureColumnsExist(turso, name, Object.keys(updates));
+
     const keys = Object.keys(updates).filter((k) => validCols.has(k));
     if (keys.length === 0) {
       return c.json({ success: true, message: 'No matching fields to update' });
@@ -744,4 +943,27 @@ app.delete('/api/records/:name/:id', async (c) => {
   }
 });
 
+// Hazard Trigger Tournament C2 endpoints
+registerTournamentRoutes(app, getTurso);
+
+// 3-Tier Relational Condition Studio endpoints
+registerConditionRoutes(app, getTurso);
+
+// Tempt Sandbox isolated endpoints
+registerTemptConditionRoutes(app, getTurso);
+
+// SPA Fallback for client-side routing (including /hazard, subdomains) on Cloudflare Workers
+app.get('*', async (c) => {
+  if (c.env?.ASSETS) {
+    const url = new URL(c.req.url);
+    if (url.pathname.includes('.')) {
+      return c.env.ASSETS.fetch(c.req.raw);
+    }
+    const indexReq = new Request(new URL('/', c.req.url).toString(), c.req.raw);
+    return c.env.ASSETS.fetch(indexReq);
+  }
+  return c.text('Not found', 404);
+});
+
 export default app;
+

@@ -1,11 +1,15 @@
 import React, { useState } from 'react';
-import { Plus, Trash2, Edit2, Save } from 'lucide-react';
-import { TableSchema, ColumnDefinition, AtomicFieldType, FIELD_TYPES } from '../types';
+import { Plus, Trash2, Edit2, Save, CheckCircle2, Loader2 } from 'lucide-react';
+import { TableSchema, ColumnDefinition, AtomicFieldType, FIELD_TYPES, TableRecord } from '../types';
 import { ColumnEditorDrawer } from './ColumnEditorDrawer';
 
 interface SchemaViewProps {
   schema: TableSchema;
   availableTables: string[];
+  tables?: Record<string, TableSchema>;
+  relationStore?: Record<string, Record<string, TableRecord>>;
+  draftColumns?: ColumnDefinition[];
+  onColumnsChange?: (columns: ColumnDefinition[]) => void;
   onSaveSchema: (updatedSchema: TableSchema) => Promise<void>;
   isSaving: boolean;
   isMobile: boolean;
@@ -14,11 +18,15 @@ interface SchemaViewProps {
 export const SchemaView: React.FC<SchemaViewProps> = ({
   schema,
   availableTables,
+  tables = {},
+  relationStore = {},
+  draftColumns,
+  onColumnsChange,
   onSaveSchema,
   isSaving,
   isMobile,
 }) => {
-  const [columns, setColumns] = useState<ColumnDefinition[]>(schema.columns || []);
+  const [columns, setColumns] = useState<ColumnDefinition[]>(draftColumns || schema.columns || []);
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
 
   // Drag and drop state
@@ -28,9 +36,9 @@ export const SchemaView: React.FC<SchemaViewProps> = ({
 
   // Synchronize columns when active table changes
   React.useEffect(() => {
-    setColumns(schema.columns || []);
+    setColumns(draftColumns || schema.columns || []);
     setEditingIndex(null);
-  }, [schema]);
+  }, [schema, draftColumns]);
 
   // Edit draft state
   const [draftName, setDraftName] = useState('');
@@ -38,8 +46,13 @@ export const SchemaView: React.FC<SchemaViewProps> = ({
   const [draftType, setDraftType] = useState<AtomicFieldType>('text_single');
   const [draftOptions, setDraftOptions] = useState('');
   const [draftTarget, setDraftTarget] = useState('');
+  const [draftTargetField, setDraftTargetField] = useState('');
   const [draftPrefix, setDraftPrefix] = useState('');
   const [draftFormula, setDraftFormula] = useState('');
+  const [draftFilterRule, setDraftFilterRule] = useState('');
+  const [draftSecondaryTarget, setDraftSecondaryTarget] = useState('');
+  const [draftSecondaryTargetField, setDraftSecondaryTargetField] = useState('');
+  const [draftSecondaryFilterRule, setDraftSecondaryFilterRule] = useState('');
 
   const handleEditColumn = (index: number) => {
     const col = columns[index];
@@ -49,6 +62,11 @@ export const SchemaView: React.FC<SchemaViewProps> = ({
     setDraftType(col.type);
     setDraftOptions(col.metadata?.options ? col.metadata.options.join(', ') : '');
     setDraftTarget(col.metadata?.target || (availableTables[0] || ''));
+    setDraftTargetField(col.metadata?.target_field || '');
+    setDraftFilterRule(col.metadata?.filter_rule || '');
+    setDraftSecondaryTarget(col.metadata?.secondary_target || '');
+    setDraftSecondaryTargetField(col.metadata?.secondary_target_field || '');
+    setDraftSecondaryFilterRule(col.metadata?.secondary_filter_rule || '');
     setDraftPrefix(col.metadata?.prefix || '');
     setDraftFormula(col.metadata?.default_option || '');
   };
@@ -61,6 +79,11 @@ export const SchemaView: React.FC<SchemaViewProps> = ({
     setDraftType('text_single');
     setDraftOptions('');
     setDraftTarget(availableTables[0] || '');
+    setDraftTargetField('');
+    setDraftFilterRule('');
+    setDraftSecondaryTarget('');
+    setDraftSecondaryTargetField('');
+    setDraftSecondaryFilterRule('');
     setDraftPrefix('');
     setDraftFormula('');
   };
@@ -75,6 +98,13 @@ export const SchemaView: React.FC<SchemaViewProps> = ({
     }
     if ((draftType === 'relation_single' || draftType === 'relation_multi') && draftTarget) {
       meta.target = draftTarget.trim();
+      if (draftTargetField.trim()) meta.target_field = draftTargetField.trim();
+      if (draftFilterRule.trim()) meta.filter_rule = draftFilterRule.trim();
+      if (draftSecondaryTarget.trim()) {
+        meta.secondary_target = draftSecondaryTarget.trim();
+        if (draftSecondaryTargetField.trim()) meta.secondary_target_field = draftSecondaryTargetField.trim();
+        if (draftSecondaryFilterRule.trim()) meta.secondary_filter_rule = draftSecondaryFilterRule.trim();
+      }
     }
     if (draftFormula) meta.default_option = draftFormula.trim();
 
@@ -93,13 +123,26 @@ export const SchemaView: React.FC<SchemaViewProps> = ({
     }
 
     setColumns(nextCols);
+    onColumnsChange?.(nextCols);
     setEditingIndex(null);
+    // Automatically persist schema changes to Turso Cloud immediately
+    onSaveSchema({
+      table_name: schema.table_name,
+      columns: nextCols,
+    });
   };
 
   const handleDeleteColumn = (index: number) => {
     if (confirm(`Are you sure you want to delete column "${columns[index].name}"?`)) {
-      setColumns(columns.filter((_, i) => i !== index));
+      const nextCols = columns.filter((_, i) => i !== index);
+      setColumns(nextCols);
+      onColumnsChange?.(nextCols);
       if (editingIndex === index) setEditingIndex(null);
+      // Automatically persist schema changes to Turso Cloud immediately
+      onSaveSchema({
+        table_name: schema.table_name,
+        columns: nextCols,
+      });
     }
   };
 
@@ -132,15 +175,39 @@ export const SchemaView: React.FC<SchemaViewProps> = ({
             </span>
           </div>
 
-          <div style={{ display: 'flex', gap: '0.5rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
             <button className="btn" onClick={handleAddNewColumn} title="Add new column definition">
               <Plus size={14} />
               <span>Add Column</span>
             </button>
-            <button className="btn primary" onClick={handleCommitSchema} disabled={isSaving} title="Save Schema to Turso Cloud">
-              <Save size={14} />
-              <span>{isSaving ? 'Saving...' : 'Save Schema to Turso'}</span>
-            </button>
+            <div
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.4rem',
+                padding: '0.35rem 0.75rem',
+                borderRadius: 'var(--radius-sm)',
+                fontSize: '12px',
+                fontWeight: 500,
+                color: isSaving ? 'var(--accent)' : 'var(--text-dim)',
+                background: isSaving ? 'var(--accent-bg)' : 'transparent',
+                border: isSaving ? '1px solid var(--accent)' : '1px solid var(--border-light)',
+                transition: 'all 0.2s ease',
+              }}
+              title={isSaving ? 'Persisting schema to Turso Cloud' : 'All schema changes are automatically saved to Turso Cloud'}
+            >
+              {isSaving ? (
+                <>
+                  <Loader2 size={13} className="spin" color="var(--accent)" />
+                  <span>Saving schema...</span>
+                </>
+              ) : (
+                <>
+                  <CheckCircle2 size={13} color="var(--success)" />
+                  <span>Auto-saved</span>
+                </>
+              )}
+            </div>
           </div>
         </div>
 
@@ -204,9 +271,15 @@ export const SchemaView: React.FC<SchemaViewProps> = ({
                       else if (dragPosition === 'top' && draggedIdx < idx) targetIdx = idx - 1;
                       next.splice(Math.max(0, targetIdx), 0, moved);
                       setColumns(next);
+                      onColumnsChange?.(next);
                       setDraggedIdx(null);
                       setDragOverIdx(null);
                       setDragPosition(null);
+                      // Automatically persist reordered column sequence to Turso Cloud
+                      onSaveSchema({
+                        table_name: schema.table_name,
+                        columns: next,
+                      });
                     }}
                     onDragEnd={() => {
                       setDraggedIdx(null);
@@ -238,7 +311,27 @@ export const SchemaView: React.FC<SchemaViewProps> = ({
                       {col.slug}
                     </td>
                     <td style={{ padding: '0.65rem 0.75rem', color: 'var(--text-tertiary)', fontSize: '12px' }}>
-                      {col.metadata?.target && <span>→ Target: <strong>{col.metadata.target}</strong></span>}
+                      {col.metadata?.target && (
+                        <span>
+                          → Target: <strong>{col.metadata.target}</strong>
+                          {col.metadata.target_field ? (
+                            <span style={{ color: 'var(--c-rel)', fontWeight: 600 }}>.{col.metadata.target_field}</span>
+                          ) : (
+                            <span style={{ color: 'var(--text-dim)', fontSize: '11px' }}>.(auto)</span>
+                          )}
+                          {col.metadata.secondary_target && (
+                            <span style={{ marginLeft: '0.4rem', color: 'var(--tag-purple-text, #c084fc)' }}>
+                              + <strong>{col.metadata.secondary_target}</strong>
+                              {col.metadata.secondary_target_field ? `.${col.metadata.secondary_target_field}` : '.(auto)'}
+                            </span>
+                          )}
+                          {col.metadata.filter_rule && (
+                            <span style={{ marginLeft: '0.4rem', color: 'var(--accent)', fontSize: '11px', fontFamily: 'var(--font-mono)' }}>
+                              [{col.metadata.filter_rule === 'only_leaf' ? '🍃 End Points' : col.metadata.filter_rule === 'only_root' ? '🌳 Root Only' : col.metadata.filter_rule}]
+                            </span>
+                          )}
+                        </span>
+                      )}
                       {col.metadata?.options && <span>Options: [{col.metadata.options.join(', ')}]</span>}
                       {col.metadata?.prefix && <span>Prefix: <code>{col.metadata.prefix}</code></span>}
                       {col.metadata?.default_option && <span style={{ color: 'var(--warning)', fontFamily: 'var(--font-mono)' }}>{col.metadata.default_option}</span>}
@@ -281,6 +374,20 @@ export const SchemaView: React.FC<SchemaViewProps> = ({
         setDraftOptions={setDraftOptions}
         draftTarget={draftTarget}
         setDraftTarget={setDraftTarget}
+        draftTargetField={draftTargetField}
+        setDraftTargetField={setDraftTargetField}
+        draftFilterRule={draftFilterRule}
+        setDraftFilterRule={setDraftFilterRule}
+        targetRecords={draftTarget && relationStore[draftTarget] ? Object.values(relationStore[draftTarget]) : []}
+        targetColumns={tables && draftTarget ? tables[draftTarget]?.columns || [] : []}
+        draftSecondaryTarget={draftSecondaryTarget}
+        setDraftSecondaryTarget={setDraftSecondaryTarget}
+        draftSecondaryTargetField={draftSecondaryTargetField}
+        setDraftSecondaryTargetField={setDraftSecondaryTargetField}
+        draftSecondaryFilterRule={draftSecondaryFilterRule}
+        setDraftSecondaryFilterRule={setDraftSecondaryFilterRule}
+        secondaryTargetRecords={draftSecondaryTarget && relationStore[draftSecondaryTarget] ? Object.values(relationStore[draftSecondaryTarget]) : []}
+        secondaryTargetColumns={tables && draftSecondaryTarget ? tables[draftSecondaryTarget]?.columns || [] : []}
         draftFormula={draftFormula}
         setDraftFormula={setDraftFormula}
         onSave={handleSaveDraft}

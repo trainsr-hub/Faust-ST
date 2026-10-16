@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Plus, Search, Edit3, Trash2, Tag, Link2 } from 'lucide-react';
-import { TableSchema, TableRecord } from '../types';
+import { TableSchema, TableRecord, ColumnDefinition } from '../types';
+import { parseMultiValue } from './NotionMultiSelect';
+import { resolveRelationLabel } from '../services/relationFilter';
 
 interface MobileCardViewProps {
   schema: TableSchema;
@@ -9,6 +11,7 @@ interface MobileCardViewProps {
   onNewRecord: () => void;
   onDeleteRecord: (id: string) => Promise<void>;
   isLoading: boolean;
+  relationStore?: Record<string, Record<string, TableRecord>>;
 }
 
 export const MobileCardView: React.FC<MobileCardViewProps> = ({
@@ -18,18 +21,31 @@ export const MobileCardView: React.FC<MobileCardViewProps> = ({
   onNewRecord,
   onDeleteRecord,
   isLoading,
+  relationStore = {},
 }) => {
   const [search, setSearch] = useState('');
+
+  const resolveRelation = (col: ColumnDefinition, relId: string): string => {
+    return resolveRelationLabel(
+      relId,
+      col.metadata?.target,
+      col.metadata?.target_field,
+      relationStore,
+      undefined,
+      col.metadata?.secondary_target,
+      col.metadata?.secondary_target_field
+    );
+  };
 
   // Primary title column (usually 'name' or 'main_content' or first non-id text column)
   const primaryCol = schema.columns.find((c) => c.slug === 'name' || c.slug === 'main_content') ||
     schema.columns.find((c) => c.type === 'text_single' || c.type === 'text_multi') ||
     schema.columns[1] || schema.columns[0];
 
-  // Secondary badge columns (enums, tags, dates)
+  // Secondary badge columns (enums, tags, dates, relations)
   const secondaryCols = schema.columns.filter((c) =>
     c.slug !== 'id' && c.slug !== primaryCol?.slug &&
-    (c.type === 'enum_single' || c.type === 'enum_multi' || c.type === 'relation_single' || c.slug === 'date' || c.slug === 'idx')
+    (c.type === 'enum_single' || c.type === 'enum_multi' || c.type === 'relation_single' || c.type === 'relation_multi' || c.slug === 'date' || c.slug === 'idx')
   );
 
   const filteredRecords = records.filter((r) => {
@@ -176,6 +192,26 @@ export const MobileCardView: React.FC<MobileCardViewProps> = ({
                     const val = r[col.slug];
                     if (val === undefined || val === null || val === '') return null;
 
+                    if (col.type === 'relation_single') {
+                      const label = resolveRelation(col, String(val));
+                      return (
+                        <span key={col.slug} className="badge badge-rel" title={`ID: ${val}`}>
+                          <Link2 size={10} />
+                          <span>{label}</span>
+                        </span>
+                      );
+                    }
+
+                    if (col.type === 'relation_multi') {
+                      const ids = parseMultiValue(val);
+                      return ids.map((id) => (
+                        <span key={id} className="badge badge-rel" title={`ID: ${id}`}>
+                          <Link2 size={10} />
+                          <span>{resolveRelation(col, id)}</span>
+                        </span>
+                      ));
+                    }
+
                     if (Array.isArray(val)) {
                       return val.map((item) => (
                         <span key={item} className="badge badge-enum">
@@ -185,18 +221,17 @@ export const MobileCardView: React.FC<MobileCardViewProps> = ({
                       ));
                     }
 
-                    if (col.type === 'relation_single') {
-                      return (
-                        <span key={col.slug} className="badge badge-rel">
-                          <Link2 size={10} />
-                          <span>{val}</span>
+                    if (typeof val === 'object' && val !== null) {
+                      return Object.keys(val).map((k) => (
+                        <span key={`${col.slug}_${k}`} className="badge badge-text" style={{ fontFamily: 'var(--font-mono)', fontSize: '11px' }}>
+                          <span>{k}</span>
                         </span>
-                      );
+                      ));
                     }
 
                     return (
                       <span key={col.slug} className="badge badge-text">
-                        <span>{val}</span>
+                        <span>{String(val)}</span>
                       </span>
                     );
                   })}

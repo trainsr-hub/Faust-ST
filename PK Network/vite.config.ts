@@ -7,6 +7,10 @@ export default defineConfig({
     port: 20150,
     open: true, // Automatically open browser tab on launch!
     host: true, // Allow accessing from phone on local WiFi!
+    watch: {
+      usePolling: true,
+      interval: 300,
+    },
     proxy: {
       '/api': {
         target: 'http://localhost:8787',
